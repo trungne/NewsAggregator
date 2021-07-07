@@ -21,8 +21,9 @@ This setup guide is intended for:
 ###### Configure build and run
 1. In IntelliJ navigation bar, go to ` Run -> Edit CXonfigurations `
 2. In the Build and run section, nagivate *VM options*. If there is no such option, select Modify options and check *Add VM options*.
-3. * For Windows, copy and paste this ` --module-path "\path\to\javafx-sdk-15.0.1\lib" --add-modules javafx.controls,javafx.fxml `
-* For MacOS/Linux, copy and paste this ` --module-path /path/to/javafx-sdk-15.0.1/lib --add-modules javafx.controls,javafx.fxml `
+3. Add module path to VM options:
+    * For Windows, copy and paste this ` --module-path "\path\to\javafx-sdk-15.0.1\lib" --add-modules javafx.controls,javafx.fxml `
+    * For MacOS/Linux, copy and paste this ` --module-path /path/to/javafx-sdk-15.0.1/lib --add-modules javafx.controls,javafx.fxml `
 4. Change the *path/to/javafx-sdk...* to the actual path of the JavaFX lib. This is the path you selected when adding JavaFX to Project Library. Note: the path should end with */lib* (or *\lib* if you're using Windows)
 5. **Apply** and **OK**
 
