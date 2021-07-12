@@ -129,7 +129,7 @@ public class Scraper {
 //            System.out.println(thumbNail);
 //            System.out.println("==========================");
 
-            if (title == null || description == null || content == null || dateTimeStr == null || thumbNail == null){
+            if (title == null || description == null || dateTimeStr == null || thumbNail == null){
                 return null;
             }
 
