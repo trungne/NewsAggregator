@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class Scraper {
-    static final int MAX_ARTICLE_PER_CATEGORY = 5;
+    static final int MAX_ARTICLES_PER_CATEGORY = 5;
 
     URL newsOutletUrl;
     String titleLinkClass;
@@ -89,7 +89,7 @@ public class Scraper {
             // target all title tags and pull out links for articles
             for (Element e: titleTags){
 
-                if (links.size() > MAX_ARTICLE_PER_CATEGORY) return links;
+                if (links.size() > MAX_ARTICLES_PER_CATEGORY) return links;
                 // link is stored in href attribute of <a> tag
                 URL link = new URL(baseUrl, e.getElementsByTag("a").attr("href"));
                 links.add(link);

@@ -7,6 +7,7 @@ public class ContentFactory extends DetailFactory {
     @Override
     protected Detail createDetail(Element html) {
         Detail detail;
+        // TODO: create matching detail for each html element
         // if pic create figure. check extension (.jpg, .png)
         if (html.text().endsWith(".jpg")){
             detail = new Figure(html.text());
