@@ -35,5 +35,3 @@ hs_err_pid*
 #idea folder
 .idea/
 out
-
-*.iml
