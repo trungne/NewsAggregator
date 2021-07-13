@@ -3,10 +3,7 @@ package News;
 import News.Content.ContentFactory;
 import Scraper.*;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -14,7 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class NewsOutlet implements Serializable {
-    public static void main(String[] args) {
+    static void initializeNewsOutlets(){
         HashMap<String, String> VNExpressCategories = new HashMap<>();
         VNExpressCategories.put("Covid", "https://vnexpress.net/covid-19/tin-tuc");
         VNExpressCategories.put("Politics", "https://vnexpress.net/thoi-su/chinh-tri");
@@ -65,17 +62,15 @@ public class NewsOutlet implements Serializable {
 //            NhanDanCategories.put("Entertainment", new URL("??"));
         NhanDanCategories.put("World","https://nhandan.vn/thegioi");
 
-
         NewsOutlet VNExpress = new NewsOutlet("https://vnexpress.net/", "title-news", "title-detail", "description", "fck_detail", "datePublished","fig-picture", VNExpressCategories);
         NewsOutlet ZingNews = new NewsOutlet("https://zingnews.vn/", "article-title", "the-article-title", "the-article-summary", "the-article-body", "article:published_time", "pic", ZingCategories);
-
         // wtf? fix this pls, cant use "lightbox-content" (class of img) to scrape img
         NewsOutlet TuoiTre = new NewsOutlet("https://tuoitre.vn/", "title-news", "article-title", "sapo", "content fck","article:published_time","VCSortableInPreviewMode",TuoitreCategories);
-
         NewsOutlet ThanhNien = new NewsOutlet("https://thanhnien.vn/", "story__thumb", "details__headline", "sapo", "details__content", "article:published_time", "pswp-content__image", ThanhNienCategories);
         NewsOutlet NhanDan = new NewsOutlet("https://nhandan.vn/", "box-title", "box-title-detail", "box-des-detail", "detail-content-body ", "box-date pull-left", "box-detail-thumb", NhanDanCategories);
 
         ArrayList<NewsOutlet> newsOutlets = new ArrayList<>();
+
         newsOutlets.add(VNExpress);
         newsOutlets.add(ZingNews);
         newsOutlets.add(TuoiTre);
@@ -93,34 +88,24 @@ public class NewsOutlet implements Serializable {
                 i.printStackTrace();
             }
         }
+    }
+    public static void main(String[] args) {
+        File dataDir = new File(NewsOutlet.SER_FILE_PATH);
+        File[] dataDirListing = dataDir.listFiles();
+        if (dataDirListing != null) {
+            for (File child: dataDirListing){
+                System.out.println(child.getName());
+            }
+        }
 
 
-        Scraper VNExpressScrapper = new Scraper(VNExpress, new ContentFactory(), new RetrieveInMetaTag());
-        Scraper ZingNewsScrapper = new Scraper(ZingNews, new ContentFactory(), new RetrieveInMetaTag());
-        Scraper TuoiTreScrapper = new Scraper(TuoiTre, new ContentFactory(), new RetrieveInMetaTag());
-        Scraper ThanhNienScrapper = new Scraper(ThanhNien, new ContentFactory(), new RetrieveInMetaTag());
-        Scraper NhanDanScrapper = new Scraper(NhanDan, new ContentFactory(), new RetrieveInBodyTag());
 
-//        final long startTime = System.currentTimeMillis();
-//
-//
-//
-//        HashSet<Article> allArticles = new HashSet<>();
-//        allArticles.addAll(ZingNewsScrapper.getArticlesFromCategories());
-//        allArticles.addAll(VNExpressScrapper.getArticlesFromCategories());
-//        allArticles.addAll(TuoiTreScrapper.getArticlesFromCategories());
-//        allArticles.addAll(ThanhNienScrapper.getArticlesFromCategories());
-//        allArticles.addAll(NhanDanScrapper.getArticlesFromCategories());
-//
-//        System.out.println(allArticles.size());
-//
-//        for (Article article: allArticles){
-//            article.displayTitleAndCategory();
-//            System.out.println("---- time: " + article.getDateTime());
-//        }
-//
-//        final long endTime = System.currentTimeMillis();
-//        System.out.println("Total execution time: " + (endTime - startTime)/1000);
+//        Scraper VNExpressScrapper = new Scraper(VNExpress, new ContentFactory(), new RetrieveInMetaTag());
+//        Scraper ZingNewsScrapper = new Scraper(ZingNews, new ContentFactory(), new RetrieveInMetaTag());
+//        Scraper TuoiTreScrapper = new Scraper(TuoiTre, new ContentFactory(), new RetrieveInMetaTag());
+//        Scraper ThanhNienScrapper = new Scraper(ThanhNien, new ContentFactory(), new RetrieveInMetaTag());
+//        Scraper NhanDanScrapper = new Scraper(NhanDan, new ContentFactory(), new RetrieveInBodyTag());
+
 
     }
 
@@ -134,6 +119,7 @@ public class NewsOutlet implements Serializable {
     public String dateTimeClass;
     public String pictureClass;
     public HashMap<String, String> categories;
+    
 
     private String name;
 
