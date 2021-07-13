@@ -113,10 +113,9 @@ public class Scraper {
             dateTimeStr = this.newsOutlet.dateTimeRetrievable.getDateTimeString(doc, this.newsOutlet.dateTimeClass);
 
             // first pic is always the article thumbnail !
-            // TODO: create DEFAULT thumbnail in case there is no pic in doc
             thumbNail = doc.getElementsByClass(this.newsOutlet.pictureClass).first();
 
-            if (title == null || description == null || dateTimeStr == null || thumbNail == null){
+            if (title == null || description == null || content == null || dateTimeStr == null){
                 return null;
             }
 
@@ -143,19 +142,19 @@ public class Scraper {
                                                   String mainCategory){
         String title = titleTag.text();
         String description = descriptionTag.text();
-
-        // TODO: move this to newsOutlet class
         ArrayList<Detail> details = this.detailFactory.createDetailList(contentTag);
 
-        // look for img in the data-src first, if not found, look in src
-        String thumbNailUrl = thumbNailTag.getElementsByTag("img").attr("data-src");
-        if (thumbNailUrl.isEmpty()){
-            thumbNailUrl = thumbNailTag.getElementsByTag("img").attr("src");
+        String thumbNailUrl = this.newsOutlet.defaultThumbNailUrl;
+        if (thumbNailTag != null){
+            // look for img in the data-src first, if not found, look in src
+            thumbNailUrl = thumbNailTag.getElementsByTag("img").attr("data-src");
+            if (thumbNailUrl.isEmpty()){
+                thumbNailUrl = thumbNailTag.getElementsByTag("img").attr("src");
+            }
         }
 
         LocalDateTime localDateTime = this.dateTimeRetrievable.getLocalDateTime(dateTime);
-
-        if (title.isEmpty() || description.isEmpty() || details.isEmpty() || thumbNailUrl.isEmpty() || localDateTime == null){
+        if (title.isEmpty() || description.isEmpty() || details.isEmpty() || thumbNailUrl.isEmpty()){
             return null;
         }
 

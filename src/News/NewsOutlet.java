@@ -64,11 +64,20 @@ public class NewsOutlet implements Serializable {
         NhanDanCategories.put("World","https://nhandan.vn/thegioi");
 
         NewsOutlet VNExpress = new NewsOutlet("https://vnexpress.net/", "title-news", "title-detail", "description", "fck_detail", "datePublished","fig-picture", VNExpressCategories, new ContentFactory(), new RetrieveInMetaTag());
+        VNExpress.setDefaultThumbNailUrl("https://s1.vnecdn.net/vnexpress/restruct/i/v395/logo_default.jpg");
+
         NewsOutlet ZingNews = new NewsOutlet("https://zingnews.vn/", "article-title", "the-article-title", "the-article-summary", "the-article-body", "article:published_time", "pic", ZingCategories, new ContentFactory(), new RetrieveInMetaTag());
+        ZingNews.setDefaultThumbNailUrl("https://static-znews.zadn.vn/images/logo-zing-home.svg");
+
         // TODO: fix this pls, cant use "lightbox-content" (class of img) to scrape img
         NewsOutlet TuoiTre = new NewsOutlet("https://tuoitre.vn/", "title-news", "article-title", "sapo", "content fck","article:published_time","VCSortableInPreviewMode",TuoitreCategories, new ContentFactory(), new RetrieveInMetaTag());
+        TuoiTre.setDefaultThumbNailUrl("https://dangkyxettuyennghe.tuoitre.vn/img/logo-tt.png");
+
         NewsOutlet ThanhNien = new NewsOutlet("https://thanhnien.vn/", "story__thumb", "details__headline", "sapo", "details__content", "article:published_time", "pswp-content__image", ThanhNienCategories, new ContentFactory(), new RetrieveInMetaTag());
+        ThanhNien.setDefaultThumbNailUrl("https://static.thanhnien.vn/v2/App_Themes/images/logo-tn-2.png");
+
         NewsOutlet NhanDan = new NewsOutlet("https://nhandan.vn/", "box-title", "box-title-detail", "box-des-detail", "detail-content-body ", "box-date pull-left", "box-detail-thumb", NhanDanCategories, new ContentFactory(), new RetrieveInBodyTag());
+        NhanDan.setDefaultThumbNailUrl("https://www.nhandan-printing.vn/datafiles_D_D/setmulti/nhandan_copy.jpg");
 
 
         HashMap<String, NewsOutlet> newsOutlets = new HashMap<>();
@@ -89,6 +98,7 @@ public class NewsOutlet implements Serializable {
     public String contentBodyClass;
     public String dateTimeClass;
     public String pictureClass;
+    public String defaultThumbNailUrl;
     public HashMap<String, String> categories;
 
     // factories
@@ -111,6 +121,10 @@ public class NewsOutlet implements Serializable {
 
         this.detailFactory = detailFactory;
         this.dateTimeRetrievable = dateTimeRetrievable;
+    }
+
+    public void setDefaultThumbNailUrl(String url){
+        this.defaultThumbNailUrl = url;
     }
 
     public String getName(){

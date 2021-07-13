@@ -33,11 +33,11 @@ public class ScraperTestDrive {
         allArticles.addAll(NhanDanScrapper.getArticlesFromCategories());
 
         System.out.println(allArticles.size());
-
-        for (Article article: allArticles){
-            article.displayTitleAndCategory();
-            System.out.println("---- time: " + article.getDateTime());
-        }
+//
+//        for (Article article: allArticles){
+//            article.displayTitleAndCategory();
+//            System.out.println("---- time: " + article.getDateTime());
+//        }
 
         final long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (double) (endTime - startTime)/1000);
