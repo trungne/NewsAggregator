@@ -1,20 +1,17 @@
 package Scraper;
 
-import News.Article;
-import News.Content.Detail;
-import News.Content.DetailFactory;
-import News.NewsOutlet;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import News.*;
+import News.Content.*;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import org.jsoup.*;
+import org.jsoup.nodes.*;
+import org.jsoup.select.*;
+
+import java.io.*;
+import java.net.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
+
+import java.util.*;
 
 public class Scraper {
     static final int MAX_ARTICLES_PER_CATEGORY = 5;
