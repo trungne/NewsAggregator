@@ -34,22 +34,26 @@ public class Scraper {
     public HashSet<Article> getArticlesFromCategories(){
         HashSet<Article> articles = new HashSet<>();
 
-        // retrieve all article links in each category
+        // step 1: get url to each category
+        // step 2: For each category, get all article links belong to that category
+        // step 3: For each article, create an article object
+
         for(String categoryName: this.newsOutlet.categories.keySet()){
 
-            // first, get url to a specific category (value) by assessing the name (key)
+            // step 1: get url to a specific category (value) by assessing the category name (key)
             URL urlToCategory;
             try{
                 urlToCategory = new URL(this.newsOutlet.categories.get(categoryName));
             }
             catch (MalformedURLException e) {
                 e.printStackTrace();
-                continue; // skip the category if the link cannot be reached
+                continue; // skip if the link cannot be reached
             }
 
+            // step 2
             HashSet<URL> urlsInCategory = getAllArticleLinks(urlToCategory);
 
-            // in each category, create articles from its links
+            // step 3
             for (URL url: urlsInCategory){
                 Article article = getArticle(url, categoryName);
                 if (article != null)
@@ -109,14 +113,9 @@ public class Scraper {
             // TODO: create DEFAULT thumbnail in case there is no pic in doc
             thumbNail = doc.getElementsByClass(this.newsOutlet.pictureClass).first();
 
-//            System.out.println(articleUrl.toString());
-//            System.out.println(thumbNail);
-//            System.out.println("==========================");
-
             if (title == null || description == null || dateTimeStr == null || thumbNail == null){
                 return null;
             }
-
 
             // create the article by all scraped html tags and the provided category
             article = createArticleFromHtmlElements(title,
@@ -141,8 +140,11 @@ public class Scraper {
                                                   String mainCategory){
         String title = titleTag.text();
         String description = descriptionTag.text();
+
+        // TODO: move this to newsOutlet class
         ArrayList<Detail> details = detailFactory.createDetailList(contentTag);
 
+        // look for img in the data-src first, if not found, look in src
         String thumbNailUrl = thumbNailTag.getElementsByTag("img").attr("data-src");
         if (thumbNailUrl.isEmpty()){
             thumbNailUrl = thumbNailTag.getElementsByTag("img").attr("src");

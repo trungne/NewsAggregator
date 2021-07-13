@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class NewsOutlet implements Serializable {
-    static void initializeNewsOutlets(){
+    public static HashMap<String, NewsOutlet> initializeNewsOutlets(){
         HashMap<String, String> VNExpressCategories = new HashMap<>();
         VNExpressCategories.put("Covid", "https://vnexpress.net/covid-19/tin-tuc");
         VNExpressCategories.put("Politics", "https://vnexpress.net/thoi-su/chinh-tri");
@@ -58,58 +58,29 @@ public class NewsOutlet implements Serializable {
         NhanDanCategories.put("Business","https://nhandan.vn/kinhte");
         NhanDanCategories.put("Technology","https://nhandan.vn/khoahoc-congnghe");
         NhanDanCategories.put("Health","https://nhandan.vn/y-te");
-        NhanDanCategories.put("Sports","https://nhandan.vn/thethao");
-//            NhanDanCategories.put("Entertainment", new URL("??"));
+        NhanDanCategories.put("Sports","https://nhandan.vn/thethao"); // NhanDanCategories.put("Entertainment", new URL("??"));
         NhanDanCategories.put("World","https://nhandan.vn/thegioi");
 
         NewsOutlet VNExpress = new NewsOutlet("https://vnexpress.net/", "title-news", "title-detail", "description", "fck_detail", "datePublished","fig-picture", VNExpressCategories);
         NewsOutlet ZingNews = new NewsOutlet("https://zingnews.vn/", "article-title", "the-article-title", "the-article-summary", "the-article-body", "article:published_time", "pic", ZingCategories);
-        // wtf? fix this pls, cant use "lightbox-content" (class of img) to scrape img
+        // TODO: fix this pls, cant use "lightbox-content" (class of img) to scrape img
         NewsOutlet TuoiTre = new NewsOutlet("https://tuoitre.vn/", "title-news", "article-title", "sapo", "content fck","article:published_time","VCSortableInPreviewMode",TuoitreCategories);
         NewsOutlet ThanhNien = new NewsOutlet("https://thanhnien.vn/", "story__thumb", "details__headline", "sapo", "details__content", "article:published_time", "pswp-content__image", ThanhNienCategories);
         NewsOutlet NhanDan = new NewsOutlet("https://nhandan.vn/", "box-title", "box-title-detail", "box-des-detail", "detail-content-body ", "box-date pull-left", "box-detail-thumb", NhanDanCategories);
 
-        ArrayList<NewsOutlet> newsOutlets = new ArrayList<>();
 
-        newsOutlets.add(VNExpress);
-        newsOutlets.add(ZingNews);
-        newsOutlets.add(TuoiTre);
-        newsOutlets.add(ThanhNien);
-        newsOutlets.add(NhanDan);
-        for (NewsOutlet newsOutlet: newsOutlets){
-            try{
-                FileOutputStream fileOut = new FileOutputStream(NewsOutlet.SER_FILE_PATH + newsOutlet.getName() + ".ser");
-                ObjectOutputStream out = new ObjectOutputStream(fileOut);
-                out.writeObject(newsOutlet);
-                out.close();
-                fileOut.close();
-            }
-            catch (IOException i){
-                i.printStackTrace();
-            }
-        }
-    }
-    public static void main(String[] args) {
-        File dataDir = new File(NewsOutlet.SER_FILE_PATH);
-        File[] dataDirListing = dataDir.listFiles();
-        if (dataDirListing != null) {
-            for (File child: dataDirListing){
-                System.out.println(child.getName());
-            }
-        }
+        HashMap<String, NewsOutlet> newsOutlets = new HashMap<>();
+        newsOutlets.put("vnexpress", VNExpress);
+        newsOutlets.put("zingnews", ZingNews);
+        newsOutlets.put("tuoitre", TuoiTre);
+        newsOutlets.put("thanhnien", ThanhNien);
+        newsOutlets.put("nhandan", NhanDan);
 
-
-
-//        Scraper VNExpressScrapper = new Scraper(VNExpress, new ContentFactory(), new RetrieveInMetaTag());
-//        Scraper ZingNewsScrapper = new Scraper(ZingNews, new ContentFactory(), new RetrieveInMetaTag());
-//        Scraper TuoiTreScrapper = new Scraper(TuoiTre, new ContentFactory(), new RetrieveInMetaTag());
-//        Scraper ThanhNienScrapper = new Scraper(ThanhNien, new ContentFactory(), new RetrieveInMetaTag());
-//        Scraper NhanDanScrapper = new Scraper(NhanDan, new ContentFactory(), new RetrieveInBodyTag());
-
+        return newsOutlets;
 
     }
 
-    static final String SER_FILE_PATH = "./src/News/data/";
+    public static final String SER_FILE_PATH = "./src/News/data/";
 
     public String baseUrl;
     public String titleLinkClass;
@@ -119,9 +90,6 @@ public class NewsOutlet implements Serializable {
     public String dateTimeClass;
     public String pictureClass;
     public HashMap<String, String> categories;
-    
-
-    private String name;
 
     public NewsOutlet(String baseUrl, String titleLinkClass,
                       String titleClass, String descriptionClass,
