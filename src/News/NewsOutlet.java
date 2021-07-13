@@ -1,12 +1,14 @@
 package News;
 
 import News.Content.ContentFactory;
+import News.Content.DetailFactory;
 import Scraper.*;
 
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -61,12 +63,12 @@ public class NewsOutlet implements Serializable {
         NhanDanCategories.put("Sports","https://nhandan.vn/thethao"); // NhanDanCategories.put("Entertainment", new URL("??"));
         NhanDanCategories.put("World","https://nhandan.vn/thegioi");
 
-        NewsOutlet VNExpress = new NewsOutlet("https://vnexpress.net/", "title-news", "title-detail", "description", "fck_detail", "datePublished","fig-picture", VNExpressCategories);
-        NewsOutlet ZingNews = new NewsOutlet("https://zingnews.vn/", "article-title", "the-article-title", "the-article-summary", "the-article-body", "article:published_time", "pic", ZingCategories);
+        NewsOutlet VNExpress = new NewsOutlet("https://vnexpress.net/", "title-news", "title-detail", "description", "fck_detail", "datePublished","fig-picture", VNExpressCategories, new ContentFactory(), new RetrieveInMetaTag());
+        NewsOutlet ZingNews = new NewsOutlet("https://zingnews.vn/", "article-title", "the-article-title", "the-article-summary", "the-article-body", "article:published_time", "pic", ZingCategories, new ContentFactory(), new RetrieveInMetaTag());
         // TODO: fix this pls, cant use "lightbox-content" (class of img) to scrape img
-        NewsOutlet TuoiTre = new NewsOutlet("https://tuoitre.vn/", "title-news", "article-title", "sapo", "content fck","article:published_time","VCSortableInPreviewMode",TuoitreCategories);
-        NewsOutlet ThanhNien = new NewsOutlet("https://thanhnien.vn/", "story__thumb", "details__headline", "sapo", "details__content", "article:published_time", "pswp-content__image", ThanhNienCategories);
-        NewsOutlet NhanDan = new NewsOutlet("https://nhandan.vn/", "box-title", "box-title-detail", "box-des-detail", "detail-content-body ", "box-date pull-left", "box-detail-thumb", NhanDanCategories);
+        NewsOutlet TuoiTre = new NewsOutlet("https://tuoitre.vn/", "title-news", "article-title", "sapo", "content fck","article:published_time","VCSortableInPreviewMode",TuoitreCategories, new ContentFactory(), new RetrieveInMetaTag());
+        NewsOutlet ThanhNien = new NewsOutlet("https://thanhnien.vn/", "story__thumb", "details__headline", "sapo", "details__content", "article:published_time", "pswp-content__image", ThanhNienCategories, new ContentFactory(), new RetrieveInMetaTag());
+        NewsOutlet NhanDan = new NewsOutlet("https://nhandan.vn/", "box-title", "box-title-detail", "box-des-detail", "detail-content-body ", "box-date pull-left", "box-detail-thumb", NhanDanCategories, new ContentFactory(), new RetrieveInBodyTag());
 
 
         HashMap<String, NewsOutlet> newsOutlets = new HashMap<>();
@@ -80,8 +82,6 @@ public class NewsOutlet implements Serializable {
 
     }
 
-    public static final String SER_FILE_PATH = "./src/News/data/";
-
     public String baseUrl;
     public String titleLinkClass;
     public String titleClass;
@@ -91,10 +91,15 @@ public class NewsOutlet implements Serializable {
     public String pictureClass;
     public HashMap<String, String> categories;
 
+    // factories
+    public DetailFactory detailFactory;
+    public DateTimeRetrievable dateTimeRetrievable;
+
     public NewsOutlet(String baseUrl, String titleLinkClass,
                       String titleClass, String descriptionClass,
                       String contentBodyClass, String dateTimeClass,
-                      String pictureClass, HashMap<String, String> categories){
+                      String pictureClass, HashMap<String, String> categories,
+                      DetailFactory detailFactory, DateTimeRetrievable dateTimeRetrievable){
         this.baseUrl = baseUrl;
         this.titleLinkClass = titleLinkClass;
         this.titleClass = titleClass;
@@ -103,6 +108,9 @@ public class NewsOutlet implements Serializable {
         this.dateTimeClass = dateTimeClass;
         this.pictureClass = pictureClass;
         this.categories = categories;
+
+        this.detailFactory = detailFactory;
+        this.dateTimeRetrievable = dateTimeRetrievable;
     }
 
     public String getName(){

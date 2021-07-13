@@ -17,11 +17,11 @@ public class ScraperTestDrive {
     public static void main(String[] args) {
         HashMap<String, NewsOutlet> newsOutlets = NewsOutlet.initializeNewsOutlets();
 
-        Scraper VNExpressScrapper = new Scraper(newsOutlets.get("vnexpress"), new ContentFactory(), new RetrieveInMetaTag());
-        Scraper ZingNewsScrapper = new Scraper(newsOutlets.get("zingnews"), new ContentFactory(), new RetrieveInMetaTag());
-        Scraper TuoiTreScrapper = new Scraper(newsOutlets.get("tuoitre"), new ContentFactory(), new RetrieveInMetaTag());
-        Scraper ThanhNienScrapper = new Scraper(newsOutlets.get("thanhnien"), new ContentFactory(), new RetrieveInMetaTag());
-        Scraper NhanDanScrapper = new Scraper(newsOutlets.get("nhandan"), new ContentFactory(), new RetrieveInBodyTag());
+        Scraper VNExpressScrapper = new Scraper(newsOutlets.get("vnexpress"));
+        Scraper ZingNewsScrapper = new Scraper(newsOutlets.get("zingnews"));
+        Scraper TuoiTreScrapper = new Scraper(newsOutlets.get("tuoitre"));
+        Scraper ThanhNienScrapper = new Scraper(newsOutlets.get("thanhnien"));
+        Scraper NhanDanScrapper = new Scraper(newsOutlets.get("nhandan"));
 
         final long startTime = System.currentTimeMillis();
 
@@ -40,7 +40,7 @@ public class ScraperTestDrive {
         }
 
         final long endTime = System.currentTimeMillis();
-        System.out.println("Total execution time: " + (endTime - startTime)/1000);
+        System.out.println("Total execution time: " + (double) (endTime - startTime)/1000);
 
     }
 }

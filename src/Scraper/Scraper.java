@@ -1,7 +1,6 @@
 package Scraper;
 
 import News.Article;
-import News.Content.ContentFactory;
 import News.Content.Detail;
 import News.Content.DetailFactory;
 import News.NewsOutlet;
@@ -15,20 +14,24 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 
 public class Scraper {
     static final int MAX_ARTICLES_PER_CATEGORY = 5;
 
     NewsOutlet newsOutlet;
-    DetailFactory detailFactory;
-    DateTimeRetrievable dateTimeRetriever;
 
-    public Scraper(NewsOutlet newsOutlet, DetailFactory detailFactory, DateTimeRetrievable dateTimeRetriever){
+    // factory
+    DetailFactory detailFactory;
+
+    // datetime retrievable methods
+    DateTimeRetrievable dateTimeRetrievable;
+
+    public Scraper(NewsOutlet newsOutlet){
         this.newsOutlet = newsOutlet;
-        this.detailFactory = detailFactory;
-        this.dateTimeRetriever = dateTimeRetriever;
+
+        this.detailFactory = newsOutlet.detailFactory;
+        this.dateTimeRetrievable = newsOutlet.dateTimeRetrievable;
     }
 
     public HashSet<Article> getArticlesFromCategories(){
@@ -107,7 +110,7 @@ public class Scraper {
             title = doc.getElementsByClass(this.newsOutlet.titleClass).first();
             description = doc.getElementsByClass(this.newsOutlet.descriptionClass).first();
             content = doc.getElementsByClass(this.newsOutlet.contentBodyClass);
-            dateTimeStr = dateTimeRetriever.getDateTimeString(doc, this.newsOutlet.dateTimeClass);
+            dateTimeStr = this.newsOutlet.dateTimeRetrievable.getDateTimeString(doc, this.newsOutlet.dateTimeClass);
 
             // first pic is always the article thumbnail !
             // TODO: create DEFAULT thumbnail in case there is no pic in doc
@@ -142,7 +145,7 @@ public class Scraper {
         String description = descriptionTag.text();
 
         // TODO: move this to newsOutlet class
-        ArrayList<Detail> details = detailFactory.createDetailList(contentTag);
+        ArrayList<Detail> details = this.detailFactory.createDetailList(contentTag);
 
         // look for img in the data-src first, if not found, look in src
         String thumbNailUrl = thumbNailTag.getElementsByTag("img").attr("data-src");
@@ -150,7 +153,7 @@ public class Scraper {
             thumbNailUrl = thumbNailTag.getElementsByTag("img").attr("src");
         }
 
-        LocalDateTime localDateTime = dateTimeRetriever.getLocalDateTime(dateTime);
+        LocalDateTime localDateTime = this.dateTimeRetrievable.getLocalDateTime(dateTime);
 
         if (title.isEmpty() || description.isEmpty() || details.isEmpty() || thumbNailUrl.isEmpty() || localDateTime == null){
             return null;
