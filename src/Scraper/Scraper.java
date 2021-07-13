@@ -16,7 +16,6 @@ import java.util.*;
 public class Scraper {
     static final int MAX_ARTICLES_PER_CATEGORY = 5;
 
-    NewsOutlet newsOutlet;
 
     // factory
     DetailFactory detailFactory;
@@ -24,26 +23,19 @@ public class Scraper {
     // datetime retrievable methods
     DateTimeRetrievable dateTimeRetrievable;
 
-    public Scraper(NewsOutlet newsOutlet){
-        this.newsOutlet = newsOutlet;
-
-        this.detailFactory = newsOutlet.detailFactory;
-        this.dateTimeRetrievable = newsOutlet.dateTimeRetrievable;
-    }
-
-    public HashSet<Article> getArticlesFromCategories(){
+    public HashSet<Article> scrape(NewsOutlet newsOutlet){
         HashSet<Article> articles = new HashSet<>();
 
         // step 1: get url to each category
         // step 2: For each category, get all article links belong to that category
         // step 3: For each article, create an article object
 
-        for(String categoryName: this.newsOutlet.categories.keySet()){
-
+        for (String category: newsOutlet.categories.keySet()){
             // step 1: get url to a specific category (value) by assessing the category name (key)
             URL urlToCategory;
+
             try{
-                urlToCategory = new URL(this.newsOutlet.categories.get(categoryName));
+                urlToCategory = new URL(newsOutlet.categories.get(category));
             }
             catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -51,29 +43,30 @@ public class Scraper {
             }
 
             // step 2
-            HashSet<URL> urlsInCategory = getAllArticleLinks(urlToCategory);
+            HashSet<URL> urlsInCategory = getAllArticleLinks(urlToCategory, newsOutlet.titleLinkClass);
 
             // step 3
             for (URL url: urlsInCategory){
-                Article article = getArticle(url, categoryName);
+                Article article = getArticle(url, category, newsOutlet);
+
                 if (article != null)
                     articles.add(article);
             }
+
         }
 
         return articles;
     }
 
-
     // get all article links in a category
-    private HashSet<URL> getAllArticleLinks(URL baseUrl){
+    private HashSet<URL> getAllArticleLinks(URL baseUrl, String titleLinkClass){
         Document doc;
 
         // Do not store duplicates
         HashSet<URL> links = new HashSet<>();
         try{
             doc = Jsoup.connect(baseUrl.toString()).get();
-            Elements titleTags = doc.getElementsByClass(this.newsOutlet.titleLinkClass);
+            Elements titleTags = doc.getElementsByClass(titleLinkClass);
             // target all title tags and pull out links for articles
             for (Element e: titleTags){
 
@@ -89,59 +82,50 @@ public class Scraper {
         return links;
     }
 
-    private Article getArticle(URL articleUrl, String category){
+    private Article getArticle(URL articleUrl, String category, NewsOutlet newsOutlet){
         Document doc;
 
-        Article article = null;
-        Element title;
-        Element description;
-        Elements content;
-        Element thumbNail;
-        String dateTimeStr;
+
+        String titleCssClass = newsOutlet.titleClass;
+        String descriptionCssClass = newsOutlet.descriptionClass;
+        String contentBodyCssClass = newsOutlet.contentBodyClass;
+        String picCssClass = newsOutlet.pictureClass;
+        String dateTimeCssClass = newsOutlet.dateTimeClass;
+
+        Article article;
+        Element titleTag = null;
+        Element descriptionTag = null;
+        Elements contentTag = null;
+        Element thumbNailTag = null;
+        String dateTimeStr = "";
 
         try {
             // scrape all html tags that contain properties of the article
             doc = Jsoup.connect(articleUrl.toString()).get();
 
             // TODO: videos sometimes do not have title tag!
-            title = doc.getElementsByClass(this.newsOutlet.titleClass).first();
-            description = doc.getElementsByClass(this.newsOutlet.descriptionClass).first();
-            content = doc.getElementsByClass(this.newsOutlet.contentBodyClass);
-            dateTimeStr = this.newsOutlet.dateTimeRetrievable.getDateTimeString(doc, this.newsOutlet.dateTimeClass);
+            titleTag = doc.getElementsByClass(titleCssClass).first();
+            descriptionTag = doc.getElementsByClass(descriptionCssClass).first();
+            contentTag = doc.getElementsByClass(contentBodyCssClass);
+            dateTimeStr = newsOutlet.dateTimeRetrievable.getDateTimeString(doc, dateTimeCssClass);
 
             // first pic is always the article thumbnail !
-            thumbNail = doc.getElementsByClass(this.newsOutlet.pictureClass).first();
-
-            if (title == null || description == null || content == null || dateTimeStr == null){
-                return null;
-            }
-
-            // create the article by all scraped html tags and the provided category
-            article = createArticleFromHtmlElements(title,
-                                                    description,
-                                                    content,
-                                                    thumbNail,
-                                                    dateTimeStr,
-                                                    category);
+            thumbNailTag = doc.getElementsByClass(picCssClass).first();
         }
         catch (IOException e){
             e.printStackTrace();
         }
 
-        return article;
-    }
+        if (titleTag == null || descriptionTag == null || contentTag == null || dateTimeStr == null){
+            return null;
+        }
 
-    private Article createArticleFromHtmlElements(Element titleTag,
-                                                  Element descriptionTag,
-                                                  Elements contentTag,
-                                                  Element thumbNailTag,
-                                                  String dateTime,
-                                                  String mainCategory){
+        // create the article by all scraped html tags and the provided category
         String title = titleTag.text();
         String description = descriptionTag.text();
-        ArrayList<Detail> details = this.detailFactory.createDetailList(contentTag);
+        ArrayList<Detail> details = newsOutlet.detailFactory.createDetailList(contentTag);
 
-        String thumbNailUrl = this.newsOutlet.defaultThumbNailUrl;
+        String thumbNailUrl = newsOutlet.defaultThumbNailUrl;
         if (thumbNailTag != null){
             // look for img in the data-src first, if not found, look in src
             thumbNailUrl = thumbNailTag.getElementsByTag("img").attr("data-src");
@@ -150,11 +134,12 @@ public class Scraper {
             }
         }
 
-        LocalDateTime localDateTime = this.dateTimeRetrievable.getLocalDateTime(dateTime);
+        LocalDateTime localDateTime = this.dateTimeRetrievable.getLocalDateTime(dateTimeStr);
         if (title.isEmpty() || description.isEmpty() || details.isEmpty() || thumbNailUrl.isEmpty()){
             return null;
         }
 
-        return new Article(title, description, details, thumbNailUrl, localDateTime, mainCategory);
+        return new Article(articleUrl, category, title, description, details, thumbNailUrl, localDateTime);
     }
+
 }

@@ -6,6 +6,7 @@ import News.Content.ContentFactory;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.HashSet;
 public class Article {
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EE, dd/MMMM/yyyy, kk:mm ");
     // attributes
+    URL url;
     String title;
     String description;
     ArrayList<Detail> details;
@@ -21,12 +23,15 @@ public class Article {
     LocalDateTime dateTime;
     HashSet<String> categories = new HashSet<>();
 
-    public Article(String title,
+    public Article(URL url,
+                   String category,
+                   String title,
                    String description,
                    ArrayList<Detail> details,
                    String thumbNailUrl,
-                   LocalDateTime dateTime,
-                   String category){
+                   LocalDateTime dateTime
+                   ){
+        this.url = url;
         this.title = title;
         this.description = description;
         this.details = details;
