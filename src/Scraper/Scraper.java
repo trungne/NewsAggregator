@@ -16,13 +16,6 @@ import java.util.*;
 public class Scraper {
     static final int MAX_ARTICLES_PER_CATEGORY = 5;
 
-
-    // factory
-    DetailFactory detailFactory;
-
-    // datetime retrievable methods
-    DateTimeRetrievable dateTimeRetrievable;
-
     public HashSet<Article> scrape(NewsOutlet newsOutlet){
         HashSet<Article> articles = new HashSet<>();
 
@@ -33,7 +26,6 @@ public class Scraper {
         for (String category: newsOutlet.categories.keySet()){
             // step 1: get url to a specific category (value) by assessing the category name (key)
             URL urlToCategory;
-
             try{
                 urlToCategory = new URL(newsOutlet.categories.get(category));
             }
@@ -43,18 +35,15 @@ public class Scraper {
             }
 
             // step 2
-            HashSet<URL> urlsInCategory = getAllArticleLinks(urlToCategory, newsOutlet.titleLinkClass);
+            HashSet<URL> urlsInCategory = getAllArticleLinks(urlToCategory, newsOutlet.titleLinkCssClass);
 
             // step 3
             for (URL url: urlsInCategory){
                 Article article = getArticle(url, category, newsOutlet);
-
                 if (article != null)
                     articles.add(article);
             }
-
         }
-
         return articles;
     }
 
@@ -85,14 +74,8 @@ public class Scraper {
     private Article getArticle(URL articleUrl, String category, NewsOutlet newsOutlet){
         Document doc;
 
-
-        String titleCssClass = newsOutlet.titleClass;
-        String descriptionCssClass = newsOutlet.descriptionClass;
-        String contentBodyCssClass = newsOutlet.contentBodyClass;
-        String picCssClass = newsOutlet.pictureClass;
-        String dateTimeCssClass = newsOutlet.dateTimeClass;
-
         Article article;
+
         Element titleTag = null;
         Element descriptionTag = null;
         Elements contentTag = null;
@@ -104,19 +87,20 @@ public class Scraper {
             doc = Jsoup.connect(articleUrl.toString()).get();
 
             // TODO: videos sometimes do not have title tag!
-            titleTag = doc.getElementsByClass(titleCssClass).first();
-            descriptionTag = doc.getElementsByClass(descriptionCssClass).first();
-            contentTag = doc.getElementsByClass(contentBodyCssClass);
-            dateTimeStr = newsOutlet.dateTimeRetrievable.getDateTimeString(doc, dateTimeCssClass);
+            titleTag = doc.getElementsByClass(newsOutlet.titleCssClass).first();
+            descriptionTag = doc.getElementsByClass(newsOutlet.descriptionCssClass).first();
+            contentTag = doc.getElementsByClass(newsOutlet.contentBodyCssClass);
+            dateTimeStr = newsOutlet.dateTimeRetrievable.getDateTimeString(doc, newsOutlet.dateTimeCssClass);
 
             // first pic is always the article thumbnail !
-            thumbNailTag = doc.getElementsByClass(picCssClass).first();
+            thumbNailTag = doc.getElementsByClass(newsOutlet.pictureCssClass).first();
         }
         catch (IOException e){
             e.printStackTrace();
         }
 
-        if (titleTag == null || descriptionTag == null || contentTag == null || dateTimeStr == null){
+        // TODO: create a separate function to check if scraped html/text are valid to create an article object
+        if (titleTag == null || descriptionTag == null || contentTag == null){
             return null;
         }
 
@@ -134,12 +118,11 @@ public class Scraper {
             }
         }
 
-        LocalDateTime localDateTime = this.dateTimeRetrievable.getLocalDateTime(dateTimeStr);
+        LocalDateTime localDateTime = newsOutlet.dateTimeRetrievable.getLocalDateTime(dateTimeStr);
         if (title.isEmpty() || description.isEmpty() || details.isEmpty() || thumbNailUrl.isEmpty()){
             return null;
         }
 
         return new Article(articleUrl, category, title, description, details, thumbNailUrl, localDateTime);
     }
-
 }

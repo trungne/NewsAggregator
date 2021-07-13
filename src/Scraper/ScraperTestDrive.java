@@ -13,15 +13,13 @@ public class ScraperTestDrive {
 
         final long startTime = System.currentTimeMillis();
 
-        Scraper scraper;
+        Scraper scraper = new Scraper();
         for (String newsOutlet: newsOutlets.keySet()){
-            scraper = new Scraper();
             NewsOutlet target = newsOutlets.get(newsOutlet);
             allArticles.addAll(scraper.scrape(target));
         }
 
         final long endTime = System.currentTimeMillis();
-        System.out.println("Total execution time: " + (double) (endTime - startTime)/1000);
 
         System.out.println(allArticles.size());
 //
@@ -29,5 +27,7 @@ public class ScraperTestDrive {
             article.displayTitleAndCategory();
             System.out.println("---- time: " + article.getDateTime());
         }
+        System.out.println("Total execution time: " + (double) (endTime - startTime)/1000);
+
     }
 }

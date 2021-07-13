@@ -7,10 +7,7 @@ import Scraper.*;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class NewsOutlet implements Serializable {
     public static HashMap<String, NewsOutlet> initializeNewsOutlets(){
@@ -92,12 +89,12 @@ public class NewsOutlet implements Serializable {
     }
 
     public String baseUrl;
-    public String titleLinkClass;
-    public String titleClass;
-    public String descriptionClass;
-    public String contentBodyClass;
-    public String dateTimeClass;
-    public String pictureClass;
+    public String titleLinkCssClass;
+    public String titleCssClass;
+    public String descriptionCssClass;
+    public String contentBodyCssClass;
+    public String dateTimeCssClass;
+    public String pictureCssClass;
     public String defaultThumbNailUrl;
     public HashMap<String, String> categories;
 
@@ -106,17 +103,17 @@ public class NewsOutlet implements Serializable {
     public DateTimeRetrievable dateTimeRetrievable;
 
     public NewsOutlet(String baseUrl, String titleLinkClass,
-                      String titleClass, String descriptionClass,
-                      String contentBodyClass, String dateTimeClass,
+                      String titleCssClass, String descriptionCssClass,
+                      String contentBodyCssClass, String dateTimeClass,
                       String pictureClass, HashMap<String, String> categories,
                       DetailFactory detailFactory, DateTimeRetrievable dateTimeRetrievable){
         this.baseUrl = baseUrl;
-        this.titleLinkClass = titleLinkClass;
-        this.titleClass = titleClass;
-        this.descriptionClass = descriptionClass;
-        this.contentBodyClass = contentBodyClass;
-        this.dateTimeClass = dateTimeClass;
-        this.pictureClass = pictureClass;
+        this.titleLinkCssClass = titleLinkClass;
+        this.titleCssClass = titleCssClass;
+        this.descriptionCssClass = descriptionCssClass;
+        this.contentBodyCssClass = contentBodyCssClass;
+        this.dateTimeCssClass = dateTimeClass;
+        this.pictureCssClass = pictureClass;
         this.categories = categories;
 
         this.detailFactory = detailFactory;
