@@ -21,8 +21,7 @@ public class ScraperTestDrive {
 //            es.execute(scrapers[i]);
             final int INDEX = i;
             es.execute(() -> {
-                Scraper scraper = new Scraper();
-                allArticles.addAll(scraper.scrape(newsOutlets[INDEX]));
+                allArticles.addAll((new Scraper()).scrape(newsOutlets[INDEX]));
             });
         }
         es.shutdown();
