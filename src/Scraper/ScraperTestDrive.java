@@ -18,7 +18,6 @@ public class ScraperTestDrive {
         final long startTime = System.currentTimeMillis();
 
         for (int i = 0; i < newsOutlets.length; i++){
-//            es.execute(scrapers[i]);
             final int INDEX = i;
             es.execute(() -> {
                 allArticles.addAll((new Scraper()).scrape(newsOutlets[INDEX]));

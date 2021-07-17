@@ -10,7 +10,6 @@ public class RetrieveInMetaTag implements DateTimeRetrievable{
 
     @Override
     public String getDateTimeString(Document doc, String propertyContainsDateTimeInfo) {
-        String dateTimeStr;
         Elements dateTimeTag = doc.getElementsByAttributeValue("property", propertyContainsDateTimeInfo);
         // this is for VNExpress with their unconventional naming!
         if (dateTimeTag.outerHtml().isEmpty()){

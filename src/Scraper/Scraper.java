@@ -109,7 +109,7 @@ public class Scraper {
         // create the article by all scraped html tags and the provided category
         String title = titleTag.text();
         String description = descriptionTag.text();
-        ArrayList<Detail> details = newsOutlet.detailFactory.createDetailList(contentTag);
+            ArrayList<Detail> details = newsOutlet.detailFactory.createDetailList(contentTag);
 
         String thumbNailUrl = newsOutlet.defaultThumbNailUrl;
         if (thumbNailTag != null){
@@ -121,7 +121,7 @@ public class Scraper {
         }
 
         LocalDateTime localDateTime = newsOutlet.dateTimeRetrievable.getLocalDateTime(dateTimeStr);
-        if (title.isEmpty() || description.isEmpty() || details.isEmpty() || thumbNailUrl.isEmpty()){
+        if (title.isEmpty() || description.isEmpty() || details.isEmpty()){
             return null;
         }
 
