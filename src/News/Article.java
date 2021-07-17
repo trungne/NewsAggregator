@@ -1,10 +1,6 @@
 package News;
 
 import News.Content.Detail;
-import News.Content.DetailFactory;
-import News.Content.ContentFactory;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.net.URL;
 import java.time.LocalDateTime;

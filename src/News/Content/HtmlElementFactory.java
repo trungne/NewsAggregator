@@ -2,7 +2,7 @@ package News.Content;
 
 import org.jsoup.nodes.Element;
 
-public class ContentFactory extends DetailFactory {
+public class HtmlElementFactory extends DetailFactory {
 
     @Override
     protected Detail createDetail(Element html) {

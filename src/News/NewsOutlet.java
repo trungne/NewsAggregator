@@ -1,6 +1,6 @@
 package News;
 
-import News.Content.ContentFactory;
+import News.Content.HtmlElementFactory;
 import News.Content.DetailFactory;
 import Scraper.*;
 
@@ -60,20 +60,20 @@ public class NewsOutlet implements Serializable {
         NhanDanCategories.put("Sports","https://nhandan.vn/thethao"); // NhanDanCategories.put("Entertainment", new URL("??"));
         NhanDanCategories.put("World","https://nhandan.vn/thegioi");
 
-        NewsOutlet VNExpress = new NewsOutlet("VNExpress","https://vnexpress.net/", "title-news", "title-detail", "description", "fck_detail", "datePublished","fig-picture", VNExpressCategories, new ContentFactory(), new RetrieveInMetaTag());
+        NewsOutlet VNExpress = new NewsOutlet("VNExpress","https://vnexpress.net/", "title-news", "title-detail", "description", "fck_detail", "datePublished","fig-picture", VNExpressCategories, new HtmlElementFactory(), new RetrieveInMetaTag());
         VNExpress.setDefaultThumbNailUrl("https://s1.vnecdn.net/vnexpress/restruct/i/v395/logo_default.jpg");
 
-        NewsOutlet ZingNews = new NewsOutlet("ZingNews", "https://zingnews.vn/", "article-title", "the-article-title", "the-article-summary", "the-article-body", "article:published_time", "pic", ZingCategories, new ContentFactory(), new RetrieveInMetaTag());
+        NewsOutlet ZingNews = new NewsOutlet("ZingNews", "https://zingnews.vn/", "article-title", "the-article-title", "the-article-summary", "the-article-body", "article:published_time", "pic", ZingCategories, new HtmlElementFactory(), new RetrieveInMetaTag());
         ZingNews.setDefaultThumbNailUrl("https://static-znews.zadn.vn/images/logo-zing-home.svg");
 
         // TODO: fix this pls, cant use "lightbox-content" (class of img) to scrape img
-        NewsOutlet TuoiTre = new NewsOutlet("TuoiTre","https://tuoitre.vn/", "title-news", "article-title", "sapo", "content fck","article:published_time","VCSortableInPreviewMode",TuoitreCategories, new ContentFactory(), new RetrieveInMetaTag());
+        NewsOutlet TuoiTre = new NewsOutlet("TuoiTre","https://tuoitre.vn/", "title-news", "article-title", "sapo", "content fck","article:published_time","VCSortableInPreviewMode",TuoitreCategories, new HtmlElementFactory(), new RetrieveInMetaTag());
         TuoiTre.setDefaultThumbNailUrl("https://dangkyxettuyennghe.tuoitre.vn/img/logo-tt.png");
 
-        NewsOutlet ThanhNien = new NewsOutlet("ThanhNien","https://thanhnien.vn/", "story__thumb", "details__headline", "sapo", "details__content", "article:published_time", "pswp-content__image", ThanhNienCategories, new ContentFactory(), new RetrieveInMetaTag());
+        NewsOutlet ThanhNien = new NewsOutlet("ThanhNien","https://thanhnien.vn/", "story__thumb", "details__headline", "sapo", "details__content", "article:published_time", "pswp-content__image", ThanhNienCategories, new HtmlElementFactory(), new RetrieveInMetaTag());
         ThanhNien.setDefaultThumbNailUrl("https://static.thanhnien.vn/v2/App_Themes/images/logo-tn-2.png");
 
-        NewsOutlet NhanDan = new NewsOutlet("NhanDan", "https://nhandan.vn/", "box-title", "box-title-detail", "box-des-detail", "detail-content-body ", "box-date pull-left", "box-detail-thumb", NhanDanCategories, new ContentFactory(), new RetrieveInBodyTag());
+        NewsOutlet NhanDan = new NewsOutlet("NhanDan", "https://nhandan.vn/", "box-title", "box-title-detail", "box-des-detail", "detail-content-body ", "box-date pull-left", "box-detail-thumb", NhanDanCategories, new HtmlElementFactory(), new RetrieveInBodyTag());
         NhanDan.setDefaultThumbNailUrl("https://www.nhandan-printing.vn/datafiles_D_D/setmulti/nhandan_copy.jpg");
 
 
