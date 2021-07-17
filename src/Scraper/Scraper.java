@@ -15,6 +15,7 @@ import java.util.*;
 
 public class Scraper {
     static final int MAX_ARTICLES_PER_CATEGORY = 5;
+    static final int TIME_OUT_SECOND = 5 * 1000;
 
     public void scrapeWebAndFillCollection(NewsOutlet newsOutlet, Collection<Article> collection){
         /*
@@ -98,6 +99,7 @@ public class Scraper {
             }
 
         } catch (IOException e){
+            // TODO: disable this in production
             e.printStackTrace();
         }
         return links;
@@ -116,7 +118,7 @@ public class Scraper {
 
         try {
             // scrape all html tags that contain properties of the article
-            doc = Jsoup.connect(articleUrl.toString()).get();
+            doc = Jsoup.connect(articleUrl.toString()).timeout(TIME_OUT_SECOND).get(); // set timeout so that the waiting time is limited
 
             // TODO: videos sometimes do not have title tag!
             titleTag = doc.getElementsByClass(newsOutlet.titleCssClass).first();
@@ -128,6 +130,7 @@ public class Scraper {
             thumbNailTag = doc.getElementsByClass(newsOutlet.pictureCssClass).first();
         }
         catch (IOException e){
+            // TODO: disable this in production!
             e.printStackTrace();
         }
 
