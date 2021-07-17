@@ -16,9 +16,39 @@ import java.util.*;
 public class Scraper {
     static final int MAX_ARTICLES_PER_CATEGORY = 5;
 
-    public HashSet<Article> scrape(NewsOutlet newsOutlet){
-        HashSet<Article> articles = new HashSet<>();
+    public void scrapeWebAndFillCollection(NewsOutlet newsOutlet, Collection<Article> collection){
+        /*
+        step 1: get url to each category
+        step 2: For each category, get all article links belong to that category
+        step 3: For each article, create an article object
+        */
+        // step 1: get url to a specific category (value) by assessing the category name (key)
+        for (String category: newsOutlet.categories.keySet()){
+            URL urlToCategory;
+            try{
+                urlToCategory = new URL(newsOutlet.categories.get(category));
+            }
+            catch (MalformedURLException e) {
+                e.printStackTrace();
+                continue; // skip if the link cannot be reached
+            }
 
+            // step 2
+            HashSet<URL> urlsInCategory = getAllArticleLinksInCategory(urlToCategory, newsOutlet.titleLinkCssClass);
+
+            // step 3
+            for (URL url: urlsInCategory){
+                Article article = getArticle(url, category, newsOutlet);
+                if (article != null)
+                    collection.add(article);
+            }
+        }
+
+    }
+
+
+    public Collection<Article> scrape(NewsOutlet newsOutlet){
+        HashSet<Article> articles = new HashSet<>();
         /*
         step 1: get url to each category
         step 2: For each category, get all article links belong to that category

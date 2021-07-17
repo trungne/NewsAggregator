@@ -3,8 +3,7 @@ package Scraper;
 import News.Article;
 import News.NewsOutlet;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -12,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 public class ScraperTestDrive {
     public static void main(String[] args) throws InterruptedException {
         NewsOutlet[] newsOutlets = NewsOutlet.initializeNewsOutlets();
-        HashSet<Article> allArticles = new HashSet<>();
+        List<Article> safeArticleList = Collections.synchronizedList(new ArrayList<>());
         ExecutorService es = Executors.newCachedThreadPool();
 
         final long startTime = System.currentTimeMillis();
@@ -20,7 +19,8 @@ public class ScraperTestDrive {
         for (int i = 0; i < newsOutlets.length; i++){
             final int INDEX = i;
             es.execute(() -> {
-                allArticles.addAll((new Scraper()).scrape(newsOutlets[INDEX]));
+                (new Scraper()).scrapeWebAndFillCollection(newsOutlets[INDEX], safeArticleList);
+//                allArticles.addAll((new Scraper()).scrape(newsOutlets[INDEX]));
             });
         }
         es.shutdown();
@@ -29,12 +29,12 @@ public class ScraperTestDrive {
 
         final long endTime = System.currentTimeMillis();
 
-        System.out.println(allArticles.size());
+        System.out.println(safeArticleList.size());
 //
-//        for (Article article: allArticles){
-//            article.displayTitleAndCategory();
-//            System.out.println("---- time: " + article.getDateTime());
-//        }
+        for (Article article: safeArticleList){
+            article.displayTitleAndCategory();
+            System.out.println("---- time: " + article.getDateTime());
+        }
         System.out.println("Total execution time: " + (double) (endTime - startTime)/1000);
 
     }
