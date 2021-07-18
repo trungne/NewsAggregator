@@ -21,12 +21,11 @@ public class ArticleCollection {
         return articles;
     }
 
-    public void setArticles(Collection<Article> articles) {
-        ArticleCollection.articles = articles;
-    }
-
-    // TODO:
+    //
     private void loadArticles(){
+        // TODO: From scraping news
+
+        // TODO: From database
 
     }
 }

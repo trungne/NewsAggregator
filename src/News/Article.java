@@ -1,6 +1,7 @@
 package News;
 
 import News.Content.Detail;
+import org.jsoup.nodes.Element;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -12,25 +13,25 @@ public class Article {
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EE, dd/MMMM/yyyy, kk:mm ");
     // attributes
     URL url;
-    String title;
-    String description;
-    ArrayList<Detail> details;
+    Element title;
+    Element description;
+    Element mainContent;
     String thumbNailUrl;
     LocalDateTime dateTime;
     HashSet<String> categories = new HashSet<>();
 
     public Article(URL url,
                    String category,
-                   String title,
-                   String description,
-                   ArrayList<Detail> details,
+                   Element title,
+                   Element description,
+                   Element mainContent,
                    String thumbNailUrl,
                    LocalDateTime dateTime
                    ){
         this.url = url;
         this.title = title;
         this.description = description;
-        this.details = details;
+        this.mainContent = mainContent;
         this.thumbNailUrl = thumbNailUrl;
         this.dateTime = dateTime;
         this.categories.add(category);

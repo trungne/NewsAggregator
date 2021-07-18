@@ -94,7 +94,7 @@ public class NewsOutlet implements Serializable {
 
     // factories
     public DetailFactory detailFactory;
-    public DateTimeRetrievable dateTimeRetrievable;
+    public DateTimeRetrievable dateTimeRetriever;
 
     public NewsOutlet(String name,
                       String baseUrl, String titleLinkClass,
@@ -113,7 +113,7 @@ public class NewsOutlet implements Serializable {
         this.categories = categories;
 
         this.detailFactory = detailFactory;
-        this.dateTimeRetrievable = dateTimeRetrievable;
+        this.dateTimeRetriever = dateTimeRetrievable;
     }
 
     public void setDefaultThumbNailUrl(String url){

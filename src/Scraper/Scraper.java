@@ -106,58 +106,55 @@ public class Scraper {
     }
 
     private Article getArticle(URL articleUrl, String category, NewsOutlet newsOutlet){
-        Document doc;
-
-        Article article;
-
-        Element titleTag = null;
-        Element descriptionTag = null;
-        Elements contentTag = null;
-        Element thumbNailTag = null;
-        String dateTimeStr = "";
-
         try {
+            Document doc;
             // scrape all html tags that contain properties of the article
-            doc = Jsoup.connect(articleUrl.toString()).timeout(TIME_OUT_SECOND).get(); // set timeout so that the waiting time is limited
+            doc = Jsoup.connect(articleUrl.toString()).timeout(TIME_OUT_SECOND).get();
 
             // TODO: videos sometimes do not have title tag!
-            titleTag = doc.getElementsByClass(newsOutlet.titleCssClass).first();
-            descriptionTag = doc.getElementsByClass(newsOutlet.descriptionCssClass).first();
-            contentTag = doc.getElementsByClass(newsOutlet.contentBodyCssClass);
-            dateTimeStr = newsOutlet.dateTimeRetrievable.getDateTimeString(doc, newsOutlet.dateTimeCssClass);
-
+            Element titleTag = doc.getElementsByClass(newsOutlet.titleCssClass).first();
+            Element descriptionTag = doc.getElementsByClass(newsOutlet.descriptionCssClass).first();
+            Element mainContentTag = doc.getElementsByClass(newsOutlet.contentBodyCssClass).first();
             // first pic is always the article thumbnail !
-            thumbNailTag = doc.getElementsByClass(newsOutlet.pictureCssClass).first();
+            Element thumbNailTag = doc.getElementsByClass(newsOutlet.pictureCssClass).first();
+
+            String dateTimeStr = newsOutlet.dateTimeRetriever.getDateTimeString(doc, newsOutlet.dateTimeCssClass);
+
+            // TODO: create a separate function to check if scraped html/text are valid to create an article object
+
+            // sanitize and customize scraped tags
+            titleTag = newsOutlet.detailFactory.createHtmlTag(titleTag, DetailFactory.TITLE_CSS_CLASS);
+            descriptionTag = newsOutlet.detailFactory.createHtmlTag(descriptionTag, DetailFactory.DESCRIPTION_CSS_CLASS);
+            mainContentTag = newsOutlet.detailFactory.createHtmlTag(mainContentTag, DetailFactory.MAIN_CONTENT_CSS_CLASS);
+            thumbNailTag = newsOutlet.detailFactory.createHtmlTag(thumbNailTag, DetailFactory.THUMBNAIL_CSS_CLASS);
+
+            String thumbNailUrl = newsOutlet.defaultThumbNailUrl;
+            if (thumbNailTag != null){
+                // look for img in the data-src first, if not found, look in src
+                Element firstImgTag = thumbNailTag.getElementsByTag("img").first();
+
+                if (firstImgTag != null){
+                    if (firstImgTag.hasAttr("data-src")){
+                        thumbNailUrl = firstImgTag.attr("abs:data-src");
+                    }
+                    else if (firstImgTag.hasAttr("src")){
+                        thumbNailUrl = firstImgTag.attr("src");
+                    }
+                }
+            }
+
+            LocalDateTime localDateTime = newsOutlet.dateTimeRetriever.getLocalDateTime(dateTimeStr);
+
+            if (titleTag == null || descriptionTag == null || mainContentTag == null){
+                return null;
+            }
+
+            return new Article(articleUrl, category, titleTag, descriptionTag, mainContentTag, thumbNailUrl, localDateTime);
         }
         catch (IOException e){
             // TODO: disable this in production!
             e.printStackTrace();
-        }
-
-        // TODO: create a separate function to check if scraped html/text are valid to create an article object
-        if (titleTag == null || descriptionTag == null || contentTag == null){
             return null;
         }
-
-        // create the article by all scraped html tags and the provided category
-        String title = titleTag.text();
-        String description = descriptionTag.text();
-            ArrayList<Detail> details = newsOutlet.detailFactory.createDetailList(contentTag);
-
-        String thumbNailUrl = newsOutlet.defaultThumbNailUrl;
-        if (thumbNailTag != null){
-            // look for img in the data-src first, if not found, look in src
-            thumbNailUrl = thumbNailTag.getElementsByTag("img").attr("data-src");
-            if (thumbNailUrl.isEmpty()){
-                thumbNailUrl = thumbNailTag.getElementsByTag("img").attr("src");
-            }
-        }
-
-        LocalDateTime localDateTime = newsOutlet.dateTimeRetrievable.getLocalDateTime(dateTimeStr);
-        if (title.isEmpty() || description.isEmpty() || details.isEmpty()){
-            return null;
-        }
-
-        return new Article(articleUrl, category, title, description, details, thumbNailUrl, localDateTime);
     }
 }

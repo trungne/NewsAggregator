@@ -5,20 +5,24 @@ import org.jsoup.nodes.Element;
 public class HtmlElementFactory extends DetailFactory {
 
     @Override
-    protected Detail createDetail(Element html) {
-        Detail detail;
-        // TODO: create matching detail for each html element
-        // if pic create figure. check extension (.jpg, .png)
-        if (html.text().endsWith(".jpg")){
-            detail = new Figure(html.text());
+    protected Element createCustomTag(Element e, String type) {
+
+        if (type.equals(TITLE_CSS_CLASS)){
+
         }
-        else if (html.text().equals("caption")){
-            detail = new Caption(html.text());
+        else if (type.equals(DESCRIPTION_CSS_CLASS)){
+
+        }
+        else if (type.equals(MAIN_CONTENT_CSS_CLASS)){
+
+        }
+        else if (type.equals(THUMBNAIL_CSS_CLASS)){
+
         }
         else{
-            detail = new Paragraph(html.text());
+
         }
-        // else create paragraph
-        return detail;
+
+        return e;
     }
 }

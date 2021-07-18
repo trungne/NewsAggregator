@@ -6,19 +6,22 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 
 public abstract class DetailFactory {
+    public static final String TITLE_CSS_CLASS = "title";
+    public static final String DESCRIPTION_CSS_CLASS = "description";
+    public static final String MAIN_CONTENT_CSS_CLASS = "main-content";
+    public static final String THUMBNAIL_CSS_CLASS = "thumbnail";
+    public Element createHtmlTag(Element e, String type){
+        Element target = e;
+        // Remove attributes
+        target.clearAttributes();
 
-    public ArrayList<Detail> createDetailList(Elements contentElements){
-        ArrayList<Detail> details = new ArrayList<>();
+        // Add specific css classes to each detail
+        target.addClass(type);
 
-        // TODO: clear all css classes of elements
-
-        for(Element e: contentElements){
-            // TODO: add specific css classes to each detail
-            details.add(createDetail(e));
-        }
-
-        return details;
+        //
+        target = createCustomTag(target, type);
+        return e;
     }
 
-    protected abstract Detail createDetail(Element e);
+    protected abstract Element createCustomTag(Element e, String tag);
 }
