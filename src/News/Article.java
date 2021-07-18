@@ -1,12 +1,10 @@
 package News;
 
-import News.Content.Detail;
 import org.jsoup.nodes.Element;
 
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Article {
@@ -46,9 +44,12 @@ public class Article {
         this.categories.add(category);
     }
 
+    // TODO: only for testing
     public void displayTitleAndCategory(){
-        System.out.println("Title: " + this.title + ". Category: " + this.categories.toString());
+        System.out.println(url);
+        System.out.println("Title: " + this.description + ". Category: " + this.categories.toString());
     }
+
 
     public String getDateTime(){
         return dtf.format(this.dateTime);

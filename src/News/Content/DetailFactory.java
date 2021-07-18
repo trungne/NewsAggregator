@@ -9,19 +9,19 @@ public abstract class DetailFactory {
     public static final String TITLE_CSS_CLASS = "title";
     public static final String DESCRIPTION_CSS_CLASS = "description";
     public static final String MAIN_CONTENT_CSS_CLASS = "main-content";
-    public static final String THUMBNAIL_CSS_CLASS = "thumbnail";
+    public static final String LOCATION_CSS_CLASS = "location";
     public Element createHtmlTag(Element e, String type){
         Element target = e;
-        // Remove attributes
-        target.clearAttributes();
+
+        // sanitize tag. This also removes all attributes.
+        target = sanitizeTag(target, type);
 
         // Add specific css classes to each detail
         target.addClass(type);
 
-        //
-        target = createCustomTag(target, type);
-        return e;
+
+        return target;
     }
 
-    protected abstract Element createCustomTag(Element e, String tag);
+    protected abstract Element sanitizeTag(Element e, String tag);
 }

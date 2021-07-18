@@ -15,7 +15,7 @@ import java.util.*;
 
 public class Scraper {
     static final int MAX_ARTICLES_PER_CATEGORY = 5;
-    static final int TIME_OUT_SECOND = 5 * 1000;
+    static final int TIME_OUT_SECOND = 10 * 1000;
 
     public void scrapeWebAndFillCollection(NewsOutlet newsOutlet, Collection<Article> collection){
         /*
@@ -39,6 +39,8 @@ public class Scraper {
 
             // step 3
             for (URL url: urlsInCategory){
+                // TODO: check if url is already scraped/in the database
+                
                 Article article = getArticle(url, category, newsOutlet);
                 if (article != null)
                     collection.add(article);
@@ -122,11 +124,10 @@ public class Scraper {
 
             // TODO: create a separate function to check if scraped html/text are valid to create an article object
 
-            // sanitize and customize scraped tags
+            // sanitize and customize 3 scraped tags
             titleTag = newsOutlet.detailFactory.createHtmlTag(titleTag, DetailFactory.TITLE_CSS_CLASS);
             descriptionTag = newsOutlet.detailFactory.createHtmlTag(descriptionTag, DetailFactory.DESCRIPTION_CSS_CLASS);
             mainContentTag = newsOutlet.detailFactory.createHtmlTag(mainContentTag, DetailFactory.MAIN_CONTENT_CSS_CLASS);
-            thumbNailTag = newsOutlet.detailFactory.createHtmlTag(thumbNailTag, DetailFactory.THUMBNAIL_CSS_CLASS);
 
             String thumbNailUrl = newsOutlet.defaultThumbNailUrl;
             if (thumbNailTag != null){
@@ -154,6 +155,9 @@ public class Scraper {
         catch (IOException e){
             // TODO: disable this in production!
             e.printStackTrace();
+            return null;
+        }
+        catch (NullPointerException e){
             return null;
         }
     }
