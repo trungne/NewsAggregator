@@ -1,27 +1,19 @@
-package News.Content;
+package News.Sanitizer;
 
-import org.apache.commons.exec.util.StringUtils;
 import org.jsoup.Jsoup;
-import org.jsoup.internal.StringUtil;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Entities;
 import org.jsoup.safety.Safelist;
 import org.jsoup.select.Elements;
 
 
-public class VNExpressElementFactory extends DetailFactory{
+public class VNExpressSanitizer extends HtmlSanitizer {
     @Override
     protected Element sanitizeTag(Element e, String type) {
         Safelist safelist; // modify this safe list according to the type
         String cleanHtml;
         Element newHtmlElement;
-        Document doc;
-        switch (type) {
-            case TITLE_CSS_CLASS:
-                // no need for safe list cleaning as there aren't many attributes in the title tag
-                return e.clearAttributes();
 
+        switch (type) {
             case DESCRIPTION_CSS_CLASS:
                 safelist = Safelist.basic();
                 cleanHtml = Jsoup.clean(e.html(), safelist);

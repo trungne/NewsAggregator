@@ -1,7 +1,7 @@
 package Scraper;
 
 import News.*;
-import News.Content.*;
+import News.Sanitizer.*;
 
 import org.jsoup.*;
 import org.jsoup.nodes.*;
@@ -14,8 +14,10 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class Scraper {
-    static final int MAX_ARTICLES_PER_CATEGORY = 2;
+    static final int MAX_LINKS_SCRAPED = 2;
     static final int TIME_OUT_SECOND = 10 * 1000;
+
+    private Document doc;
 
     public void scrapeWebAndFillCollection(NewsOutlet newsOutlet, Collection<Article> collection){
         /*
@@ -48,6 +50,85 @@ public class Scraper {
         }
 
     }
+
+    public static ArrayList<URL> scrapeLinksByClass(URL baseUrl, String cssClass){
+        Document doc;
+        // Do not store duplicates
+        ArrayList<URL> links = new ArrayList<>();
+        try{
+            doc = Jsoup.connect(baseUrl.toString()).get();
+            Elements titleTags = doc.getElementsByClass(cssClass);
+            // target all title tags and pull out links for articles
+            for (Element tag: titleTags){
+                if (links.size() > MAX_LINKS_SCRAPED) return links;
+                // link is stored in href attribute of <a> tag
+                URL link = new URL(baseUrl, tag.getElementsByTag("a").attr("href"));
+                links.add(link);
+            }
+
+        } catch (IOException e){
+            // TODO: disable this in production
+            e.printStackTrace();
+        }
+        return links;
+    }
+    public Scraper(){
+
+    }
+
+    public Scraper(Document doc){
+        this.doc = doc;
+    }
+
+
+    public Scraper(String url) throws IOException {
+        this.doc = Jsoup.connect(url).get();
+    }
+    
+    // only scrape the first tag found!
+    public Element scrapeElementByClass(String uniqueCssClass){
+        String queryString = uniqueCssClass;
+        if (!queryString.startsWith(".")){
+            queryString = "." + uniqueCssClass;
+        }
+        return this.doc.selectFirst(queryString);
+    }
+
+    public String scrapeFirstImgUrlByClass(String uniqueCssClass){
+        String queryString = uniqueCssClass;
+        if (!queryString.startsWith(".")){
+            queryString = "." + uniqueCssClass;
+        }
+
+        String thumbNailUrl = "";
+        Element thumbNailTag = this.doc.selectFirst(queryString);
+
+        if (thumbNailTag != null){
+            Element firstImgTag = thumbNailTag.getElementsByTag("img").first();
+
+            if (firstImgTag != null){
+                if (firstImgTag.hasAttr("data-src")){
+                    thumbNailUrl = firstImgTag.attr("abs:data-src");
+                }
+                else if (firstImgTag.hasAttr("src")){
+                    thumbNailUrl = firstImgTag.attr("abs:src");
+                }
+            }
+        }
+        return thumbNailUrl;
+
+    }
+
+    public LocalDateTime scrapeDateTime(String uniqueDateTimeCssClass, ScrapingDateTimeBehavior scrapingDateTimeBehavior){
+        String dateTimeStr = scrapingDateTimeBehavior.getDateTimeString(this.doc, uniqueDateTimeCssClass);
+        return scrapingDateTimeBehavior.getLocalDateTime(dateTimeStr);
+    }
+
+
+
+
+
+
 
 
     public Collection<Article> scrape(NewsOutlet newsOutlet){
@@ -94,7 +175,7 @@ public class Scraper {
             // target all title tags and pull out links for articles
             for (Element e: titleTags){
 
-                if (links.size() > MAX_ARTICLES_PER_CATEGORY) return links;
+                if (links.size() > MAX_LINKS_SCRAPED) return links;
                 // link is stored in href attribute of <a> tag
                 URL link = new URL(baseUrl, e.getElementsByTag("a").attr("href"));
                 links.add(link);
@@ -120,14 +201,14 @@ public class Scraper {
             // first pic is always the article thumbnail !
             Element thumbNailTag = doc.getElementsByClass(newsOutlet.pictureCssClass).first();
 
-            String dateTimeStr = newsOutlet.dateTimeRetriever.getDateTimeString(doc, newsOutlet.dateTimeCssClass);
+            String dateTimeStr = newsOutlet.scrapingDateTimeBehavior.getDateTimeString(doc, newsOutlet.dateTimeCssClass);
 
             // TODO: create a separate function to check if scraped html/text are valid to create an article object
 
             // sanitize and customize 3 scraped tags
-            titleTag = newsOutlet.detailFactory.createHtmlTag(titleTag, DetailFactory.TITLE_CSS_CLASS);
-            descriptionTag = newsOutlet.detailFactory.createHtmlTag(descriptionTag, DetailFactory.DESCRIPTION_CSS_CLASS);
-            mainContentTag = newsOutlet.detailFactory.createHtmlTag(mainContentTag, DetailFactory.MAIN_CONTENT_CSS_CLASS);
+            titleTag = newsOutlet.sanitizer.sanitize(titleTag, HtmlSanitizer.TITLE_CSS_CLASS);
+            descriptionTag = newsOutlet.sanitizer.sanitize(descriptionTag, HtmlSanitizer.DESCRIPTION_CSS_CLASS);
+            mainContentTag = newsOutlet.sanitizer.sanitize(mainContentTag, HtmlSanitizer.MAIN_CONTENT_CSS_CLASS);
 
             String thumbNailUrl = newsOutlet.defaultThumbNailUrl;
             if (thumbNailTag != null){
@@ -144,7 +225,7 @@ public class Scraper {
                 }
             }
 
-            LocalDateTime localDateTime = newsOutlet.dateTimeRetriever.getLocalDateTime(dateTimeStr);
+            LocalDateTime localDateTime = newsOutlet.scrapingDateTimeBehavior.getLocalDateTime(dateTimeStr);
 
             if (titleTag == null || descriptionTag == null || mainContentTag == null){
                 return null;

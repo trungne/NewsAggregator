@@ -1,6 +1,7 @@
 package Scraper;
 
 import News.Article;
+import News.ArticleListGenerator;
 import News.NewsOutlet;
 
 import java.util.*;
@@ -19,8 +20,7 @@ public class ScraperTestDrive {
         for (int i = 0; i < newsOutlets.length; i++){
             final int INDEX = i;
             es.execute(() -> {
-                (new Scraper()).scrapeWebAndFillCollection(newsOutlets[INDEX], safeArticleList);
-//                allArticles.addAll((new Scraper()).scrape(newsOutlets[INDEX]));
+                safeArticleList.addAll((new ArticleListGenerator(newsOutlets[INDEX])).getArticles());
             });
         }
         es.shutdown();

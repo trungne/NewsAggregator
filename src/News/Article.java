@@ -50,6 +50,9 @@ public class Article {
         System.out.println(this.mainContent + ". Category: " + this.categories.toString());
     }
 
+    public String getTitle() {
+        return title.text();
+    }
 
     public String getDateTime(){
         return dtf.format(this.dateTime);
