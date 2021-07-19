@@ -17,7 +17,7 @@ public class NhanDanSanitizer extends HtmlSanitizer {
                 safelist.removeTags("span", "p");
                 cleanHtml = Jsoup.clean(e.html(), safelist);
 
-                newHtmlElement = new Element("p").html(cleanHtml.replace("&nbsp;"," "));
+                newHtmlElement = new Element("p").html(cleanHtml);
 
                 return newHtmlElement;
             case MAIN_CONTENT_CSS_CLASS:

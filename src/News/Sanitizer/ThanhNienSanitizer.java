@@ -18,7 +18,7 @@ public class ThanhNienSanitizer extends HtmlSanitizer {
 
                 // TODO: parse clean html with doc to decode special chars
 
-                newHtmlElement = new Element("p").html(cleanHtml.replace("&nbsp;"," "));
+                newHtmlElement = new Element("p").html(cleanHtml);
 
                 return newHtmlElement;
             case MAIN_CONTENT_CSS_CLASS:

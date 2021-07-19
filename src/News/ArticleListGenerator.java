@@ -15,7 +15,6 @@ import java.util.HashMap;
 
 public class ArticleListGenerator {
     NewsOutlet newsOutlet;
-
     ArrayList<Article> articles = new ArrayList<>();
 
 
@@ -89,7 +88,6 @@ public class ArticleListGenerator {
 
         // TODO: check if link already exists in database?
 
-        //
         for (String category: newsOutlet.categories.keySet()){
             ArrayList<URL> links;
             URL categoryUrl;

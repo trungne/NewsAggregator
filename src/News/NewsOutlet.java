@@ -87,7 +87,7 @@ public class NewsOutlet implements Serializable {
         NhanDan.setName(NewsOutlet.NhanDan);
 
         // NewsOutlet[]{VNExpress, ZingNews, TuoiTre, ThanhNien, NhanDan};
-        return new NewsOutlet[]{VNExpress};
+        return new NewsOutlet[]{VNExpress, ZingNews, TuoiTre, ThanhNien, NhanDan};
 
     }
 

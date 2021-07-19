@@ -32,8 +32,8 @@ public class ScraperTestDrive {
         System.out.println(safeArticleList.size());
 //
         for (Article article: safeArticleList){
-            article.displayTitleAndCategory();
-            System.out.println("---- time: " + article.getDateTime());
+            System.out.println(article.getUrl() + " =============");
+            System.out.println(article.getHtml());
         }
         System.out.println("Total execution time: " + (double) (endTime - startTime)/1000);
 

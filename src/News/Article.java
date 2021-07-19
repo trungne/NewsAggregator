@@ -50,6 +50,18 @@ public class Article {
         System.out.println(this.mainContent + ". Category: " + this.categories.toString());
     }
 
+    public String getHtml(){
+        // String builder may not be thread-safe
+        StringBuilder s = new StringBuilder(title.outerHtml());
+        s.append(description.outerHtml());
+        s.append(mainContent.outerHtml());
+        return s.toString();
+    }
+
+    public String getUrl(){
+        return this.url.toString();
+    }
+
     public String getTitle() {
         return title.text();
     }

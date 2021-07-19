@@ -15,10 +15,12 @@ public class ZingNewsSanitizer extends HtmlSanitizer {
             case DESCRIPTION_CSS_CLASS:
                 safelist = Safelist.basic();
                 cleanHtml = Jsoup.clean(e.html(), safelist);
-                newHtmlElement = new Element("p").html(cleanHtml.replace("&nbsp;"," "));
+                newHtmlElement = new Element("p").html(cleanHtml);
 
                 return newHtmlElement;
             case MAIN_CONTENT_CSS_CLASS:
+                safelist = Safelist.relaxed();
+
 
                 break;
             default:
