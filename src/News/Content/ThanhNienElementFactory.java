@@ -18,6 +18,9 @@ public class ThanhNienElementFactory extends DetailFactory{
             case DESCRIPTION_CSS_CLASS:
                 safelist = Safelist.basic();
                 cleanHtml = Jsoup.clean(e.html(), safelist);
+
+                // TODO: parse clean html with doc to decode special chars
+
                 newHtmlElement = new Element("p").html(cleanHtml.replace("&nbsp;"," "));
 
                 return newHtmlElement;

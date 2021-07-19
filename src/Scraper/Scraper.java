@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class Scraper {
-    static final int MAX_ARTICLES_PER_CATEGORY = 5;
+    static final int MAX_ARTICLES_PER_CATEGORY = 2;
     static final int TIME_OUT_SECOND = 10 * 1000;
 
     public void scrapeWebAndFillCollection(NewsOutlet newsOutlet, Collection<Article> collection){
@@ -40,7 +40,7 @@ public class Scraper {
             // step 3
             for (URL url: urlsInCategory){
                 // TODO: check if url is already scraped/in the database
-                
+
                 Article article = getArticle(url, category, newsOutlet);
                 if (article != null)
                     collection.add(article);

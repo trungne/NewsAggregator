@@ -86,8 +86,8 @@ public class NewsOutlet implements Serializable {
         NhanDan.setDefaultThumbNailUrl("https://www.nhandan-printing.vn/datafiles_D_D/setmulti/nhandan_copy.jpg");
         NhanDan.setName(NewsOutlet.NhanDan);
 
-
-        return new NewsOutlet[]{VNExpress, ZingNews, TuoiTre, ThanhNien, NhanDan};
+        // NewsOutlet[]{VNExpress, ZingNews, TuoiTre, ThanhNien, NhanDan};
+        return new NewsOutlet[]{VNExpress};
 
     }
 

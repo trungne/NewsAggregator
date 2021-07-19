@@ -1,9 +1,14 @@
 package News.Content;
 
+import org.apache.commons.exec.util.StringUtils;
 import org.jsoup.Jsoup;
+import org.jsoup.internal.StringUtil;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Entities;
 import org.jsoup.safety.Safelist;
 import org.jsoup.select.Elements;
+
 
 public class VNExpressElementFactory extends DetailFactory{
     @Override
@@ -11,7 +16,7 @@ public class VNExpressElementFactory extends DetailFactory{
         Safelist safelist; // modify this safe list according to the type
         String cleanHtml;
         Element newHtmlElement;
-
+        Document doc;
         switch (type) {
             case TITLE_CSS_CLASS:
                 // no need for safe list cleaning as there aren't many attributes in the title tag
@@ -32,13 +37,16 @@ public class VNExpressElementFactory extends DetailFactory{
 
                 return newHtmlElement;
             case MAIN_CONTENT_CSS_CLASS:
-
-                break;
+                safelist = Safelist.relaxed();
+                safelist.addAttributes("img", "scr", "data-src");
+                safelist.removeTags("div");
+                cleanHtml = Jsoup.clean(e.html(), safelist);
+                newHtmlElement = new Element("div").html(cleanHtml);
+                return newHtmlElement;
             default:
-
-                break;
+                return e;
         }
 
-        return e;
+
     }
 }

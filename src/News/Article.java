@@ -47,7 +47,7 @@ public class Article {
     // TODO: only for testing
     public void displayTitleAndCategory(){
         System.out.println(url);
-        System.out.println("Title: " + this.description + ". Category: " + this.categories.toString());
+        System.out.println(this.mainContent + ". Category: " + this.categories.toString());
     }
 
 
