@@ -65,29 +65,95 @@ public class NewsOutletInfo implements Serializable {
         NhanDanCategories.put("Sports","https://nhandan.vn/thethao"); // NhanDanCategories.put("Entertainment", new URL("??"));
         NhanDanCategories.put("World","https://nhandan.vn/thegioi");
 
-        NewsOutletInfo VNExpress = new NewsOutletInfo("VNExpress","https://vnexpress.net/", "title-news", "title-detail", "description", "fck_detail", "datePublished","fig-picture", VNExpressCategories, new VNExpressSanitizer(), new ScrapeInMetaTag());
-        VNExpress.setDefaultThumbNailUrl("https://s1.vnecdn.net/vnexpress/restruct/i/v395/logo_default.jpg");
-        VNExpress.setName(NewsOutletInfo.VNExpress);
+//        NewsOutletInfo VNExpress = new NewsOutletInfo("VNExpress", "https://vnexpress.net/", "title-news", "title-detail", "description", "fck_detail", "datePublished", "fig-picture", VNExpressCategories, new VNExpressSanitizer(), new ScrapeInMetaTag());
+//        VNExpress.setDefaultThumbNailUrl("https://s1.vnecdn.net/vnexpress/restruct/i/v395/logo_default.jpg");
 
-        NewsOutletInfo ZingNews = new NewsOutletInfo("ZingNews", "https://zingnews.vn/", "article-title", "the-article-title", "the-article-summary", "the-article-body", "article:published_time", "pic", ZingCategories, new ZingNewsSanitizer(), new ScrapeInMetaTag());
-        ZingNews.setDefaultThumbNailUrl("https://static-znews.zadn.vn/images/logo-zing-home.svg");
-        ZingNews.setName(NewsOutletInfo.ZingNews);
+
+        NewsOutletInfo VNExpressInfo = new NewsOutletInfo(NewsOutletInfo.VNExpress);
+        VNExpressInfo.setBaseUrl("https://vnexpress.net/");
+        VNExpressInfo.setTitleLinkCssClass("title-news");
+        VNExpressInfo.setTitleCssClass("title-detail");
+        VNExpressInfo.setDescriptionCssClass("description");
+        VNExpressInfo.setContentBodyCssClass("fck_detail");
+        VNExpressInfo.setDateTimeCssClass("datePublished");
+        VNExpressInfo.setPictureCssClass("fig-picture");
+        VNExpressInfo.setDefaultThumbNailUrl("https://s1.vnecdn.net/vnexpress/restruct/i/v395/logo_default.jpg");
+        VNExpressInfo.setCategories(VNExpressCategories);
+        VNExpressInfo.setSanitizer(new VNExpressSanitizer());
+        VNExpressInfo.setScrapingDateTimeBehavior(new ScrapeInMetaTag());
+
+
+//        NewsOutletInfo ZingNews = new NewsOutletInfo("ZingNews", "https://zingnews.vn/", "article-title", "the-article-title", "the-article-summary", "the-article-body", "article:published_time", "pic", ZingCategories, new ZingNewsSanitizer(), new ScrapeInMetaTag());
+//        ZingNews.setDefaultThumbNailUrl("https://static-znews.zadn.vn/images/logo-zing-home.svg");
+
+
+        NewsOutletInfo ZingNewsInfo = new NewsOutletInfo(NewsOutletInfo.ZingNews);
+        ZingNewsInfo.setBaseUrl("https://zingnews.vn/");
+        ZingNewsInfo.setTitleLinkCssClass("article-title");
+        ZingNewsInfo.setTitleCssClass("the-article-title");
+        ZingNewsInfo.setDescriptionCssClass("the-article-summary");
+        ZingNewsInfo.setContentBodyCssClass("the-article-body");
+        ZingNewsInfo.setDateTimeCssClass("article:published_time");
+        ZingNewsInfo.setPictureCssClass("pic");
+        ZingNewsInfo.setDefaultThumbNailUrl("https://static-znews.zadn.vn/images/logo-zing-home.svg");
+        ZingNewsInfo.setCategories(ZingCategories);
+        ZingNewsInfo.setSanitizer(new ZingNewsSanitizer());
+        ZingNewsInfo.setScrapingDateTimeBehavior(new ScrapeInMetaTag());
 
         // TODO: fix this pls, cant use "lightbox-content" (class of img) to scrape img
-        NewsOutletInfo TuoiTre = new NewsOutletInfo("TuoiTre","https://tuoitre.vn/", "title-news", "article-title", "sapo", "content fck","article:published_time","VCSortableInPreviewMode",TuoitreCategories, new TuoiTreSanitizer(), new ScrapeInMetaTag());
-        TuoiTre.setDefaultThumbNailUrl("https://dangkyxettuyennghe.tuoitre.vn/img/logo-tt.png");
-        TuoiTre.setName(NewsOutletInfo.TuoiTre);
+//        NewsOutletInfo TuoiTre = new NewsOutletInfo("TuoiTre","https://tuoitre.vn/", "title-news", "article-title", "sapo", "content fck","article:published_time", "VCSortableInPreviewMode", TuoitreCategories, new TuoiTreSanitizer(), new ScrapeInMetaTag());
+//        TuoiTre.setDefaultThumbNailUrl("https://dangkyxettuyennghe.tuoitre.vn/img/logo-tt.png");
 
-        NewsOutletInfo ThanhNien = new NewsOutletInfo("ThanhNien","https://thanhnien.vn/", "story__thumb", "details__headline", "sapo", "details__content", "article:published_time", "pswp-content__image", ThanhNienCategories, new ThanhNienSanitizer(), new ScrapeInMetaTag());
-        ThanhNien.setDefaultThumbNailUrl("https://static.thanhnien.vn/v2/App_Themes/images/logo-tn-2.png");
-        ThanhNien.setName(NewsOutletInfo.ThanhNien);
 
-        NewsOutletInfo NhanDan = new NewsOutletInfo("NhanDan", "https://nhandan.vn/", "box-title", "box-title-detail", "box-des-detail", "detail-content-body ", "box-date pull-left", "box-detail-thumb", NhanDanCategories, new NhanDanSanitizer(), new ScrapeInBodyTag());
-        NhanDan.setDefaultThumbNailUrl("https://www.nhandan-printing.vn/datafiles_D_D/setmulti/nhandan_copy.jpg");
-        NhanDan.setName(NewsOutletInfo.NhanDan);
+        NewsOutletInfo TuoiTreInfo = new NewsOutletInfo(NewsOutletInfo.TuoiTre);
+        TuoiTreInfo.setBaseUrl("https://tuoitre.vn/");
+        TuoiTreInfo.setTitleLinkCssClass("title-news");
+        TuoiTreInfo.setTitleCssClass("article-title");
+        TuoiTreInfo.setDescriptionCssClass("sapo");
+        TuoiTreInfo.setContentBodyCssClass("content fck");
+        TuoiTreInfo.setDateTimeCssClass("article:published_time");
+        TuoiTreInfo.setPictureCssClass("VCSortableInPreviewMode");
+        TuoiTreInfo.setDefaultThumbNailUrl("https://dangkyxettuyennghe.tuoitre.vn/img/logo-tt.png");
+        TuoiTreInfo.setCategories(TuoitreCategories);
+        TuoiTreInfo.setSanitizer(new TuoiTreSanitizer());
+        TuoiTreInfo.setScrapingDateTimeBehavior(new ScrapeInMetaTag());
+
+//        NewsOutletInfo ThanhNien = new NewsOutletInfo("ThanhNien","https://thanhnien.vn/", "story__thumb", "details__headline", "sapo", "details__content", "article:published_time", "pswp-content__image", ThanhNienCategories, new ThanhNienSanitizer(), new ScrapeInMetaTag());
+//        ThanhNien.setDefaultThumbNailUrl("https://static.thanhnien.vn/v2/App_Themes/images/logo-tn-2.png");
+//
+
+        NewsOutletInfo ThanhNienInfo = new NewsOutletInfo(NewsOutletInfo.ThanhNien);
+        ThanhNienInfo.setBaseUrl("https://thanhnien.vn/");
+        ThanhNienInfo.setTitleLinkCssClass("story__thumb");
+        ThanhNienInfo.setTitleCssClass("details__headline");
+        ThanhNienInfo.setDescriptionCssClass("sapo");
+        ThanhNienInfo.setContentBodyCssClass("details__content");
+        ThanhNienInfo.setDateTimeCssClass("article:published_time");
+        ThanhNienInfo.setPictureCssClass("pswp-content__image");
+        ThanhNienInfo.setDefaultThumbNailUrl("https://static.thanhnien.vn/v2/App_Themes/images/logo-tn-2.png");
+        ThanhNienInfo.setCategories(ThanhNienCategories);
+        ThanhNienInfo.setSanitizer(new ThanhNienSanitizer());
+        ThanhNienInfo.setScrapingDateTimeBehavior(new ScrapeInMetaTag());
+
+//        NewsOutletInfo NhanDan = new NewsOutletInfo("NhanDan", "https://nhandan.vn/", "box-title", "box-title-detail", "box-des-detail", "detail-content-body", "box-date pull-left", "box-detail-thumb", NhanDanCategories, new NhanDanSanitizer(), new ScrapeInBodyTag());
+//        NhanDan.setDefaultThumbNailUrl("https://www.nhandan-printing.vn/datafiles_D_D/setmulti/nhandan_copy.jpg");
+//
+
+        NewsOutletInfo NhanDanInfo = new NewsOutletInfo(NewsOutletInfo.NhanDan);
+        NhanDanInfo.setBaseUrl("https://nhandan.vn/");
+        NhanDanInfo.setTitleLinkCssClass("box-title");
+        NhanDanInfo.setTitleCssClass("box-title-detail");
+        NhanDanInfo.setDescriptionCssClass("box-des-detail");
+        NhanDanInfo.setContentBodyCssClass("detail-content-body");
+        NhanDanInfo.setDateTimeCssClass("box-date pull-left");
+        NhanDanInfo.setPictureCssClass("box-detail-thumb");
+        NhanDanInfo.setDefaultThumbNailUrl("https://www.nhandan-printing.vn/datafiles_D_D/setmulti/nhandan_copy.jpg");
+        NhanDanInfo.setCategories(NhanDanCategories);
+        NhanDanInfo.setSanitizer(new NhanDanSanitizer());
+        NhanDanInfo.setScrapingDateTimeBehavior(new ScrapeInBodyTag());
 
         // NewsOutletInfo[]{VNExpress, ZingNews, TuoiTre, ThanhNien, NhanDan};
-        return new NewsOutletInfo[]{VNExpress, ZingNews, TuoiTre, ThanhNien, NhanDan};
+        return new NewsOutletInfo[]{VNExpressInfo, ZingNewsInfo, TuoiTreInfo, ThanhNienInfo, NhanDanInfo};
 
     }
 
@@ -106,50 +172,53 @@ public class NewsOutletInfo implements Serializable {
     public HtmlSanitizer sanitizer;
     public ScrapingDateTimeBehavior scrapingDateTimeBehavior;
 
-    public NewsOutletInfo(String name,
-                          String baseUrl, String titleLinkClass,
-                          String titleCssClass, String descriptionCssClass,
-                          String contentBodyCssClass, String dateTimeClass,
-                          String pictureClass, HashMap<String, String> categories,
-                          HtmlSanitizer htmlSanitizer, ScrapingDateTimeBehavior scrapingDateTimeBehavior){
+    public NewsOutletInfo(String name){
         this.name = name;
+    }
+
+    // setters
+    public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
-        this.titleLinkCssClass = titleLinkClass;
-        this.titleCssClass = titleCssClass;
-        this.descriptionCssClass = descriptionCssClass;
-        this.contentBodyCssClass = contentBodyCssClass;
-        this.dateTimeCssClass = dateTimeClass;
-        this.pictureCssClass = pictureClass;
+    }
+
+    public void setCategories(HashMap<String, String> categories) {
         this.categories = categories;
-        this.sanitizer = htmlSanitizer;
+    }
+
+    public void setTitleLinkCssClass(String titleLinkCssClass) {
+        this.titleLinkCssClass = titleLinkCssClass;
+    }
+
+    public void setDescriptionCssClass(String descriptionCssClass) {
+        this.descriptionCssClass = descriptionCssClass;
+    }
+
+    public void setContentBodyCssClass(String contentBodyCssClass) {
+        this.contentBodyCssClass = contentBodyCssClass;
+    }
+
+    public void setPictureCssClass(String pictureCssClass) {
+        this.pictureCssClass = pictureCssClass;
+    }
+
+    public void setDateTimeCssClass(String dateTimeCssClass) {
+        this.dateTimeCssClass = dateTimeCssClass;
+    }
+
+    public void setSanitizer(HtmlSanitizer sanitizer) {
+        this.sanitizer = sanitizer;
+    }
+
+    public void setScrapingDateTimeBehavior(ScrapingDateTimeBehavior scrapingDateTimeBehavior) {
         this.scrapingDateTimeBehavior = scrapingDateTimeBehavior;
+    }
+
+    public void setTitleCssClass(String titleCssClass) {
+        this.titleCssClass = titleCssClass;
     }
 
     public void setDefaultThumbNailUrl(String url){
         this.defaultThumbNailUrl = url;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName(){
-        URL url;
-        try {
-            url = new URL(this.baseUrl);
-            String host = url.getHost();
-            for (int i = 0; i < host.length(); i++){
-                if (host.charAt(i) == '.'){
-                    return host.substring(0, i);
-                }
-            }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-    public String getBaseUrl() {
-        return baseUrl;
-    }
 }

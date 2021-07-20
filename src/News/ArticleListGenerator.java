@@ -17,10 +17,11 @@ public class ArticleListGenerator {
     private static final int MAX_WAIT_TIME = 5000; // ms
 
     public static ArrayList<Article> getArticles(NewsOutletInfo newsOutletInfo){
-        return extractArticlesFromNewsOutlet(newsOutletInfo);
+        // TODO: get articles from database
+        return extractArticlesFromCategories(newsOutletInfo);
     }
 
-    private static ArrayList<Article> extractArticlesFromNewsOutlet(NewsOutletInfo newsOutletInfo){
+    private static ArrayList<Article> extractArticlesFromCategories(NewsOutletInfo newsOutletInfo){
         ArrayList<Article> articles = new ArrayList<>();
         HashMap<String, ArrayList<URL>> categories = extractLinksFromCategories(newsOutletInfo);
 
@@ -39,17 +40,16 @@ public class ArticleListGenerator {
     private static Article createArticle(URL url, String category, NewsOutletInfo newsOutletInfo){
         try{
             Document articleDoc = Jsoup.connect(url.toString()).timeout(MAX_WAIT_TIME).get();
-            Scraper scraper = new Scraper(articleDoc);
 
             // scrape all needed tags of the article
-            Element titleTag = scraper.scrapeElementByClass(newsOutletInfo.titleCssClass);
-            Element descriptionTag = scraper.scrapeElementByClass(newsOutletInfo.descriptionCssClass);
-            Element mainContentTag = scraper.scrapeElementByClass(newsOutletInfo.contentBodyCssClass);
-            String thumbNailUrl = scraper.scrapeFirstImgUrlByClass(newsOutletInfo.pictureCssClass);
+            Element titleTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.titleCssClass);
+            Element descriptionTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.descriptionCssClass);
+            Element mainContentTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.contentBodyCssClass);
+            String thumbNailUrl = Scraper.scrapeFirstImgUrlByClass(articleDoc, newsOutletInfo.pictureCssClass);
             if (thumbNailUrl.isEmpty()){
                 thumbNailUrl = newsOutletInfo.defaultThumbNailUrl;
             }
-            LocalDateTime dateTime = scraper.scrapeDateTime(newsOutletInfo.dateTimeCssClass, newsOutletInfo.scrapingDateTimeBehavior);
+            LocalDateTime dateTime = newsOutletInfo.scrapingDateTimeBehavior.getLocalDateTime(articleDoc, newsOutletInfo.dateTimeCssClass);
 
 
             // sanitize all scraped tags and customize them

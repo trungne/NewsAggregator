@@ -5,6 +5,5 @@ import org.jsoup.nodes.Document;
 import java.time.LocalDateTime;
 
 public interface ScrapingDateTimeBehavior {
-    String getDateTimeString(Document doc, String propertyContainsDateTimeInfo);
-    LocalDateTime getLocalDateTime(String dateTimeStr);
+    LocalDateTime getLocalDateTime(Document doc, String propertyContainsDateTimeInfo);
 }

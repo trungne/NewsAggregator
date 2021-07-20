@@ -8,7 +8,7 @@ import org.jsoup.select.Elements;
 
 public class VNExpressSanitizer extends HtmlSanitizer {
     @Override
-    protected Element sanitizeTag(Element e, String type) {
+    protected Element sanitizeNonTitleTag(Element e, String type) {
         Safelist safelist; // modify this safe list according to the type
         String cleanHtml;
         Element newHtmlElement;

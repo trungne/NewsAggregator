@@ -14,7 +14,7 @@ public abstract class HtmlSanitizer {
             target.clearAttributes();
         }
         else{
-            target = sanitizeTag(target, type);
+            target = sanitizeNonTitleTag(target, type);
         }
 
         // Add specific css classes to each detail
@@ -24,5 +24,5 @@ public abstract class HtmlSanitizer {
         return target;
     }
 
-    protected abstract Element sanitizeTag(Element e, String tag);
+    protected abstract Element sanitizeNonTitleTag(Element e, String tag);
 }

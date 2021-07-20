@@ -11,16 +11,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class Scraper {
-    static final int MAX_LINKS_SCRAPED = 2;
-    private final Document doc;
-
-    public Scraper(Document doc) {
-        this.doc = doc;
-    }
-
-    public Scraper(String url) throws IOException {
-        this.doc = Jsoup.connect(url).get();
-    }
+    static final int MAX_LINKS_SCRAPED = 10;
 
     public static ArrayList<URL> scrapeLinksByClass(URL baseUrl, String cssClass) {
         Document doc;
@@ -44,22 +35,22 @@ public class Scraper {
     }
 
     // only scrape the first tag found!
-    public Element scrapeElementByClass(String uniqueCssClass) {
+    public static Element scrapeElementByClass(Document doc, String uniqueCssClass) {
         String queryString = uniqueCssClass;
         if (!queryString.startsWith(".")) {
             queryString = "." + uniqueCssClass;
         }
-        return this.doc.selectFirst(queryString);
+        return doc.selectFirst(queryString);
     }
 
-    public String scrapeFirstImgUrlByClass(String uniqueCssClass) {
+    public static String scrapeFirstImgUrlByClass(Document doc, String uniqueCssClass) {
         String queryString = uniqueCssClass;
         if (!queryString.startsWith(".")) {
             queryString = "." + uniqueCssClass;
         }
 
         String thumbNailUrl = "";
-        Element thumbNailTag = this.doc.selectFirst(queryString);
+        Element thumbNailTag = doc.selectFirst(queryString);
 
         if (thumbNailTag != null) {
             Element firstImgTag = thumbNailTag.getElementsByTag("img").first();
@@ -73,11 +64,6 @@ public class Scraper {
             }
         }
         return thumbNailUrl;
-    }
-
-    public LocalDateTime scrapeDateTime(String uniqueDateTimeCssClass, ScrapingDateTimeBehavior scrapingDateTimeBehavior) {
-        String dateTimeStr = scrapingDateTimeBehavior.getDateTimeString(this.doc, uniqueDateTimeCssClass);
-        return scrapingDateTimeBehavior.getLocalDateTime(dateTimeStr);
     }
 }
 

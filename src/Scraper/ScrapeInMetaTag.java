@@ -7,17 +7,14 @@ import java.time.LocalDateTime;
 
 public class ScrapeInMetaTag implements ScrapingDateTimeBehavior {
     @Override
-    public String getDateTimeString(Document doc, String propertyContainsDateTimeInfo) {
+    public LocalDateTime getLocalDateTime(Document doc, String propertyContainsDateTimeInfo) {
         Elements dateTimeTag = doc.getElementsByAttributeValue("property", propertyContainsDateTimeInfo);
-        // this is for VNExpress with their unconventional naming!
+    // this is for VNExpress with their unconventional naming!
         if (dateTimeTag.outerHtml().isEmpty()){
             dateTimeTag = doc.getElementsByAttributeValue("itemprop", propertyContainsDateTimeInfo);
         }
-        return dateTimeTag.attr("content");
-    }
 
-    @Override
-    public LocalDateTime getLocalDateTime(String dateTimeStr) {
+        String dateTimeStr = dateTimeTag.attr("content");
         if (dateTimeStr.isEmpty() || dateTimeStr.isBlank()){
             return LocalDateTime.now();
         }

@@ -7,16 +7,15 @@ import org.jsoup.select.Elements;
 import java.time.LocalDateTime;
 
 public class ScrapeInBodyTag implements ScrapingDateTimeBehavior {
-
     @Override
-    public String getDateTimeString(Document doc, String propertyContainsDateTimeInfo) {
+    public LocalDateTime getLocalDateTime(Document doc, String propertyContainsDateTimeInfo) {
         Element dateTimeTag = doc.selectFirst(propertyContainsDateTimeInfo);
-        return getDateTimeSubString(dateTimeTag.text());
-    }
 
-    @Override
-    public LocalDateTime getLocalDateTime(String dateTimeStr) {
-        if (dateTimeStr.isEmpty() || dateTimeStr.isBlank()){
+        String dateTimeStr;
+        if (dateTimeTag != null){
+            dateTimeStr = getDateTimeSubString(dateTimeTag.text());
+        }
+        else{
             return LocalDateTime.now();
         }
 
