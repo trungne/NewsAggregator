@@ -2,7 +2,7 @@ package Scraper;
 
 import News.Article;
 import News.ArticleListGenerator;
-import News.NewsOutlet;
+import News.NewsOutletInFo;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -11,16 +11,16 @@ import java.util.concurrent.TimeUnit;
 
 public class ScraperTestDrive {
     public static void main(String[] args) throws InterruptedException {
-        NewsOutlet[] newsOutlets = NewsOutlet.initializeNewsOutlets();
+        NewsOutletInFo[] newsOutletInFos = NewsOutletInFo.initializeNewsOutlets();
         List<Article> safeArticleList = Collections.synchronizedList(new ArrayList<>());
         ExecutorService es = Executors.newCachedThreadPool();
 
         final long startTime = System.currentTimeMillis();
 
-        for (int i = 0; i < newsOutlets.length; i++){
+        for (int i = 0; i < newsOutletInFos.length; i++){
             final int INDEX = i;
             es.execute(() -> {
-                safeArticleList.addAll((new ArticleListGenerator(newsOutlets[INDEX])).getArticles());
+                safeArticleList.addAll((ArticleListGenerator.getArticles(newsOutletInFos[INDEX])));
             });
         }
         es.shutdown();

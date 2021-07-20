@@ -18,6 +18,9 @@ public class Article {
     LocalDateTime dateTime;
     HashSet<String> categories = new HashSet<>();
 
+    public Article(){
+
+    }
     public Article(URL url,
                    String category,
                    Element title,
@@ -39,10 +42,7 @@ public class Article {
         return this.categories.contains(category);
     }
 
-    public void addCategory(String category){
-        // check valid category
-        this.categories.add(category);
-    }
+
 
     // TODO: only for testing
     public void displayTitleAndCategory(){
@@ -72,5 +72,39 @@ public class Article {
 
     public String getThumbNailUrl() {
         return thumbNailUrl;
+    }
+
+    // setters
+    public void setUrl(URL url) {
+        this.url = url;
+    }
+
+    public void setCategories(HashSet<String> categories) {
+        this.categories = categories;
+    }
+
+    public void setTitle(Element title) {
+        this.title = title;
+    }
+
+    public void setDescription(Element description) {
+        this.description = description;
+    }
+
+    public void setMainContent(Element mainContent) {
+        this.mainContent = mainContent;
+    }
+
+    public void setThumbNailUrl(String thumbNailUrl) {
+        this.thumbNailUrl = thumbNailUrl;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void addCategory(String category){
+        // check valid category
+        this.categories.add(category);
     }
 }
