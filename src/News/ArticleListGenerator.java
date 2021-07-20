@@ -16,11 +16,11 @@ import java.util.HashMap;
 public class ArticleListGenerator {
     private static final int MAX_WAIT_TIME = 5000; // ms
 
-    public static ArrayList<Article> getArticles(NewsOutletInFo newsOutletInfo){
+    public static ArrayList<Article> getArticles(NewsOutletInfo newsOutletInfo){
         return extractArticlesFromNewsOutlet(newsOutletInfo);
     }
 
-    private static ArrayList<Article> extractArticlesFromNewsOutlet(NewsOutletInFo newsOutletInfo){
+    private static ArrayList<Article> extractArticlesFromNewsOutlet(NewsOutletInfo newsOutletInfo){
         ArrayList<Article> articles = new ArrayList<>();
         HashMap<String, ArrayList<URL>> categories = extractLinksFromCategories(newsOutletInfo);
 
@@ -36,7 +36,7 @@ public class ArticleListGenerator {
     }
 
 
-    private static Article createArticle(URL url, String category, NewsOutletInFo newsOutletInfo){
+    private static Article createArticle(URL url, String category, NewsOutletInfo newsOutletInfo){
         try{
             Document articleDoc = Jsoup.connect(url.toString()).timeout(MAX_WAIT_TIME).get();
             Scraper scraper = new Scraper(articleDoc);
@@ -84,7 +84,7 @@ public class ArticleListGenerator {
 
     }
 
-    private static HashMap<String, ArrayList<URL>> extractLinksFromCategories(NewsOutletInFo newsOutletInfo){
+    private static HashMap<String, ArrayList<URL>> extractLinksFromCategories(NewsOutletInfo newsOutletInfo){
 
         HashMap<String, ArrayList<URL>> categories = new HashMap<>();
 

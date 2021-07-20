@@ -8,14 +8,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 
-public class NewsOutletInFo implements Serializable {
+public class NewsOutletInfo implements Serializable {
     public static final String VNExpress = "VNExpress";
     public static final String ZingNews = "ZingNews";
     public static final String ThanhNien = "ThanhNien";
     public static final String TuoiTre = "TuoiTre";
     public static final String NhanDan = "NhanDan";
 
-    public static NewsOutletInFo[] initializeNewsOutlets(){
+    public static NewsOutletInfo[] initializeNewsOutlets(){
         HashMap<String, String> VNExpressCategories = new HashMap<>();
         VNExpressCategories.put("Covid", "https://vnexpress.net/covid-19/tin-tuc");
         VNExpressCategories.put("Politics", "https://vnexpress.net/thoi-su/chinh-tri");
@@ -65,29 +65,29 @@ public class NewsOutletInFo implements Serializable {
         NhanDanCategories.put("Sports","https://nhandan.vn/thethao"); // NhanDanCategories.put("Entertainment", new URL("??"));
         NhanDanCategories.put("World","https://nhandan.vn/thegioi");
 
-        NewsOutletInFo VNExpress = new NewsOutletInFo("VNExpress","https://vnexpress.net/", "title-news", "title-detail", "description", "fck_detail", "datePublished","fig-picture", VNExpressCategories, new VNExpressSanitizer(), new ScrapeInMetaTag());
+        NewsOutletInfo VNExpress = new NewsOutletInfo("VNExpress","https://vnexpress.net/", "title-news", "title-detail", "description", "fck_detail", "datePublished","fig-picture", VNExpressCategories, new VNExpressSanitizer(), new ScrapeInMetaTag());
         VNExpress.setDefaultThumbNailUrl("https://s1.vnecdn.net/vnexpress/restruct/i/v395/logo_default.jpg");
-        VNExpress.setName(NewsOutletInFo.VNExpress);
+        VNExpress.setName(NewsOutletInfo.VNExpress);
 
-        NewsOutletInFo ZingNews = new NewsOutletInFo("ZingNews", "https://zingnews.vn/", "article-title", "the-article-title", "the-article-summary", "the-article-body", "article:published_time", "pic", ZingCategories, new ZingNewsSanitizer(), new ScrapeInMetaTag());
+        NewsOutletInfo ZingNews = new NewsOutletInfo("ZingNews", "https://zingnews.vn/", "article-title", "the-article-title", "the-article-summary", "the-article-body", "article:published_time", "pic", ZingCategories, new ZingNewsSanitizer(), new ScrapeInMetaTag());
         ZingNews.setDefaultThumbNailUrl("https://static-znews.zadn.vn/images/logo-zing-home.svg");
-        ZingNews.setName(NewsOutletInFo.ZingNews);
+        ZingNews.setName(NewsOutletInfo.ZingNews);
 
         // TODO: fix this pls, cant use "lightbox-content" (class of img) to scrape img
-        NewsOutletInFo TuoiTre = new NewsOutletInFo("TuoiTre","https://tuoitre.vn/", "title-news", "article-title", "sapo", "content fck","article:published_time","VCSortableInPreviewMode",TuoitreCategories, new TuoiTreSanitizer(), new ScrapeInMetaTag());
+        NewsOutletInfo TuoiTre = new NewsOutletInfo("TuoiTre","https://tuoitre.vn/", "title-news", "article-title", "sapo", "content fck","article:published_time","VCSortableInPreviewMode",TuoitreCategories, new TuoiTreSanitizer(), new ScrapeInMetaTag());
         TuoiTre.setDefaultThumbNailUrl("https://dangkyxettuyennghe.tuoitre.vn/img/logo-tt.png");
-        TuoiTre.setName(NewsOutletInFo.TuoiTre);
+        TuoiTre.setName(NewsOutletInfo.TuoiTre);
 
-        NewsOutletInFo ThanhNien = new NewsOutletInFo("ThanhNien","https://thanhnien.vn/", "story__thumb", "details__headline", "sapo", "details__content", "article:published_time", "pswp-content__image", ThanhNienCategories, new ThanhNienSanitizer(), new ScrapeInMetaTag());
+        NewsOutletInfo ThanhNien = new NewsOutletInfo("ThanhNien","https://thanhnien.vn/", "story__thumb", "details__headline", "sapo", "details__content", "article:published_time", "pswp-content__image", ThanhNienCategories, new ThanhNienSanitizer(), new ScrapeInMetaTag());
         ThanhNien.setDefaultThumbNailUrl("https://static.thanhnien.vn/v2/App_Themes/images/logo-tn-2.png");
-        ThanhNien.setName(NewsOutletInFo.ThanhNien);
+        ThanhNien.setName(NewsOutletInfo.ThanhNien);
 
-        NewsOutletInFo NhanDan = new NewsOutletInFo("NhanDan", "https://nhandan.vn/", "box-title", "box-title-detail", "box-des-detail", "detail-content-body ", "box-date pull-left", "box-detail-thumb", NhanDanCategories, new NhanDanSanitizer(), new ScrapeInBodyTag());
+        NewsOutletInfo NhanDan = new NewsOutletInfo("NhanDan", "https://nhandan.vn/", "box-title", "box-title-detail", "box-des-detail", "detail-content-body ", "box-date pull-left", "box-detail-thumb", NhanDanCategories, new NhanDanSanitizer(), new ScrapeInBodyTag());
         NhanDan.setDefaultThumbNailUrl("https://www.nhandan-printing.vn/datafiles_D_D/setmulti/nhandan_copy.jpg");
-        NhanDan.setName(NewsOutletInFo.NhanDan);
+        NhanDan.setName(NewsOutletInfo.NhanDan);
 
-        // NewsOutletInFo[]{VNExpress, ZingNews, TuoiTre, ThanhNien, NhanDan};
-        return new NewsOutletInFo[]{VNExpress, ZingNews, TuoiTre, ThanhNien, NhanDan};
+        // NewsOutletInfo[]{VNExpress, ZingNews, TuoiTre, ThanhNien, NhanDan};
+        return new NewsOutletInfo[]{VNExpress, ZingNews, TuoiTre, ThanhNien, NhanDan};
 
     }
 
@@ -106,7 +106,7 @@ public class NewsOutletInFo implements Serializable {
     public HtmlSanitizer sanitizer;
     public ScrapingDateTimeBehavior scrapingDateTimeBehavior;
 
-    public NewsOutletInFo(String name,
+    public NewsOutletInfo(String name,
                           String baseUrl, String titleLinkClass,
                           String titleCssClass, String descriptionCssClass,
                           String contentBodyCssClass, String dateTimeClass,
