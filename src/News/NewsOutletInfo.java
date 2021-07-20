@@ -65,10 +65,6 @@ public class NewsOutletInfo implements Serializable {
         NhanDanCategories.put("Sports","https://nhandan.vn/thethao"); // NhanDanCategories.put("Entertainment", new URL("??"));
         NhanDanCategories.put("World","https://nhandan.vn/thegioi");
 
-//        NewsOutletInfo VNExpress = new NewsOutletInfo("VNExpress", "https://vnexpress.net/", "title-news", "title-detail", "description", "fck_detail", "datePublished", "fig-picture", VNExpressCategories, new VNExpressSanitizer(), new ScrapeInMetaTag());
-//        VNExpress.setDefaultThumbNailUrl("https://s1.vnecdn.net/vnexpress/restruct/i/v395/logo_default.jpg");
-
-
         NewsOutletInfo VNExpressInfo = new NewsOutletInfo(NewsOutletInfo.VNExpress);
         VNExpressInfo.setBaseUrl("https://vnexpress.net/");
         VNExpressInfo.setTitleLinkCssClass("title-news");
@@ -81,11 +77,6 @@ public class NewsOutletInfo implements Serializable {
         VNExpressInfo.setCategories(VNExpressCategories);
         VNExpressInfo.setSanitizer(new VNExpressSanitizer());
         VNExpressInfo.setScrapingDateTimeBehavior(new ScrapeInMetaTag());
-
-
-//        NewsOutletInfo ZingNews = new NewsOutletInfo("ZingNews", "https://zingnews.vn/", "article-title", "the-article-title", "the-article-summary", "the-article-body", "article:published_time", "pic", ZingCategories, new ZingNewsSanitizer(), new ScrapeInMetaTag());
-//        ZingNews.setDefaultThumbNailUrl("https://static-znews.zadn.vn/images/logo-zing-home.svg");
-
 
         NewsOutletInfo ZingNewsInfo = new NewsOutletInfo(NewsOutletInfo.ZingNews);
         ZingNewsInfo.setBaseUrl("https://zingnews.vn/");
@@ -101,10 +92,6 @@ public class NewsOutletInfo implements Serializable {
         ZingNewsInfo.setScrapingDateTimeBehavior(new ScrapeInMetaTag());
 
         // TODO: fix this pls, cant use "lightbox-content" (class of img) to scrape img
-//        NewsOutletInfo TuoiTre = new NewsOutletInfo("TuoiTre","https://tuoitre.vn/", "title-news", "article-title", "sapo", "content fck","article:published_time", "VCSortableInPreviewMode", TuoitreCategories, new TuoiTreSanitizer(), new ScrapeInMetaTag());
-//        TuoiTre.setDefaultThumbNailUrl("https://dangkyxettuyennghe.tuoitre.vn/img/logo-tt.png");
-
-
         NewsOutletInfo TuoiTreInfo = new NewsOutletInfo(NewsOutletInfo.TuoiTre);
         TuoiTreInfo.setBaseUrl("https://tuoitre.vn/");
         TuoiTreInfo.setTitleLinkCssClass("title-news");
@@ -117,10 +104,6 @@ public class NewsOutletInfo implements Serializable {
         TuoiTreInfo.setCategories(TuoitreCategories);
         TuoiTreInfo.setSanitizer(new TuoiTreSanitizer());
         TuoiTreInfo.setScrapingDateTimeBehavior(new ScrapeInMetaTag());
-
-//        NewsOutletInfo ThanhNien = new NewsOutletInfo("ThanhNien","https://thanhnien.vn/", "story__thumb", "details__headline", "sapo", "details__content", "article:published_time", "pswp-content__image", ThanhNienCategories, new ThanhNienSanitizer(), new ScrapeInMetaTag());
-//        ThanhNien.setDefaultThumbNailUrl("https://static.thanhnien.vn/v2/App_Themes/images/logo-tn-2.png");
-//
 
         NewsOutletInfo ThanhNienInfo = new NewsOutletInfo(NewsOutletInfo.ThanhNien);
         ThanhNienInfo.setBaseUrl("https://thanhnien.vn/");
@@ -135,10 +118,6 @@ public class NewsOutletInfo implements Serializable {
         ThanhNienInfo.setSanitizer(new ThanhNienSanitizer());
         ThanhNienInfo.setScrapingDateTimeBehavior(new ScrapeInMetaTag());
 
-//        NewsOutletInfo NhanDan = new NewsOutletInfo("NhanDan", "https://nhandan.vn/", "box-title", "box-title-detail", "box-des-detail", "detail-content-body", "box-date pull-left", "box-detail-thumb", NhanDanCategories, new NhanDanSanitizer(), new ScrapeInBodyTag());
-//        NhanDan.setDefaultThumbNailUrl("https://www.nhandan-printing.vn/datafiles_D_D/setmulti/nhandan_copy.jpg");
-//
-
         NewsOutletInfo NhanDanInfo = new NewsOutletInfo(NewsOutletInfo.NhanDan);
         NhanDanInfo.setBaseUrl("https://nhandan.vn/");
         NhanDanInfo.setTitleLinkCssClass("box-title");
@@ -152,9 +131,7 @@ public class NewsOutletInfo implements Serializable {
         NhanDanInfo.setSanitizer(new NhanDanSanitizer());
         NhanDanInfo.setScrapingDateTimeBehavior(new ScrapeInBodyTag());
 
-        // NewsOutletInfo[]{VNExpress, ZingNews, TuoiTre, ThanhNien, NhanDan};
         return new NewsOutletInfo[]{VNExpressInfo, ZingNewsInfo, TuoiTreInfo, ThanhNienInfo, NhanDanInfo};
-
     }
 
     public String name;

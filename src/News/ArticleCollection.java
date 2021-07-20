@@ -19,7 +19,7 @@ public class ArticleCollection {
 
     }
 
-    public Collection<Article> getArticles() {
+    public static Collection<Article> getArticles() {
         return articles;
     }
 

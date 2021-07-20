@@ -90,6 +90,7 @@ public class ArticleListGenerator {
 
         // TODO: check if link already exists in database?
 
+        // loop through each category and scrape links in it
         for (String category: newsOutletInfo.categories.keySet()){
             ArrayList<URL> links;
             URL categoryUrl;
