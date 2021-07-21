@@ -5,6 +5,7 @@ import org.jsoup.nodes.Element;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 
 public class Article {
@@ -14,73 +15,92 @@ public class Article {
     Element title;
     Element description;
     Element mainContent;
-    String thumbNailUrl;
+    Element thumbNail;
     LocalDateTime dateTime;
     HashSet<String> categories = new HashSet<>();
 
     public Article(){
 
     }
-    public Article(URL url,
-                   String category,
-                   Element title,
-                   Element description,
-                   Element mainContent,
-                   String thumbNailUrl,
-                   LocalDateTime dateTime
-                   ){
-        this.url = url;
-        this.title = title;
-        this.description = description;
-        this.mainContent = mainContent;
-        this.thumbNailUrl = thumbNailUrl;
-        this.dateTime = dateTime;
-        this.categories.add(category);
-    }
 
     public boolean belongsToCategory(String category){
         return this.categories.contains(category);
     }
 
-
-
-    // TODO: only for testing
-    public void displayTitleAndCategory(){
-        System.out.println(url);
-        System.out.println(this.mainContent + ". Category: " + this.categories.toString());
-    }
-
     public String getHtml(){
-        // String builder may not be thread-safe
-        StringBuilder s = new StringBuilder(title.outerHtml());
-        s.append(description.outerHtml());
-        s.append(mainContent.outerHtml());
-        return s.toString();
+        Element article = new Element("article");
+
+        // create header div
+        Element header = new Element("div");
+        header.addClass(CSSConvention.ARTICLE_HEADER);
+
+        // category div
+        Element categories = new Element("div");
+        categories.addClass(CSSConvention.ARTICLE_CATEGORY);
+        StringBuilder categoriesStrBuilder = new StringBuilder();
+        for (String category: this.categories){
+            categoriesStrBuilder.append(category).append(" - ");
+        }
+        String categoriesStr = categoriesStrBuilder.substring(0, categoriesStrBuilder.length() - 2);
+        categories.text(categoriesStr);
+
+        // published time div
+        Element publishedTime = new Element("div");
+        publishedTime.addClass(CSSConvention.PUBLISHED_TIME);
+        publishedTime.text(getAbsoluteTime());
+
+        header.appendChild(categories);
+        header.appendChild(publishedTime);
+
+        // create article content div which contains title, desp, and main content
+        Element content = new Element("div");
+        content.addClass(CSSConvention.ARTICLE_CONTENT);
+
+        content.appendChild(title);
+        content.appendChild(description);
+        content.appendChild(mainContent);
+
+        article.appendChild(header);
+        article.appendChild(content);
+
+        return article.outerHtml();
     }
 
-    public String getUrl(){
-        return this.url.toString();
-    }
-
-    public String getTitle() {
-        return title.text();
-    }
-
-    public String getDateTime(){
+    public String getAbsoluteTime(){
         return dtf.format(this.dateTime);
     }
 
-    public String getThumbNailUrl() {
-        return thumbNailUrl;
+    public String getRelativeTime(){
+        long minutes = ChronoUnit.MINUTES.between(dateTime, LocalDateTime.now());
+
+        if (minutes == 0){
+            long seconds = ChronoUnit.SECONDS.between(dateTime, LocalDateTime.now());
+            if (seconds < 2)
+                return "Just now.";
+            return seconds + " seconds" + " ago.";
+        }
+        else if (minutes < 1440){ // 1440 minutes = 1 day
+            long hours = minutes/60;
+            return hours + (hours == 1 ? " hour " : " hours ") + minutes%60 + (minutes == 1 ? " minute" : " minutes") + " ago.";
+        }
+        else if (minutes >= 1440){
+            long days = minutes/1440;
+            return days + (days == 1 ? " day" : "days") + " ago.";
+        }
+        else{
+            return "Just now.";
+        }
+
     }
+
+    public long getMinutesSincePublished() {
+        return ChronoUnit.MINUTES.between(dateTime, LocalDateTime.now());
+    }
+
 
     // setters
     public void setUrl(URL url) {
         this.url = url;
-    }
-
-    public void setCategories(HashSet<String> categories) {
-        this.categories = categories;
     }
 
     public void setTitle(Element title) {
@@ -95,8 +115,8 @@ public class Article {
         this.mainContent = mainContent;
     }
 
-    public void setThumbNailUrl(String thumbNailUrl) {
-        this.thumbNailUrl = thumbNailUrl;
+    public void setThumbNailUrl(Element thumbNail) {
+        this.thumbNail = thumbNail;
     }
 
     public void setDateTime(LocalDateTime dateTime) {
@@ -107,4 +127,32 @@ public class Article {
         // check valid category
         this.categories.add(category);
     }
+
+
+    public String getPreview(){
+        Element preview = new Element("div");
+        preview.addClass(CSSConvention.PREVIEW);
+
+        Element relativeTime = new Element("div");
+        relativeTime.addClass(CSSConvention.PUBLISHED_TIME);
+        relativeTime.text(getRelativeTime());
+
+        Element thumbTitle = new Element("div");
+        thumbTitle.addClass(CSSConvention.THUMBNAIL_TITLE);
+        thumbTitle.text(title.text());
+
+        Element thumbDesp = new Element("div");
+        thumbDesp.addClass(CSSConvention.THUMBNAIL_DESCRIPTION);
+        thumbDesp.text(description.text());
+
+        preview.appendChild(thumbNail);
+        preview.appendChild(thumbTitle);
+        preview.appendChild(thumbDesp);
+        preview.appendChild(relativeTime);
+
+        return preview.outerHtml();
+
+    }
+
+
 }

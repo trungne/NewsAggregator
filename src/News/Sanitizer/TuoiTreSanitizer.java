@@ -1,5 +1,6 @@
 package News.Sanitizer;
 
+import News.CSSConvention;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Safelist;
@@ -12,13 +13,13 @@ public class TuoiTreSanitizer extends HtmlSanitizer {
         Element newHtmlElement;
 
         switch (type) {
-            case DESCRIPTION_CSS_CLASS:
+            case CSSConvention.DESCRIPTION:
                 safelist = Safelist.basic();
                 cleanHtml = Jsoup.clean(e.html(), safelist);
                 newHtmlElement = new Element("p").html(cleanHtml.replace("TTO - ", ""));
 
                 return newHtmlElement;
-            case MAIN_CONTENT_CSS_CLASS:
+            case CSSConvention.MAIN_CONTENT:
 
                 break;
             default:

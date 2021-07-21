@@ -1,6 +1,5 @@
 package News;
 
-import News.Sanitizer.HtmlSanitizer;
 import Scraper.Scraper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -45,23 +44,29 @@ public class ArticleListGenerator {
             Element titleTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.titleCssClass);
             Element descriptionTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.descriptionCssClass);
             Element mainContentTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.contentBodyCssClass);
-            String thumbNailUrl = Scraper.scrapeFirstImgUrlByClass(articleDoc, newsOutletInfo.pictureCssClass);
-            if (thumbNailUrl.isEmpty()){
-                thumbNailUrl = newsOutletInfo.defaultThumbNailUrl;
-            }
+            Element thumbNail = Scraper.scrapeCleanedFirstImgTagByClass(articleDoc, newsOutletInfo.pictureCssClass);
             LocalDateTime dateTime = newsOutletInfo.scrapingDateTimeBehavior.getLocalDateTime(articleDoc, newsOutletInfo.dateTimeCssClass);
 
+            if (!thumbNail.hasAttr("src")){
+                thumbNail.attr("src", newsOutletInfo.defaultThumbNailUrl);
+            }
+
+            if (!thumbNail.hasAttr("alt")){
+                // set alt to title tag text if there is one.
+                // else, set it to default value, which is "thumbnail"
+                thumbNail.attr("alt", !titleTag.text().isEmpty() ? titleTag.text() : "thumbnail");
+            }
 
             // sanitize all scraped tags and customize them
-            titleTag = newsOutletInfo.sanitizer.sanitize(titleTag, HtmlSanitizer.TITLE_CSS_CLASS);
-            descriptionTag = newsOutletInfo.sanitizer.sanitize(descriptionTag, HtmlSanitizer.DESCRIPTION_CSS_CLASS);
-            mainContentTag = newsOutletInfo.sanitizer.sanitize(mainContentTag, HtmlSanitizer.MAIN_CONTENT_CSS_CLASS);
+            titleTag = newsOutletInfo.sanitizer.sanitize(titleTag, CSSConvention.TITLE);
+            descriptionTag = newsOutletInfo.sanitizer.sanitize(descriptionTag, CSSConvention.DESCRIPTION);
+            mainContentTag = newsOutletInfo.sanitizer.sanitize(mainContentTag, CSSConvention.MAIN_CONTENT);
+            thumbNail = newsOutletInfo.sanitizer.sanitize(thumbNail, CSSConvention.THUMBNAIL);
 
-            // no need to sanitize thumbnail url or date time as default values will be assigned
-            // to such values if they are null
+            // no need to sanitize date time as a default value will be assigned if it is null
 
             // TODO: Check valid tags
-            if (titleTag == null || descriptionTag == null || mainContentTag == null){
+            if (titleTag == null || descriptionTag == null || mainContentTag == null || thumbNail == null){
                 return null;
             }
 
@@ -72,7 +77,7 @@ public class ArticleListGenerator {
             article.setTitle(titleTag);
             article.setDescription(descriptionTag);
             article.setMainContent(mainContentTag);
-            article.setThumbNailUrl(thumbNailUrl);
+            article.setThumbNailUrl(thumbNail);
             article.setDateTime(dateTime);
 
             return article;

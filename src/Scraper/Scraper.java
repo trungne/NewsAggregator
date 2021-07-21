@@ -43,27 +43,29 @@ public class Scraper {
         return doc.selectFirst(queryString);
     }
 
-    public static String scrapeFirstImgUrlByClass(Document doc, String uniqueCssClass) {
-        String queryString = uniqueCssClass;
-        if (!queryString.startsWith(".")) {
-            queryString = "." + uniqueCssClass;
-        }
+    public static Element scrapeCleanedFirstImgTagByClass(Document doc, String uniqueCssClass) {
+        Element firstImgTag = scrapeElementByClass(doc, uniqueCssClass);
+        firstImgTag = firstImgTag.getElementsByTag("img").first();
+        // return an empty img tag if nothing to be scraped
+        Element cleanedFirstImgTag = new Element("img");
 
-        String thumbNailUrl = "";
-        Element thumbNailTag = doc.selectFirst(queryString);
+        if (firstImgTag != null) {
 
-        if (thumbNailTag != null) {
-            Element firstImgTag = thumbNailTag.getElementsByTag("img").first();
-
-            if (firstImgTag != null) {
-                if (firstImgTag.hasAttr("data-src")) {
-                    thumbNailUrl = firstImgTag.attr("abs:data-src");
-                } else if (firstImgTag.hasAttr("src")) {
-                    thumbNailUrl = firstImgTag.attr("abs:src");
-                }
+            // assign src for the img tag
+            if (firstImgTag.hasAttr("data-src")) {
+                cleanedFirstImgTag.attr("src",firstImgTag.attr("data-src"));
+            } else if (firstImgTag.hasAttr("src")) {
+                cleanedFirstImgTag.attr("src",firstImgTag.attr("src"));
             }
+
+            // assign alt for the img tag
+            if (firstImgTag.hasAttr("alt")){
+                cleanedFirstImgTag.attr("alt", firstImgTag.attr("alt"));
+            }
+
         }
-        return thumbNailUrl;
+
+        return cleanedFirstImgTag;
     }
 }
 
