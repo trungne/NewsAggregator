@@ -11,9 +11,8 @@ public class ScraperTestDrive {
     public static void main(String[] args) throws InterruptedException {
         final long startTime = System.currentTimeMillis();
 
-        ArticleCollection.loadArticles();
+        ArrayList<Preview> previews = ArticleCollection.getPreviewsByCategory(CATEGORY.HEALTH);
 
-        ArrayList<Preview> previews = ArticleCollection.getPreviewsByCategory(CATEGORY.SPORTS);
         for (Preview preview: previews){
             System.out.println(preview);
         }

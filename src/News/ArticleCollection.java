@@ -12,7 +12,14 @@ import java.util.concurrent.TimeUnit;
 public class ArticleCollection {
     private static Collection<Article> articles;
 
-    public static ArrayList<Preview> getPreviewsByCategory(String category){
+    public static ArrayList<Preview> getPreviewsByCategory(String category) {
+        if (articles == null){
+            try {
+                loadArticles();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
 
         ArrayList<Preview> matchedPreviews = new ArrayList<>();
@@ -26,7 +33,7 @@ public class ArticleCollection {
         return matchedPreviews;
     }
 
-    public static void loadArticles() throws InterruptedException {
+    private static void loadArticles() throws InterruptedException {
         // TODO: From scraping news
         NewsOutletInfo[] newsOutletInfos = NewsOutletInfo.initializeNewsOutlets();
         List<Article> safeArticleList = Collections.synchronizedList(new ArrayList<>());
