@@ -129,7 +129,7 @@ public class Article {
     }
 
 
-    public String getPreview(){
+    public Preview getPreview(){
         Element preview = new Element("div");
         preview.addClass(CSSConvention.PREVIEW);
 
@@ -150,7 +150,7 @@ public class Article {
         preview.appendChild(thumbDesp);
         preview.appendChild(relativeTime);
 
-        return preview.outerHtml();
+        return new Preview(preview, this);
 
     }
 

@@ -12,10 +12,13 @@ public class ScraperTestDrive {
         final long startTime = System.currentTimeMillis();
 
         ArticleCollection.loadArticles();
-        ArrayList<String> previews = ArticleCollection.getPreviewsByCategory(CATEGORY.POLITICS);
-        for (String preview: previews){
-            System.out.println(preview);
-        }
+
+        ArrayList<Preview> previews = ArticleCollection.getPreviewsByCategory(CATEGORY.POLITICS);
+//        for (Preview preview: previews){
+//            System.out.println(preview);
+//        }
+        System.out.println(previews.get(0).toString());
+        System.out.println(previews.get(0).getArticleHtml());
 
         final long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (double) (endTime - startTime)/1000);
