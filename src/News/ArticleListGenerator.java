@@ -58,10 +58,10 @@ public class ArticleListGenerator {
             }
 
             // sanitize all scraped tags and customize them
-            titleTag = newsOutletInfo.sanitizer.sanitize(titleTag, CSSConvention.TITLE);
-            descriptionTag = newsOutletInfo.sanitizer.sanitize(descriptionTag, CSSConvention.DESCRIPTION);
-            mainContentTag = newsOutletInfo.sanitizer.sanitize(mainContentTag, CSSConvention.MAIN_CONTENT);
-            thumbNail = newsOutletInfo.sanitizer.sanitize(thumbNail, CSSConvention.THUMBNAIL);
+            titleTag = newsOutletInfo.sanitizer.sanitize(titleTag, CSS.TITLE);
+            descriptionTag = newsOutletInfo.sanitizer.sanitize(descriptionTag, CSS.DESCRIPTION);
+            mainContentTag = newsOutletInfo.sanitizer.sanitize(mainContentTag, CSS.MAIN_CONTENT);
+            thumbNail = newsOutletInfo.sanitizer.sanitize(thumbNail, CSS.THUMBNAIL);
 
             // no need to sanitize date time as a default value will be assigned if it is null
 
@@ -79,6 +79,7 @@ public class ArticleListGenerator {
             article.setMainContent(mainContentTag);
             article.setThumbNailUrl(thumbNail);
             article.setDateTime(dateTime);
+            article.setNewsSource(newsOutletInfo.name);
 
             return article;
 

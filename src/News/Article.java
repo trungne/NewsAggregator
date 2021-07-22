@@ -19,6 +19,8 @@ public class Article {
     LocalDateTime dateTime;
     HashSet<String> categories = new HashSet<>();
 
+    String newsSource;
+
     public Article(){
 
     }
@@ -32,11 +34,11 @@ public class Article {
 
         // create header div
         Element header = new Element("div");
-        header.addClass(CSSConvention.ARTICLE_HEADER);
+        header.addClass(CSS.ARTICLE_HEADER);
 
         // category div
         Element categories = new Element("div");
-        categories.addClass(CSSConvention.ARTICLE_CATEGORY);
+        categories.addClass(CSS.ARTICLE_CATEGORY);
         StringBuilder categoriesStrBuilder = new StringBuilder();
         for (String category: this.categories){
             categoriesStrBuilder.append(category).append(" - ");
@@ -46,7 +48,7 @@ public class Article {
 
         // published time div
         Element publishedTime = new Element("div");
-        publishedTime.addClass(CSSConvention.PUBLISHED_TIME);
+        publishedTime.addClass(CSS.PUBLISHED_TIME);
         publishedTime.text(getAbsoluteTime());
 
         header.appendChild(categories);
@@ -54,7 +56,7 @@ public class Article {
 
         // create article content div which contains title, desp, and main content
         Element content = new Element("div");
-        content.addClass(CSSConvention.ARTICLE_CONTENT);
+        content.addClass(CSS.ARTICLE_CONTENT);
         content.appendChild(title);
         content.appendChild(description);
         content.appendChild(mainContent);
@@ -126,27 +128,43 @@ public class Article {
         this.categories.add(category);
     }
 
+    public void setNewsSource(String newsSource) {
+        this.newsSource = newsSource;
+    }
 
     public Preview getPreview(){
-        Element preview = new Element("div");
-        preview.addClass(CSSConvention.PREVIEW);
+
+
+        Element source = new Element("div");
+        source.addClass(CSS.SOURCE);
+        source.text(newsSource);
 
         Element relativeTime = new Element("div");
-        relativeTime.addClass(CSSConvention.PUBLISHED_TIME);
+        relativeTime.addClass(CSS.PUBLISHED_TIME);
         relativeTime.text(getRelativeTime());
 
+        Element thumbHeader = new Element("div");
+        thumbHeader.addClass(CSS.THUMBNAIL_HEADER);
+        thumbHeader.appendChild(source);
+        thumbHeader.appendChild(relativeTime);
+
+
         Element thumbTitle = new Element("div");
-        thumbTitle.addClass(CSSConvention.THUMBNAIL_TITLE);
+        thumbTitle.addClass(CSS.THUMBNAIL_TITLE);
         thumbTitle.text(title.text());
 
         Element thumbDesp = new Element("div");
-        thumbDesp.addClass(CSSConvention.THUMBNAIL_DESCRIPTION);
+        thumbDesp.addClass(CSS.THUMBNAIL_DESCRIPTION);
         thumbDesp.text(description.text());
 
+
+        Element preview = new Element("div");
+        preview.addClass(CSS.PREVIEW);
+
         preview.appendChild(thumbNail);
+        preview.appendChild(thumbHeader);
         preview.appendChild(thumbTitle);
         preview.appendChild(thumbDesp);
-        preview.appendChild(relativeTime);
 
         return new Preview(preview, this);
 

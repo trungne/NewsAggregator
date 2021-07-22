@@ -1,6 +1,6 @@
 package News.Sanitizer;
 
-import News.CSSConvention;
+import News.CSS;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Safelist;
@@ -13,13 +13,13 @@ public class ZingNewsSanitizer extends HtmlSanitizer {
         Element newHtmlElement;
 
         switch (type) {
-            case CSSConvention.DESCRIPTION:
+            case CSS.DESCRIPTION:
                 safelist = Safelist.basic();
                 cleanHtml = Jsoup.clean(e.html(), safelist);
                 newHtmlElement = new Element("p").html(cleanHtml);
 
                 return newHtmlElement;
-            case CSSConvention.MAIN_CONTENT:
+            case CSS.MAIN_CONTENT:
                 safelist = Safelist.relaxed();
 
 

@@ -1,6 +1,6 @@
 package News.Sanitizer;
 
-import News.CSSConvention;
+import News.CSS;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Safelist;
@@ -15,7 +15,7 @@ public class VNExpressSanitizer extends HtmlSanitizer {
         Element newHtmlElement;
 
         switch (type) {
-            case CSSConvention.DESCRIPTION:
+            case CSS.DESCRIPTION:
                 safelist = Safelist.basic();
                 cleanHtml = Jsoup.clean(e.html(), safelist);
                 newHtmlElement = new Element("p").html(cleanHtml);
@@ -24,12 +24,12 @@ public class VNExpressSanitizer extends HtmlSanitizer {
                 Elements spanTags = newHtmlElement.getElementsByTag("span");
                 spanTags.tagName("strong");
                 for (Element ele : spanTags) {
-                    ele.addClass(CSSConvention.LOCATION);
+                    ele.addClass(CSS.LOCATION);
                     ele.text(ele.text() + " - ");
                 }
 
                 return newHtmlElement;
-            case CSSConvention.MAIN_CONTENT:
+            case CSS.MAIN_CONTENT:
                 safelist = Safelist.relaxed();
 
                 // modify safelist based on obversation of VNExpress article

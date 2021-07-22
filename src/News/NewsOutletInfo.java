@@ -11,9 +11,9 @@ import java.util.HashMap;
 public class NewsOutletInfo implements Serializable {
     public static final String VNExpress = "VNExpress";
     public static final String ZingNews = "ZingNews";
-    public static final String ThanhNien = "ThanhNien";
-    public static final String TuoiTre = "TuoiTre";
-    public static final String NhanDan = "NhanDan";
+    public static final String ThanhNien = "Thanh Niên";
+    public static final String TuoiTre = "Tuổi Trẻ";
+    public static final String NhanDan = "Nhân Dân";
 
     public static NewsOutletInfo[] initializeNewsOutlets(){
         HashMap<String, String> VNExpressCategories = new HashMap<>();

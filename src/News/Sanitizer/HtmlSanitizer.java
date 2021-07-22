@@ -1,6 +1,6 @@
 package News.Sanitizer;
 
-import News.CSSConvention;
+import News.CSS;
 import org.jsoup.nodes.Element;
 
 public abstract class HtmlSanitizer {
@@ -13,12 +13,12 @@ public abstract class HtmlSanitizer {
         Element target = e;
 
         switch (type) {
-            case CSSConvention.TITLE: {
+            case CSS.TITLE: {
                 target.clearAttributes();
                 break;
             }
 
-            case CSSConvention.DESCRIPTION: {
+            case CSS.DESCRIPTION: {
                 // maybe do something later??
                 break;
             }
