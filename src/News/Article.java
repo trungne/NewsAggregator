@@ -55,7 +55,6 @@ public class Article {
         // create article content div which contains title, desp, and main content
         Element content = new Element("div");
         content.addClass(CSSConvention.ARTICLE_CONTENT);
-
         content.appendChild(title);
         content.appendChild(description);
         content.appendChild(mainContent);
@@ -79,18 +78,17 @@ public class Article {
                 return "Just now.";
             return seconds + " seconds" + " ago.";
         }
+        else if (minutes < 60){
+            return minutes + (minutes == 1 ? " minute" : " minutes") + " ago";
+        }
         else if (minutes < 1440){ // 1440 minutes = 1 day
             long hours = minutes/60;
             return hours + (hours == 1 ? " hour " : " hours ") + minutes%60 + (minutes == 1 ? " minute" : " minutes") + " ago.";
         }
-        else if (minutes >= 1440){
+        else {
             long days = minutes/1440;
-            return days + (days == 1 ? " day" : "days") + " ago.";
+            return days + (days == 1 ? " day" : " days") + " ago.";
         }
-        else{
-            return "Just now.";
-        }
-
     }
 
     public long getMinutesSincePublished() {

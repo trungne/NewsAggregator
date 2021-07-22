@@ -22,6 +22,7 @@ public class ArticleCollection {
                 matchedPreviews.add(a.getPreview());
             }
         }
+        Collections.sort(matchedPreviews);
         return matchedPreviews;
     }
 

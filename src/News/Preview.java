@@ -1,8 +1,9 @@
 package News;
 
+import org.jetbrains.annotations.NotNull;
 import org.jsoup.nodes.Element;
 
-public class Preview {
+public class Preview implements Comparable<Preview>{
     Element preview;
     Article article;
 
@@ -21,5 +22,11 @@ public class Preview {
 
     public String getArticleHtml(){
         return article.getHtml();
+    }
+
+
+    @Override
+    public int compareTo(Preview p) {
+        return (int) (this.article.getMinutesSincePublished() - p.article.getMinutesSincePublished());
     }
 }
