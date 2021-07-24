@@ -34,7 +34,6 @@ public class ArticleListGenerator {
                     articles.add(article);
             }
         }
-        System.out.println(newsOutletInfo.name + "=>" + articles);
         return articles;
     }
 

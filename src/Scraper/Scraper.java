@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class Scraper {
-    static final int MAX_LINKS_SCRAPED = 15;
+    static final int MAX_LINKS_SCRAPED = 12;
 
     public static ArrayList<URL> scrapeLinksByClass(URL baseUrl, String cssClass) {
 
