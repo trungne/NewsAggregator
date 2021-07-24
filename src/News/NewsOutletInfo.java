@@ -91,7 +91,6 @@ public class NewsOutletInfo implements Serializable {
         ZingNewsInfo.setSanitizer(new ZingNewsSanitizer());
         ZingNewsInfo.setScrapingDateTimeBehavior(new ScrapeInMetaTag());
 
-        // TODO: fix this pls, cant use "lightbox-content" (class of img) to scrape img
         NewsOutletInfo TuoiTreInfo = new NewsOutletInfo(NewsOutletInfo.TuoiTre);
         TuoiTreInfo.setBaseUrl("https://tuoitre.vn/");
         TuoiTreInfo.setTitleLinkCssClass("title-news");
