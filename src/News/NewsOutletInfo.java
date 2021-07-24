@@ -97,7 +97,7 @@ public class NewsOutletInfo implements Serializable {
         TuoiTreInfo.setTitleLinkCssClass("title-news");
         TuoiTreInfo.setTitleCssClass("article-title");
         TuoiTreInfo.setDescriptionCssClass("sapo");
-        TuoiTreInfo.setContentBodyCssClass("content fck");
+        TuoiTreInfo.setContentBodyCssClass("fck");
         TuoiTreInfo.setDateTimeCssClass("article:published_time");
         TuoiTreInfo.setPictureCssClass("VCSortableInPreviewMode");
         TuoiTreInfo.setDefaultThumbNailUrl("https://dangkyxettuyennghe.tuoitre.vn/img/logo-tt.png");

@@ -11,9 +11,10 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class Scraper {
-    static final int MAX_LINKS_SCRAPED = 10;
+    static final int MAX_LINKS_SCRAPED = 15;
 
     public static ArrayList<URL> scrapeLinksByClass(URL baseUrl, String cssClass) {
+
         Document doc;
         ArrayList<URL> links = new ArrayList<>();
         try {
@@ -26,7 +27,6 @@ public class Scraper {
                 URL link = new URL(baseUrl, tag.getElementsByTag("a").attr("href"));
                 links.add(link);
             }
-
         } catch (IOException e) {
             // TODO: disable this in production
             e.printStackTrace();

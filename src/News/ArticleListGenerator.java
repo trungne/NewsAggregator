@@ -20,6 +20,24 @@ public class ArticleListGenerator {
         return extractArticlesFromCategories(newsOutletInfo);
     }
 
+    public static ArrayList<Article> getArticlesInCategory(NewsOutletInfo newsOutletInfo, String category){
+        return extractArticlesFromCategory(newsOutletInfo, category);
+    }
+
+    private static ArrayList<Article> extractArticlesFromCategory(NewsOutletInfo newsOutletInfo, String category){
+        ArrayList<Article> articles = new ArrayList<>();
+        ArrayList<URL> articleUrls = extractLinksFromCategory(newsOutletInfo, category);
+        if (articleUrls != null){
+            for (URL url: articleUrls){
+                Article article = createArticle(url, category, newsOutletInfo);
+                if (article != null)
+                    articles.add(article);
+            }
+        }
+        System.out.println(newsOutletInfo.name + "=>" + articles);
+        return articles;
+    }
+
     private static ArrayList<Article> extractArticlesFromCategories(NewsOutletInfo newsOutletInfo){
         ArrayList<Article> articles = new ArrayList<>();
         HashMap<String, ArrayList<URL>> categories = extractLinksFromCategories(newsOutletInfo);
@@ -27,7 +45,6 @@ public class ArticleListGenerator {
         for (String category: categories.keySet()){
             for(URL articleUrl: categories.get(category)){
                 Article article = createArticle(articleUrl, category, newsOutletInfo);
-                // TODO: check if article already exists, if yes add current category to it
                 if (article != null)
                     articles.add(article);
             }
@@ -46,7 +63,6 @@ public class ArticleListGenerator {
             Element mainContentTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.contentBodyCssClass);
             Element thumbNail = Scraper.scrapeCleanedFirstImgTagByClass(articleDoc, newsOutletInfo.pictureCssClass);
             LocalDateTime dateTime = newsOutletInfo.scrapingDateTimeBehavior.getLocalDateTime(articleDoc, newsOutletInfo.dateTimeCssClass);
-
             if (!thumbNail.hasAttr("src")){
                 thumbNail.attr("src", newsOutletInfo.defaultThumbNailUrl);
             }
@@ -90,6 +106,19 @@ public class ArticleListGenerator {
 
     }
 
+    private static ArrayList<URL> extractLinksFromCategory(NewsOutletInfo newsOutletInfo, String category){
+        if (newsOutletInfo.categories.containsKey(category)){
+            URL categoryUrl;
+            try {
+                categoryUrl = new URL(newsOutletInfo.categories.get(category));
+                return new ArrayList<>(Scraper.scrapeLinksByClass(categoryUrl, newsOutletInfo.titleLinkCssClass));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     private static HashMap<String, ArrayList<URL>> extractLinksFromCategories(NewsOutletInfo newsOutletInfo){
 
         HashMap<String, ArrayList<URL>> categories = new HashMap<>();
@@ -98,21 +127,10 @@ public class ArticleListGenerator {
 
         // loop through each category and scrape links in it
         for (String category: newsOutletInfo.categories.keySet()){
-            ArrayList<URL> links;
-            URL categoryUrl;
-            try {
-                categoryUrl = new URL(newsOutletInfo.categories.get(category));
-            }
-            catch (MalformedURLException e){
-                continue; // skip if category url cannot be formed;
-            }
-
-            links = Scraper.scrapeLinksByClass(categoryUrl, newsOutletInfo.titleLinkCssClass);
-
-            categories.put(category, links);
+            ArrayList<URL> urls =  extractLinksFromCategory(newsOutletInfo, category);
+            if (urls != null)
+                categories.put(category, urls);
         }
-
-
         return categories;
 
 

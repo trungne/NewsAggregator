@@ -8,10 +8,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class ScraperTestDrive {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         final long startTime = System.currentTimeMillis();
 
-        ArrayList<Preview> previews = ArticleCollection.getPreviewsByCategory(CATEGORY.HEALTH);
+        ArrayList<Preview> previews = ArticleCollection.getPreviewsByCategory(CATEGORY.POLITICS);
 
         for (Preview preview: previews){
             System.out.println(preview);
