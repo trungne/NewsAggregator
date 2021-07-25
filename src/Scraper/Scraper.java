@@ -37,14 +37,20 @@ public class Scraper {
     // only scrape the first tag found!
     public static Element scrapeElementByClass(Document doc, String uniqueCssClass) {
         String queryString = uniqueCssClass;
+
         if (!queryString.startsWith(".")) {
             queryString = "." + uniqueCssClass;
         }
+
         return doc.selectFirst(queryString);
     }
 
     public static Element scrapeCleanedFirstImgTagByClass(Document doc, String uniqueCssClass) {
         Element firstImgTag = scrapeElementByClass(doc, uniqueCssClass);
+        if (firstImgTag == null){
+            return null;
+        }
+        //TODO check null
         firstImgTag = firstImgTag.getElementsByTag("img").first();
         // return an empty img tag if nothing to be scraped
         Element cleanedFirstImgTag = new Element("img");

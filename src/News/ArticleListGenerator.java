@@ -53,15 +53,23 @@ public class ArticleListGenerator {
 
 
     private static Article createArticle(URL url, String category, NewsOutletInfo newsOutletInfo){
+        Element titleTag;
+        Element descriptionTag;
+        Element mainContentTag;
+        Element thumbNail;
+        LocalDateTime dateTime;
+
         try{
             Document articleDoc = Jsoup.connect(url.toString()).timeout(MAX_WAIT_TIME).get();
 
             // scrape all needed tags of the article
-            Element titleTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.titleCssClass);
-            Element descriptionTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.descriptionCssClass);
-            Element mainContentTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.contentBodyCssClass);
-            Element thumbNail = Scraper.scrapeCleanedFirstImgTagByClass(articleDoc, newsOutletInfo.pictureCssClass);
-            LocalDateTime dateTime = newsOutletInfo.scrapingDateTimeBehavior.getLocalDateTime(articleDoc, newsOutletInfo.dateTimeCssClass);
+            titleTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.titleCssClass);
+            descriptionTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.descriptionCssClass);
+            mainContentTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.contentBodyCssClass);
+            thumbNail = Scraper.scrapeCleanedFirstImgTagByClass(articleDoc, newsOutletInfo.pictureCssClass);
+
+            dateTime = newsOutletInfo.scrapingDateTimeBehavior.getLocalDateTime(articleDoc, newsOutletInfo.dateTimeCssClass);
+
             if (!thumbNail.hasAttr("src")){
                 thumbNail.attr("src", newsOutletInfo.defaultThumbNailUrl);
             }
@@ -79,29 +87,32 @@ public class ArticleListGenerator {
             thumbNail = newsOutletInfo.sanitizer.sanitize(thumbNail, CSS.THUMBNAIL);
 
             // no need to sanitize date time as a default value will be assigned if it is null
+        }
+        catch (IOException | NullPointerException e){
+            System.out.println(url);
+            e.printStackTrace();
+            return null;
+        }
 
-            // TODO: Check valid tags
-            if (titleTag == null || descriptionTag == null || mainContentTag == null || thumbNail == null){
-                return null;
-            }
+        Article article = new Article();
+        article.setDateTime(dateTime);
+        article.setNewsSource(newsOutletInfo.name);
 
-            Article article = new Article();
-
+        try{
             article.setUrl(url);
             article.addCategory(category);
             article.setTitle(titleTag);
             article.setDescription(descriptionTag);
             article.setMainContent(mainContentTag);
             article.setThumbNailUrl(thumbNail);
-            article.setDateTime(dateTime);
-            article.setNewsSource(newsOutletInfo.name);
-
-            return article;
-
         }
-        catch (IOException | NullPointerException e){
+
+        catch (Exception e){
+            System.out.println(e.toString());
             return null;
         }
+
+        return article;
 
     }
 

@@ -66,12 +66,12 @@ public class NewsOutletInfo implements Serializable {
 
         NewsOutletInfo VNExpressInfo = new NewsOutletInfo(NewsOutletInfo.VNExpress);
         VNExpressInfo.setBaseUrl("https://vnexpress.net/");
-        VNExpressInfo.setTitleLinkCssClass("title-news");
-        VNExpressInfo.setTitleCssClass("title-detail");
-        VNExpressInfo.setDescriptionCssClass("description");
-        VNExpressInfo.setContentBodyCssClass("fck_detail");
-        VNExpressInfo.setDateTimeCssClass("datePublished");
-        VNExpressInfo.setPictureCssClass("fig-picture");
+        VNExpressInfo.setTitleLinkCssClass(CSS.VNEXPRESS_TITLE_LINK);
+        VNExpressInfo.setTitleCssClass(CSS.VNEXPRESS_TITLE);
+        VNExpressInfo.setDescriptionCssClass(CSS.VNEXPRESS_DESCRIPTION);
+        VNExpressInfo.setContentBodyCssClass(CSS.VNEXPRESS_BODY);
+        VNExpressInfo.setDateTimeCssClass(CSS.VNEXPRESS_TIME);
+        VNExpressInfo.setPictureCssClass(CSS.VNEXPRESS_PIC);
         VNExpressInfo.setDefaultThumbNailUrl("https://s1.vnecdn.net/vnexpress/restruct/i/v395/logo_default.jpg");
         VNExpressInfo.setCategories(VNExpressCategories);
         VNExpressInfo.setSanitizer(new VNExpressSanitizer());
@@ -79,12 +79,12 @@ public class NewsOutletInfo implements Serializable {
 
         NewsOutletInfo ZingNewsInfo = new NewsOutletInfo(NewsOutletInfo.ZingNews);
         ZingNewsInfo.setBaseUrl("https://zingnews.vn/");
-        ZingNewsInfo.setTitleLinkCssClass("article-title");
-        ZingNewsInfo.setTitleCssClass("the-article-title");
-        ZingNewsInfo.setDescriptionCssClass("the-article-summary");
-        ZingNewsInfo.setContentBodyCssClass("the-article-body");
-        ZingNewsInfo.setDateTimeCssClass("article:published_time");
-        ZingNewsInfo.setPictureCssClass("pic");
+        ZingNewsInfo.setTitleLinkCssClass(CSS.ZING_TITLE_LINK);
+        ZingNewsInfo.setTitleCssClass(CSS.ZING_TITLE);
+        ZingNewsInfo.setDescriptionCssClass(CSS.ZING_DESCRIPTION);
+        ZingNewsInfo.setContentBodyCssClass(CSS.ZING_BODY);
+        ZingNewsInfo.setDateTimeCssClass(CSS.ZING_TIME);
+        ZingNewsInfo.setPictureCssClass(CSS.ZING_PIC);
         ZingNewsInfo.setDefaultThumbNailUrl("https://static-znews.zadn.vn/images/logo-zing-home.svg");
         ZingNewsInfo.setCategories(ZingCategories);
         ZingNewsInfo.setSanitizer(new ZingNewsSanitizer());
@@ -92,12 +92,12 @@ public class NewsOutletInfo implements Serializable {
 
         NewsOutletInfo TuoiTreInfo = new NewsOutletInfo(NewsOutletInfo.TuoiTre);
         TuoiTreInfo.setBaseUrl("https://tuoitre.vn/");
-        TuoiTreInfo.setTitleLinkCssClass("title-news");
-        TuoiTreInfo.setTitleCssClass("article-title");
-        TuoiTreInfo.setDescriptionCssClass("sapo");
-        TuoiTreInfo.setContentBodyCssClass("fck");
-        TuoiTreInfo.setDateTimeCssClass("article:published_time");
-        TuoiTreInfo.setPictureCssClass("VCSortableInPreviewMode");
+        TuoiTreInfo.setTitleLinkCssClass(CSS.TUOITRE_TITLE_LINK);
+        TuoiTreInfo.setTitleCssClass(CSS.TUOITRE_TITLE);
+        TuoiTreInfo.setDescriptionCssClass(CSS.TUOITRE_DESCRIPTION);
+        TuoiTreInfo.setContentBodyCssClass(CSS.TUOITRE_BODY);
+        TuoiTreInfo.setDateTimeCssClass(CSS.TUOITRE_TIME);
+        TuoiTreInfo.setPictureCssClass(CSS.TUOITRE_PIC);
         TuoiTreInfo.setDefaultThumbNailUrl("https://dangkyxettuyennghe.tuoitre.vn/img/logo-tt.png");
         TuoiTreInfo.setCategories(TuoitreCategories);
         TuoiTreInfo.setSanitizer(new TuoiTreSanitizer());
@@ -105,12 +105,12 @@ public class NewsOutletInfo implements Serializable {
 
         NewsOutletInfo ThanhNienInfo = new NewsOutletInfo(NewsOutletInfo.ThanhNien);
         ThanhNienInfo.setBaseUrl("https://thanhnien.vn/");
-        ThanhNienInfo.setTitleLinkCssClass("story__thumb");
-        ThanhNienInfo.setTitleCssClass("details__headline");
-        ThanhNienInfo.setDescriptionCssClass("sapo");
-        ThanhNienInfo.setContentBodyCssClass("details__content");
-        ThanhNienInfo.setDateTimeCssClass("article:published_time");
-        ThanhNienInfo.setPictureCssClass("pswp-content__image");
+        ThanhNienInfo.setTitleLinkCssClass(CSS.THANHNIEN_TITLE_LINK);
+        ThanhNienInfo.setTitleCssClass(CSS.THANHNIEN_TITLE);
+        ThanhNienInfo.setDescriptionCssClass(CSS.THANHNIEN_DESCRIPTION);
+        ThanhNienInfo.setContentBodyCssClass(CSS.THANHNIEN_BODY);
+        ThanhNienInfo.setDateTimeCssClass(CSS.THANHNIEN_TIME);
+        ThanhNienInfo.setPictureCssClass(CSS.THANHNIEN_PIC);
         ThanhNienInfo.setDefaultThumbNailUrl("https://static.thanhnien.vn/v2/App_Themes/images/logo-tn-2.png");
         ThanhNienInfo.setCategories(ThanhNienCategories);
         ThanhNienInfo.setSanitizer(new ThanhNienSanitizer());
@@ -118,12 +118,12 @@ public class NewsOutletInfo implements Serializable {
 
         NewsOutletInfo NhanDanInfo = new NewsOutletInfo(NewsOutletInfo.NhanDan);
         NhanDanInfo.setBaseUrl("https://nhandan.vn/");
-        NhanDanInfo.setTitleLinkCssClass("box-title");
-        NhanDanInfo.setTitleCssClass("box-title-detail");
-        NhanDanInfo.setDescriptionCssClass("box-des-detail");
-        NhanDanInfo.setContentBodyCssClass("detail-content-body");
-        NhanDanInfo.setDateTimeCssClass("box-date pull-left");
-        NhanDanInfo.setPictureCssClass("box-detail-thumb");
+        NhanDanInfo.setTitleLinkCssClass(CSS.NHANDAN_TITLE_LINK);
+        NhanDanInfo.setTitleCssClass(CSS.NHANDAN_TITLE);
+        NhanDanInfo.setDescriptionCssClass(CSS.NHANDAN_DESCRIPTION);
+        NhanDanInfo.setContentBodyCssClass(CSS.NHANDAN_BODY);
+        NhanDanInfo.setDateTimeCssClass(CSS.NHANDAN_TIME);
+        NhanDanInfo.setPictureCssClass(CSS.NHANDAN_PIC);
         NhanDanInfo.setDefaultThumbNailUrl("https://www.nhandan-printing.vn/datafiles_D_D/setmulti/nhandan_copy.jpg");
         NhanDanInfo.setCategories(NhanDanCategories);
         NhanDanInfo.setSanitizer(new NhanDanSanitizer());

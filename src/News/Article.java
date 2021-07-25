@@ -10,6 +10,15 @@ import java.util.HashSet;
 
 public class Article {
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EE, dd/MMMM/yyyy, kk:mm ");
+    static boolean validateTag(Element e, String type) throws Exception {
+        if (e == null)
+            throw new Exception("Element For " + type + " Not Found");
+
+        if (e.text().isEmpty())
+            throw new Exception("Empty Title");
+
+        return true;
+    }
     // attributes
     URL url;
     Element title;
@@ -99,24 +108,31 @@ public class Article {
 
 
     // setters
-    public void setUrl(URL url) {
+    public void setUrl(URL url) throws Exception {
+        if (url == null)
+            throw new Exception("No Url Found For Article");
+
         this.url = url;
     }
 
-    public void setTitle(Element title) {
-        this.title = title;
+    public void setTitle(Element title) throws Exception {
+       if (validateTag(title, "Title"))
+           this.title = title;
     }
 
-    public void setDescription(Element description) {
-        this.description = description;
+    public void setDescription(Element description) throws Exception {
+        if (validateTag(description, "Description"))
+            this.description = description;
     }
 
-    public void setMainContent(Element mainContent) {
-        this.mainContent = mainContent;
+    public void setMainContent(Element mainContent) throws Exception {
+        if (validateTag(mainContent, "Main Content"))
+            this.mainContent = mainContent;
     }
 
-    public void setThumbNailUrl(Element thumbNail) {
-        this.thumbNail = thumbNail;
+    public void setThumbNailUrl(Element thumbNail) throws Exception {
+        if (validateTag(mainContent, "Thumbnail"))
+            this.thumbNail = thumbNail;
     }
 
     public void setDateTime(LocalDateTime dateTime) {

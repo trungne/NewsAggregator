@@ -10,9 +10,10 @@ public class ScrapeInBodyTag implements ScrapingDateTimeBehavior {
     @Override
     public LocalDateTime getLocalDateTime(Document doc, String propertyContainsDateTimeInfo) {
         Element dateTimeTag = doc.selectFirst(propertyContainsDateTimeInfo);
-
         String dateTimeStr;
+
         if (dateTimeTag != null){
+            System.out.println(dateTimeTag.html());
             dateTimeStr = getDateTimeSubString(dateTimeTag.text());
         }
         else{
