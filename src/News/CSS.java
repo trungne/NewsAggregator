@@ -9,6 +9,15 @@ public class CSS {
     public static final String TITLE = "title";
     public static final String DESCRIPTION = "description";
     public static final String MAIN_CONTENT = "main-content";
+
+    // CSS Classes for content in main content
+    public static final String PARAGRAPH = "content-paragraph";
+    public static final String FIGURE = "content-pic";
+    public static final String VIDEO = "content-video";
+    public static final String RELEVANT_NEWS = "relevant-news";
+    public static final String RELEVANT_NEWS_ITEM = "relevant-news-item";
+
+
     public static final String LOCATION = "location";
 
     // CSS for previews
@@ -19,10 +28,16 @@ public class CSS {
     public static final String THUMBNAIL_TITLE = "thumb-title";
     public static final String THUMBNAIL_DESCRIPTION = "thumb-desp";
 
+    /* The following CSS Classes are used to initialize NewsOutletInfo */
+
     // CSS for VNExpress
     public static final String VNEXPRESS_TITLE = "title-detail";
     public static final String VNEXPRESS_DESCRIPTION = "description";
     public static final String VNEXPRESS_BODY = "fck_detail";
+
+    // These are css of tags we need to keep in VNExpress article body
+    public static final String VNEXPRESS_PARAGRAPH = "Normal";
+
     public static final String VNEXPRESS_TIME = "datePublished";
     public static final String VNEXPRESS_PIC = "fig-picture";
     public static final String VNEXPRESS_TITLE_LINK = "title-news";

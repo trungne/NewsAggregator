@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class ScrapeInBodyTag implements ScrapingDateTimeBehavior {
     @Override
     public LocalDateTime getLocalDateTime(Document doc, String propertyContainsDateTimeInfo) {
-        Element dateTimeTag = Scraper.scrapeElementByClass(doc, propertyContainsDateTimeInfo);
+        Element dateTimeTag = Scraper.scrapeFirstElementByClass(doc, propertyContainsDateTimeInfo);
         String dateTimeStr;
         if (dateTimeTag != null){
             dateTimeStr = getDateTimeSubString(dateTimeTag.text());

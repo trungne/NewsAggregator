@@ -14,8 +14,7 @@ public class ScraperTestDrive {
         ArrayList<Preview> previews = ArticleCollection.getPreviewsByCategory(CATEGORY.HEALTH);
 
         for (Preview preview: previews){
-            System.out.println(preview);
-
+            System.out.println(preview.getArticleHtml());
         }
 
         final long endTime = System.currentTimeMillis();

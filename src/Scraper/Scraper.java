@@ -6,7 +6,6 @@ import org.jsoup.select.*;
 
 import java.io.*;
 import java.net.*;
-import java.time.LocalDateTime;
 
 import java.util.*;
 
@@ -35,7 +34,7 @@ public class Scraper {
     }
 
     // only scrape the first tag found!
-    public static Element scrapeElementByClass(Document doc, String uniqueCssClass) {
+    public static Element scrapeFirstElementByClass(Document doc, String uniqueCssClass) {
         String queryString = uniqueCssClass;
 
         if (!queryString.startsWith(".")) {
@@ -46,27 +45,30 @@ public class Scraper {
     }
 
     public static Element scrapeFirstImgTagByClass(Document doc, String uniqueCssClass) {
-        Element elementContainsImg = scrapeElementByClass(doc, uniqueCssClass);
-        if (elementContainsImg == null) return null;
+        Element elementContainsImgs = scrapeFirstElementByClass(doc, uniqueCssClass);
+        if (elementContainsImgs == null) return null;
 
-        Element firstImgTag = elementContainsImg.getElementsByTag("img").first();
+        Element firstImgTag = elementContainsImgs.getElementsByTag("img").first();
         if (firstImgTag == null) return null;
 
+        return createCleanImgTag(firstImgTag);
+    }
 
+    public static Element createCleanImgTag(Element e){
         Element cleanedFirstImgTag = new Element("img");
 
         // assign src for the img tag
         // TODO: maybe check valid src? end with .jpg png??
-        if (firstImgTag.hasAttr("data-src"))
-            cleanedFirstImgTag.attr("src",firstImgTag.attr("data-src"));
-        else if (firstImgTag.hasAttr("src"))
-            cleanedFirstImgTag.attr("src",firstImgTag.attr("src"));
+        if (e.hasAttr("data-src"))
+            cleanedFirstImgTag.attr("src",e.attr("data-src"));
+        else if (e.hasAttr("src"))
+            cleanedFirstImgTag.attr("src",e.attr("src"));
         else
             return null;
 
         // assign alt for the img tag
-        if (firstImgTag.hasAttr("alt")){
-            cleanedFirstImgTag.attr("alt", firstImgTag.attr("alt"));
+        if (e.hasAttr("alt")){
+            cleanedFirstImgTag.attr("alt", e.attr("alt"));
         }
 
         // only return img tag that has src

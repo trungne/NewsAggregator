@@ -52,7 +52,7 @@ public class ArticleListGenerator {
     }
 
 
-    private static Article createArticle(URL url, String category, NewsOutletInfo newsOutletInfo){
+    public static Article createArticle(URL url, String category, NewsOutletInfo newsOutletInfo){
         Document articleDoc;
         try {
             articleDoc = Jsoup.connect(url.toString()).timeout(MAX_WAIT_TIME).get();
@@ -68,9 +68,9 @@ public class ArticleListGenerator {
         LocalDateTime dateTime;
 
         // scrape all needed tags of the article
-        titleTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.titleCssClass);
-        descriptionTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.descriptionCssClass);
-        mainContentTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.contentBodyCssClass);
+        titleTag = Scraper.scrapeFirstElementByClass(articleDoc, newsOutletInfo.titleCssClass);
+        descriptionTag = Scraper.scrapeFirstElementByClass(articleDoc, newsOutletInfo.descriptionCssClass);
+        mainContentTag = Scraper.scrapeFirstElementByClass(articleDoc, newsOutletInfo.contentBodyCssClass);
         thumbNail = Scraper.scrapeFirstImgTagByClass(articleDoc, newsOutletInfo.pictureCssClass);
         dateTime = newsOutletInfo.scrapingDateTimeBehavior.getLocalDateTime(articleDoc, newsOutletInfo.dateTimeCssClass);
 
