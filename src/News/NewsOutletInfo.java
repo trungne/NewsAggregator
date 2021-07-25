@@ -4,8 +4,6 @@ import News.Sanitizer.*;
 import Scraper.*;
 
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 
 public class NewsOutletInfo implements Serializable {
@@ -17,53 +15,54 @@ public class NewsOutletInfo implements Serializable {
 
     public static NewsOutletInfo[] initializeNewsOutlets(){
         HashMap<String, String> VNExpressCategories = new HashMap<>();
-        VNExpressCategories.put(CATEGORY.COVID, "https://vnexpress.net/covid-19/tin-tuc");
-        VNExpressCategories.put(CATEGORY.POLITICS, "https://vnexpress.net/thoi-su/chinh-tri");
-        VNExpressCategories.put(CATEGORY.BUSINESS, "https://vnexpress.net/kinh-doanh");
-        VNExpressCategories.put(CATEGORY.TECHNOLOGY, "https://vnexpress.net/khoa-hoc");
-        VNExpressCategories.put(CATEGORY.HEALTH, "https://vnexpress.net/suc-khoe");
-        VNExpressCategories.put(CATEGORY.SPORTS, "https://vnexpress.net/the-thao");
-        VNExpressCategories.put(CATEGORY.ENTERTAINMENT,"https://vnexpress.net/giai-tri");
-        VNExpressCategories.put(CATEGORY.WORLD, "https://vnexpress.net/the-gioi");
+
+        VNExpressCategories.put(CATEGORY.COVID, CATEGORY.VNEXPRESS_COVID);
+        VNExpressCategories.put(CATEGORY.POLITICS, CATEGORY.VNEXPRESS_POLITICS);
+        VNExpressCategories.put(CATEGORY.BUSINESS, CATEGORY.VNEXPRESS_BUSINESS);
+        VNExpressCategories.put(CATEGORY.TECHNOLOGY, CATEGORY.VNEXPRESS_TECHNOLOGY);
+        VNExpressCategories.put(CATEGORY.HEALTH, CATEGORY.VNEXPRESS_HEALTH);
+        VNExpressCategories.put(CATEGORY.SPORTS, CATEGORY.VNEXPRESS_SPORTS);
+        VNExpressCategories.put(CATEGORY.ENTERTAINMENT, CATEGORY.VNEXPRESS_ENTERTAINMENT);
+        VNExpressCategories.put(CATEGORY.WORLD, CATEGORY.VNEXPRESS_WORLD);
 
         HashMap<String, String> ZingCategories = new HashMap<>();
-        ZingCategories.put(CATEGORY.COVID, "https://zingnews.vn/tieu-diem/covid-19.html");
-        ZingCategories.put(CATEGORY.POLITICS, "https://zingnews.vn/chinh-tri.html");
-        ZingCategories.put(CATEGORY.BUSINESS, "https://zingnews.vn/kinh-doanh-tai-chinh.html");
-        ZingCategories.put(CATEGORY.TECHNOLOGY, "https://zingnews.vn/cong-nghe.html");
-        ZingCategories.put(CATEGORY.HEALTH, "https://zingnews.vn/suc-khoe.html");
-        ZingCategories.put(CATEGORY.SPORTS, "https://zingnews.vn/the-thao.html");
-        ZingCategories.put(CATEGORY.ENTERTAINMENT, "https://zingnews.vn/giai-tri.html");
-        ZingCategories.put(CATEGORY.WORLD, "https://zingnews.vn/the-gioi.html");
+        ZingCategories.put(CATEGORY.COVID, CATEGORY.ZING_COVID);
+        ZingCategories.put(CATEGORY.POLITICS, CATEGORY.ZING_POLITICS);
+        ZingCategories.put(CATEGORY.BUSINESS, CATEGORY.ZING_BUSINESS);
+        ZingCategories.put(CATEGORY.TECHNOLOGY, CATEGORY.ZING_TECHNOLOGY);
+        ZingCategories.put(CATEGORY.HEALTH, CATEGORY.ZING_HEALTH);
+        ZingCategories.put(CATEGORY.SPORTS, CATEGORY.ZING_SPORTS);
+        ZingCategories.put(CATEGORY.ENTERTAINMENT, CATEGORY.ZING_ENTERTAINMENT);
+        ZingCategories.put(CATEGORY.WORLD, CATEGORY.ZING_WORLD);
 
         HashMap<String, String> TuoitreCategories = new HashMap<>();
-        TuoitreCategories.put(CATEGORY.COVID,"https://tuoitre.vn/covid-19.html");
-        TuoitreCategories.put(CATEGORY.POLITICS,"https://tuoitre.vn/thoi-su.htm");
-        TuoitreCategories.put(CATEGORY.BUSINESS,"https://tuoitre.vn/kinh-doanh.htm");
-        TuoitreCategories.put(CATEGORY.TECHNOLOGY,"https://tuoitre.vn/khoa-hoc.htm");
-        TuoitreCategories.put(CATEGORY.HEALTH,"https://tuoitre.vn/suc-khoe.htm");
-        TuoitreCategories.put(CATEGORY.SPORTS,"https://tuoitre.vn/the-thao.htm");
-        TuoitreCategories.put(CATEGORY.ENTERTAINMENT,"https://tuoitre.vn/giai-tri.htm");
-        TuoitreCategories.put(CATEGORY.WORLD,"https://tuoitre.vn/the-gioi.htm");
+        TuoitreCategories.put(CATEGORY.COVID,CATEGORY.TUOITRE_COVID);
+        TuoitreCategories.put(CATEGORY.POLITICS,CATEGORY.TUOITRE_POLITICS);
+        TuoitreCategories.put(CATEGORY.BUSINESS,CATEGORY.TUOITRE_BUSINESS);
+        TuoitreCategories.put(CATEGORY.TECHNOLOGY,CATEGORY.TUOITRE_TECHNOLOGY);
+        TuoitreCategories.put(CATEGORY.HEALTH,CATEGORY.TUOITRE_HEALTH);
+        TuoitreCategories.put(CATEGORY.SPORTS,CATEGORY.TUOITRE_SPORTS);
+        TuoitreCategories.put(CATEGORY.ENTERTAINMENT,CATEGORY.TUOITRE_ENTERTAINMENT);
+        TuoitreCategories.put(CATEGORY.WORLD,CATEGORY.TUOITRE_WORLD);
 
         HashMap<String, String> ThanhNienCategories = new HashMap<>();
-        ThanhNienCategories.put(CATEGORY.COVID, "https://thanhnien.vn/covid-19/");
-        ThanhNienCategories.put(CATEGORY.POLITICS, "https://thanhnien.vn/thoi-su/");
-        ThanhNienCategories.put(CATEGORY.BUSINESS, "https://thanhnien.vn/tai-chinh-kinh-doanh/");
-        ThanhNienCategories.put(CATEGORY.TECHNOLOGY,"https://thanhnien.vn/cong-nghe/");
-        ThanhNienCategories.put(CATEGORY.HEALTH,"https://thanhnien.vn/suc-khoe/");
-        ThanhNienCategories.put(CATEGORY.SPORTS,"https://thanhnien.vn/the-thao/");
-        ThanhNienCategories.put(CATEGORY.ENTERTAINMENT,"https://thanhnien.vn/giai-tri/");
-        ThanhNienCategories.put(CATEGORY.WORLD,"https://thanhnien.vn/the-gioi/");
+        ThanhNienCategories.put(CATEGORY.COVID,CATEGORY.THANHNIEN_COVID);
+        ThanhNienCategories.put(CATEGORY.POLITICS,CATEGORY.THANHNIEN_POLITICS);
+        ThanhNienCategories.put(CATEGORY.BUSINESS,CATEGORY.THANHNIEN_BUSINESS);
+        ThanhNienCategories.put(CATEGORY.TECHNOLOGY,CATEGORY.THANHNIEN_TECHNOLOGY);
+        ThanhNienCategories.put(CATEGORY.HEALTH,CATEGORY.THANHNIEN_HEALTH);
+        ThanhNienCategories.put(CATEGORY.SPORTS,CATEGORY.THANHNIEN_SPORTS);
+        ThanhNienCategories.put(CATEGORY.ENTERTAINMENT,CATEGORY.THANHNIEN_ENTERTAINMENT);
+        ThanhNienCategories.put(CATEGORY.WORLD,CATEGORY.THANHNIEN_WORLD);
 
         HashMap<String, String> NhanDanCategories = new HashMap<>();
-        NhanDanCategories.put(CATEGORY.COVID,"https://nhandan.vn/tieu-diem");
-        NhanDanCategories.put(CATEGORY.POLITICS,"https://nhandan.vn/chinhtri");
-        NhanDanCategories.put(CATEGORY.BUSINESS,"https://nhandan.vn/kinhte");
-        NhanDanCategories.put(CATEGORY.TECHNOLOGY,"https://nhandan.vn/khoahoc-congnghe");
-        NhanDanCategories.put(CATEGORY.HEALTH,"https://nhandan.vn/y-te");
-        NhanDanCategories.put(CATEGORY.SPORTS,"https://nhandan.vn/thethao"); // NhanDanCategories.put("Entertainment", new URL("??"));
-        NhanDanCategories.put(CATEGORY.WORLD,"https://nhandan.vn/thegioi");
+        NhanDanCategories.put(CATEGORY.COVID,CATEGORY.NHANDAN_COVID);
+        NhanDanCategories.put(CATEGORY.POLITICS,CATEGORY.NHANDAN_POLITICS);
+        NhanDanCategories.put(CATEGORY.BUSINESS,CATEGORY.NHANDAN_BUSINESS);
+        NhanDanCategories.put(CATEGORY.TECHNOLOGY,CATEGORY.NHANDAN_TECHNOLOGY);
+        NhanDanCategories.put(CATEGORY.HEALTH,CATEGORY.NHANDAN_HEALTH);
+        NhanDanCategories.put(CATEGORY.SPORTS,CATEGORY.NHANDAN_SPORTS); // NhanDanCategories.put("Entertainment", new URL("??"));
+        NhanDanCategories.put(CATEGORY.WORLD,CATEGORY.NHANDAN_WORLD);
 
         NewsOutletInfo VNExpressInfo = new NewsOutletInfo(NewsOutletInfo.VNExpress);
         VNExpressInfo.setBaseUrl("https://vnexpress.net/");
