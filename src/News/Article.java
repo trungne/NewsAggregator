@@ -10,13 +10,13 @@ import java.util.HashSet;
 
 public class Article {
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EE, dd/MMMM/yyyy, kk:mm ");
-    static boolean validateTag(Element e, String type) throws Exception {
+    static boolean validateTag(Element e, String type, URL url) throws Exception {
         if (e == null)
             throw new Exception("Element For " + type + " Not Found");
 
-        if (e.text().isEmpty())
-            throw new Exception("Empty Title");
+        if (e.text().isEmpty()){
 
+        }
         return true;
     }
     // attributes
@@ -94,7 +94,7 @@ public class Article {
         }
         else if (minutes < 1440){ // 1440 minutes = 1 day
             long hours = minutes/60;
-            return hours + (hours == 1 ? " hour " : " hours ") + minutes%60 + (minutes == 1 ? " minute" : " minutes") + " ago.";
+            return hours + (hours == 1 ? " hour " : " hours ") + minutes%60 + (minutes%60 == 1 ? " minute" : " minutes") + " ago.";
         }
         else {
             long days = minutes/1440;
@@ -116,22 +116,22 @@ public class Article {
     }
 
     public void setTitle(Element title) throws Exception {
-       if (validateTag(title, "Title"))
+       if (validateTag(title, "Title", url))
            this.title = title;
     }
 
     public void setDescription(Element description) throws Exception {
-        if (validateTag(description, "Description"))
+        if (validateTag(description, "Description", url))
             this.description = description;
     }
 
     public void setMainContent(Element mainContent) throws Exception {
-        if (validateTag(mainContent, "Main Content"))
+        if (validateTag(mainContent, "Main Content", url))
             this.mainContent = mainContent;
     }
 
     public void setThumbNailUrl(Element thumbNail) throws Exception {
-        if (validateTag(mainContent, "Thumbnail"))
+        if (validateTag(mainContent, "Thumbnail", url))
             this.thumbNail = thumbNail;
     }
 

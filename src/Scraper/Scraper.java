@@ -45,32 +45,31 @@ public class Scraper {
         return doc.selectFirst(queryString);
     }
 
-    public static Element scrapeCleanedFirstImgTagByClass(Document doc, String uniqueCssClass) {
-        Element firstImgTag = scrapeElementByClass(doc, uniqueCssClass);
-        if (firstImgTag == null){
-            return null;
-        }
-        //TODO check null
-        firstImgTag = firstImgTag.getElementsByTag("img").first();
-        // return an empty img tag if nothing to be scraped
+    public static Element scrapeFirstImgTagByClass(Document doc, String uniqueCssClass) {
+        Element elementContainsImg = scrapeElementByClass(doc, uniqueCssClass);
+        if (elementContainsImg == null) return null;
+
+        Element firstImgTag = elementContainsImg.getElementsByTag("img").first();
+        if (firstImgTag == null) return null;
+
+
         Element cleanedFirstImgTag = new Element("img");
 
-        if (firstImgTag != null) {
+        // assign src for the img tag
+        // TODO: maybe check valid src? end with .jpg png??
+        if (firstImgTag.hasAttr("data-src"))
+            cleanedFirstImgTag.attr("src",firstImgTag.attr("data-src"));
+        else if (firstImgTag.hasAttr("src"))
+            cleanedFirstImgTag.attr("src",firstImgTag.attr("src"));
+        else
+            return null;
 
-            // assign src for the img tag
-            if (firstImgTag.hasAttr("data-src")) {
-                cleanedFirstImgTag.attr("src",firstImgTag.attr("data-src"));
-            } else if (firstImgTag.hasAttr("src")) {
-                cleanedFirstImgTag.attr("src",firstImgTag.attr("src"));
-            }
-
-            // assign alt for the img tag
-            if (firstImgTag.hasAttr("alt")){
-                cleanedFirstImgTag.attr("alt", firstImgTag.attr("alt"));
-            }
-
+        // assign alt for the img tag
+        if (firstImgTag.hasAttr("alt")){
+            cleanedFirstImgTag.attr("alt", firstImgTag.attr("alt"));
         }
 
+        // only return img tag that has src
         return cleanedFirstImgTag;
     }
 }

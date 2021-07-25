@@ -23,9 +23,9 @@ public class VNExpressSanitizer extends HtmlSanitizer {
                 // deal with span tag (for location)
                 Elements spanTags = newHtmlElement.getElementsByTag("span");
                 spanTags.tagName("strong");
-                for (Element ele : spanTags) {
-                    ele.addClass(CSS.LOCATION);
-                    ele.text(ele.text() + " - ");
+                for (Element span : spanTags) {
+                    span.addClass(CSS.LOCATION);
+                    span.text(span.text() + " - ");
                 }
 
                 return newHtmlElement;

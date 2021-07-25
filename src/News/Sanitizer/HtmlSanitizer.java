@@ -17,10 +17,8 @@ public abstract class HtmlSanitizer {
                 target.clearAttributes();
                 break;
             }
+            case CSS.THUMBNAIL: {
 
-            case CSS.DESCRIPTION: {
-                // maybe do something later??
-                break;
             }
 
             default:
@@ -33,6 +31,6 @@ public abstract class HtmlSanitizer {
 
         return target;
     }
-
     protected abstract Element sanitizeNonTitleTag(Element e, String tag);
+
 }

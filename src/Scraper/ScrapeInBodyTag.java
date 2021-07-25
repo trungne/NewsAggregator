@@ -2,18 +2,15 @@ package Scraper;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.time.LocalDateTime;
 
 public class ScrapeInBodyTag implements ScrapingDateTimeBehavior {
     @Override
     public LocalDateTime getLocalDateTime(Document doc, String propertyContainsDateTimeInfo) {
-        Element dateTimeTag = doc.selectFirst(propertyContainsDateTimeInfo);
+        Element dateTimeTag = Scraper.scrapeElementByClass(doc, propertyContainsDateTimeInfo);
         String dateTimeStr;
-
         if (dateTimeTag != null){
-            System.out.println(dateTimeTag.html());
             dateTimeStr = getDateTimeSubString(dateTimeTag.text());
         }
         else{

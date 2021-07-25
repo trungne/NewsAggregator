@@ -53,46 +53,48 @@ public class ArticleListGenerator {
 
 
     private static Article createArticle(URL url, String category, NewsOutletInfo newsOutletInfo){
+        Document articleDoc;
+        try {
+            articleDoc = Jsoup.connect(url.toString()).timeout(MAX_WAIT_TIME).get();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+            return null;
+        }
+
         Element titleTag;
         Element descriptionTag;
         Element mainContentTag;
         Element thumbNail;
         LocalDateTime dateTime;
 
-        try{
-            Document articleDoc = Jsoup.connect(url.toString()).timeout(MAX_WAIT_TIME).get();
+        // scrape all needed tags of the article
+        titleTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.titleCssClass);
+        descriptionTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.descriptionCssClass);
+        mainContentTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.contentBodyCssClass);
+        thumbNail = Scraper.scrapeFirstImgTagByClass(articleDoc, newsOutletInfo.pictureCssClass);
+        dateTime = newsOutletInfo.scrapingDateTimeBehavior.getLocalDateTime(articleDoc, newsOutletInfo.dateTimeCssClass);
 
-            // scrape all needed tags of the article
-            titleTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.titleCssClass);
-            descriptionTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.descriptionCssClass);
-            mainContentTag = Scraper.scrapeElementByClass(articleDoc, newsOutletInfo.contentBodyCssClass);
-            thumbNail = Scraper.scrapeCleanedFirstImgTagByClass(articleDoc, newsOutletInfo.pictureCssClass);
-
-            dateTime = newsOutletInfo.scrapingDateTimeBehavior.getLocalDateTime(articleDoc, newsOutletInfo.dateTimeCssClass);
-
-            if (!thumbNail.hasAttr("src")){
-                thumbNail.attr("src", newsOutletInfo.defaultThumbNailUrl);
-            }
-
-            if (!thumbNail.hasAttr("alt")){
-                // set alt to title tag text if there is one.
-                // else, set it to default value, which is "thumbnail"
-                thumbNail.attr("alt", !titleTag.text().isEmpty() ? titleTag.text() : "thumbnail");
-            }
-
-            // sanitize all scraped tags and customize them
-            titleTag = newsOutletInfo.sanitizer.sanitize(titleTag, CSS.TITLE);
-            descriptionTag = newsOutletInfo.sanitizer.sanitize(descriptionTag, CSS.DESCRIPTION);
-            mainContentTag = newsOutletInfo.sanitizer.sanitize(mainContentTag, CSS.MAIN_CONTENT);
-            thumbNail = newsOutletInfo.sanitizer.sanitize(thumbNail, CSS.THUMBNAIL);
-
-            // no need to sanitize date time as a default value will be assigned if it is null
-        }
-        catch (IOException | NullPointerException e){
-            System.out.println(url);
-            e.printStackTrace();
+        // no need to check for thumbnail and datetime because default values will be assigned if they are null
+        if (titleTag == null || descriptionTag == null || mainContentTag == null){
             return null;
         }
+
+        // assign default thumbnail if there is no thumbnail
+        if (thumbNail == null){
+            thumbNail = new Element("img");
+            thumbNail.attr("src", newsOutletInfo.defaultThumbNailUrl);
+        }
+
+        // assign default alt if there is none
+        if (!thumbNail.hasAttr("alt"))
+            thumbNail.attr("alt", !titleTag.text().isEmpty() ? titleTag.text() : "thumbnail");
+
+        // sanitize all scraped tags and customize them
+        titleTag = newsOutletInfo.sanitizer.sanitize(titleTag, CSS.TITLE);
+        descriptionTag = newsOutletInfo.sanitizer.sanitize(descriptionTag, CSS.DESCRIPTION);
+        mainContentTag = newsOutletInfo.sanitizer.sanitize(mainContentTag, CSS.MAIN_CONTENT);
+        thumbNail = newsOutletInfo.sanitizer.sanitize(thumbNail, CSS.THUMBNAIL);
+        // no need to sanitize date time as a default value will be assigned if it is null
 
         Article article = new Article();
         article.setDateTime(dateTime);
