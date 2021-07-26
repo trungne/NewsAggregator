@@ -62,6 +62,7 @@ public class NewsOutletInfo implements Serializable {
         NhanDanCategories.put(CATEGORY.TECHNOLOGY,CATEGORY.NHANDAN_TECHNOLOGY);
         NhanDanCategories.put(CATEGORY.HEALTH,CATEGORY.NHANDAN_HEALTH);
         NhanDanCategories.put(CATEGORY.SPORTS,CATEGORY.NHANDAN_SPORTS); // NhanDanCategories.put("Entertainment", new URL("??"));
+        NhanDanCategories.put(CATEGORY.ENTERTAINMENT, CATEGORY.NHANDAN_ENTERTAINMENT);
         NhanDanCategories.put(CATEGORY.WORLD,CATEGORY.NHANDAN_WORLD);
 
         NewsOutletInfo VNExpressInfo = new NewsOutletInfo(NewsOutletInfo.VNExpress);

@@ -54,6 +54,7 @@ public class CATEGORY {
     public static final String NHANDAN_TECHNOLOGY = "https://nhandan.vn/khoahoc-congnghe";
     public static final String NHANDAN_HEALTH = "https://nhandan.vn/y-te";
     public static final String NHANDAN_SPORTS = "https://nhandan.vn/thethao";
+    public static final String NHANDAN_ENTERTAINMENT = "https://nhandan.vn/vanhoa";
     public static final String NHANDAN_WORLD = "https://nhandan.vn/thegioi";
 
 
