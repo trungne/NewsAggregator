@@ -106,6 +106,9 @@ public class Article {
         return ChronoUnit.MINUTES.between(dateTime, LocalDateTime.now());
     }
 
+    public Element getMainContent() {
+        return mainContent;
+    }
 
     // setters
     public void setUrl(URL url) throws Exception {

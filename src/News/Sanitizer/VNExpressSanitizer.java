@@ -2,11 +2,15 @@ package News.Sanitizer;
 
 import News.CSS;
 import Scraper.Scraper;
-import com.sun.javafx.webkit.theme.ScrollBarWidget;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.nodes.TextNode;
 import org.jsoup.safety.Safelist;
 import org.jsoup.select.Elements;
+import org.jsoup.select.NodeFilter;
+import org.jsoup.select.NodeTraversor;
+import org.jsoup.select.NodeVisitor;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -15,6 +19,7 @@ import java.util.regex.Pattern;
 
 
 public class VNExpressSanitizer extends HtmlSanitizer {
+
     @Override
     protected Element sanitizeNonTitleTag(Element e, String type) {
         Safelist safelist; // modify this safe list according to the type
@@ -38,51 +43,54 @@ public class VNExpressSanitizer extends HtmlSanitizer {
                 return newHtmlElement;
 
             case CSS.MAIN_CONTENT:
-                Element cleanTag = new Element("div");
+                Element newRoot = new Element("div"); //<div></div>
 
-                for (Element child: e.children()){
-                    if (child.tagName().equals("p") && child.hasClass("Normal")){
-                        Element para = child.clearAttributes();
-                        para.addClass(CSS.PARAGRAPH);
-                        cleanTag.appendChild(child.clearAttributes());
-                    }
-                    else if(child.tagName().equals("figure") && child.hasClass("tplCaption")){
-                        Element figure = sanitizeFigureTag(child);
-                        if (figure == null) continue;
-                        figure.addClass(CSS.FIGURE);
-                        cleanTag.appendChild(figure);
-                    }
-                    else if (child.tagName().equals("ul") && child.hasClass("list-news")){
-                        Element relevantNews = sanitizeRelevantNewsTag(child);
-                        if (relevantNews == null) continue;
-                        relevantNews.addClass(CSS.RELEVANT_NEWS);
-                        cleanTag.appendChild(relevantNews);
-                    }
-                    else if (child.tagName().equals("div")){
-                        Element videoTag = child.getElementsByClass("videoContainter").first();
-                        if (videoTag == null) continue;
+                NodeFilter VNExpressFilter = new VNExpressFilter(newRoot);
+                NodeTraversor.filter(VNExpressFilter, e);
 
-                        videoTag = sanitizeVideoTag(videoTag);
-                        if (videoTag == null) continue;
+//                for (Element child: e.children()){
+//                    if (child.tagName().equals("p") && child.hasClass("Normal")){
+//                        Element para = child.clearAttributes();
+//                        para.addClass(CSS.PARAGRAPH);
+//                        System.out.println(para);
+//                        newRoot.appendChild(para);
+//                    }
+//                    else if(child.tagName().equals("figure") && child.hasClass("tplCaption")){
+//                        Element figure = VNExpressSanitizer.sanitizeFigureTag(child);
+//                        if (figure == null) continue;
+//                        figure.addClass(CSS.FIGURE);
+//                        newRoot.appendChild(figure);
+//                    }
+//                    else if (child.tagName().equals("ul") && child.hasClass("list-news")){
+//                        Element relevantNews = VNExpressSanitizer.sanitizeRelevantNewsTag(child);
+//                        if (relevantNews == null) continue;
+//                        relevantNews.addClass(CSS.RELEVANT_NEWS);
+//                        newRoot.appendChild(relevantNews);
+//                    }
+//                    else if (child.tagName().equals("div")){
+//                        Element videoTag;
+//                        try {
+//                            videoTag = child.getElementsByClass("videoContainter").first();
+//                            videoTag = videoTag.getElementsByTag("video").first();
+//                        } catch (NullPointerException err){
+//                            continue;
+//                        }
+//
+//
+//                        videoTag = VNExpressSanitizer.sanitizeVideoTag(videoTag);
+//                        if (videoTag == null) continue;
+//
+//                        videoTag.addClass(CSS.VIDEO);
+//                        newRoot.appendChild(videoTag);
+//                    }
+//                }
 
-                        videoTag.addClass(CSS.VIDEO);
-                        cleanTag.appendChild(videoTag);
-                    }
-
-                }
-
-                return cleanTag;
-
+                return newRoot;
             default:
                 return e;
         }
-
-
     }
-
-
-
-    private Element sanitizeRelevantNewsTag(Element tag){
+    protected static Element sanitizeRelevantNewsTag(Element tag){
         Element relevantNews = new Element("ul");
 
         // keep the href and text of <a> tag.
@@ -115,7 +123,9 @@ public class VNExpressSanitizer extends HtmlSanitizer {
         return relevantNews;
     }
 
-    private Element sanitizeFigureTag(Element tag){
+    // create a figure tag with img AND figcaption tagS
+    protected static Element sanitizeFigureTag(Element tag){
+        // tag = figure tag
         // get the first img tag
         // first figcaption tag
         // append them to a new figure tag
@@ -127,6 +137,7 @@ public class VNExpressSanitizer extends HtmlSanitizer {
             // get the first figcaption tag
             Element caption = tag.getElementsByTag("figcaption").first().clearAttributes();
 
+            // clear the attribute of <p> tag in side figcaption
             for (Element e: caption.children()){
                 e.clearAttributes();
             }
@@ -142,13 +153,10 @@ public class VNExpressSanitizer extends HtmlSanitizer {
         }
     }
 
-    private Element sanitizeVideoTag(Element tag){
-        Element oldVideoTag = tag.getElementsByTag("video").first();
-        if (oldVideoTag == null) return null;
-
+    protected static Element sanitizeVideoTag(Element tag){
         URL src;
         try {
-            src = new URL(oldVideoTag.attr("src"));
+            src = new URL(tag.attr("src"));
         } catch (MalformedURLException e) {
             return null;
         }
@@ -159,13 +167,16 @@ public class VNExpressSanitizer extends HtmlSanitizer {
 
         host = host.replaceFirst(Pattern.quote("d1"), Matcher.quoteReplacement("v"));
 
+        // remove an extra /video from file path
         file = file.replaceFirst(Pattern.quote("/video"), Matcher.quoteReplacement(""));
 
+        // remove resolution from file path
         file = file.replaceFirst(Pattern.quote("/,240p,360p,480p,,"), Matcher.quoteReplacement(""));
         file = file.replaceFirst(Pattern.quote("/,240p,360p,480p,720p,"), Matcher.quoteReplacement(""));
         file = file.replaceFirst(Pattern.quote("/,240p,360p,,"), Matcher.quoteReplacement(""));
         file = file.replaceFirst(Pattern.quote("/,240p,,"), Matcher.quoteReplacement(""));
 
+        // change extension to mp4
         file = file.replaceFirst(Pattern.quote("/vne/master.m3u8"), Matcher.quoteReplacement(".mp4"));
 
         URL newSrc;
@@ -177,10 +188,80 @@ public class VNExpressSanitizer extends HtmlSanitizer {
 
         Element newVideo = new Element("video");
         newVideo.attr("controls", true);
+
         Element newVideoSrc = new Element("source");
         newVideoSrc.attr("src", newSrc.toString());
+
         newVideo.appendChild(newVideoSrc);
         return newVideo;
     }
 
+}
+
+final class VNExpressFilter implements NodeFilter {
+    final Element newRoot;
+    public VNExpressFilter(Element newRoot) {
+        this.newRoot = newRoot;
+    }
+
+    @Override
+    public FilterResult head(Node node, int i) {
+        if (!(node instanceof Element)) return FilterResult.SKIP_ENTIRELY;
+
+        Element child = (Element) node;
+
+        // get paragraph (contain text)
+        if(child.tagName().equals("p") && child.hasClass(CSS.VNEXPRESS_PARAGRAPH)){
+
+            // clear default CSS class and other attributes
+            child = child.clearAttributes();
+
+            // insert css for paragraph
+            child.addClass(CSS.PARAGRAPH);
+
+            newRoot.append(child.outerHtml());
+//            this.newRoot.appendChild(child); // TODO WHY DOES THIS CAUSE NULL POINTER EXCEPTION???????????
+            return FilterResult.SKIP_ENTIRELY;
+        }
+
+        // get picture
+        else if(child.tagName().equals("figure")){
+            Element figure = VNExpressSanitizer.sanitizeFigureTag(child);
+            if (figure == null) return FilterResult.SKIP_ENTIRELY;
+
+            figure.addClass(CSS.FIGURE);
+            newRoot.append(figure.outerHtml());
+            return FilterResult.SKIP_ENTIRELY;
+
+        }
+
+        // get video
+        else if (child.tagName().equals("video")){
+            Element videoTag = VNExpressSanitizer.sanitizeVideoTag(child);
+            if (videoTag == null) return FilterResult.SKIP_ENTIRELY;
+
+            videoTag.addClass(CSS.VIDEO);
+            newRoot.append(videoTag.outerHtml());
+            return FilterResult.SKIP_ENTIRELY;
+        }
+
+        // get relevant news
+        else if (child.tagName().equals("ul") && child.hasClass("list-news")){
+            Element relevantNews = VNExpressSanitizer.sanitizeRelevantNewsTag(child);
+            if(relevantNews == null) return FilterResult.SKIP_ENTIRELY;
+
+            relevantNews.addClass(CSS.RELEVANT_NEWS);
+            newRoot.append(relevantNews.outerHtml());
+            return FilterResult.SKIP_ENTIRELY;
+        }
+        else{
+            return FilterResult.CONTINUE;
+        }
+    }
+
+    @Override
+    public FilterResult tail(Node node, int i) {
+
+        return null;
+    }
 }

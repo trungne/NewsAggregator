@@ -26,7 +26,8 @@ public abstract class HtmlSanitizer {
         }
 
         // Add specific css classes to each detail
-        target.addClass(type);
+        if (target != null)
+            target.addClass(type);
 
 
         return target;
