@@ -54,25 +54,36 @@ public class Scraper {
         return createCleanImgTag(firstImgTag);
     }
 
-    public static Element createCleanImgTag(Element e){
+
+    /* Create a new img with the src and alt of an img tag
+     * Return null if the parameter is not an img tag
+     * Return null if the no src is found
+     * */
+    public static Element createCleanImgTag(Element imgTag){
+        if (!imgTag.tagName().equals("img")) return null;
+
         Element cleanedFirstImgTag = new Element("img");
 
         // assign src for the img tag
         // TODO: maybe check valid src? end with .jpg png??
-        if (e.hasAttr("data-src"))
-            cleanedFirstImgTag.attr("src",e.attr("data-src"));
-        else if (e.hasAttr("src"))
-            cleanedFirstImgTag.attr("src",e.attr("src"));
+        if (!imgTag.attr("data-src").isEmpty())
+            cleanedFirstImgTag.attr("src",imgTag.attr("data-src"));
+        else if (!imgTag.attr("src").isEmpty())
+            cleanedFirstImgTag.attr("src",imgTag.attr("src"));
         else
             return null;
 
         // assign alt for the img tag
-        if (e.hasAttr("alt")){
-            cleanedFirstImgTag.attr("alt", e.attr("alt"));
+        if (!imgTag.attr("alt").isEmpty()){
+            cleanedFirstImgTag.attr("alt", imgTag.attr("alt"));
         }
 
         // only return img tag that has src
         return cleanedFirstImgTag;
+    }
+
+    public static Element scrapeCaption(Element caption){
+        return null;
     }
 }
 

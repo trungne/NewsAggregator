@@ -61,17 +61,25 @@ public class ArticleListGenerator {
             return null;
         }
 
-        Element titleTag;
-        Element descriptionTag;
-        Element mainContentTag;
-        Element thumbNail;
-        LocalDateTime dateTime;
+        Element titleTag = null;
+        Element descriptionTag = null;
+        Element mainContentTag = null;
+        Element thumbNail = null;
+        LocalDateTime dateTime = null;
 
         // scrape all needed tags of the article
         titleTag = Scraper.scrapeFirstElementByClass(articleDoc, newsOutletInfo.titleCssClass);
         descriptionTag = Scraper.scrapeFirstElementByClass(articleDoc, newsOutletInfo.descriptionCssClass);
         mainContentTag = Scraper.scrapeFirstElementByClass(articleDoc, newsOutletInfo.contentBodyCssClass);
-        thumbNail = Scraper.scrapeFirstImgTagByClass(articleDoc, newsOutletInfo.pictureCssClass);
+        if(newsOutletInfo.thumbNailCssClass.isEmpty()){
+            thumbNail = Scraper.scrapeFirstImgTagByClass(articleDoc, newsOutletInfo.pictureCssClass);
+        }
+        else{
+            thumbNail = Scraper.scrapeFirstImgTagByClass(articleDoc, newsOutletInfo.thumbNailCssClass);
+        }
+
+
+
         dateTime = newsOutletInfo.scrapingDateTimeBehavior.getLocalDateTime(articleDoc, newsOutletInfo.dateTimeCssClass);
 
         // no need to check for thumbnail and datetime because default values will be assigned if they are null
@@ -80,7 +88,7 @@ public class ArticleListGenerator {
         }
 
         // assign default thumbnail if there is no thumbnail
-        if (thumbNail == null){
+        if (thumbNail == null || thumbNail.attr("src").isEmpty()){
             thumbNail = new Element("img");
             thumbNail.attr("src", newsOutletInfo.defaultThumbNailUrl);
         }

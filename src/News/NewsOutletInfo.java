@@ -61,7 +61,7 @@ public class NewsOutletInfo implements Serializable {
         NhanDanCategories.put(CATEGORY.BUSINESS,CATEGORY.NHANDAN_BUSINESS);
         NhanDanCategories.put(CATEGORY.TECHNOLOGY,CATEGORY.NHANDAN_TECHNOLOGY);
         NhanDanCategories.put(CATEGORY.HEALTH,CATEGORY.NHANDAN_HEALTH);
-        NhanDanCategories.put(CATEGORY.SPORTS,CATEGORY.NHANDAN_SPORTS); // NhanDanCategories.put("Entertainment", new URL("??"));
+        NhanDanCategories.put(CATEGORY.SPORTS,CATEGORY.NHANDAN_SPORTS);
         NhanDanCategories.put(CATEGORY.ENTERTAINMENT, CATEGORY.NHANDAN_ENTERTAINMENT);
         NhanDanCategories.put(CATEGORY.WORLD,CATEGORY.NHANDAN_WORLD);
 
@@ -125,6 +125,7 @@ public class NewsOutletInfo implements Serializable {
         NhanDanInfo.setContentBodyCssClass(CSS.NHANDAN_BODY);
         NhanDanInfo.setDateTimeCssClass(CSS.NHANDAN_TIME);
         NhanDanInfo.setPictureCssClass(CSS.NHANDAN_PIC);
+        NhanDanInfo.setThumbNailCssClass(CSS.NHANDAN_THUMBNAIL);
         NhanDanInfo.setDefaultThumbNailUrl("https://www.nhandan-printing.vn/datafiles_D_D/setmulti/nhandan_copy.jpg");
         NhanDanInfo.setCategories(NhanDanCategories);
         NhanDanInfo.setSanitizer(new NhanDanSanitizer());
@@ -133,16 +134,17 @@ public class NewsOutletInfo implements Serializable {
         return new NewsOutletInfo[]{VNExpressInfo, ZingNewsInfo, TuoiTreInfo, ThanhNienInfo, NhanDanInfo};
     }
 
-    public String name;
-    public String baseUrl;
-    public String titleLinkCssClass;
-    public String titleCssClass;
-    public String descriptionCssClass;
-    public String contentBodyCssClass;
-    public String dateTimeCssClass;
-    public String pictureCssClass;
-    public String defaultThumbNailUrl;
-    public HashMap<String, String> categories;
+    public String name = "";
+    public String baseUrl = "";
+    public String titleLinkCssClass = "";
+    public String titleCssClass = "";
+    public String descriptionCssClass = "";
+    public String contentBodyCssClass = "";
+    public String dateTimeCssClass = "";
+    public String pictureCssClass = "";
+    public String thumbNailCssClass = "";
+    public String defaultThumbNailUrl = "";
+    public HashMap<String, String> categories = null;
 
     // behaviors
     public HtmlSanitizer sanitizer;
@@ -179,6 +181,10 @@ public class NewsOutletInfo implements Serializable {
 
     public void setDateTimeCssClass(String dateTimeCssClass) {
         this.dateTimeCssClass = dateTimeCssClass;
+    }
+
+    public void setThumbNailCssClass(String thumbNailCssClass){
+        this.thumbNailCssClass = thumbNailCssClass;
     }
 
     public void setSanitizer(HtmlSanitizer sanitizer) {

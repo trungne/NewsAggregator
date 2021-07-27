@@ -16,7 +16,7 @@ public class TuoiTreSanitizer extends HtmlSanitizer {
             case CSS.DESCRIPTION:
                 safelist = Safelist.basic();
                 cleanHtml = Jsoup.clean(e.html(), safelist);
-                newHtmlElement = new Element("p").html(cleanHtml.replace("TTO - ", ""));
+                newHtmlElement = new Element("p").html(cleanHtml);
 
                 return newHtmlElement;
             case CSS.MAIN_CONTENT:
