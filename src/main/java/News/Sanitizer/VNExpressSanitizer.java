@@ -66,6 +66,11 @@ final class VNExpressFilter implements NodeFilter {
         Element child = (Element) node;
         boolean validTag = false;
 
+        // skip these tags immediately
+        if (child.attr("style").contains("display: none")){
+            return FilterResult.SKIP_ENTIRELY;
+        }
+
         // get paragraph
         if (child.tagName().equals("p")) {
             Element para = new Element("p");

@@ -60,6 +60,8 @@ public class ArticleListGenerator {
             ioException.printStackTrace();
             return null;
         }
+//        articleDoc = Jsoup.parse(Scraper.getBodyHtml(url));
+
 
         Element titleTag = null;
         Element descriptionTag = null;

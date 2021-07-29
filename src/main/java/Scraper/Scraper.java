@@ -3,6 +3,11 @@ package Scraper;
 import org.jsoup.*;
 import org.jsoup.nodes.*;
 import org.jsoup.select.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.*;
 import java.net.*;
@@ -10,7 +15,22 @@ import java.net.*;
 import java.util.*;
 
 public class Scraper {
+    private static final int MAX_WAIT_TIME = 5000; // ms
     static final int MAX_LINKS_SCRAPED = 12;
+
+    // TODO this shit crashes my computer
+    public static String getBodyHtml(URL url){
+        String chromeDriverPath = "E:\\Coding\\Java\\chromedriver_win32\\chromedriver.exe";
+        System.setProperty("webdriver.chrome.driver", chromeDriverPath);
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200","--ignore-certificate-errors");
+        WebDriver driver = new ChromeDriver(options);
+        driver.get(url.toString());
+
+        WebElement element = driver.findElement(By.tagName("body"));
+        System.out.println(element.getAttribute("innerHtml"));
+        return element.getAttribute("innerHtml");
+    }
 
     public static ArrayList<URL> scrapeLinksByClass(URL baseUrl, String cssClass) {
 
