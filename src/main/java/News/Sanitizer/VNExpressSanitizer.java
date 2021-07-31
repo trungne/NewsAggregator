@@ -22,11 +22,10 @@ public class VNExpressSanitizer extends HtmlSanitizer {
     protected Element sanitizeNonTitleTag(Element e, String type) {
         switch (type) {
             case CSS.DESCRIPTION:
-                Safelist safelist; // modify this safe list according to the type
                 String cleanHtml;
                 Element newHtmlElement;
-                safelist = Safelist.basic();
-                cleanHtml = Jsoup.clean(e.html(), safelist);
+
+                cleanHtml = Jsoup.clean(e.html(), Safelist.basic());
                 newHtmlElement = new Element("p").html(cleanHtml);
 
                 // deal with span tag (for location)
@@ -40,7 +39,7 @@ public class VNExpressSanitizer extends HtmlSanitizer {
 
                 return newHtmlElement;
             case CSS.MAIN_CONTENT:
-                Element newRoot = new Element("div"); //<div></div>
+                Element newRoot = new Element("div");
                 NodeFilter VNExpressFilter = new VNExpressFilter(newRoot);
                 NodeTraversor.filter(VNExpressFilter, e);
                 return newRoot;
@@ -67,9 +66,8 @@ final class VNExpressFilter implements NodeFilter {
         boolean validTag = false;
 
         // skip these tags immediately
-        if (child.attr("style").contains("display: none")){
+        if (child.attr("style").contains("display: none"))
             return FilterResult.SKIP_ENTIRELY;
-        }
 
         // get paragraph
         if (child.tagName().equals("p")) {
@@ -77,8 +75,9 @@ final class VNExpressFilter implements NodeFilter {
 
             if (child.hasClass(CSS.VNEXPRESS_PARAGRAPH))
                 para.addClass(CSS.PARAGRAPH);
-            else if (child.hasClass(CSS.VNEXPRESS_AUTHOR))
-                para.addClass(CSS.AUTHOR);
+
+//            if (child.hasClass(CSS.VNEXPRESS_AUTHOR))
+//                para.addClass(CSS.AUTHOR);
 
             Safelist safelist = Safelist.basic();
             String cleanHtml = Jsoup.clean(child.html(), safelist); // TODO Would we need safelist cleaning here???

@@ -1,6 +1,5 @@
 package News;
 
-import org.jetbrains.annotations.NotNull;
 import org.jsoup.nodes.Element;
 
 public class Preview implements Comparable<Preview>{

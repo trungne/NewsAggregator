@@ -73,7 +73,6 @@ final class NhanDanFilter implements NodeFilter{
             for (Element p: child.getElementsByTag("p")){
                 p.clearAttributes();
                 p.addClass(CSS.PARAGRAPH);
-                p.addClass(CSS.QUOTE);
             }
 
             root.append(child.outerHtml());
@@ -89,12 +88,9 @@ final class NhanDanFilter implements NodeFilter{
             }
         }
         else if (child.hasClass(CSS.NHANDAN_AUTHOR)){
+            String cleanHtml = Jsoup.clean(child.html(), Safelist.simpleText());
 
-            Safelist safelist = Safelist.simpleText();
-            String cleanHtml = Jsoup.clean(child.html(), safelist);
-
-            Element para = new Element("p");
-            para.html(cleanHtml);
+            Element para = new Element("p").html(cleanHtml);
             para.addClass(CSS.AUTHOR);
 
             if (!para.outerHtml().isEmpty()){
