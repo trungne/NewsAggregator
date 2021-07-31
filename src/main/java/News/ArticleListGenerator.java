@@ -30,9 +30,9 @@ public class ArticleListGenerator {
                     ioException.printStackTrace();
                     continue;
                 }
+                boolean ok = addContentToArticle(articleDoc, newsOutletInfo, article);
 
-                article = createArticle(articleDoc, newsOutletInfo, article);
-                if (article != null){
+                if (ok){
                     articles.add(article);
                 }
             }
@@ -67,11 +67,12 @@ public class ArticleListGenerator {
         String category = newsOutletInfo.getCategory(articleDoc);
         // TODO: wtf?
         Article article = new Article(url, newsOutletInfo, category);
-
-        return createArticle(articleDoc, newsOutletInfo, article);
+        boolean ok = addContentToArticle(articleDoc, newsOutletInfo, article);
+        if (ok) return article;
+        return null;
     }
 
-    public static Article createArticle(Document articleDoc, NewsOutletInfo newsOutletInfo, Article article){
+    public static boolean addContentToArticle(Document articleDoc, NewsOutletInfo newsOutletInfo, Article article){
         Element titleTag = newsOutletInfo.getTitleTag(articleDoc);
         Element descriptionTag = newsOutletInfo.getDescriptionTag(articleDoc);
         Element mainContentTag = newsOutletInfo.getMainContent(articleDoc);
@@ -80,7 +81,7 @@ public class ArticleListGenerator {
 
         // no need to check for thumbnail and datetime because default values will be assigned if they are null
         if (titleTag == null || descriptionTag == null || mainContentTag == null){
-            return null;
+            return false;
         }
 
         // assign default alt if there is none
@@ -105,9 +106,9 @@ public class ArticleListGenerator {
         catch (Exception e){
             // TODO write to err log
             System.out.println(e.toString());
-            return null;
+            return false;
         }
 
-        return article;
+        return true;
     }
 }
