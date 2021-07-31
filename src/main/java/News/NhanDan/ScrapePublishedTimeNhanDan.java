@@ -1,14 +1,17 @@
-package Scraper;
+package News.NhanDan;
 
+import Scraper.PublishedTimeScrapable;
+import Scraper.Scraper;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.time.LocalDateTime;
 
-public class ScrapeInBodyTag implements ScrapingDateTimeBehavior {
+public class ScrapePublishedTimeNhanDan implements PublishedTimeScrapable {
+
     @Override
-    public LocalDateTime getLocalDateTime(Document doc, String propertyContainsDateTimeInfo) {
-        Element dateTimeTag = Scraper.scrapeFirstElementByClass(doc, propertyContainsDateTimeInfo);
+    public LocalDateTime getLocalDateTime(Document doc, String property) {
+        Element dateTimeTag = Scraper.scrapeFirstElementByClass(doc, property);
         String dateTimeStr;
         if (dateTimeTag != null){
             dateTimeStr = getDateTimeSubString(dateTimeTag.text());

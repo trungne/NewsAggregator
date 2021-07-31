@@ -11,7 +11,7 @@ public class ScraperTestDrive {
     public static void main(String[] args) {
         final long startTime = System.currentTimeMillis();
 
-        Collection<Preview> previews = ArticleCollection.getPreviewsByCategory(CATEGORY.COVID);
+        Collection<Preview> previews = ArticleCollection.getPreviewsByCategory(CATEGORY.SPORTS);
 
         for (Preview preview: previews){
             System.out.println(preview.getArticleHtml());

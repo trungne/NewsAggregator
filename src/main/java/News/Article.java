@@ -30,8 +30,10 @@ public class Article {
 
     String newsSource;
 
-    public Article(){
-
+    public Article(URL url, NewsOutletInfo newsOutletInfo, String category){
+        this.url = url;
+        setNewsSource(newsOutletInfo.name);
+        addCategory(category);
     }
 
     public boolean belongsToCategory(String category){
@@ -111,10 +113,7 @@ public class Article {
     }
 
     // setters
-    public void setUrl(URL url) throws Exception {
-        if (url == null)
-            throw new Exception("No Url Found For Article");
-
+    public void setUrl(URL url) {
         this.url = url;
     }
 

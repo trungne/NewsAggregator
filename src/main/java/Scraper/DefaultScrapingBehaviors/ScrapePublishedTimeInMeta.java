@@ -1,17 +1,20 @@
-package Scraper;
+package Scraper.DefaultScrapingBehaviors;
 
+import Scraper.PublishedTimeScrapable;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.time.LocalDateTime;
 
-public class ScrapeInMetaTag implements ScrapingDateTimeBehavior {
+public class ScrapePublishedTimeInMeta implements PublishedTimeScrapable {
+
     @Override
-    public LocalDateTime getLocalDateTime(Document doc, String propertyContainsDateTimeInfo) {
-        Elements dateTimeTag = doc.getElementsByAttributeValue("property", propertyContainsDateTimeInfo);
-    // this is for VNExpress with their unconventional naming!
+    public LocalDateTime getLocalDateTime(Document doc, String value) {
+        Elements dateTimeTag = doc.getElementsByAttributeValue("property", value);
+
+        // this is for VNExpress with their unconventional naming!
         if (dateTimeTag.outerHtml().isEmpty()){
-            dateTimeTag = doc.getElementsByAttributeValue("itemprop", propertyContainsDateTimeInfo);
+            dateTimeTag = doc.getElementsByAttributeValue("itemprop", value);
         }
 
         String dateTimeStr = dateTimeTag.attr("content");
