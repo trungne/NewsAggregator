@@ -4,11 +4,28 @@ import News.CSS;
 import org.jsoup.nodes.Element;
 
 public abstract class HtmlSanitizer {
-//    public static final String TITLE_CSS_CLASS = "title";
-//    public static final String DESCRIPTION_CSS_CLASS = "description";
-//    public static final String MAIN_CONTENT_CSS_CLASS = "main-content";
-//    public static final String LOCATION_CSS_CLASS = "location";
-//    public static final String THUMBNAIL_CSS_CLASS = "thumbnail";
+    public Element sanitizeTitle(Element e){
+        e.clearAttributes();
+        e.addClass(CSS.TITLE);
+        return e;
+    }
+
+    // TODO: make this abstract later!
+    public Element sanitizeDescription(Element e){
+        return null;
+    }
+
+
+    // TODO: make this abstract later!
+    public Element sanitizeMainContent(Element e){
+        return null;
+    }
+
+    // TODO: make this abstract later!
+    public Element sanitizeThumbNail(Element e){
+        return e.addClass(CSS.THUMBNAIL);
+    }
+
     public Element sanitize(Element e, String type){
         Element target = e;
 

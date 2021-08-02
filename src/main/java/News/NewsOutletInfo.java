@@ -3,8 +3,11 @@ import News.Sanitizer.*;
 import Scraper.*;
 import static Scraper.Scraper.*;
 import org.jsoup.nodes.*;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.*;
 
 public class NewsOutletInfo implements Scrapable {
     public String name = "";
@@ -84,16 +87,20 @@ public class NewsOutletInfo implements Scrapable {
         this.defaultThumbNailUrl = url;
     }
 
+    // sanitize tag here!
     @Override
     public Element getTitleTag(Document doc) {
         return scrapeFirstElementByClass(doc, this.titleCssClass);
     }
 
+    // sanitize tag here!
     @Override
     public Element getDescriptionTag(Document doc) {
         return scrapeFirstElementByClass(doc, this.descriptionCssClass);
     }
 
+
+    // sanitize tag here!
     @Override
     public Element getMainContent(Document doc) {
         return scrapeFirstElementByClass(doc, this.contentBodyCssClass);
@@ -126,6 +133,20 @@ public class NewsOutletInfo implements Scrapable {
         return categoryScrapable.getCategory(doc);
     }
 
+    @Override
+    public Collection<URL> getLinksFromCategory(String category) {
+        if (categories.containsKey(category)) {
+            try {
+                URL categoryUrl = new URL(categories.get(category));
+                return new HashSet<>(Scraper.scrapeLinksByClass(categoryUrl, titleLinkCssClass));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        else
+            return null;
+    }
     Element getDefaultThumbnail(){
         Element thumbnail = new Element("img");
         thumbnail.attr("src", this.defaultThumbNailUrl);

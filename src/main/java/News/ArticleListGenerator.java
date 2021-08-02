@@ -5,7 +5,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -13,16 +12,17 @@ import java.util.*;
 public class ArticleListGenerator {
     private static final int MAX_WAIT_TIME = 5000; // ms
 
-    public static ArrayList<Article> getArticlesInCategory(NewsOutletInfo newsOutletInfo, String category){
-        return extractArticlesFromCategory(newsOutletInfo, category);
+    public static List<Article> getArticlesInCategory(NewsOutlet newsOutlet, String category){
+        return extractArticlesFromCategory(newsOutlet, category);
     }
 
-    private static ArrayList<Article> extractArticlesFromCategory(NewsOutletInfo newsOutletInfo, String category){
+    private static List<Article> extractArticlesFromCategory(NewsOutlet newsOutlet, String category){
         ArrayList<Article> articles = new ArrayList<>();
-        ArrayList<URL> articleUrls = extractLinksFromCategory(newsOutletInfo, category);
+        Collection<URL> articleUrls = newsOutlet.getLinksFromCategory(category);
+
         if (articleUrls != null){
             for (URL url: articleUrls){
-                Article article = new Article(url, newsOutletInfo, category);
+                Article article = new Article(url, newsOutlet, category);
                 Document articleDoc;
                 try {
                     articleDoc = Jsoup.connect(url.toString()).timeout(MAX_WAIT_TIME).get();
@@ -30,7 +30,7 @@ public class ArticleListGenerator {
                     ioException.printStackTrace();
                     continue;
                 }
-                boolean ok = addContentToArticle(articleDoc, newsOutletInfo, article);
+                boolean ok = addContentToArticle(articleDoc, newsOutlet, article);
 
                 if (ok){
                     articles.add(article);
@@ -40,22 +40,11 @@ public class ArticleListGenerator {
         return articles;
     }
 
-    private static ArrayList<URL> extractLinksFromCategory(NewsOutletInfo newsOutletInfo, String category){
-        if (newsOutletInfo.categories.containsKey(category)){
-            URL categoryUrl;
-            try {
-                categoryUrl = new URL(newsOutletInfo.categories.get(category));
-                return new ArrayList<>(Scraper.scrapeLinksByClass(categoryUrl, newsOutletInfo.titleLinkCssClass));
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
 
-    public static Article createArticle(URL url, String newsOulet){
-        NewsOutletInfo newsOutletInfo = GetNewsOutlets.newsOutlets.get(newsOulet);
-        if (newsOutletInfo == null) return null;
+    public static Article createArticle(URL url, String name){
+        NewsOutlet newsOutlet = GetNewsOutlets.newsOutlets.get(name);
+        if (newsOutlet == null) return null;
+
         Document articleDoc;
         try {
             articleDoc = Jsoup.connect(url.toString()).timeout(MAX_WAIT_TIME).get();
@@ -64,17 +53,17 @@ public class ArticleListGenerator {
             return null;
         }
 
-        String category = newsOutletInfo.getCategory(articleDoc);
-        // TODO: wtf?
-        Article article = new Article(url, newsOutletInfo, category);
-        boolean ok = addContentToArticle(articleDoc, newsOutletInfo, article);
+        String category = newsOutlet.getCategory(articleDoc);
+        Article article = new Article(url, newsOutlet, category);
+        boolean ok = addContentToArticle(articleDoc, newsOutlet, article);
+
         if (ok) return article;
         return null;
     }
 
-    public static boolean addContentToArticle(Document articleDoc, NewsOutletInfo newsOutletInfo, Article article){
-        Element titleTag = newsOutletInfo.getTitleTag(articleDoc);
-        Element descriptionTag = newsOutletInfo.getDescriptionTag(articleDoc);
+    public static boolean addContentToArticle(Document articleDoc, NewsOutlet newsOutletInfo, Article article){
+        Element titleTag = newsOutletInfo.getTitle(articleDoc);
+        Element descriptionTag = newsOutletInfo.getDescription(articleDoc);
         Element mainContentTag = newsOutletInfo.getMainContent(articleDoc);
         Element thumbNail = newsOutletInfo.getThumbnail(articleDoc);
         LocalDateTime publishedTime = newsOutletInfo.getPublishedTime(articleDoc);
@@ -87,12 +76,6 @@ public class ArticleListGenerator {
         // assign default alt if there is none
         if (!thumbNail.hasAttr("alt"))
             thumbNail.attr("alt", !titleTag.text().isEmpty() ? titleTag.text() : "thumbnail");
-
-        // sanitize all scraped tags and customize them
-        titleTag = newsOutletInfo.sanitizer.sanitize(titleTag, CSS.TITLE);
-        descriptionTag = newsOutletInfo.sanitizer.sanitize(descriptionTag, CSS.DESCRIPTION);
-        mainContentTag = newsOutletInfo.sanitizer.sanitize(mainContentTag, CSS.MAIN_CONTENT);
-        thumbNail = newsOutletInfo.sanitizer.sanitize(thumbNail, CSS.THUMBNAIL);
 
         article.setDateTime(publishedTime);
         article.setNewsSource(newsOutletInfo.name);

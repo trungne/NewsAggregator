@@ -30,9 +30,9 @@ public class Article {
 
     String newsSource;
 
-    public Article(URL url, NewsOutletInfo newsOutletInfo, String category){
+    public Article(URL url, NewsOutlet newsOutlet, String category){
         this.url = url;
-        setNewsSource(newsOutletInfo.name);
+        setNewsSource(newsOutlet.name);
         addCategory(category);
     }
 
