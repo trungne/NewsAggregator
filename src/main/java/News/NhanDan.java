@@ -1,6 +1,7 @@
 package News;
 
 import News.Sanitizer.HtmlSanitizer;
+import News.Sanitizer.NhanDanSanitizer;
 import News.Sanitizer.TuoiTreSanitizer;
 import Scraper.Scraper;
 import org.jsoup.nodes.Document;
@@ -42,7 +43,7 @@ public class NhanDan extends NewsOutlet{
                 NhanDanCategories,
                 NhanDanCssConfig,
                 CSS.NHANDAN_THUMBNAIL,
-                new TuoiTreSanitizer());
+                new NhanDanSanitizer());
     }
     String thumbnailCss = "";
     public NhanDan(String name,

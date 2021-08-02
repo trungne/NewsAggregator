@@ -12,13 +12,13 @@ public abstract class HtmlSanitizer {
 
     // TODO: make this abstract later!
     public Element sanitizeDescription(Element e){
-        return null;
+        return e;
     }
 
 
     // TODO: make this abstract later!
     public Element sanitizeMainContent(Element e){
-        return null;
+        return e;
     }
 
     // TODO: make this abstract later!

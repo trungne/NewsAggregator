@@ -1,6 +1,7 @@
 package News;
 
 import News.Sanitizer.HtmlSanitizer;
+import News.Sanitizer.ThanhNienSanitizer;
 import News.Sanitizer.TuoiTreSanitizer;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -41,7 +42,7 @@ public class ThanhNien extends NewsOutlet{
                 "https://static.thanhnien.vn/v2/App_Themes/images/logo-tn-2.png",
                 ThanhNienCategories,
                 ThanhNienCssConfig,
-                new TuoiTreSanitizer());
+                new ThanhNienSanitizer());
     }
 
     public ThanhNien(String name, String defaultThumbnail, Categories categories, CssConfiguration cssConfiguration, HtmlSanitizer sanitizer) {

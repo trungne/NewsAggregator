@@ -61,12 +61,12 @@ public class ArticleListGenerator {
         return null;
     }
 
-    public static boolean addContentToArticle(Document articleDoc, NewsOutlet newsOutletInfo, Article article){
-        Element titleTag = newsOutletInfo.getTitle(articleDoc);
-        Element descriptionTag = newsOutletInfo.getDescription(articleDoc);
-        Element mainContentTag = newsOutletInfo.getMainContent(articleDoc);
-        Element thumbNail = newsOutletInfo.getThumbnail(articleDoc);
-        LocalDateTime publishedTime = newsOutletInfo.getPublishedTime(articleDoc);
+    public static boolean addContentToArticle(Document articleDoc, NewsOutlet newsOutlet, Article article){
+        Element titleTag = newsOutlet.getTitle(articleDoc);
+        Element descriptionTag = newsOutlet.getDescription(articleDoc);
+        Element mainContentTag = newsOutlet.getMainContent(articleDoc);
+        Element thumbNail = newsOutlet.getThumbnail(articleDoc);
+        LocalDateTime publishedTime = newsOutlet.getPublishedTime(articleDoc);
 
         // no need to check for thumbnail and datetime because default values will be assigned if they are null
         if (titleTag == null || descriptionTag == null || mainContentTag == null){
@@ -78,7 +78,7 @@ public class ArticleListGenerator {
             thumbNail.attr("alt", !titleTag.text().isEmpty() ? titleTag.text() : "thumbnail");
 
         article.setDateTime(publishedTime);
-        article.setNewsSource(newsOutletInfo.name);
+        article.setNewsSource(newsOutlet.name);
 
         try{
             article.setTitle(titleTag);
