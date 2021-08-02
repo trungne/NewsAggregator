@@ -1,11 +1,10 @@
-package Scraper;
+package BusinessLayer.Scraper;
 
-import News.*;
+import BusinessLayer.*;
+import BusinessLayer.Helper.CATEGORY;
+import BusinessLayer.News.Preview;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class ScraperTestDrive {
     public static void main(String[] args) {

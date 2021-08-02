@@ -1,6 +1,8 @@
-package News;
+package BusinessLayer.Helper;
 
-import Scraper.Scraper;
+import BusinessLayer.Helper.GetNewsOutlets;
+import BusinessLayer.News.Article;
+import BusinessLayer.NewsSources.NewsOutlet;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
 
@@ -78,7 +80,7 @@ public class ArticleListGenerator {
             thumbNail.attr("alt", !titleTag.text().isEmpty() ? titleTag.text() : "thumbnail");
 
         article.setDateTime(publishedTime);
-        article.setNewsSource(newsOutlet.name);
+        article.setNewsSource(newsOutlet.getName());
 
         try{
             article.setTitle(titleTag);

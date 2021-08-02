@@ -1,26 +1,29 @@
-package News;
+package BusinessLayer.NewsSources;
 
-import News.Sanitizer.*;
+import BusinessLayer.Sanitizer.*;
 import org.jsoup.nodes.*;
+
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import static Scraper.Scraper.*;
+import java.util.HashMap;
+import java.util.HashSet;
 
-public abstract class  NewsOutlet {
+import static BusinessLayer.Helper.Scraper.*;
 
+public abstract class NewsOutlet {
     String name;
     String defaultThumbnail;
     Categories categories;
     CssConfiguration cssConfiguration;
     HtmlSanitizer sanitizer;
 
-
     public NewsOutlet(String name,
                       String defaultThumbnail,
                       Categories categories,
                       CssConfiguration cssConfiguration,
-                      HtmlSanitizer sanitizer){
+                      HtmlSanitizer sanitizer) {
         this.name = name;
         this.defaultThumbnail = defaultThumbnail;
         this.categories = categories;
@@ -29,21 +32,21 @@ public abstract class  NewsOutlet {
     }
 
     // by default, scrape the first element that matches provided css
-    public Element getTitle(Document doc){
+    public Element getTitle(Document doc) {
         Element title = scrapeFirstElementByClass(doc, cssConfiguration.title);
         if(title != null) title = sanitizer.sanitizeTitle(title);
         return title;
     }
 
     // by default, scrape the first element that matches provided css
-    public Element getDescription(Document doc){
+    public Element getDescription(Document doc) {
         Element desp = scrapeFirstElementByClass(doc, cssConfiguration.description);
         if(desp != null) desp = sanitizer.sanitizeDescription(desp);
         return desp;
     }
 
     // by default, scrape the first element that matches provided css
-    public Element getMainContent(Document doc){
+    public Element getMainContent(Document doc) {
         Element content = scrapeFirstElementByClass(doc, cssConfiguration.mainContent);
         if(content != null) content = sanitizer.sanitizeMainContent(content);
         return content;
@@ -85,5 +88,57 @@ public abstract class  NewsOutlet {
 
     public String toString(){
         return this.name;
+    }
+    public String getName() {return this.name;}
+}
+
+class CssConfiguration {
+    public String baseUrl;
+    public String titleInCategoryPage;
+    public String title;
+    public String description;
+    public String mainContent;
+    public String publishedTime;
+    public String picture;
+
+    public CssConfiguration(String baseUrl,
+                            String titleInCategoryPage,
+                            String title,
+                            String description,
+                            String mainContent,
+                            String publishedTime,
+                            String picture) {
+        this.baseUrl = baseUrl;
+        this.titleInCategoryPage = titleInCategoryPage;
+        this.title = title;
+        this.description = description;
+        this.mainContent = mainContent;
+        this.publishedTime = publishedTime;
+        this.picture = picture;
+    }
+}
+
+class Categories {
+    HashMap<String, String> categories;
+
+    public Categories(HashMap<String, String> categories) {
+        this.categories = categories;
+    }
+
+    public Collection<URL> getLinksFromCategory(String category, String css) {
+        if (categories.containsKey(category)) {
+            try {
+                URL categoryUrl = new URL(categories.get(category));
+                return new HashSet<>(scrapeLinksByClass(categoryUrl, css));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return null;
+            }
+        } else
+            return null;
+    }
+
+    public String toString() {
+        return this.categories.toString();
     }
 }

@@ -1,4 +1,4 @@
-package News;
+package BusinessLayer.Helper;
 
 public class CATEGORY {
     public static final String COVID = "Covid";

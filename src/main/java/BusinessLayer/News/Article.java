@@ -1,5 +1,7 @@
-package News;
+package BusinessLayer.News;
 
+import BusinessLayer.Helper.CSS;
+import BusinessLayer.NewsSources.NewsOutlet;
 import org.jsoup.nodes.Element;
 
 import java.net.URL;
@@ -20,7 +22,7 @@ public class Article {
         return true;
     }
     // attributes
-    public URL url;
+    URL url;
     Element title;
     Element description;
     Element mainContent;
@@ -32,7 +34,7 @@ public class Article {
 
     public Article(URL url, NewsOutlet newsOutlet, String category){
         this.url = url;
-        setNewsSource(newsOutlet.name);
+        setNewsSource(newsOutlet.getName());
         addCategory(category);
     }
 

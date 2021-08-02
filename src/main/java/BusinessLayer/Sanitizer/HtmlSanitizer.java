@@ -1,6 +1,6 @@
-package News.Sanitizer;
+package BusinessLayer.Sanitizer;
 
-import News.CSS;
+import BusinessLayer.Helper.CSS;
 import org.jsoup.nodes.Element;
 
 public abstract class HtmlSanitizer {

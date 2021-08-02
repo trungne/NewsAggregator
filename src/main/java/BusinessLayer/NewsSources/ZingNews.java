@@ -1,8 +1,10 @@
-package News;
+package BusinessLayer.NewsSources;
 
-import News.Sanitizer.HtmlSanitizer;
-import News.Sanitizer.VNExpressSanitizer;
-import News.Sanitizer.ZingNewsSanitizer;
+import BusinessLayer.Helper.CATEGORY;
+import BusinessLayer.Helper.CSS;
+import BusinessLayer.Helper.ParseLocalDateTime;
+import BusinessLayer.Sanitizer.HtmlSanitizer;
+import BusinessLayer.Sanitizer.ZingNewsSanitizer;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -58,7 +60,7 @@ public class ZingNews extends NewsOutlet{
         if (dateTimeStr.isEmpty() || dateTimeStr.isBlank()){
             return LocalDateTime.now();
         }
-        return Helper.parseLocalDateTime.parse(dateTimeStr);
+        return ParseLocalDateTime.parse(dateTimeStr);
     }
 
     @Override

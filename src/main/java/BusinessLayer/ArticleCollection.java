@@ -1,4 +1,10 @@
-package News;
+package BusinessLayer;
+
+import BusinessLayer.Helper.ArticleListGenerator;
+import BusinessLayer.Helper.GetNewsOutlets;
+import BusinessLayer.News.Article;
+import BusinessLayer.News.Preview;
+import BusinessLayer.NewsSources.NewsOutlet;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;

@@ -1,9 +1,10 @@
-package News;
+package BusinessLayer.NewsSources;
 
-import News.Sanitizer.HtmlSanitizer;
-import News.Sanitizer.NhanDanSanitizer;
-import News.Sanitizer.TuoiTreSanitizer;
-import Scraper.Scraper;
+import BusinessLayer.Helper.CATEGORY;
+import BusinessLayer.Helper.CSS;
+import BusinessLayer.Sanitizer.HtmlSanitizer;
+import BusinessLayer.Sanitizer.NhanDanSanitizer;
+import BusinessLayer.Helper.Scraper;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 

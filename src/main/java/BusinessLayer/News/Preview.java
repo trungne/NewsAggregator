@@ -1,4 +1,4 @@
-package News;
+package BusinessLayer.News;
 
 import org.jsoup.nodes.Element;
 
