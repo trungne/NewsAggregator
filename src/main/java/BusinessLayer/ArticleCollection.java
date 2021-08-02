@@ -19,7 +19,8 @@ public class ArticleCollection {
     // get all news outlet css info
     public static final HashMap<String, NewsOutlet> newsOutlets = GetNewsOutlets.newsOutlets;
 
-    public static Collection<Preview> getPreviewsByCategory(String category) {
+    // generate previews from articles scraped
+    public static List<Preview> getPreviewsByCategory(String category) {
         // load articles if they haven't been loaded before
         if (!articlesByCategories.containsKey(category) || articlesByCategories.get(category) == null) {
             try {
