@@ -58,7 +58,6 @@ public abstract class  NewsOutlet {
             thumbnail = sanitizer.sanitizeThumbNail(thumbnail);
             return thumbnail;
         } catch (NullPointerException e){
-            System.out.println(doc.head());
             return getDefaultThumbnail();
         }
     }

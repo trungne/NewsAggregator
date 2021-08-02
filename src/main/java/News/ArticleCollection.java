@@ -29,16 +29,16 @@ public class ArticleCollection {
          * Special add-on info for Covid news
          * Delete this when Covid is not a thing anymore
          */
-        if (category.equals(CATEGORY.COVID)){
-            for (Article article: articlesByCategories.get(category)){
-                try{
-                    article.getMainContent().append(CovidInfo.getCovidInfo());
-                } catch (NullPointerException e) {
-                    System.out.println(article.url);
-                    System.out.println(article.title);
-                }
-            }
-        }
+//        if (category.equals(CATEGORY.COVID)){
+//            for (Article article: articlesByCategories.get(category)){
+//                try{
+//                    article.getMainContent().append(CovidInfo.getCovidInfo());
+//                } catch (NullPointerException e) {
+//                    System.out.println(article.url);
+//                    System.out.println(article.title);
+//                }
+//            }
+//        }
 
         // loop through articles in the category and create a list of their previews
         ArrayList<Preview> matchedPreviews = new ArrayList<>();
