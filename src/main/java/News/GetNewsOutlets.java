@@ -1,17 +1,12 @@
 package News;
 
-import News.Sanitizer.*;
-import Scraper.DefaultScrapingBehaviors.ScrapePublishedTimeInMeta;
-
 
 import java.util.HashMap;
 
 public class GetNewsOutlets {
     public static final HashMap<String, NewsOutlet> newsOutlets = initializeNewsOutlets();
     public static HashMap<String, NewsOutlet> initializeNewsOutlets(){
-
         HashMap<String, NewsOutlet> newsList = new HashMap<>();
-
         newsList.put("VNExpress", VNExpress.init());
         newsList.put("ZingNews", ZingNews.init());
         newsList.put("ThanhNien", ThanhNien.init());

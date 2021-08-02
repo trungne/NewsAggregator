@@ -48,8 +48,33 @@ public class VNExpressSanitizer extends HtmlSanitizer {
         }
     }
 
+    @Override
+    public Element sanitizeDescription(Element e) {
+        String cleanHtml;
+        Element newHtmlElement;
 
+        cleanHtml = Jsoup.clean(e.html(), Safelist.basic());
+        newHtmlElement = new Element("p").html(cleanHtml);
 
+        // deal with span tag (for location)
+        Elements spanTags = newHtmlElement.getElementsByTag("span");
+
+        spanTags.tagName("strong");
+        for (Element span : spanTags) {
+            span.addClass(CSS.LOCATION);
+            span.text(span.text() + " - ");
+        }
+
+        return newHtmlElement;
+    }
+
+    @Override
+    public Element sanitizeMainContent(Element e) {
+        Element newRoot = new Element("div");
+        NodeFilter VNExpressFilter = new VNExpressFilter(newRoot);
+        NodeTraversor.filter(VNExpressFilter, e);
+        return newRoot;
+    }
 }
 
 final class VNExpressFilter implements NodeFilter {

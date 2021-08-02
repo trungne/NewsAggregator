@@ -36,6 +36,28 @@ public class NhanDanSanitizer extends HtmlSanitizer {
                 return e;
         }
     }
+
+    @Override
+    public Element sanitizeDescription(Element e) {
+        Safelist safelist; // modify this safe list according to the type
+        String cleanHtml;
+        Element newHtmlElement;
+        safelist = Safelist.basic();
+        safelist.removeTags("span", "p");
+        cleanHtml = Jsoup.clean(e.html(), safelist);
+
+        newHtmlElement = new Element("p").html(cleanHtml);
+
+        return newHtmlElement;
+    }
+
+    @Override
+    public Element sanitizeMainContent(Element e) {
+        Element newRoot = new Element("div");
+        NodeFilter NhanDanFilter = new NhanDanFilter(newRoot);
+        NodeTraversor.filter(NhanDanFilter, e);
+        return newRoot;
+    }
 }
 
 
