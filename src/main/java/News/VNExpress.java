@@ -10,17 +10,25 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class VNExpress extends NewsOutlet{
+    public static final String VNEXPRESS_COVID =  "https://vnexpress.net/covid-19/tin-tuc";
+    public static final String VNEXPRESS_POLITICS = "https://vnexpress.net/thoi-su/chinh-tri";
+    public static final String VNEXPRESS_BUSINESS = "https://vnexpress.net/kinh-doanh";
+    public static final String VNEXPRESS_TECHNOLOGY = "https://vnexpress.net/khoa-hoc";
+    public static final String VNEXPRESS_HEALTH = "https://vnexpress.net/suc-khoe";
+    public static final String VNEXPRESS_SPORTS = "https://vnexpress.net/the-thao";
+    public static final String VNEXPRESS_ENTERTAINMENT = "https://vnexpress.net/giai-tri";
+    public static final String VNEXPRESS_WORLD = "https://vnexpress.net/the-gioi";
     public static NewsOutlet init(){
         /* VNExpress */
         HashMap<String, String> categories = new HashMap<>();
-        categories.put(CATEGORY.COVID, CATEGORY.VNEXPRESS_COVID);
-        categories.put(CATEGORY.POLITICS, CATEGORY.VNEXPRESS_POLITICS);
-        categories.put(CATEGORY.BUSINESS, CATEGORY.VNEXPRESS_BUSINESS);
-        categories.put(CATEGORY.TECHNOLOGY, CATEGORY.VNEXPRESS_TECHNOLOGY);
-        categories.put(CATEGORY.HEALTH, CATEGORY.VNEXPRESS_HEALTH);
-        categories.put(CATEGORY.SPORTS, CATEGORY.VNEXPRESS_SPORTS);
-        categories.put(CATEGORY.ENTERTAINMENT, CATEGORY.VNEXPRESS_ENTERTAINMENT);
-        categories.put(CATEGORY.WORLD, CATEGORY.VNEXPRESS_WORLD);
+        categories.put(CATEGORY.COVID, VNEXPRESS_COVID);
+        categories.put(CATEGORY.POLITICS, VNEXPRESS_POLITICS);
+        categories.put(CATEGORY.BUSINESS, VNEXPRESS_BUSINESS);
+        categories.put(CATEGORY.TECHNOLOGY, VNEXPRESS_TECHNOLOGY);
+        categories.put(CATEGORY.HEALTH, VNEXPRESS_HEALTH);
+        categories.put(CATEGORY.SPORTS, VNEXPRESS_SPORTS);
+        categories.put(CATEGORY.ENTERTAINMENT, VNEXPRESS_ENTERTAINMENT);
+        categories.put(CATEGORY.WORLD, VNEXPRESS_WORLD);
         Categories VNExpressCategories = new Categories(categories);
         CssConfiguration VNExpressConfig = new CssConfiguration(
                 "https://vnexpress.net/",

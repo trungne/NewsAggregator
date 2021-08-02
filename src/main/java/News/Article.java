@@ -20,7 +20,7 @@ public class Article {
         return true;
     }
     // attributes
-    URL url;
+    public URL url;
     Element title;
     Element description;
     Element mainContent;

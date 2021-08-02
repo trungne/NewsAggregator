@@ -11,17 +11,24 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class TuoiTre extends NewsOutlet{
+    public static final String TUOITRE_COVID = "https://tuoitre.vn/covid-19.html";
+    public static final String TUOITRE_POLITICS = "https://tuoitre.vn/thoi-su.htm";
+    public static final String TUOITRE_BUSINESS = "https://tuoitre.vn/kinh-doanh.htm";
+    public static final String TUOITRE_TECHNOLOGY = "https://tuoitre.vn/khoa-hoc.htm";
+    public static final String TUOITRE_HEALTH = "https://tuoitre.vn/suc-khoe.htm";
+    public static final String TUOITRE_SPORTS = "https://tuoitre.vn/the-thao.htm";
+    public static final String TUOITRE_ENTERTAINMENT = "https://tuoitre.vn/giai-tri.htm";
+    public static final String TUOITRE_WORLD = "https://tuoitre.vn/the-gioi.htm";
     public static NewsOutlet init(){
-        /* VNExpress */
         HashMap<String, String> categories = new HashMap<>();
-        categories.put(CATEGORY.COVID, CATEGORY.TUOITRE_COVID);
-        categories.put(CATEGORY.POLITICS, CATEGORY.TUOITRE_POLITICS);
-        categories.put(CATEGORY.BUSINESS, CATEGORY.TUOITRE_BUSINESS);
-        categories.put(CATEGORY.TECHNOLOGY, CATEGORY.TUOITRE_TECHNOLOGY);
-        categories.put(CATEGORY.HEALTH, CATEGORY.TUOITRE_HEALTH);
-        categories.put(CATEGORY.SPORTS, CATEGORY.TUOITRE_SPORTS);
-        categories.put(CATEGORY.ENTERTAINMENT, CATEGORY.TUOITRE_ENTERTAINMENT);
-        categories.put(CATEGORY.WORLD, CATEGORY.TUOITRE_WORLD);
+        categories.put(CATEGORY.COVID, TUOITRE_COVID);
+        categories.put(CATEGORY.POLITICS, TUOITRE_POLITICS);
+        categories.put(CATEGORY.BUSINESS, TUOITRE_BUSINESS);
+        categories.put(CATEGORY.TECHNOLOGY, TUOITRE_TECHNOLOGY);
+        categories.put(CATEGORY.HEALTH, TUOITRE_HEALTH);
+        categories.put(CATEGORY.SPORTS, TUOITRE_SPORTS);
+        categories.put(CATEGORY.ENTERTAINMENT, TUOITRE_ENTERTAINMENT);
+        categories.put(CATEGORY.WORLD, TUOITRE_WORLD);
         Categories TuoiTreCategories = new Categories(categories);
         CssConfiguration TuoiTreCssConfig = new CssConfiguration(
                 "https://tuoitre.vn/",

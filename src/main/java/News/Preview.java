@@ -4,7 +4,7 @@ import org.jsoup.nodes.Element;
 
 public class Preview implements Comparable<Preview>{
     Element preview;
-    Article article;
+    public Article article;
 
     public Preview(Element preview, Article article){
         this.preview = preview;

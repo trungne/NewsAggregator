@@ -20,9 +20,8 @@ public class ArticleListGenerator {
         ArrayList<Article> articles = new ArrayList<>();
         Collection<URL> articleUrls = newsOutlet.getLinksFromCategory(category);
 
-        if (articleUrls != null){
+        if (articleUrls.size() != 0){
             for (URL url: articleUrls){
-                Article article = new Article(url, newsOutlet, category);
                 Document articleDoc;
                 try {
                     articleDoc = Jsoup.connect(url.toString()).timeout(MAX_WAIT_TIME).get();
@@ -30,8 +29,9 @@ public class ArticleListGenerator {
                     ioException.printStackTrace();
                     continue;
                 }
-                boolean ok = addContentToArticle(articleDoc, newsOutlet, article);
 
+                Article article = new Article(url, newsOutlet, category);
+                boolean ok = addContentToArticle(articleDoc, newsOutlet, article);
                 if (ok){
                     articles.add(article);
                 }
