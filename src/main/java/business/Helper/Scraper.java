@@ -1,4 +1,4 @@
-package Scraper;
+package business.Helper;
 
 import org.jsoup.*;
 import org.jsoup.nodes.*;
@@ -11,9 +11,7 @@ import java.util.*;
 
 public class Scraper {
     static final int MAX_LINKS_SCRAPED = 12;
-
     public static ArrayList<URL> scrapeLinksByClass(URL baseUrl, String cssClass) {
-
         Document doc;
         ArrayList<URL> links = new ArrayList<>();
         try {
@@ -43,18 +41,6 @@ public class Scraper {
 
         return doc.selectFirst(queryString);
     }
-
-    public static Element scrapeFirstImgTagByClass(Document doc, String uniqueCssClass) {
-        Element elementContainsImgs = scrapeFirstElementByClass(doc, uniqueCssClass);
-        if (elementContainsImgs == null) return null;
-
-        Element firstImgTag = elementContainsImgs.getElementsByTag("img").first();
-        if (firstImgTag == null) return null;
-
-        return createCleanImgTag(firstImgTag);
-    }
-
-
     /* Create a new img with the src and alt of an img tag
      * Return null if the parameter is not an img tag
      * Return null if the no src is found
@@ -80,10 +66,6 @@ public class Scraper {
 
         // only return img tag that has src
         return cleanedFirstImgTag;
-    }
-
-    public static Element scrapeCaption(Element caption){
-        return null;
     }
 }
 

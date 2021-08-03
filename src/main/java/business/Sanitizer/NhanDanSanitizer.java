@@ -1,14 +1,12 @@
-package News.Sanitizer;
+package business.Sanitizer;
 
-import News.CSS;
+import business.Helper.CSS;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.safety.Safelist;
 import org.jsoup.select.NodeFilter;
 import org.jsoup.select.NodeTraversor;
-
-import java.util.logging.Filter;
 
 public class NhanDanSanitizer extends HtmlSanitizer {
     @Override
@@ -35,6 +33,28 @@ public class NhanDanSanitizer extends HtmlSanitizer {
             default:
                 return e;
         }
+    }
+
+    @Override
+    public Element sanitizeDescription(Element e) {
+        Safelist safelist; // modify this safe list according to the type
+        String cleanHtml;
+        Element newHtmlElement;
+        safelist = Safelist.basic();
+        safelist.removeTags("span", "p");
+        cleanHtml = Jsoup.clean(e.html(), safelist);
+
+        newHtmlElement = new Element("p").html(cleanHtml);
+
+        return newHtmlElement;
+    }
+
+    @Override
+    public Element sanitizeMainContent(Element e) {
+        Element newRoot = new Element("div");
+        NodeFilter NhanDanFilter = new NhanDanFilter(newRoot);
+        NodeTraversor.filter(NhanDanFilter, e);
+        return newRoot;
     }
 }
 
@@ -73,7 +93,6 @@ final class NhanDanFilter implements NodeFilter{
             for (Element p: child.getElementsByTag("p")){
                 p.clearAttributes();
                 p.addClass(CSS.PARAGRAPH);
-                p.addClass(CSS.QUOTE);
             }
 
             root.append(child.outerHtml());
@@ -89,12 +108,9 @@ final class NhanDanFilter implements NodeFilter{
             }
         }
         else if (child.hasClass(CSS.NHANDAN_AUTHOR)){
+            String cleanHtml = Jsoup.clean(child.html(), Safelist.simpleText());
 
-            Safelist safelist = Safelist.simpleText();
-            String cleanHtml = Jsoup.clean(child.html(), safelist);
-
-            Element para = new Element("p");
-            para.html(cleanHtml);
+            Element para = new Element("p").html(cleanHtml);
             para.addClass(CSS.AUTHOR);
 
             if (!para.outerHtml().isEmpty()){

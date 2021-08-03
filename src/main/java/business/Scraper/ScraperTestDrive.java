@@ -1,20 +1,19 @@
-package Scraper;
+package business.Scraper;
 
-import News.*;
+import business.*;
+import business.Helper.CATEGORY;
+import business.News.Preview;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class ScraperTestDrive {
     public static void main(String[] args) {
         final long startTime = System.currentTimeMillis();
 
-        ArrayList<Preview> previews = ArticleCollection.getPreviewsByCategory(CATEGORY.HEALTH);
+        Collection<Preview> previews = ArticleCollection.getPreviewsByCategory(CATEGORY.HEALTH);
 
         for (Preview preview: previews){
-            System.out.println(preview.getArticleHtml());
+            System.out.println(preview);
         }
 
         final long endTime = System.currentTimeMillis();

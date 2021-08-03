@@ -1,4 +1,4 @@
-package News;
+package business.Helper;
 
 public class CSS {
     // CSS for main content in articles

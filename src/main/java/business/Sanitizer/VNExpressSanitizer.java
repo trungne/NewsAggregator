@@ -1,7 +1,7 @@
-package News.Sanitizer;
+package business.Sanitizer;
 
-import News.CSS;
-import Scraper.Scraper;
+import business.Helper.CSS;
+import business.Helper.Scraper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -22,11 +22,10 @@ public class VNExpressSanitizer extends HtmlSanitizer {
     protected Element sanitizeNonTitleTag(Element e, String type) {
         switch (type) {
             case CSS.DESCRIPTION:
-                Safelist safelist; // modify this safe list according to the type
                 String cleanHtml;
                 Element newHtmlElement;
-                safelist = Safelist.basic();
-                cleanHtml = Jsoup.clean(e.html(), safelist);
+
+                cleanHtml = Jsoup.clean(e.html(), Safelist.basic());
                 newHtmlElement = new Element("p").html(cleanHtml);
 
                 // deal with span tag (for location)
@@ -40,7 +39,7 @@ public class VNExpressSanitizer extends HtmlSanitizer {
 
                 return newHtmlElement;
             case CSS.MAIN_CONTENT:
-                Element newRoot = new Element("div"); //<div></div>
+                Element newRoot = new Element("div");
                 NodeFilter VNExpressFilter = new VNExpressFilter(newRoot);
                 NodeTraversor.filter(VNExpressFilter, e);
                 return newRoot;
@@ -49,8 +48,33 @@ public class VNExpressSanitizer extends HtmlSanitizer {
         }
     }
 
+    @Override
+    public Element sanitizeDescription(Element e) {
+        String cleanHtml;
+        Element newHtmlElement;
 
+        cleanHtml = Jsoup.clean(e.html(), Safelist.basic());
+        newHtmlElement = new Element("p").html(cleanHtml);
 
+        // deal with span tag (for location)
+        Elements spanTags = newHtmlElement.getElementsByTag("span");
+
+        spanTags.tagName("strong");
+        for (Element span : spanTags) {
+            span.addClass(CSS.LOCATION);
+            span.text(span.text() + " - ");
+        }
+
+        return newHtmlElement;
+    }
+
+    @Override
+    public Element sanitizeMainContent(Element e) {
+        Element newRoot = new Element("div");
+        NodeFilter VNExpressFilter = new VNExpressFilter(newRoot);
+        NodeTraversor.filter(VNExpressFilter, e);
+        return newRoot;
+    }
 }
 
 final class VNExpressFilter implements NodeFilter {
@@ -66,14 +90,19 @@ final class VNExpressFilter implements NodeFilter {
         Element child = (Element) node;
         boolean validTag = false;
 
+        // skip these tags immediately
+        if (child.attr("style").contains("display: none"))
+            return FilterResult.SKIP_ENTIRELY;
+
         // get paragraph
         if (child.tagName().equals("p")) {
             Element para = new Element("p");
 
             if (child.hasClass(CSS.VNEXPRESS_PARAGRAPH))
                 para.addClass(CSS.PARAGRAPH);
-            else if (child.hasClass(CSS.VNEXPRESS_AUTHOR))
-                para.addClass(CSS.AUTHOR);
+
+//            if (child.hasClass(CSS.VNEXPRESS_AUTHOR))
+//                para.addClass(CSS.AUTHOR);
 
             Safelist safelist = Safelist.basic();
             String cleanHtml = Jsoup.clean(child.html(), safelist); // TODO Would we need safelist cleaning here???

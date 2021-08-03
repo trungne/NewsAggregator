@@ -1,6 +1,6 @@
-package News.Sanitizer;
+package business.Sanitizer;
 
-import News.CSS;
+import business.Helper.CSS;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Safelist;
