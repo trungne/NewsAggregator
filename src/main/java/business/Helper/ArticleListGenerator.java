@@ -1,8 +1,7 @@
-package BusinessLayer.Helper;
+package business.Helper;
 
-import BusinessLayer.Helper.GetNewsOutlets;
-import BusinessLayer.News.Article;
-import BusinessLayer.NewsSources.NewsOutlet;
+import business.News.Article;
+import business.NewsSources.NewsOutlet;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
 

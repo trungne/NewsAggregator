@@ -1,6 +1,6 @@
-package BusinessLayer.Sanitizer;
+package business.Sanitizer;
 
-import BusinessLayer.Helper.CSS;
+import business.Helper.CSS;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;

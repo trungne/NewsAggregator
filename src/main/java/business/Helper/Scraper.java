@@ -1,4 +1,4 @@
-package BusinessLayer.Helper;
+package business.Helper;
 
 import org.jsoup.*;
 import org.jsoup.nodes.*;

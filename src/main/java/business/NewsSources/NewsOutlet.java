@@ -1,6 +1,6 @@
-package BusinessLayer.NewsSources;
+package business.NewsSources;
 
-import BusinessLayer.Sanitizer.*;
+import business.Sanitizer.*;
 import org.jsoup.nodes.*;
 
 import java.net.MalformedURLException;
@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static BusinessLayer.Helper.Scraper.*;
+import static business.Helper.Scraper.*;
 
 public abstract class NewsOutlet {
     String name;

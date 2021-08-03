@@ -1,6 +1,6 @@
-package BusinessLayer.Sanitizer;
+package business.Sanitizer;
 
-import BusinessLayer.Helper.CSS;
+import business.Helper.CSS;
 import org.jsoup.nodes.Element;
 
 public abstract class HtmlSanitizer {

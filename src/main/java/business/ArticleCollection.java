@@ -1,15 +1,11 @@
-package BusinessLayer;
+package business;
 
-import BusinessLayer.Helper.ArticleListGenerator;
-import BusinessLayer.Helper.GetNewsOutlets;
-import BusinessLayer.News.Article;
-import BusinessLayer.News.Preview;
-import BusinessLayer.NewsSources.NewsOutlet;
+import business.Helper.*;
+import business.News.*;
+import business.NewsSources.*;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 // an interface for presentation layer to access scraped articles
 public class ArticleCollection {
@@ -22,7 +18,7 @@ public class ArticleCollection {
     // generate previews from articles scraped
     public static List<Preview> getPreviewsByCategory(String category) {
         // load articles if they haven't been loaded before
-        if (!articlesByCategories.containsKey(category) || articlesByCategories.get(category) == null) {
+        if (articlesByCategories.get(category) == null) {
             try {
                 loadArticlesByCategory(category);
             } catch (InterruptedException e) {
@@ -31,6 +27,40 @@ public class ArticleCollection {
                 return new ArrayList<>();
             }
         }
+        return createPreviewsByCategory(category);
+
+
+    }
+    private static List<Preview> createPreviewsByCategory(String category){
+        // loop through articles in the category and create a list of their previews
+        ArrayList<Preview> matchedPreviews = new ArrayList<>();
+        for (Article article: articlesByCategories.get(category)) {
+            matchedPreviews.add(article.getPreview());
+        }
+
+        // sort article by published time
+        Collections.sort(matchedPreviews);
+
+        return matchedPreviews;
+    }
+
+
+    // MULTI THREADING!
+    private static void loadArticlesByCategory(String category) throws InterruptedException{
+        List<Article> safeArticleList = Collections.synchronizedList(new ArrayList<>());
+        ExecutorService es = Executors.newCachedThreadPool();
+//        CovidInfo.loadInfo();
+        for (String newsOutlet: newsOutlets.keySet()){
+            es.execute(() -> {
+                List<Article> articles = ArticleListGenerator
+                        .getArticlesInCategory(newsOutlets.get(newsOutlet), category);
+                safeArticleList.addAll(articles);
+            });
+        }
+
+        es.shutdown();
+        boolean finished = es.awaitTermination(30, TimeUnit.SECONDS);
+
 
         /*
          * Special add-on info for Covid news
@@ -47,33 +77,6 @@ public class ArticleCollection {
 //            }
 //        }
 
-        // loop through articles in the category and create a list of their previews
-        ArrayList<Preview> matchedPreviews = new ArrayList<>();
-        for (Article article: articlesByCategories.get(category)) {
-            matchedPreviews.add(article.getPreview());
-        }
-
-        // sort article by published time
-        Collections.sort(matchedPreviews);
-
-        return matchedPreviews;
-    }
-
-    // MULTI THREADING!
-    private static void loadArticlesByCategory(String category) throws InterruptedException{
-        List<Article> safeArticleList = Collections.synchronizedList(new ArrayList<>());
-        ExecutorService es = Executors.newCachedThreadPool();
-//        CovidInfo.loadInfo();
-        for (String newsOutlet: newsOutlets.keySet()){
-            es.execute(() -> {
-                Collection<Article> articles = ArticleListGenerator
-                        .getArticlesInCategory(newsOutlets.get(newsOutlet), category);
-                safeArticleList.addAll(articles);
-            });
-        }
-
-        es.shutdown();
-        boolean finished = es.awaitTermination(30, TimeUnit.SECONDS);
 
         if (finished){
             articlesByCategories.put(category, safeArticleList);

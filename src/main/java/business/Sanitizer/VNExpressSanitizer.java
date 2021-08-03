@@ -1,7 +1,7 @@
-package BusinessLayer.Sanitizer;
+package business.Sanitizer;
 
-import BusinessLayer.Helper.CSS;
-import BusinessLayer.Helper.Scraper;
+import business.Helper.CSS;
+import business.Helper.Scraper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;

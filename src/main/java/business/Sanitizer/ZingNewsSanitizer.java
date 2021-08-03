@@ -1,11 +1,11 @@
-package BusinessLayer.Sanitizer;
+package business.Sanitizer;
 
-import BusinessLayer.Helper.CSS;
+import business.Helper.CSS;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Safelist;
 
-public class ThanhNienSanitizer extends HtmlSanitizer {
+public class ZingNewsSanitizer extends HtmlSanitizer {
     @Override
     protected Element sanitizeNonTitleTag(Element e, String type) {
         Safelist safelist; // modify this safe list according to the type
@@ -17,8 +17,11 @@ public class ThanhNienSanitizer extends HtmlSanitizer {
                 safelist = Safelist.basic();
                 cleanHtml = Jsoup.clean(e.html(), safelist);
                 newHtmlElement = new Element("p").html(cleanHtml);
+
                 return newHtmlElement;
             case CSS.MAIN_CONTENT:
+                safelist = Safelist.relaxed();
+
 
                 break;
             default:

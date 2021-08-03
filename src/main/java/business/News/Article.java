@@ -1,7 +1,7 @@
-package BusinessLayer.News;
+package business.News;
 
-import BusinessLayer.Helper.CSS;
-import BusinessLayer.NewsSources.NewsOutlet;
+import business.Helper.CSS;
+import business.NewsSources.NewsOutlet;
 import org.jsoup.nodes.Element;
 
 import java.net.URL;
@@ -15,13 +15,9 @@ public class Article {
     static boolean validateTag(Element e, String type, URL url) throws Exception {
         if (e == null)
             throw new Exception("Element For " + type + " Not Found");
-
-        if (e.text().isEmpty()){
-
-        }
         return true;
     }
-    // attributes
+
     URL url;
     Element title;
     Element description;
@@ -110,9 +106,6 @@ public class Article {
         return ChronoUnit.MINUTES.between(dateTime, LocalDateTime.now());
     }
 
-    public Element getMainContent() {
-        return mainContent;
-    }
 
     // setters
     public void setUrl(URL url) {

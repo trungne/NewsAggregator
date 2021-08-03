@@ -1,8 +1,8 @@
-package BusinessLayer.Scraper;
+package business.Scraper;
 
-import BusinessLayer.*;
-import BusinessLayer.Helper.CATEGORY;
-import BusinessLayer.News.Preview;
+import business.*;
+import business.Helper.CATEGORY;
+import business.News.Preview;
 
 import java.util.*;
 

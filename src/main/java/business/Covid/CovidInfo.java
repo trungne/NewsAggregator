@@ -1,4 +1,4 @@
-package BusinessLayer.Covid;
+package business.Covid;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.jsoup.nodes.Element;

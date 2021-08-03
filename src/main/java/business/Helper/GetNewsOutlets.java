@@ -1,7 +1,7 @@
-package BusinessLayer.Helper;
+package business.Helper;
 
 
-import BusinessLayer.NewsSources.*;
+import business.NewsSources.*;
 
 import java.util.HashMap;
 

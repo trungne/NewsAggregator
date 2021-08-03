@@ -1,10 +1,10 @@
-package BusinessLayer.NewsSources;
+package business.NewsSources;
 
-import BusinessLayer.Helper.CATEGORY;
-import BusinessLayer.Helper.CSS;
-import BusinessLayer.Helper.ParseLocalDateTime;
-import BusinessLayer.Sanitizer.HtmlSanitizer;
-import BusinessLayer.Sanitizer.VNExpressSanitizer;
+import business.Helper.CATEGORY;
+import business.Helper.CSS;
+import business.Helper.LocalDateTimeParser;
+import business.Sanitizer.HtmlSanitizer;
+import business.Sanitizer.VNExpressSanitizer;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -59,7 +59,7 @@ public class VNExpress extends NewsOutlet{
         if (dateTimeStr.isEmpty() || dateTimeStr.isBlank()){
             return LocalDateTime.now();
         }
-        return ParseLocalDateTime.parse(dateTimeStr);
+        return LocalDateTimeParser.parse(dateTimeStr);
     }
 
     @Override
