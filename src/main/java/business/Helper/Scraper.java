@@ -1,5 +1,6 @@
 package business.Helper;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.*;
 import org.jsoup.nodes.*;
 import org.jsoup.select.*;
@@ -52,15 +53,15 @@ public class Scraper {
 
         // assign src for the img tag
         // TODO: maybe check valid src? end with .jpg png??
-        if (!imgTag.attr("data-src").isEmpty())
+        if (!StringUtils.isEmpty(imgTag.attr("data-src")))
             cleanedFirstImgTag.attr("src",imgTag.attr("data-src"));
-        else if (!imgTag.attr("src").isEmpty())
+        else if (!StringUtils.isEmpty(imgTag.attr("src")))
             cleanedFirstImgTag.attr("src",imgTag.attr("src"));
         else
             return null;
 
         // assign alt for the img tag
-        if (!imgTag.attr("alt").isEmpty()){
+        if (!StringUtils.isEmpty(imgTag.attr("alt"))){
             cleanedFirstImgTag.attr("alt", imgTag.attr("alt"));
         }
 

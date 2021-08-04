@@ -1,4 +1,5 @@
 package business.NewsSources;
+import org.apache.commons.lang3.StringUtils;
 
 import business.Helper.CATEGORY;
 import business.Helper.CSS;
@@ -46,6 +47,7 @@ public class NhanDan extends NewsOutlet{
                 CSS.NHANDAN_THUMBNAIL,
                 new NhanDanSanitizer());
     }
+
     String thumbnailCss = "";
     public NhanDan(String name,
                    String defaultThumbnail,
@@ -60,10 +62,10 @@ public class NhanDan extends NewsOutlet{
     @Override
     public LocalDateTime getPublishedTime(Document doc) {
         Element dateTimeTag = Scraper.scrapeFirstElementByClass(doc, cssConfiguration.publishedTime);
-        String dateTimeStr;
-        if (dateTimeTag == null) return LocalDateTime.now();
+        if (dateTimeTag == null)
+            return LocalDateTime.now();
 
-        dateTimeStr = getDateTimeSubString(dateTimeTag.text());
+        String dateTimeStr = getDateTimeSubString(dateTimeTag.text());
 
         // 1 0 - 0 7 - 2 0 2 1 , [space] 0  8  :  4  6
         // 0 1 2 3 4 5 6 7 8 9 10 11     12 13 14 15 16
@@ -78,8 +80,12 @@ public class NhanDan extends NewsOutlet{
     @Override
     public String getCategory(Document doc) {
         Element tag = doc.selectFirst(".bc-item");
-        if (tag == null) return "";
-        if (tag.text().isEmpty()) return "";
+        if (tag == null)
+            return "";
+
+        if (StringUtils.isEmpty(tag.text()))
+            return "";
+
         return tag.text();
     }
 

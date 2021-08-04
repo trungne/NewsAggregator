@@ -5,6 +5,7 @@ import business.Helper.CSS;
 import business.Helper.LocalDateTimeParser;
 import business.Sanitizer.HtmlSanitizer;
 import business.Sanitizer.ZingNewsSanitizer;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -57,17 +58,23 @@ public class ZingNews extends NewsOutlet{
     public LocalDateTime getPublishedTime(Document doc) {
         Elements dateTimeTag = doc.getElementsByAttributeValue("property", cssConfiguration.publishedTime);
         String dateTimeStr = dateTimeTag.attr("content");
-        if (dateTimeStr.isEmpty() || dateTimeStr.isBlank()){
+
+        if (StringUtils.isEmpty(dateTimeStr)){
             return LocalDateTime.now();
         }
+
         return LocalDateTimeParser.parse(dateTimeStr);
     }
 
     @Override
     public String getCategory(Document doc) {
         Element tag = doc.selectFirst(".the-article-category");
-        if (tag == null) return "";
-        if (tag.text().isEmpty()) return "";
+        if (tag == null)
+            return "";
+
+        if (StringUtils.isEmpty(tag.text()))
+            return "";
+
         return tag.text();
     }
 }

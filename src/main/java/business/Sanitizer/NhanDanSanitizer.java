@@ -1,6 +1,7 @@
 package business.Sanitizer;
 
 import business.Helper.CSS;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -113,8 +114,9 @@ final class NhanDanFilter implements NodeFilter{
             Element para = new Element("p").html(cleanHtml);
             para.addClass(CSS.AUTHOR);
 
-            if (!para.outerHtml().isEmpty()){
-                root.append(para.outerHtml());
+            String content = para.outerHtml();
+            if (!StringUtils.isEmpty(content)){
+                root.append(content);
                 validTag = true;
             }
 
@@ -133,8 +135,10 @@ final class NhanDanFilter implements NodeFilter{
 //            validTag = true;
 //        }
 
-        if (validTag) return FilterResult.SKIP_ENTIRELY;
-        else return FilterResult.CONTINUE;
+        if (validTag)
+            return FilterResult.SKIP_ENTIRELY;
+        else
+            return FilterResult.CONTINUE;
 
 
     }
@@ -145,7 +149,9 @@ final class NhanDanFilter implements NodeFilter{
         safelist.addTags("figcaption");
         Element figure = new Element("figure");
         String cleanHtml = Jsoup.clean(tag.html(), safelist);
-        if (cleanHtml.isEmpty()) return null;
+
+        if (StringUtils.isEmpty(cleanHtml))
+            return null;
         return figure.html(cleanHtml);
     }
 

@@ -2,6 +2,7 @@ package business.Helper;
 
 import business.News.Article;
 import business.NewsSources.NewsOutlet;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
 
@@ -76,7 +77,7 @@ public class ArticleListGenerator {
 
         // assign default alt if there is none
         if (!thumbNail.hasAttr("alt"))
-            thumbNail.attr("alt", !titleTag.text().isEmpty() ? titleTag.text() : "thumbnail");
+            thumbNail.attr("alt", StringUtils.isEmpty(titleTag.text()) ? "thumbnail" : titleTag.text());
 
         article.setDateTime(publishedTime);
         article.setNewsSource(newsOutlet.getName());

@@ -2,6 +2,7 @@ package business.Sanitizer;
 
 import business.Helper.CSS;
 import business.Helper.Scraper;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -181,7 +182,8 @@ final class VNExpressFilter implements NodeFilter {
         safelist.removeTags("span");
         String cleanHtml = Jsoup.clean(tag.html(), safelist);
         Element relevantNews = new Element("ul");
-        if(!cleanHtml.isEmpty()){
+
+        if(!StringUtils.isEmpty(cleanHtml)){
             return relevantNews.html(cleanHtml);
         }
         else return null;
@@ -193,7 +195,9 @@ final class VNExpressFilter implements NodeFilter {
         safelist.addTags("figcaption");
         Element figure = new Element("figure");
         String cleanHtml = Jsoup.clean(tag.html(), safelist);
-        if (cleanHtml.isEmpty()) return null;
+
+        if (StringUtils.isEmpty(cleanHtml))
+            return null;
         return figure.html(cleanHtml);
     }
 

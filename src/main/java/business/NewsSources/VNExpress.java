@@ -5,6 +5,7 @@ import business.Helper.CSS;
 import business.Helper.LocalDateTimeParser;
 import business.Sanitizer.HtmlSanitizer;
 import business.Sanitizer.VNExpressSanitizer;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -56,17 +57,23 @@ public class VNExpress extends NewsOutlet{
     public LocalDateTime getPublishedTime(Document doc) {
         Elements dateTimeTag = doc.getElementsByAttributeValue("itemprop", cssConfiguration.publishedTime);
         String dateTimeStr = dateTimeTag.attr("content");
-        if (dateTimeStr.isEmpty() || dateTimeStr.isBlank()){
+
+        if (StringUtils.isEmpty(dateTimeStr)){
             return LocalDateTime.now();
         }
+
         return LocalDateTimeParser.parse(dateTimeStr);
     }
 
     @Override
     public String getCategory(Document doc) {
         Element tag = doc.getElementsByAttributeValue("name", "tt_site_id_detail").first();
-        if (tag == null) return "";
-        if (tag.attr("catename").isEmpty()) return "";
+        if (tag == null)
+            return "";
+
+        if (StringUtils.isEmpty(tag.attr("catename")))
+            return "";
+
         return tag.attr("catename");
     }
 }

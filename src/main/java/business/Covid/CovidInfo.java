@@ -1,6 +1,7 @@
 package business.Covid;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Element;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -32,7 +33,7 @@ public class CovidInfo {
     static Element blockquote = new Element("blockquote");
 
     public static String getCovidInfo(){
-        if (blockquote.text().isEmpty()){
+        if (StringUtils.isEmpty(blockquote.text())){
             loadInfo();
         }
 
@@ -83,8 +84,7 @@ public class CovidInfo {
         blockquote.appendChild(containerForCategories);
         blockquote.append("<p>* Số ca nhiễm bao gồm cả trong nước và nhập cảnh</p>");
 
-
-        if(!caseByDayGraph.isEmpty() || !caseTotalGraph.isEmpty()){
+        if(!StringUtils.isEmpty(caseByDayGraph) || !StringUtils.isEmpty(caseTotalGraph)){
             Element graphs = new Element("div");
             graphs.addClass("covid-graphs");
             graphs.append(caseByDayGraph);

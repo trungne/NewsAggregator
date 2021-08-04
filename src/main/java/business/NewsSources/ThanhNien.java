@@ -5,6 +5,7 @@ import business.Helper.CSS;
 import business.Helper.LocalDateTimeParser;
 import business.Sanitizer.HtmlSanitizer;
 import business.Sanitizer.ThanhNienSanitizer;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -56,7 +57,8 @@ public class ThanhNien extends NewsOutlet{
         Elements dateTimeTag = doc.getElementsByAttributeValue("property", cssConfiguration.publishedTime);
 
         String dateTimeStr = dateTimeTag.attr("content");
-        if (dateTimeStr.isEmpty() || dateTimeStr.isBlank()){
+
+        if (StringUtils.isEmpty(dateTimeStr)){
             return LocalDateTime.now();
         }
         return LocalDateTimeParser.parse(dateTimeStr);
@@ -65,8 +67,12 @@ public class ThanhNien extends NewsOutlet{
     @Override
     public String getCategory(Document doc) {
         Element tag = doc.getElementsByAttributeValue("property", "article:section").first();
-        if (tag == null) return "";
-        if (tag.attr("content").isEmpty()) return "";
+        if (tag == null)
+            return "";
+
+        if (StringUtils.isEmpty(tag.attr("content")))
+            return "";
+
         return tag.attr("content");
     }
 }
