@@ -8,9 +8,13 @@ import business.Sanitizer.NhanDanSanitizer;
 import business.Helper.Scraper;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+
+import static business.Helper.Scraper.createCleanImgTag;
+import static business.Helper.Scraper.scrapeFirstElementByClass;
 
 public class NhanDan extends NewsOutlet{
     private static final String NHANDAN_COVID = "https://nhandan.vn/tieu-diem";
@@ -61,20 +65,35 @@ public class NhanDan extends NewsOutlet{
 
     @Override
     public LocalDateTime getPublishedTime(Document doc) {
-        Element dateTimeTag = Scraper.scrapeFirstElementByClass(doc, cssConfiguration.publishedTime);
+        Elements dateTimeTags = doc.select("." + cssConfiguration.publishedTime);
+        Element dateTimeTag = dateTimeTags.last();
+        System.out.println(dateTimeTag);
         if (dateTimeTag == null)
             return LocalDateTime.now();
 
         String dateTimeStr = getDateTimeSubString(dateTimeTag.text());
 
-        // 1 0 - 0 7 - 2 0 2 1 , [space] 0  8  :  4  6
-        // 0 1 2 3 4 5 6 7 8 9 10 11     12 13 14 15 16
+        // 1 0 - 0 7 - 2 0 2 1 0  8  :  4  6
+        // 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14
         int day = Integer.parseInt(dateTimeStr.substring(0,2));
         int month = Integer.parseInt(dateTimeStr.substring(3,5));
         int year = Integer.parseInt(dateTimeStr.substring(6,10));
-        int hours = Integer.parseInt(dateTimeStr.substring(12,14));
-        int minutes = Integer.parseInt(dateTimeStr.substring(15));
+        int hours = Integer.parseInt(dateTimeStr.substring(10,12));
+        int minutes = Integer.parseInt(dateTimeStr.substring(13));
         return (LocalDateTime.of(year, month, day, hours, minutes));
+    }
+
+    @Override
+    public Element getThumbnail(Document doc) {
+        try{
+            Element elementContainsImgs = scrapeFirstElementByClass(doc, thumbnailCss);
+            Element thumbnail = elementContainsImgs.getElementsByTag("img").first();
+            thumbnail = createCleanImgTag(thumbnail);
+            thumbnail = sanitizer.sanitizeThumbNail(thumbnail);
+            return thumbnail;
+        } catch (NullPointerException e){
+            return getDefaultThumbnail();
+        }
     }
 
     @Override
@@ -93,6 +112,9 @@ public class NhanDan extends NewsOutlet{
     // Example Chủ Nhật, 10-07-2021, 08:45 into
     // 10-07-2021, 08:45
     private String getDateTimeSubString(String str){
+        str = str.trim();
+        str = str.replaceAll(",", "");
+        str = str.replaceAll("\\s+", "");
         for(int i = 0; i < str.length(); i++){
             // get the substring from the first digit onwards
             if (Character.isDigit(str.charAt(i))){

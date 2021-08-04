@@ -77,7 +77,7 @@ public class CSS {
     public static final String NHANDAN_TITLE = "box-title-detail";
     public static final String NHANDAN_DESCRIPTION = "box-des-detail";
     public static final String NHANDAN_BODY = "box-content-detail";
-    public static final String NHANDAN_TIME = "pull-left";
+    public static final String NHANDAN_TIME = "box-date";
     public static final String NHANDAN_PIC = "box-detail-thumb";
     public static final String NHANDAN_THUMBNAIL = "box-detail-thumb";
     public static final String NHANDAN_AUTHOR = "box-author";

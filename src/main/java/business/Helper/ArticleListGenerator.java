@@ -42,7 +42,7 @@ public class ArticleListGenerator {
     }
 
 
-    public static Article createArticle(URL url, String name){
+    private static Article createArticle(URL url, String name){
         NewsOutlet newsOutlet = GetNewsOutlets.newsOutlets.get(name);
         if (newsOutlet == null) return null;
 
@@ -65,7 +65,7 @@ public class ArticleListGenerator {
         return null;
     }
 
-    public static boolean addContentToArticle(Document articleDoc, NewsOutlet newsOutlet, Article article){
+    private static boolean addContentToArticle(Document articleDoc, NewsOutlet newsOutlet, Article article){
         Element titleTag = newsOutlet.getTitle(articleDoc);
         Element descriptionTag = newsOutlet.getDescription(articleDoc);
         Element mainContentTag = newsOutlet.getMainContent(articleDoc);

@@ -6,6 +6,7 @@ import business.NewsSources.*;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 // an interface for presentation layer to access scraped articles
 public class ArticleCollection {
@@ -33,15 +34,12 @@ public class ArticleCollection {
     }
     private static List<Preview> createPreviewsByCategory(String category){
         // loop through articles in the category and create a list of their previews
-        ArrayList<Preview> matchedPreviews = new ArrayList<>();
-        for (Article article: articlesByCategories.get(category)) {
-            matchedPreviews.add(article.getPreview());
-        }
-
         // sort article by published time
-        Collections.sort(matchedPreviews);
-
-        return matchedPreviews;
+        return articlesByCategories.get(category)
+                .stream()
+                .map(Article::getPreview)
+                .sorted()
+                .collect(Collectors.toList());
     }
 
 
