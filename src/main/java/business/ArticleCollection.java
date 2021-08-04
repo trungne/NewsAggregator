@@ -50,10 +50,10 @@ public class ArticleCollection {
         List<Article> safeArticleList = Collections.synchronizedList(new ArrayList<>());
         ExecutorService es = Executors.newCachedThreadPool();
 //        CovidInfo.loadInfo();
-        for (String newsOutlet: newsOutlets.keySet()){
+        for (NewsOutlet newsOutlet: newsOutlets.values()){
             es.execute(() -> {
                 List<Article> articles = ArticleListGenerator
-                        .getArticlesInCategory(newsOutlets.get(newsOutlet), category);
+                        .getArticlesInCategory(newsOutlet, category);
                 safeArticleList.addAll(articles);
             });
         }
