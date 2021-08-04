@@ -12,8 +12,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 
 public class CovidInfo {
-    static String source = "https://vnexpress.net/covid-19/covid-19-viet-nam";
-    static String stableChromeVersion = "92.0.4515.107";
+    static final String source = "https://vnexpress.net/covid-19/covid-19-viet-nam";
     static WebDriver driver;
 
 
@@ -137,10 +136,10 @@ public class CovidInfo {
 
 
 final class CovidCategory {
-    String description;
-    String cssClass;
-    String todayCount;
-    String totalCount;
+    private final String description;
+    private final String cssClass;
+    private final String todayCount;
+    private final String totalCount;
 
     public CovidCategory(String description, String cssClass, String todayCount, String totalCount){
         this.description = description;
