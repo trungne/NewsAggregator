@@ -14,14 +14,14 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class VNExpress extends NewsOutlet{
-    public static final String VNEXPRESS_COVID =  "https://vnexpress.net/covid-19/tin-tuc";
-    public static final String VNEXPRESS_POLITICS = "https://vnexpress.net/thoi-su/chinh-tri";
-    public static final String VNEXPRESS_BUSINESS = "https://vnexpress.net/kinh-doanh";
-    public static final String VNEXPRESS_TECHNOLOGY = "https://vnexpress.net/khoa-hoc";
-    public static final String VNEXPRESS_HEALTH = "https://vnexpress.net/suc-khoe";
-    public static final String VNEXPRESS_SPORTS = "https://vnexpress.net/the-thao";
-    public static final String VNEXPRESS_ENTERTAINMENT = "https://vnexpress.net/giai-tri";
-    public static final String VNEXPRESS_WORLD = "https://vnexpress.net/the-gioi";
+    private static final String VNEXPRESS_COVID =  "https://vnexpress.net/covid-19/tin-tuc";
+    private static final String VNEXPRESS_POLITICS = "https://vnexpress.net/thoi-su/chinh-tri";
+    private static final String VNEXPRESS_BUSINESS = "https://vnexpress.net/kinh-doanh";
+    private static final String VNEXPRESS_TECHNOLOGY = "https://vnexpress.net/khoa-hoc";
+    private static final String VNEXPRESS_HEALTH = "https://vnexpress.net/suc-khoe";
+    private static final String VNEXPRESS_SPORTS = "https://vnexpress.net/the-thao";
+    private static final String VNEXPRESS_ENTERTAINMENT = "https://vnexpress.net/giai-tri";
+    private static final String VNEXPRESS_WORLD = "https://vnexpress.net/the-gioi";
     public static NewsOutlet init(){
         /* VNExpress */
         HashMap<String, String> categories = new HashMap<>();

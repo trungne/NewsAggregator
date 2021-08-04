@@ -13,14 +13,14 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class NhanDan extends NewsOutlet{
-    public static final String NHANDAN_COVID = "https://nhandan.vn/tieu-diem";
-    public static final String NHANDAN_POLITICS = "https://nhandan.vn/chinhtri";
-    public static final String NHANDAN_BUSINESS = "https://nhandan.vn/kinhte";
-    public static final String NHANDAN_TECHNOLOGY = "https://nhandan.vn/khoahoc-congnghe";
-    public static final String NHANDAN_HEALTH = "https://nhandan.vn/y-te";
-    public static final String NHANDAN_SPORTS = "https://nhandan.vn/thethao";
-    public static final String NHANDAN_ENTERTAINMENT = "https://nhandan.vn/vanhoa";
-    public static final String NHANDAN_WORLD = "https://nhandan.vn/thegioi";
+    private static final String NHANDAN_COVID = "https://nhandan.vn/tieu-diem";
+    private static final String NHANDAN_POLITICS = "https://nhandan.vn/chinhtri";
+    private static final String NHANDAN_BUSINESS = "https://nhandan.vn/kinhte";
+    private static final String NHANDAN_TECHNOLOGY = "https://nhandan.vn/khoahoc-congnghe";
+    private static final String NHANDAN_HEALTH = "https://nhandan.vn/y-te";
+    private static final String NHANDAN_SPORTS = "https://nhandan.vn/thethao";
+    private static final String NHANDAN_ENTERTAINMENT = "https://nhandan.vn/vanhoa";
+    private static final String NHANDAN_WORLD = "https://nhandan.vn/thegioi";
     public static NewsOutlet init(){
         HashMap<String, String> categories = new HashMap<>();
         categories.put(CATEGORY.COVID, NHANDAN_COVID);
@@ -48,7 +48,7 @@ public class NhanDan extends NewsOutlet{
                 new NhanDanSanitizer());
     }
 
-    String thumbnailCss = "";
+    private String thumbnailCss = "";
     public NhanDan(String name,
                    String defaultThumbnail,
                    Categories categories,

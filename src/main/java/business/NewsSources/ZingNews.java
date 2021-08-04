@@ -14,14 +14,14 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class ZingNews extends NewsOutlet{
-    public static final String ZING_COVID = "https://zingnews.vn/tieu-diem/covid-19.html";
-    public static final String ZING_POLITICS = "https://zingnews.vn/chinh-tri.html";
-    public static final String ZING_BUSINESS = "https://zingnews.vn/kinh-doanh-tai-chinh.html";
-    public static final String ZING_TECHNOLOGY = "https://zingnews.vn/cong-nghe.html";
-    public static final String ZING_HEALTH = "https://zingnews.vn/suc-khoe.html";
-    public static final String ZING_SPORTS = "https://zingnews.vn/the-thao.html";
-    public static final String ZING_ENTERTAINMENT = "https://zingnews.vn/giai-tri.html";
-    public static final String ZING_WORLD = "https://zingnews.vn/the-gioi.html";
+    private static final String ZING_COVID = "https://zingnews.vn/tieu-diem/covid-19.html";
+    private static final String ZING_POLITICS = "https://zingnews.vn/chinh-tri.html";
+    private static final String ZING_BUSINESS = "https://zingnews.vn/kinh-doanh-tai-chinh.html";
+    private static final String ZING_TECHNOLOGY = "https://zingnews.vn/cong-nghe.html";
+    private static final String ZING_HEALTH = "https://zingnews.vn/suc-khoe.html";
+    private static final String ZING_SPORTS = "https://zingnews.vn/the-thao.html";
+    private static final String ZING_ENTERTAINMENT = "https://zingnews.vn/giai-tri.html";
+    private static final String ZING_WORLD = "https://zingnews.vn/the-gioi.html";
 
     public static NewsOutlet init(){
         HashMap<String, String> categories = new HashMap<>();

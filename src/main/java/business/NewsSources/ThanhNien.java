@@ -14,14 +14,14 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class ThanhNien extends NewsOutlet{
-    public static final String THANHNIEN_COVID = "https://thanhnien.vn/covid-19/";
-    public static final String THANHNIEN_POLITICS = "https://thanhnien.vn/thoi-su/";
-    public static final String THANHNIEN_BUSINESS = "https://thanhnien.vn/tai-chinh-kinh-doanh/";
-    public static final String THANHNIEN_TECHNOLOGY = "https://thanhnien.vn/cong-nghe/";
-    public static final String THANHNIEN_HEALTH = "https://thanhnien.vn/suc-khoe/";
-    public static final String THANHNIEN_SPORTS = "https://thanhnien.vn/the-thao/";
-    public static final String THANHNIEN_ENTERTAINMENT = "https://thanhnien.vn/giai-tri/";
-    public static final String THANHNIEN_WORLD = "https://thanhnien.vn/the-gioi/";
+    private static final String THANHNIEN_COVID = "https://thanhnien.vn/covid-19/";
+    private static final String THANHNIEN_POLITICS = "https://thanhnien.vn/thoi-su/";
+    private static final String THANHNIEN_BUSINESS = "https://thanhnien.vn/tai-chinh-kinh-doanh/";
+    private static final String THANHNIEN_TECHNOLOGY = "https://thanhnien.vn/cong-nghe/";
+    private static final String THANHNIEN_HEALTH = "https://thanhnien.vn/suc-khoe/";
+    private static final String THANHNIEN_SPORTS = "https://thanhnien.vn/the-thao/";
+    private static final String THANHNIEN_ENTERTAINMENT = "https://thanhnien.vn/giai-tri/";
+    private static final String THANHNIEN_WORLD = "https://thanhnien.vn/the-gioi/";
     public static NewsOutlet init(){
         HashMap<String, String> categories = new HashMap<>();
         categories.put(CATEGORY.COVID, THANHNIEN_COVID);

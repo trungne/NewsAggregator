@@ -18,15 +18,14 @@ public class Article {
         return true;
     }
 
-    URL url;
-    Element title;
-    Element description;
-    Element mainContent;
-    Element thumbNail;
-    LocalDateTime dateTime;
-    HashSet<String> categories = new HashSet<>();
-
-    String newsSource;
+    private URL url;
+    private Element title;
+    private Element description;
+    private Element mainContent;
+    private Element thumbNail;
+    private LocalDateTime dateTime;
+    private final HashSet<String> categories = new HashSet<>();
+    private String newsSource;
 
     public Article(URL url, NewsOutlet newsOutlet, String category){
         this.url = url;

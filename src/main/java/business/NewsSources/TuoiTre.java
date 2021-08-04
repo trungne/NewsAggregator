@@ -14,14 +14,14 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class TuoiTre extends NewsOutlet{
-    public static final String TUOITRE_COVID = "https://tuoitre.vn/covid-19.html";
-    public static final String TUOITRE_POLITICS = "https://tuoitre.vn/thoi-su.htm";
-    public static final String TUOITRE_BUSINESS = "https://tuoitre.vn/kinh-doanh.htm";
-    public static final String TUOITRE_TECHNOLOGY = "https://tuoitre.vn/khoa-hoc.htm";
-    public static final String TUOITRE_HEALTH = "https://tuoitre.vn/suc-khoe.htm";
-    public static final String TUOITRE_SPORTS = "https://tuoitre.vn/the-thao.htm";
-    public static final String TUOITRE_ENTERTAINMENT = "https://tuoitre.vn/giai-tri.htm";
-    public static final String TUOITRE_WORLD = "https://tuoitre.vn/the-gioi.htm";
+    private static final String TUOITRE_COVID = "https://tuoitre.vn/covid-19.html";
+    private static final String TUOITRE_POLITICS = "https://tuoitre.vn/thoi-su.htm";
+    private static final String TUOITRE_BUSINESS = "https://tuoitre.vn/kinh-doanh.htm";
+    private static final String TUOITRE_TECHNOLOGY = "https://tuoitre.vn/khoa-hoc.htm";
+    private static final String TUOITRE_HEALTH = "https://tuoitre.vn/suc-khoe.htm";
+    private static final String TUOITRE_SPORTS = "https://tuoitre.vn/the-thao.htm";
+    private static final String TUOITRE_ENTERTAINMENT = "https://tuoitre.vn/giai-tri.htm";
+    private static final String TUOITRE_WORLD = "https://tuoitre.vn/the-gioi.htm";
     public static NewsOutlet init(){
         HashMap<String, String> categories = new HashMap<>();
         categories.put(CATEGORY.COVID, TUOITRE_COVID);

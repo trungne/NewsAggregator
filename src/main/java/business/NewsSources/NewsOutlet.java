@@ -13,11 +13,11 @@ import java.util.HashSet;
 import static business.Helper.Scraper.*;
 
 public abstract class NewsOutlet {
-    String name;
-    String defaultThumbnail;
-    Categories categories;
-    CssConfiguration cssConfiguration;
-    HtmlSanitizer sanitizer;
+    protected final String name;
+    protected final String defaultThumbnail;
+    protected final Categories categories;
+    protected final CssConfiguration cssConfiguration;
+    protected final HtmlSanitizer sanitizer;
 
     public NewsOutlet(String name,
                       String defaultThumbnail,
@@ -119,7 +119,7 @@ class CssConfiguration {
 }
 
 class Categories {
-    HashMap<String, String> categories;
+    public HashMap<String, String> categories;
 
     public Categories(HashMap<String, String> categories) {
         this.categories = categories;
