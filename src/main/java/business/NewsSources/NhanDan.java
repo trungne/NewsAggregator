@@ -81,10 +81,10 @@ public class NhanDan extends NewsOutlet{
     public String getCategory(Document doc) {
         Element tag = doc.selectFirst(".bc-item");
         if (tag == null)
-            return "";
+            return CATEGORY.OTHERS;
 
         if (StringUtils.isEmpty(tag.text()))
-            return "";
+            return CATEGORY.OTHERS;
 
         return tag.text();
     }

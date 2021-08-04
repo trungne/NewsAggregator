@@ -69,11 +69,12 @@ public class VNExpress extends NewsOutlet{
     public String getCategory(Document doc) {
         Element tag = doc.getElementsByAttributeValue("name", "tt_site_id_detail").first();
         if (tag == null)
-            return "";
+            return CATEGORY.OTHERS;
 
-        if (StringUtils.isEmpty(tag.attr("catename")))
-            return "";
+        String category = tag.attr("catename");
+        if (StringUtils.isEmpty(category))
+            return CATEGORY.OTHERS;
 
-        return tag.attr("catename");
+        return category;
     }
 }

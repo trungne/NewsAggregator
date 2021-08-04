@@ -70,11 +70,12 @@ public class ZingNews extends NewsOutlet{
     public String getCategory(Document doc) {
         Element tag = doc.selectFirst(".the-article-category");
         if (tag == null)
-            return "";
+            return CATEGORY.OTHERS;
 
-        if (StringUtils.isEmpty(tag.text()))
-            return "";
+        String category = tag.text();
+        if (StringUtils.isEmpty(category))
+            return CATEGORY.OTHERS;
 
-        return tag.text();
+        return category;
     }
 }

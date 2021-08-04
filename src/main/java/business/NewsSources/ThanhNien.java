@@ -68,11 +68,12 @@ public class ThanhNien extends NewsOutlet{
     public String getCategory(Document doc) {
         Element tag = doc.getElementsByAttributeValue("property", "article:section").first();
         if (tag == null)
-            return "";
+            return CATEGORY.OTHERS;
 
-        if (StringUtils.isEmpty(tag.attr("content")))
-            return "";
+        String category = tag.attr("content");
+        if (StringUtils.isEmpty(category))
+            return CATEGORY.OTHERS;
 
-        return tag.attr("content");
+        return category;
     }
 }
