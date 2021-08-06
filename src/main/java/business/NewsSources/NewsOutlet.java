@@ -14,13 +14,13 @@ import static business.Helper.Scraper.*;
 public abstract class NewsOutlet {
     protected final String name;
     protected final String defaultThumbnail;
-    protected final Categories categories;
+    protected final HashMap<String, Category> categories;
     protected final CssConfiguration cssConfiguration;
     protected final HtmlSanitizer sanitizer;
 
     public NewsOutlet(String name,
                       String defaultThumbnail,
-                      Categories categories,
+                      HashMap<String, Category> categories,
                       CssConfiguration cssConfiguration,
                       HtmlSanitizer sanitizer) {
         this.name = name;
@@ -71,12 +71,21 @@ public abstract class NewsOutlet {
         return thumbnail;
     }
 
-    public Collection<URL> getLinksFromCategory(String category){
-        return categories.getLinksFromCategory(category, cssConfiguration.titleInCategoryPage);
+    public Collection<URL> getLinksFromCategory(String categoryName){
+        if (categories.containsKey(categoryName)){
+            Category category = categories.get(categoryName);
+            return category.getLinks();
+        }
+        else {
+            return null;
+        }
+
     }
 
     public abstract LocalDateTime getPublishedTime(Document doc);
-    public abstract Set<String> getCategoryNames(Document doc);
+
+    // one article can have multiple categories. The first category will be the parent category
+    public abstract List<String> getCategoryNames(Document doc);
 
     public String toString(){
         return this.name;
@@ -86,7 +95,6 @@ public abstract class NewsOutlet {
 
 class CssConfiguration {
     public String baseUrl;
-    public String titleInCategoryPage;
     public String title;
     public String description;
     public String mainContent;
@@ -94,68 +102,16 @@ class CssConfiguration {
     public String picture;
 
     public CssConfiguration(String baseUrl,
-                            String titleInCategoryPage,
                             String title,
                             String description,
                             String mainContent,
                             String publishedTime,
                             String picture) {
         this.baseUrl = baseUrl;
-        this.titleInCategoryPage = titleInCategoryPage;
         this.title = title;
         this.description = description;
         this.mainContent = mainContent;
         this.publishedTime = publishedTime;
         this.picture = picture;
-    }
-}
-
-class Categories {
-    public HashMap<String, String> mainCategories = new HashMap<>();
-    public HashMap<String, String> otherCategories = new HashMap<>();
-
-    public Categories(String covid,
-                      String politics,
-                      String business,
-                      String technology,
-                      String health,
-                      String sports,
-                      String entertainment,
-                      String world) {
-        mainCategories.put(CATEGORY.COVID, covid);
-        mainCategories.put(CATEGORY.POLITICS, politics);
-        mainCategories.put(CATEGORY.BUSINESS, business);
-        mainCategories.put(CATEGORY.TECHNOLOGY, technology);
-        mainCategories.put(CATEGORY.HEALTH, health);
-        mainCategories.put(CATEGORY.SPORTS, sports);
-        mainCategories.put(CATEGORY.ENTERTAINMENT, entertainment);
-        mainCategories.put(CATEGORY.WORLD, world);
-    }
-
-    public void addOthersCategory(String society,
-                                  String lifestyle,
-                                  String education,
-                                  String car){
-
-    }
-
-
-
-
-    public Collection<URL> getLinksFromCategory(String category, String css) {
-        if (mainCategories.containsKey(category)) {
-            try {
-                URL categoryUrl = new URL(mainCategories.get(category));
-                return new HashSet<>(scrapeLinksByClass(categoryUrl, css));
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                return null;
-            }
-        } else
-            return null;
-    }
-
-    public String toString() {
-        return this.mainCategories.toString();
     }
 }

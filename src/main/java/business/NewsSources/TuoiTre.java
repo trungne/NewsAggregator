@@ -11,33 +11,95 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class TuoiTre extends NewsOutlet{
-    private static final String TUOITRE_COVID = "https://tuoitre.vn/covid-19.html";
-    private static final String TUOITRE_POLITICS = "https://tuoitre.vn/thoi-su.htm";
-    private static final String TUOITRE_BUSINESS = "https://tuoitre.vn/kinh-doanh.htm";
-    private static final String TUOITRE_TECHNOLOGY = "https://tuoitre.vn/khoa-hoc.htm";
-    private static final String TUOITRE_HEALTH = "https://tuoitre.vn/suc-khoe.htm";
-    private static final String TUOITRE_SPORTS = "https://tuoitre.vn/the-thao.htm";
-    private static final String TUOITRE_ENTERTAINMENT = "https://tuoitre.vn/giai-tri.htm";
-    private static final String TUOITRE_WORLD = "https://tuoitre.vn/the-gioi.htm";
+    private static final Category COVID = new SubCategory(CATEGORY.COVID, "https://tuoitre.vn/covid-19.html", CSS.TUOITRE_TITLE_LINK);
+    private static final Category POLITICS = new MainCategory(CATEGORY.POLITICS, "https://tuoitre.vn/thoi-su.htm", CSS.TUOITRE_TITLE_LINK);
+    static {
+        POLITICS.addSub("https://tuoitre.vn/thoi-su/but-bi.htm");
+        POLITICS.addSub("https://tuoitre.vn/thoi-su/xa-hoi.htm");
+        POLITICS.addSub("https://tuoitre.vn/thoi-su/phong-su.htm");
+        POLITICS.addSub("https://tuoitre.vn/thoi-su/binh-luan.htm");
+    }
+
+
+    private static final Category BUSINESS = new MainCategory(CATEGORY.BUSINESS, "https://tuoitre.vn/kinh-doanh.htm", CSS.TUOITRE_TITLE_LINK);
+    static {
+        BUSINESS.addSub("https://tuoitre.vn/kinh-doanh/tai-chinh.htm");
+        BUSINESS.addSub("https://tuoitre.vn/kinh-doanh/doanh-nghiep.htm");
+        BUSINESS.addSub("https://tuoitre.vn/kinh-doanh/mua-sam.htm");
+        BUSINESS.addSub("https://tuoitre.vn/kinh-doanh/dau-tu.htm");
+    }
+
+    private static final Category TECHNOLOGY = new MainCategory(CATEGORY.TECHNOLOGY, "https://tuoitre.vn/khoa-hoc.htm", CSS.TUOITRE_TITLE_LINK);
+    static {
+        TECHNOLOGY.addSub("https://tuoitre.vn/khoa-hoc/thuong-thuc.htm");
+        TECHNOLOGY.addSub("https://tuoitre.vn/khoa-hoc/phat-minh.htm");
+    }
+
+    private static final Category HEALTH = new MainCategory(CATEGORY.HEALTH, "https://tuoitre.vn/suc-khoe.htm", CSS.TUOITRE_TITLE_LINK);
+    static {
+        HEALTH.addSub("https://tuoitre.vn/suc-khoe/dinh-duong.htm");
+        HEALTH.addSub("https://tuoitre.vn/suc-khoe/me-va-be.htm");
+        HEALTH.addSub("https://tuoitre.vn/suc-khoe/gioi-tinh.htm");
+        HEALTH.addSub("https://tuoitre.vn/suc-khoe/phong-mach.htm");
+        HEALTH.addSub("https://tuoitre.vn/suc-khoe/biet-de-khoe.htm");
+    }
+
+    private static final Category SPORTS = new MainCategory(CATEGORY.SPORTS, "https://tuoitre.vn/the-thao.htm", CSS.TUOITRE_TITLE_LINK);
+    static {
+        SPORTS.addSub("https://tuoitre.vn/the-thao/bong-da.htm");
+        SPORTS.addSub("https://tuoitre.vn/the-thao/bong-ro.htm");
+        SPORTS.addSub("https://tuoitre.vn/the-thao/vo-thuat.htm");
+        SPORTS.addSub("https://tuoitre.vn/the-thao/cac-mon-khac.htm");
+        SPORTS.addSub("https://tuoitre.vn/the-thao/khoe-360.htm");
+        SPORTS.addSub("https://tuoitre.vn/the-thao/nguoi-ham-mo.htm");
+    }
+
+    private static final Category ENTERTAINMENT = new MainCategory(CATEGORY.ENTERTAINMENT, "https://tuoitre.vn/giai-tri.htm", CSS.TUOITRE_TITLE_LINK);
+    static {
+        ENTERTAINMENT.addSub("https://tuoitre.vn/giai-tri/nghe-gi-hom-nay.htm");
+        ENTERTAINMENT.addSub("https://tuoitre.vn/giai-tri/am-nhac.htm");
+        ENTERTAINMENT.addSub("https://tuoitre.vn/giai-tri/dien-anh.htm");
+        ENTERTAINMENT.addSub("https://tuoitre.vn/giai-tri/tv-show.htm");
+        ENTERTAINMENT.addSub("https://tuoitre.vn/giai-tri/thoi-trang.htm");
+        ENTERTAINMENT.addSub("https://tuoitre.vn/giai-tri/hau-truong.htm");
+    }
+    private static final Category WORLD = new MainCategory(CATEGORY.WORLD, "https://tuoitre.vn/the-gioi.htm", CSS.TUOITRE_TITLE_LINK);
+    static {
+        WORLD.addSub("https://tuoitre.vn/the-gioi/binh-luan.htm");
+        WORLD.addSub("https://tuoitre.vn/the-gioi/kieu-bao.htm");
+        WORLD.addSub("https://tuoitre.vn/the-gioi/muon-mau.htm");
+        WORLD.addSub("https://tuoitre.vn/the-gioi/ho-so.htm");
+    }
+    private static final Category OTHERS = new MainCategory(CATEGORY.OTHERS, "", CSS.TUOITRE_TITLE_LINK);
+    static {
+        OTHERS.addSub("https://tuoitre.vn/phap-luat.htm");
+        OTHERS.addSub("https://tuoitre.vn/xe.htm");
+        OTHERS.addSub("https://dulich.tuoitre.vn/");
+        OTHERS.addSub("https://tuoitre.vn/nhip-song-tre.htm");
+        OTHERS.addSub("https://tuoitre.vn/van-hoa.htm");
+        OTHERS.addSub("https://tuoitre.vn/giao-duc.htm");
+        OTHERS.addSub("https://tuoitre.vn/gia-that.htm");
+        OTHERS.addSub("https://tuoitre.vn/ban-doc-lam-bao.htm");
+    }
+
+
     public static NewsOutlet init(){
-        HashMap<String, String> categories = new HashMap<>();
-        categories.put(CATEGORY.COVID, TUOITRE_COVID);
-        categories.put(CATEGORY.POLITICS, TUOITRE_POLITICS);
-        categories.put(CATEGORY.BUSINESS, TUOITRE_BUSINESS);
-        categories.put(CATEGORY.TECHNOLOGY, TUOITRE_TECHNOLOGY);
-        categories.put(CATEGORY.HEALTH, TUOITRE_HEALTH);
-        categories.put(CATEGORY.SPORTS, TUOITRE_SPORTS);
-        categories.put(CATEGORY.ENTERTAINMENT, TUOITRE_ENTERTAINMENT);
-        categories.put(CATEGORY.WORLD, TUOITRE_WORLD);
-        Categories TuoiTreCategories = new Categories(categories);
+        HashMap<String, Category> categories = new HashMap<>();
+        categories.put(CATEGORY.COVID,COVID);
+        categories.put(CATEGORY.POLITICS,POLITICS);
+        categories.put(CATEGORY.BUSINESS,BUSINESS);
+        categories.put(CATEGORY.TECHNOLOGY,TECHNOLOGY);
+        categories.put(CATEGORY.HEALTH,HEALTH);
+        categories.put(CATEGORY.SPORTS,SPORTS);
+        categories.put(CATEGORY.ENTERTAINMENT,ENTERTAINMENT);
+        categories.put(CATEGORY.WORLD,WORLD);
+        categories.put(CATEGORY.OTHERS,OTHERS);
+
         CssConfiguration TuoiTreCssConfig = new CssConfiguration(
                 "https://tuoitre.vn/",
-                CSS.TUOITRE_TITLE_LINK,
                 CSS.TUOITRE_TITLE,
                 CSS.TUOITRE_DESCRIPTION,
                 CSS.TUOITRE_BODY,
@@ -45,12 +107,12 @@ public class TuoiTre extends NewsOutlet{
                 CSS.TUOITRE_PIC);
         return new TuoiTre("Tuoi Tre",
                 "https://dangkyxettuyennghe.tuoitre.vn/img/logo-tt.png",
-                TuoiTreCategories,
+                categories,
                 TuoiTreCssConfig,
                 new TuoiTreSanitizer());
     }
 
-    public TuoiTre(String name, String defaultThumbnail, Categories categories, CssConfiguration cssConfiguration, HtmlSanitizer sanitizer) {
+    public TuoiTre(String name, String defaultThumbnail,  HashMap<String, Category> categories, CssConfiguration cssConfiguration, HtmlSanitizer sanitizer) {
         super(name, defaultThumbnail, categories, cssConfiguration, sanitizer);
     }
 
@@ -67,7 +129,7 @@ public class TuoiTre extends NewsOutlet{
     }
 
     @Override
-    public Set<String> getCategoryNames(Document doc) {
+    public List<String> getCategoryNames(Document doc) {
         // get parent category
         Element tag = doc.getElementsByAttributeValue("property", "article:section").first();
         String parentCategory;
@@ -76,9 +138,10 @@ public class TuoiTre extends NewsOutlet{
         }
         else{
             parentCategory = tag.attr("content");
+            parentCategory = CATEGORY.convert(parentCategory);
         }
 
-        Set<String> categoryList = new HashSet<>();
+        List<String> categoryList = new ArrayList<>();
         categoryList.add(parentCategory);
 
         // get child category
@@ -87,8 +150,10 @@ public class TuoiTre extends NewsOutlet{
             Elements children = childrenCategoryTag.getElementsByTag("a");
             for (Element e: children){
                 String category = e.attr("title");
-                // TODO: map the category
-                categoryList.add(category);
+                category = CATEGORY.convert(category);
+                if (!categoryList.contains(category)){
+                    categoryList.add(category);
+                }
             }
         }
         return categoryList;

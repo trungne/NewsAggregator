@@ -14,7 +14,7 @@ public abstract class Category {
     String url;
     String cssForScraping;
 
-    public Category(String name, String url, String cssForScraping){
+    protected Category(String name, String url, String cssForScraping){
         this.name = name;
         this.url = url;
         this.cssForScraping = cssForScraping;
@@ -28,11 +28,11 @@ public abstract class Category {
         throw new UnsupportedOperationException();
     }
 
-    public void remove(Category category){
+    public void addSub(String url){
         throw new UnsupportedOperationException();
     }
 
-    public Category getChild(int i){
+    public void remove(Category category){
         throw new UnsupportedOperationException();
     }
 
@@ -44,10 +44,18 @@ public abstract class Category {
     public Set<URL> getLinks(){
         try{
             URL link = new URL(this.url);
-            return new HashSet<>(scrapeLinksByClass(link, cssForScraping));
+            return scrapeLinksByClass(link, cssForScraping);
         } catch (MalformedURLException e){
             return null;
         }
     }
 
+    @Override
+    public String toString() {
+        return "Category{" +
+                "name='" + name + '\'' +
+                ", url='" + url + '\'' +
+                ", cssForScraping='" + cssForScraping + '\'' +
+                '}';
+    }
 }

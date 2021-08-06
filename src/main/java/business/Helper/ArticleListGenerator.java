@@ -23,6 +23,7 @@ public class ArticleListGenerator {
         Collection<URL> articleUrls = newsOutlet.getLinksFromCategory(category);
         // TODO: MULTI threading here
         for (URL url: articleUrls){
+            System.out.println(url);
             Document articleDoc;
             try {
                 articleDoc = Jsoup.connect(url.toString()).timeout(MAX_WAIT_TIME).get();
@@ -54,7 +55,7 @@ public class ArticleListGenerator {
             return null;
         }
 
-        String category = newsOutlet.getCategoryNames(articleDoc);
+        List<String> category = newsOutlet.getCategoryNames(articleDoc);
         Article article = new Article(url, newsOutlet, category);
 
         boolean isAddedSuccessfully = addContentToArticle(articleDoc, newsOutlet, article);
@@ -70,6 +71,7 @@ public class ArticleListGenerator {
         Element descriptionTag = newsOutlet.getDescription(articleDoc);
         Element mainContentTag = newsOutlet.getMainContent(articleDoc);
         Element thumbNail = newsOutlet.getThumbnail(articleDoc);
+        List<String> categories = newsOutlet.getCategoryNames(articleDoc);
         LocalDateTime publishedTime = newsOutlet.getPublishedTime(articleDoc);
 
         // no need to check for thumbnail and datetime because default values will be assigned if they are null
@@ -89,6 +91,7 @@ public class ArticleListGenerator {
             article.setDescription(descriptionTag);
             article.setMainContent(mainContentTag);
             article.setThumbNailUrl(thumbNail);
+            article.addCategory(categories);
         }
         catch (Exception e){
             // TODO write to err log

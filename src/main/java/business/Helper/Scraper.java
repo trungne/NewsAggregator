@@ -11,10 +11,10 @@ import java.net.*;
 import java.util.*;
 
 public class Scraper {
-    static final int MAX_LINKS_SCRAPED = 20;
-    public static ArrayList<URL> scrapeLinksByClass(URL baseUrl, String cssClass) {
+    static final int MAX_LINKS_SCRAPED = 10;
+    public static Set<URL> scrapeLinksByClass(URL baseUrl, String cssClass) {
         Document doc;
-        ArrayList<URL> links = new ArrayList<>();
+        Set<URL> links = new HashSet<>();
         try {
             doc = Jsoup.connect(baseUrl.toString()).get();
             Elements titleTags = doc.getElementsByClass(cssClass);

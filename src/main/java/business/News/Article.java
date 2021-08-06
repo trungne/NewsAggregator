@@ -8,7 +8,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.HashSet;
+import java.util.*;
 
 public class Article {
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EE, dd/MMMM/yyyy, kk:mm ");
@@ -24,14 +24,36 @@ public class Article {
     private Element mainContent;
     private Element thumbNail;
     private LocalDateTime dateTime;
-    private final HashSet<String> categories = new HashSet<>();
+    private final List<String> categories = new ArrayList<>();
     private String newsSource;
 
-    public Article(URL url, NewsOutlet newsOutlet, String category){
+    public Article(URL url, NewsOutlet newsOutlet, List<String> categoryList){
         this.url = url;
         setNewsSource(newsOutlet.getName());
-        addCategory(category);
+        addCategory(categoryList);
     }
+
+    public Article(URL url, NewsOutlet newsOutlet, String parentCategory){
+        this.url = url;
+        setNewsSource(newsOutlet.getName());
+        addCategory(parentCategory);
+    }
+
+    public void addCategory(String category){
+        if (!this.categories.contains(category)){
+            this.categories.add(category);
+        }
+
+    }
+
+    public void addCategory(List<String> categoryList){
+        for (String category: categoryList){
+            if (!this.categories.contains(category)){
+                this.categories.add(category);
+            }
+        }
+    }
+
 
     public boolean belongsToCategory(String category){
         return this.categories.contains(category);
@@ -51,6 +73,8 @@ public class Article {
         for (String category: this.categories){
             categoriesStrBuilder.append(category).append(" - ");
         }
+
+        // remove the " - " at the end;
         String categoriesStr = categoriesStrBuilder.substring(0, categoriesStrBuilder.length() - 2);
         categories.text(categoriesStr);
 
@@ -135,18 +159,13 @@ public class Article {
         this.dateTime = dateTime;
     }
 
-    public void addCategory(String category){
-        // check valid category
-        this.categories.add(category);
-    }
+
 
     public void setNewsSource(String newsSource) {
         this.newsSource = newsSource;
     }
 
     public Preview getPreview(){
-
-
         Element source = new Element("div");
         source.addClass(CSS.SOURCE);
         source.text(newsSource);
