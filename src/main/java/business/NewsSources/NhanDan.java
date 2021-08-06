@@ -5,13 +5,14 @@ import business.Helper.CATEGORY;
 import business.Helper.CSS;
 import business.Sanitizer.HtmlSanitizer;
 import business.Sanitizer.NhanDanSanitizer;
-import business.Helper.Scraper;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import static business.Helper.Scraper.createCleanImgTag;
 import static business.Helper.Scraper.scrapeFirstElementByClass;
@@ -67,7 +68,6 @@ public class NhanDan extends NewsOutlet{
     public LocalDateTime getPublishedTime(Document doc) {
         Elements dateTimeTags = doc.select("." + cssConfiguration.publishedTime);
         Element dateTimeTag = dateTimeTags.last();
-        System.out.println(dateTimeTag);
         if (dateTimeTag == null)
             return LocalDateTime.now();
 
@@ -97,15 +97,23 @@ public class NhanDan extends NewsOutlet{
     }
 
     @Override
-    public String getCategory(Document doc) {
-        Element tag = doc.selectFirst(".bc-item");
-        if (tag == null)
-            return CATEGORY.OTHERS;
+    public Set<String> getCategoryNames(Document doc) {
+        Elements tags = doc.getElementsByClass("bc-item");
+        Set<String> categoryList = new HashSet<>();
+        if (!tags.isEmpty()){
+            for (Element e: tags){
+                String category = e.text();
+                // TODO: map the category to english
+                categoryList.add(category);
+            }
+        }
+        else{
+            categoryList.add(CATEGORY.OTHERS);
+        }
 
-        if (StringUtils.isEmpty(tag.text()))
-            return CATEGORY.OTHERS;
+        return categoryList;
 
-        return tag.text();
+
     }
 
     // remove day of the week from the datetime string.

@@ -21,7 +21,7 @@ public class ArticleListGenerator {
     private static List<Article> extractArticlesFromCategory(NewsOutlet newsOutlet, String category){
         ArrayList<Article> articles = new ArrayList<>();
         Collection<URL> articleUrls = newsOutlet.getLinksFromCategory(category);
-
+        // TODO: MULTI threading here
         for (URL url: articleUrls){
             Document articleDoc;
             try {
@@ -54,7 +54,7 @@ public class ArticleListGenerator {
             return null;
         }
 
-        String category = newsOutlet.getCategory(articleDoc);
+        String category = newsOutlet.getCategoryNames(articleDoc);
         Article article = new Article(url, newsOutlet, category);
 
         boolean isAddedSuccessfully = addContentToArticle(articleDoc, newsOutlet, article);

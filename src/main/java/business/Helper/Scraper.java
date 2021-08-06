@@ -11,7 +11,7 @@ import java.net.*;
 import java.util.*;
 
 public class Scraper {
-    static final int MAX_LINKS_SCRAPED = 12;
+    static final int MAX_LINKS_SCRAPED = 20;
     public static ArrayList<URL> scrapeLinksByClass(URL baseUrl, String cssClass) {
         Document doc;
         ArrayList<URL> links = new ArrayList<>();

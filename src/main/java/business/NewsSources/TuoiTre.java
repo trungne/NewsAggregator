@@ -12,6 +12,8 @@ import org.jsoup.select.Elements;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TuoiTre extends NewsOutlet{
     private static final String TUOITRE_COVID = "https://tuoitre.vn/covid-19.html";
@@ -65,15 +67,30 @@ public class TuoiTre extends NewsOutlet{
     }
 
     @Override
-    public String getCategory(Document doc) {
+    public Set<String> getCategoryNames(Document doc) {
+        // get parent category
         Element tag = doc.getElementsByAttributeValue("property", "article:section").first();
-        if (tag == null)
-            return CATEGORY.OTHERS;
+        String parentCategory;
+        if (tag == null){
+            parentCategory = CATEGORY.OTHERS;
+        }
+        else{
+            parentCategory = tag.attr("content");
+        }
 
-        String category = tag.attr("content");
-        if (StringUtils.isEmpty(category))
-            return CATEGORY.OTHERS;
+        Set<String> categoryList = new HashSet<>();
+        categoryList.add(parentCategory);
 
-        return category;
+        // get child category
+        Element childrenCategoryTag = doc.selectFirst(".breadcrumbs");
+        if (childrenCategoryTag != null){
+            Elements children = childrenCategoryTag.getElementsByTag("a");
+            for (Element e: children){
+                String category = e.attr("title");
+                // TODO: map the category
+                categoryList.add(category);
+            }
+        }
+        return categoryList;
     }
 }

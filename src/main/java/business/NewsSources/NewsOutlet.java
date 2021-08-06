@@ -1,14 +1,13 @@
 package business.NewsSources;
 
+import business.Helper.CATEGORY;
 import business.Sanitizer.*;
 import org.jsoup.nodes.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 import static business.Helper.Scraper.*;
 
@@ -77,14 +76,7 @@ public abstract class NewsOutlet {
     }
 
     public abstract LocalDateTime getPublishedTime(Document doc);
-    public abstract String getCategory(Document doc);
-
-
-    // Override this in derived classes because Java is too stupid to implement
-    // abstract static method.
-//    public static NewsOutlet init(){
-//        return null;
-//    }
+    public abstract Set<String> getCategoryNames(Document doc);
 
     public String toString(){
         return this.name;
@@ -119,16 +111,41 @@ class CssConfiguration {
 }
 
 class Categories {
-    public HashMap<String, String> categories;
+    public HashMap<String, String> mainCategories = new HashMap<>();
+    public HashMap<String, String> otherCategories = new HashMap<>();
 
-    public Categories(HashMap<String, String> categories) {
-        this.categories = categories;
+    public Categories(String covid,
+                      String politics,
+                      String business,
+                      String technology,
+                      String health,
+                      String sports,
+                      String entertainment,
+                      String world) {
+        mainCategories.put(CATEGORY.COVID, covid);
+        mainCategories.put(CATEGORY.POLITICS, politics);
+        mainCategories.put(CATEGORY.BUSINESS, business);
+        mainCategories.put(CATEGORY.TECHNOLOGY, technology);
+        mainCategories.put(CATEGORY.HEALTH, health);
+        mainCategories.put(CATEGORY.SPORTS, sports);
+        mainCategories.put(CATEGORY.ENTERTAINMENT, entertainment);
+        mainCategories.put(CATEGORY.WORLD, world);
     }
 
+    public void addOthersCategory(String society,
+                                  String lifestyle,
+                                  String education,
+                                  String car){
+
+    }
+
+
+
+
     public Collection<URL> getLinksFromCategory(String category, String css) {
-        if (categories.containsKey(category)) {
+        if (mainCategories.containsKey(category)) {
             try {
-                URL categoryUrl = new URL(categories.get(category));
+                URL categoryUrl = new URL(mainCategories.get(category));
                 return new HashSet<>(scrapeLinksByClass(categoryUrl, css));
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -139,6 +156,6 @@ class Categories {
     }
 
     public String toString() {
-        return this.categories.toString();
+        return this.mainCategories.toString();
     }
 }

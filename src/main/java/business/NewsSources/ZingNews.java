@@ -1,5 +1,6 @@
 package business.NewsSources;
 
+import Application.Main;
 import business.Helper.CATEGORY;
 import business.Helper.CSS;
 import business.Helper.LocalDateTimeParser;
@@ -11,9 +12,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.*;
+
 
 public class ZingNews extends NewsOutlet{
+    // main category
+
     private static final String ZING_COVID = "https://zingnews.vn/tieu-diem/covid-19.html";
     private static final String ZING_POLITICS = "https://zingnews.vn/chinh-tri.html";
     private static final String ZING_BUSINESS = "https://zingnews.vn/kinh-doanh-tai-chinh.html";
@@ -23,17 +27,37 @@ public class ZingNews extends NewsOutlet{
     private static final String ZING_ENTERTAINMENT = "https://zingnews.vn/giai-tri.html";
     private static final String ZING_WORLD = "https://zingnews.vn/the-gioi.html";
 
+    private static final Category COVID = new SubCategory(CATEGORY.COVID, ZING_COVID, CSS.ZING_TITLE_LINK);
+
+    private static final Category POLITICS = new SubCategory(CATEGORY.POLITICS, ZING_POLITICS, CSS.ZING_TITLE_LINK);
+
+
+    private static final Category BUSINESS = new MainCategory(CATEGORY.BUSINESS, ZING_BUSINESS, CSS.ZING_TITLE_LINK);
+    static {
+        BUSINESS.add(new SubCategory("https://zingnews.vn/bat-dong-san.html", CSS.ZING_TITLE_LINK));
+        BUSINESS.add(new SubCategory("https://zingnews.vn/tieu-dung.html", CSS.ZING_TITLE_LINK));
+        BUSINESS.add(new SubCategory("https://zingnews.vn/kinh-te-so.html", CSS.ZING_TITLE_LINK));
+        BUSINESS.add(new SubCategory("https://zingnews.vn/hang-khong.html", CSS.ZING_TITLE_LINK));
+        BUSINESS.add(new SubCategory("https://zingnews.vn/ttdn.html", CSS.ZING_TITLE_LINK));
+    }
+    private static final Category TECHNOLOGY = new MainCategory(CATEGORY.TECHNOLOGY, ZING_TECHNOLOGY, CSS.ZING_TITLE_LINK);
+
+
+    // others
+    private static final HashMap<String, String> ZING_OTHERS = new HashMap<>();
+    private static final String ZING_SOCIETY = "https://zingnews.vn/thoi-su.html";
+    private static final String ZING_LIFESTYLE = "https://zingnews.vn/doi-song.html";
+    private static final String ZING_EDUCATION = "https://zingnews.vn/giao-duc.html";
+    private static final String ZING_CAR = "https://zingnews.vn/oto-xe-may.html";
+    private static final String ZING_TOURISM = "https://zingnews.vn/du-lich.html";
+
     public static NewsOutlet init(){
-        HashMap<String, String> categories = new HashMap<>();
-        categories.put(CATEGORY.COVID, ZING_COVID);
-        categories.put(CATEGORY.POLITICS, ZING_POLITICS);
-        categories.put(CATEGORY.BUSINESS, ZING_BUSINESS);
-        categories.put(CATEGORY.TECHNOLOGY, ZING_TECHNOLOGY);
-        categories.put(CATEGORY.HEALTH, ZING_HEALTH);
-        categories.put(CATEGORY.SPORTS, ZING_SPORTS);
-        categories.put(CATEGORY.ENTERTAINMENT, ZING_ENTERTAINMENT);
-        categories.put(CATEGORY.WORLD, ZING_WORLD);
-        Categories ZingCategories = new Categories(categories);
+        Categories ZingCategories = new Categories(ZING_COVID, ZING_POLITICS,
+                                                    ZING_BUSINESS, ZING_TECHNOLOGY,
+                                                    ZING_HEALTH, ZING_SPORTS,
+                                                    ZING_ENTERTAINMENT, ZING_WORLD);
+
+
         CssConfiguration ZingCssConfig = new CssConfiguration(
                 "https://zingnews.vn/",
                 CSS.ZING_TITLE_LINK,
@@ -67,15 +91,23 @@ public class ZingNews extends NewsOutlet{
     }
 
     @Override
-    public String getCategory(Document doc) {
+    public Set<String> getCategoryNames(Document doc) {
         Element tag = doc.selectFirst(".the-article-category");
-        if (tag == null)
-            return CATEGORY.OTHERS;
+        Set<String> categoryList = new HashSet<>();
+        if (tag != null){
+            Elements categoryTags = tag.getElementsByClass("parent_cate");
+            for (Element e: categoryTags){
+                String category = e.attr("title")
+                // map category
+                categoryList.add(category);
+            }
 
-        String category = tag.text();
-        if (StringUtils.isEmpty(category))
-            return CATEGORY.OTHERS;
+        }
 
-        return category;
+        if (categoryList.isEmpty()){
+            categoryList.add(CATEGORY.OTHERS);
+        }
+
+        return categoryList;
     }
 }

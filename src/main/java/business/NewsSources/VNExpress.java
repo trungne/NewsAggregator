@@ -12,6 +12,8 @@ import org.jsoup.select.Elements;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class VNExpress extends NewsOutlet{
     private static final String VNEXPRESS_COVID =  "https://vnexpress.net/covid-19/tin-tuc";
@@ -66,15 +68,32 @@ public class VNExpress extends NewsOutlet{
     }
 
     @Override
-    public String getCategory(Document doc) {
-        Element tag = doc.getElementsByAttributeValue("name", "tt_site_id_detail").first();
-        if (tag == null)
-            return CATEGORY.OTHERS;
+    public Set<String> getCategoryNames(Document doc) {
+        // parent category
+        Element parentTag = doc.getElementsByAttributeValue("name", "tt_site_id_detail").first();
+        String parentCategory;
 
-        String category = tag.attr("catename");
-        if (StringUtils.isEmpty(category))
-            return CATEGORY.OTHERS;
+        if (parentTag == null){
+            parentCategory = CATEGORY.OTHERS;
+        }
+        else{
+            parentCategory = parentTag.attr("catename");
+            // map the category to CATEGORY.
+            // TODO CREATE A FUNCTION TO MAP VIETNAMESE NAME TO ENGLISH NAME
+        }
+        Set<String> categoryList = new HashSet<>();
+        categoryList.add(parentCategory);
 
-        return category;
+        Element tag = doc.selectFirst(".breadcrumb");
+        if (tag != null){
+            Elements categoryTags = tag.getElementsByTag("li");
+            for (Element e: categoryTags){
+                String category = e.attr("title");
+                // TODO:  map the category to english
+                categoryList.add(category);
+            }
+        }
+
+        return categoryList;
     }
 }
