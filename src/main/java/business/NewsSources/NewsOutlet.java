@@ -71,7 +71,7 @@ public abstract class NewsOutlet {
         return thumbnail;
     }
 
-    public Collection<URL> getLinksFromCategory(String categoryName){
+    public Set<URL> getLinksFromCategory(String categoryName){
         if (categories.containsKey(categoryName)){
             Category category = categories.get(categoryName);
             return category.getLinks();

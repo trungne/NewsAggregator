@@ -11,7 +11,7 @@ import java.net.*;
 import java.util.*;
 
 public class Scraper {
-    static final int MAX_LINKS_SCRAPED = 10;
+    static final int MAX_LINKS_SCRAPED = 5;
     public static Set<URL> scrapeLinksByClass(URL baseUrl, String cssClass) {
         Document doc;
         Set<URL> links = new HashSet<>();
@@ -27,6 +27,7 @@ public class Scraper {
             }
         } catch (IOException e) {
             // TODO: disable this in production
+            System.out.println("EORRORORORO");
             e.printStackTrace();
         }
         return links;

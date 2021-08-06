@@ -20,10 +20,10 @@ public class ArticleListGenerator {
 
     private static List<Article> extractArticlesFromCategory(NewsOutlet newsOutlet, String category){
         ArrayList<Article> articles = new ArrayList<>();
-        Collection<URL> articleUrls = newsOutlet.getLinksFromCategory(category);
+        Set<URL> articleUrls = newsOutlet.getLinksFromCategory(category);
+        System.out.println(articleUrls);
         // TODO: MULTI threading here
         for (URL url: articleUrls){
-            System.out.println(url);
             Document articleDoc;
             try {
                 articleDoc = Jsoup.connect(url.toString()).timeout(MAX_WAIT_TIME).get();

@@ -132,15 +132,44 @@ public class NhanDan extends NewsOutlet{
             return LocalDateTime.now();
 
         String dateTimeStr = getDateTimeSubString(dateTimeTag.text());
+        if (StringUtils.isEmpty(dateTimeStr)){
+            return LocalDateTime.now();
+        }
+        // time first
+        // 0 7 : 3 0 0 4 - 0 6 -  2  0  2  1
+        // 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14
+        if (dateTimeStr.substring(0, 5).contains(":")){
+            try{
+                int hours = Integer.parseInt(dateTimeStr.substring(0,2));
+                int minutes = Integer.parseInt(dateTimeStr.substring(3, 5));
+                int day = Integer.parseInt(dateTimeStr.substring(5,7));
+                int month = Integer.parseInt(dateTimeStr.substring(8,10));
+                int year = Integer.parseInt(dateTimeStr.substring(11));
+                return (LocalDateTime.of(year, month, day, hours, minutes));
+            } catch (NumberFormatException e){
+                e.printStackTrace();
+                System.out.println(doc);
+                return LocalDateTime.now();
+            }
+        }
 
+
+        // date first
         // 1 0 - 0 7 - 2 0 2 1 0  8  :  4  6
         // 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14
-        int day = Integer.parseInt(dateTimeStr.substring(0,2));
-        int month = Integer.parseInt(dateTimeStr.substring(3,5));
-        int year = Integer.parseInt(dateTimeStr.substring(6,10));
-        int hours = Integer.parseInt(dateTimeStr.substring(10,12));
-        int minutes = Integer.parseInt(dateTimeStr.substring(13));
-        return (LocalDateTime.of(year, month, day, hours, minutes));
+        try{
+            int day = Integer.parseInt(dateTimeStr.substring(0,2));
+            int month = Integer.parseInt(dateTimeStr.substring(3,5));
+            int year = Integer.parseInt(dateTimeStr.substring(6,10));
+            int hours = Integer.parseInt(dateTimeStr.substring(10,12));
+            int minutes = Integer.parseInt(dateTimeStr.substring(13));
+            return (LocalDateTime.of(year, month, day, hours, minutes));
+        } catch (NumberFormatException e){
+            e.printStackTrace();
+            System.out.println(doc);
+            return LocalDateTime.now();
+        }
+
     }
 
     @Override
@@ -186,10 +215,14 @@ public class NhanDan extends NewsOutlet{
         str = str.trim();
         str = str.replaceAll(",", "");
         str = str.replaceAll("\\s+", "");
+        StringBuilder builder = new StringBuilder();
         for(int i = 0; i < str.length(); i++){
+            char ch = str.charAt(i);
             // get the substring from the first digit onwards
-            if (Character.isDigit(str.charAt(i))){
-                return str.substring(i);
+            if (Character.isDigit(ch) ||
+                ch == '-' ||
+                ch == ':'){
+                builder.append(ch);
             }
         }
         return "";
