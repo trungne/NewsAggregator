@@ -8,10 +8,12 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Article {
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EE, dd/MMMM/yyyy, kk:mm ");
+
     static boolean validateTag(Element e, String type, URL url) throws Exception {
         if (e == null)
             throw new Exception("Element For " + type + " Not Found");
@@ -27,39 +29,39 @@ public class Article {
     private final List<String> categories = new ArrayList<>();
     private String newsSource;
 
-    public Article(URL url, NewsOutlet newsOutlet, List<String> categoryList){
+    public Article(URL url, NewsOutlet newsOutlet, List<String> categoryList) {
         this.url = url;
         setNewsSource(newsOutlet.getName());
         addCategory(categoryList);
     }
 
-    public Article(URL url, NewsOutlet newsOutlet, String parentCategory){
+    public Article(URL url, NewsOutlet newsOutlet, String parentCategory) {
         this.url = url;
         setNewsSource(newsOutlet.getName());
         addCategory(parentCategory);
     }
 
-    public void addCategory(String category){
-        if (!this.categories.contains(category)){
+    public void addCategory(String category) {
+        if (!this.categories.contains(category)) {
             this.categories.add(category);
         }
 
     }
 
-    public void addCategory(List<String> categoryList){
-        for (String category: categoryList){
-            if (!this.categories.contains(category)){
+    public void addCategory(List<String> categoryList) {
+        for (String category : categoryList) {
+            if (!this.categories.contains(category)) {
                 this.categories.add(category);
             }
         }
     }
 
 
-    public boolean belongsToCategory(String category){
+    public boolean belongsToCategory(String category) {
         return this.categories.contains(category);
     }
 
-    public String getHtml(){
+    public String getHtml() {
         Element article = new Element("article");
 
         // create header div
@@ -70,7 +72,7 @@ public class Article {
         Element categories = new Element("div");
         categories.addClass(CSS.ARTICLE_CATEGORY);
         StringBuilder categoriesStrBuilder = new StringBuilder();
-        for (String category: this.categories){
+        for (String category : this.categories) {
             categoriesStrBuilder.append(category).append(" - ");
         }
 
@@ -99,28 +101,25 @@ public class Article {
         return article.outerHtml();
     }
 
-    public String getAbsoluteTime(){
+    public String getAbsoluteTime() {
         return dtf.format(this.dateTime);
     }
 
-    public String getRelativeTime(){
+    public String getRelativeTime() {
         long minutes = ChronoUnit.MINUTES.between(dateTime, LocalDateTime.now());
 
-        if (minutes == 0){
+        if (minutes == 0) {
             long seconds = ChronoUnit.SECONDS.between(dateTime, LocalDateTime.now());
             if (seconds < 2)
                 return "Just now.";
             return seconds + " seconds" + " ago.";
-        }
-        else if (minutes < 60){
+        } else if (minutes < 60) {
             return minutes + (minutes == 1 ? " minute" : " minutes") + " ago";
-        }
-        else if (minutes < 1440){ // 1440 minutes = 1 day
-            long hours = minutes/60;
-            return hours + (hours == 1 ? " hour " : " hours ") + minutes%60 + (minutes%60 == 1 ? " minute" : " minutes") + " ago.";
-        }
-        else {
-            long days = minutes/1440;
+        } else if (minutes < 1440) { // 1440 minutes = 1 day
+            long hours = minutes / 60;
+            return hours + (hours == 1 ? " hour " : " hours ") + minutes % 60 + (minutes % 60 == 1 ? " minute" : " minutes") + " ago.";
+        } else {
+            long days = minutes / 1440;
             return days + (days == 1 ? " day" : " days") + " ago.";
         }
     }
@@ -136,8 +135,8 @@ public class Article {
     }
 
     public void setTitle(Element title) throws Exception {
-       if (validateTag(title, "Title", url))
-           this.title = title;
+        if (validateTag(title, "Title", url))
+            this.title = title;
     }
 
     public void setDescription(Element description) throws Exception {
@@ -160,12 +159,11 @@ public class Article {
     }
 
 
-
     public void setNewsSource(String newsSource) {
         this.newsSource = newsSource;
     }
 
-    public Preview getPreview(){
+    public Preview getPreview() {
         Element source = new Element("div");
         source.addClass(CSS.SOURCE);
         source.text(newsSource);

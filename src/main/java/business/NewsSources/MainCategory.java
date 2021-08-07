@@ -3,9 +3,10 @@ package business.NewsSources;
 import org.apache.commons.lang3.StringUtils;
 
 import java.net.URL;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
-public class MainCategory extends Category{
+public class MainCategory extends Category {
     Set<Category> subCategories = new HashSet<>();
 
     public MainCategory(String name, String url, String css) {
@@ -18,7 +19,7 @@ public class MainCategory extends Category{
     }
 
     @Override
-    public void addSub(String url){
+    public void addSub(String url) {
         SubCategory subCategory = new SubCategory(url, cssForScraping);
         subCategories.add(subCategory);
     }
@@ -31,11 +32,11 @@ public class MainCategory extends Category{
     @Override
     public Set<URL> getLinks() {
         Set<URL> urls = new HashSet<>();
-        if (!StringUtils.isEmpty(url)){
+        if (!StringUtils.isEmpty(url)) {
             urls.addAll(super.getLinks());
         }
 
-        for (Category category: subCategories){
+        for (Category category : subCategories) {
             urls.addAll(category.getLinks());
         }
         return urls;

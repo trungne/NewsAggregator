@@ -10,15 +10,17 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.net.PasswordAuthentication;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-public class ThanhNien extends NewsOutlet{
+public class ThanhNien extends NewsOutlet {
     private static final Category COVID = new SubCategory(CATEGORY.COVID, "https://thanhnien.vn/covid-19/", CSS.THANHNIEN_TITLE_LINK);
     private static final Category POLITICS = new SubCategory(CATEGORY.POLITICS, "https://thanhnien.vn/thoi-su/chinh-tri/", CSS.THANHNIEN_TITLE_LINK);
 
     private static final Category BUSINESS = new MainCategory(CATEGORY.BUSINESS, "https://thanhnien.vn/tai-chinh-kinh-doanh", CSS.THANHNIEN_TITLE_LINK);
+
     static {
         BUSINESS.addSub("https://thanhnien.vn/tai-chinh-kinh-doanh/kinh-te-xanh/");
         BUSINESS.addSub("https://thanhnien.vn/kinh-doanh/chinh-sach-phat-trien/");
@@ -32,6 +34,7 @@ public class ThanhNien extends NewsOutlet{
     }
 
     private static final Category TECHNOLOGY = new MainCategory(CATEGORY.TECHNOLOGY, "https://thanhnien.vn/cong-nghe/", CSS.THANHNIEN_TITLE_LINK);
+
     static {
         TECHNOLOGY.addSub("https://thanhnien.vn/cong-nghe/xu-huong/");
         TECHNOLOGY.addSub("https://thanhnien.vn/cong-nghe/san-pham-moi/");
@@ -41,6 +44,7 @@ public class ThanhNien extends NewsOutlet{
     }
 
     private static final Category HEALTH = new MainCategory(CATEGORY.HEALTH, "https://thanhnien.vn/suc-khoe/", CSS.THANHNIEN_TITLE_LINK);
+
     static {
         HEALTH.addSub("https://thanhnien.vn/suc-khoe/lam-dep/");
         HEALTH.addSub("https://thanhnien.vn/suc-khoe/khoe-dep-moi-ngay/");
@@ -49,6 +53,7 @@ public class ThanhNien extends NewsOutlet{
     }
 
     private static final Category SPORTS = new MainCategory(CATEGORY.SPORTS, "https://thanhnien.vn/the-thao/", CSS.THANHNIEN_TITLE_LINK);
+
     static {
         SPORTS.addSub("https://thanhnien.vn/the-thao/bong-da-viet-nam/");
         SPORTS.addSub("https://thanhnien.vn/the-thao/bong-da-quoc-te/");
@@ -59,13 +64,16 @@ public class ThanhNien extends NewsOutlet{
     }
 
     private static final Category ENTERTAINMENT = new MainCategory(CATEGORY.ENTERTAINMENT, "https://thanhnien.vn/giai-tri/", CSS.THANHNIEN_TITLE_LINK);
+
     static {
         ENTERTAINMENT.addSub("https://thanhnien.vn/giai-tri/phim/");
         ENTERTAINMENT.addSub("https://thanhnien.vn/giai-tri/truyen-hinh/");
         ENTERTAINMENT.addSub("https://thanhnien.vn/giai-tri/doi-nghe-si/");
 
     }
+
     private static final Category WORLD = new MainCategory(CATEGORY.WORLD, "https://thanhnien.vn/the-gioi/", CSS.THANHNIEN_TITLE_LINK);
+
     static {
         WORLD.addSub("https://thanhnien.vn/the-gioi/kinh-te-the-gioi/");
         WORLD.addSub("https://thanhnien.vn/the-gioi/quan-su/");
@@ -76,6 +84,7 @@ public class ThanhNien extends NewsOutlet{
     }
 
     private static final Category OTHERS = new MainCategory(CATEGORY.OTHERS, "", CSS.THANHNIEN_TITLE_LINK);
+
     static {
         OTHERS.addSub("https://thanhnien.vn/thoi-su/");
         OTHERS.addSub("https://thanhnien.vn/toi-viet/");
@@ -90,17 +99,17 @@ public class ThanhNien extends NewsOutlet{
     }
 
 
-    public static NewsOutlet init(){
+    public static NewsOutlet init() {
         HashMap<String, Category> categories = new HashMap<>();
-        categories.put(CATEGORY.COVID,COVID);
-        categories.put(CATEGORY.POLITICS,POLITICS);
-        categories.put(CATEGORY.BUSINESS,BUSINESS);
-        categories.put(CATEGORY.TECHNOLOGY,TECHNOLOGY);
-        categories.put(CATEGORY.HEALTH,HEALTH);
-        categories.put(CATEGORY.SPORTS,SPORTS);
-        categories.put(CATEGORY.ENTERTAINMENT,ENTERTAINMENT);
-        categories.put(CATEGORY.WORLD,WORLD);
-        categories.put(CATEGORY.OTHERS,OTHERS);
+        categories.put(CATEGORY.COVID, COVID);
+        categories.put(CATEGORY.POLITICS, POLITICS);
+        categories.put(CATEGORY.BUSINESS, BUSINESS);
+        categories.put(CATEGORY.TECHNOLOGY, TECHNOLOGY);
+        categories.put(CATEGORY.HEALTH, HEALTH);
+        categories.put(CATEGORY.SPORTS, SPORTS);
+        categories.put(CATEGORY.ENTERTAINMENT, ENTERTAINMENT);
+        categories.put(CATEGORY.WORLD, WORLD);
+        categories.put(CATEGORY.OTHERS, OTHERS);
 
 
         CssConfiguration ThanhNienCssConfig = new CssConfiguration(
@@ -127,7 +136,7 @@ public class ThanhNien extends NewsOutlet{
 
         String dateTimeStr = dateTimeTag.attr("content");
 
-        if (StringUtils.isEmpty(dateTimeStr)){
+        if (StringUtils.isEmpty(dateTimeStr)) {
             return LocalDateTime.now();
         }
         return LocalDateTimeParser.parse(dateTimeStr);
@@ -138,10 +147,9 @@ public class ThanhNien extends NewsOutlet{
         // get parent category
         Element tag = doc.getElementsByAttributeValue("property", "article:section").first();
         String parentCategory;
-        if (tag == null){
+        if (tag == null) {
             parentCategory = CATEGORY.OTHERS;
-        }
-        else{
+        } else {
             parentCategory = tag.attr("content");
             parentCategory = CATEGORY.convert(parentCategory);
         }
@@ -151,12 +159,12 @@ public class ThanhNien extends NewsOutlet{
 
         // get child category
         Element childrenCategoryTag = doc.selectFirst(".breadcrumbs");
-        if (childrenCategoryTag != null){
+        if (childrenCategoryTag != null) {
             Elements children = childrenCategoryTag.getElementsByTag("a");
-            for (Element e: children){
+            for (Element e : children) {
                 String category = e.attr("title");
                 category = CATEGORY.convert(category);
-                if (!categoryList.contains(category)){
+                if (!categoryList.contains(category)) {
                     categoryList.add(category);
                 }
             }

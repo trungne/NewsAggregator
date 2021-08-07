@@ -1,23 +1,26 @@
 package business.NewsSources;
-import org.apache.commons.lang3.StringUtils;
 
 import business.Helper.CATEGORY;
 import business.Helper.CSS;
 import business.Sanitizer.HtmlSanitizer;
 import business.Sanitizer.NhanDanSanitizer;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import static business.Helper.Scraper.createCleanImgTag;
 import static business.Helper.Scraper.scrapeFirstElementByClass;
 
-public class NhanDan extends NewsOutlet{
+public class NhanDan extends NewsOutlet {
     private static final Category COVID = new SubCategory(CATEGORY.COVID, "https://nhandan.vn/tieu-diem", CSS.NHANDAN_TITLE_LINK);
     private static final Category POLITICS = new MainCategory(CATEGORY.POLITICS, "https://nhandan.vn/chinhtri", CSS.NHANDAN_TITLE_LINK);
+
     static {
         POLITICS.addSub("https://nhandan.vn/tin-tuc-su-kien");
         POLITICS.addSub("https://nhandan.vn/xa-luan");
@@ -29,6 +32,7 @@ public class NhanDan extends NewsOutlet{
     }
 
     private static final Category BUSINESS = new MainCategory(CATEGORY.BUSINESS, "https://nhandan.vn/kinhte", CSS.NHANDAN_TITLE_LINK);
+
     static {
         BUSINESS.addSub("https://nhandan.vn/tin-tuc-kinh-te");
         BUSINESS.addSub("https://nhandan.vn/nhan-dinh");
@@ -38,6 +42,7 @@ public class NhanDan extends NewsOutlet{
     }
 
     private static final Category TECHNOLOGY = new MainCategory(CATEGORY.TECHNOLOGY, "https://nhandan.vn/khoahoc-congnghe", CSS.NHANDAN_TITLE_LINK);
+
     static {
         TECHNOLOGY.addSub("https://nhandan.vn/khoa-hoc");
         TECHNOLOGY.addSub("https://nhandan.vn/vi-moi-truong-xanh");
@@ -45,6 +50,7 @@ public class NhanDan extends NewsOutlet{
     }
 
     private static final Category HEALTH = new MainCategory(CATEGORY.HEALTH, "https://nhandan.vn/y-te", CSS.NHANDAN_TITLE_LINK);
+
     static {
         HEALTH.addSub("https://nhandan.vn/benh-thuong-gap");
         HEALTH.addSub("https://nhandan.vn/goc-tu-van");
@@ -52,6 +58,7 @@ public class NhanDan extends NewsOutlet{
     }
 
     private static final Category SPORTS = new MainCategory(CATEGORY.SPORTS, "https://nhandan.vn/thethao", CSS.NHANDAN_TITLE_LINK);
+
     static {
         SPORTS.addSub("https://nhandan.vn/nhip-song-the-thao");
         SPORTS.addSub("https://nhandan.vn/guong-mat");
@@ -60,6 +67,7 @@ public class NhanDan extends NewsOutlet{
     }
 
     private static final Category ENTERTAINMENT = new MainCategory(CATEGORY.ENTERTAINMENT, "https://nhandan.vn/vanhoa", CSS.NHANDAN_TITLE_LINK);
+
     static {
         ENTERTAINMENT.addSub("https://nhandan.vn/dong-chay");
         ENTERTAINMENT.addSub("https://nhandan.vn/dien-dan");
@@ -69,6 +77,7 @@ public class NhanDan extends NewsOutlet{
     }
 
     private static final Category WORLD = new MainCategory(CATEGORY.WORLD, "https://nhandan.vn/thegioi", CSS.NHANDAN_TITLE_LINK);
+
     static {
         WORLD.addSub("https://nhandan.vn/cua-so-the-gioi");
         WORLD.addSub("https://nhandan.vn/cong-dong-asean");
@@ -79,6 +88,7 @@ public class NhanDan extends NewsOutlet{
     }
 
     private static final Category OTHERS = new MainCategory(CATEGORY.OTHERS, "", CSS.NHANDAN_TITLE_LINK);
+
     static {
         OTHERS.addSub("https://nhandan.vn/phapluat");
         OTHERS.addSub("https://nhandan.vn/du-lich");
@@ -86,17 +96,17 @@ public class NhanDan extends NewsOutlet{
         OTHERS.addSub("https://nhandan.vn/bandoc");
     }
 
-    public static NewsOutlet init(){
+    public static NewsOutlet init() {
         HashMap<String, Category> categories = new HashMap<>();
-        categories.put(CATEGORY.COVID,COVID);
-        categories.put(CATEGORY.POLITICS,POLITICS);
-        categories.put(CATEGORY.BUSINESS,BUSINESS);
-        categories.put(CATEGORY.TECHNOLOGY,TECHNOLOGY);
-        categories.put(CATEGORY.HEALTH,HEALTH);
-        categories.put(CATEGORY.SPORTS,SPORTS);
-        categories.put(CATEGORY.ENTERTAINMENT,ENTERTAINMENT);
-        categories.put(CATEGORY.WORLD,WORLD);
-        categories.put(CATEGORY.OTHERS,OTHERS);
+        categories.put(CATEGORY.COVID, COVID);
+        categories.put(CATEGORY.POLITICS, POLITICS);
+        categories.put(CATEGORY.BUSINESS, BUSINESS);
+        categories.put(CATEGORY.TECHNOLOGY, TECHNOLOGY);
+        categories.put(CATEGORY.HEALTH, HEALTH);
+        categories.put(CATEGORY.SPORTS, SPORTS);
+        categories.put(CATEGORY.ENTERTAINMENT, ENTERTAINMENT);
+        categories.put(CATEGORY.WORLD, WORLD);
+        categories.put(CATEGORY.OTHERS, OTHERS);
 
         CssConfiguration NhanDanCssConfig = new CssConfiguration(
                 "https://nhandan.vn/",
@@ -114,6 +124,7 @@ public class NhanDan extends NewsOutlet{
     }
 
     private final String thumbnailCss;
+
     public NhanDan(String name,
                    String defaultThumbnail,
                    HashMap<String, Category> categories,
@@ -132,21 +143,21 @@ public class NhanDan extends NewsOutlet{
             return LocalDateTime.now();
 
         String dateTimeStr = getDateTimeSubString(dateTimeTag.text());
-        if (StringUtils.isEmpty(dateTimeStr)){
+        if (StringUtils.isEmpty(dateTimeStr)) {
             return LocalDateTime.now();
         }
         // time first
         // 0 7 : 3 0 0 4 - 0 6 -  2  0  2  1
         // 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14
-        if (dateTimeStr.substring(0, 5).contains(":")){
-            try{
-                int hours = Integer.parseInt(dateTimeStr.substring(0,2));
+        if (dateTimeStr.substring(0, 5).contains(":")) {
+            try {
+                int hours = Integer.parseInt(dateTimeStr.substring(0, 2));
                 int minutes = Integer.parseInt(dateTimeStr.substring(3, 5));
-                int day = Integer.parseInt(dateTimeStr.substring(5,7));
-                int month = Integer.parseInt(dateTimeStr.substring(8,10));
+                int day = Integer.parseInt(dateTimeStr.substring(5, 7));
+                int month = Integer.parseInt(dateTimeStr.substring(8, 10));
                 int year = Integer.parseInt(dateTimeStr.substring(11));
                 return (LocalDateTime.of(year, month, day, hours, minutes));
-            } catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 e.printStackTrace();
                 System.out.println(doc);
                 return LocalDateTime.now();
@@ -157,14 +168,14 @@ public class NhanDan extends NewsOutlet{
         // date first
         // 1 0 - 0 7 - 2 0 2 1 0  8  :  4  6
         // 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14
-        try{
-            int day = Integer.parseInt(dateTimeStr.substring(0,2));
-            int month = Integer.parseInt(dateTimeStr.substring(3,5));
-            int year = Integer.parseInt(dateTimeStr.substring(6,10));
-            int hours = Integer.parseInt(dateTimeStr.substring(10,12));
+        try {
+            int day = Integer.parseInt(dateTimeStr.substring(0, 2));
+            int month = Integer.parseInt(dateTimeStr.substring(3, 5));
+            int year = Integer.parseInt(dateTimeStr.substring(6, 10));
+            int hours = Integer.parseInt(dateTimeStr.substring(10, 12));
             int minutes = Integer.parseInt(dateTimeStr.substring(13));
             return (LocalDateTime.of(year, month, day, hours, minutes));
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             e.printStackTrace();
             System.out.println(doc);
             return LocalDateTime.now();
@@ -174,13 +185,13 @@ public class NhanDan extends NewsOutlet{
 
     @Override
     public Element getThumbnail(Document doc) {
-        try{
+        try {
             Element elementContainsImgs = scrapeFirstElementByClass(doc, thumbnailCss);
             Element thumbnail = elementContainsImgs.getElementsByTag("img").first();
             thumbnail = createCleanImgTag(thumbnail);
             thumbnail = sanitizer.sanitizeThumbNail(thumbnail);
             return thumbnail;
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             return getDefaultThumbnail();
         }
     }
@@ -189,17 +200,16 @@ public class NhanDan extends NewsOutlet{
     public List<String> getCategoryNames(Document doc) {
         Elements tags = doc.getElementsByClass("bc-item");
         List<String> categoryList = new ArrayList<>();
-        if (!tags.isEmpty()){
-            for (Element e: tags){
+        if (!tags.isEmpty()) {
+            for (Element e : tags) {
                 String category = e.text();
                 category = CATEGORY.convert(category);
-                if (!categoryList.contains(category)){
+                if (!categoryList.contains(category)) {
                     categoryList.add(category);
                 }
 
             }
-        }
-        else{
+        } else {
             categoryList.add(CATEGORY.OTHERS);
         }
 
@@ -211,17 +221,17 @@ public class NhanDan extends NewsOutlet{
     // remove day of the week from the datetime string.
     // Example Chủ Nhật, 10-07-2021, 08:45 into
     // 10-07-2021, 08:45
-    private String getDateTimeSubString(String str){
+    private String getDateTimeSubString(String str) {
         str = str.trim();
         str = str.replaceAll(",", "");
         str = str.replaceAll("\\s+", "");
         StringBuilder builder = new StringBuilder();
-        for(int i = 0; i < str.length(); i++){
+        for (int i = 0; i < str.length(); i++) {
             char ch = str.charAt(i);
             // get the substring from the first digit onwards
             if (Character.isDigit(ch) ||
-                ch == '-' ||
-                ch == ':'){
+                    ch == '-' ||
+                    ch == ':') {
                 builder.append(ch);
             }
         }

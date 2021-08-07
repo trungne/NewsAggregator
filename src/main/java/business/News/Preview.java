@@ -2,24 +2,24 @@ package business.News;
 
 import org.jsoup.nodes.Element;
 
-public class Preview implements Comparable<Preview>{
+public class Preview implements Comparable<Preview> {
     private final Element preview;
     private final Article article;
 
-    public Preview(Element preview, Article article){
+    public Preview(Element preview, Article article) {
         this.preview = preview;
         this.article = article;
     }
 
-    public String toString(){
+    public String toString() {
         return preview.outerHtml();
     }
 
-    public String getHtml(){
+    public String getHtml() {
         return preview.outerHtml();
     }
 
-    public String getArticleHtml(){
+    public String getArticleHtml() {
         return article.getHtml();
     }
 

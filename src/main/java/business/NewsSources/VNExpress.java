@@ -11,12 +11,15 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-public class VNExpress extends NewsOutlet{
+public class VNExpress extends NewsOutlet {
     private static final Category COVID = new SubCategory(CATEGORY.COVID, "https://vnexpress.net/covid-19/tin-tuc", CSS.VNEXPRESS_TITLE_LINK);
     private static final Category POLITICS = new SubCategory(CATEGORY.POLITICS, "https://vnexpress.net/thoi-su/chinh-tri", CSS.VNEXPRESS_TITLE_LINK);
     private static final Category BUSINESS = new MainCategory(CATEGORY.BUSINESS, "https://vnexpress.net/kinh-doanh", CSS.VNEXPRESS_TITLE_LINK);
+
     static {
         BUSINESS.addSub("https://vnexpress.net/kinh-doanh/quoc-te");
         BUSINESS.addSub("https://vnexpress.net/kinh-doanh/doanh-nghiep");
@@ -31,6 +34,7 @@ public class VNExpress extends NewsOutlet{
     }
 
     private static final Category TECHNOLOGY = new MainCategory(CATEGORY.TECHNOLOGY, "https://vnexpress.net/khoa-hoc", CSS.VNEXPRESS_TITLE_LINK);
+
     static {
         TECHNOLOGY.addSub("https://vnexpress.net/khoa-hoc/tin-tuc");
         TECHNOLOGY.addSub("https://vnexpress.net/khoa-hoc/phat-minh");
@@ -41,6 +45,7 @@ public class VNExpress extends NewsOutlet{
     }
 
     private static final Category HEALTH = new MainCategory(CATEGORY.HEALTH, "https://vnexpress.net/suc-khoe", CSS.VNEXPRESS_TITLE_LINK);
+
     static {
         HEALTH.addSub("https://vnexpress.net/suc-khoe/tin-tuc");
         HEALTH.addSub("https://vnexpress.net/suc-khoe/tu-van");
@@ -52,6 +57,7 @@ public class VNExpress extends NewsOutlet{
     }
 
     private static final Category SPORTS = new MainCategory(CATEGORY.SPORTS, "https://vnexpress.net/the-thao", CSS.VNEXPRESS_TITLE_LINK);
+
     static {
         SPORTS.addSub("https://vnexpress.net/the-thao/video");
         SPORTS.addSub("https://vnexpress.net/bong-da");
@@ -60,6 +66,7 @@ public class VNExpress extends NewsOutlet{
     }
 
     private static final Category ENTERTAINMENT = new MainCategory(CATEGORY.ENTERTAINMENT, "https://vnexpress.net/giai-tri", CSS.VNEXPRESS_TITLE_LINK);
+
     static {
         ENTERTAINMENT.addSub("https://vnexpress.net/giai-tri/gioi-sao");
         ENTERTAINMENT.addSub("https://vnexpress.net/giai-tri/phim");
@@ -69,7 +76,9 @@ public class VNExpress extends NewsOutlet{
         ENTERTAINMENT.addSub("https://vnexpress.net/giai-tri/sach");
         ENTERTAINMENT.addSub("https://vnexpress.net/giai-tri/san-khau-my-thuat");
     }
+
     private static final Category WORLD = new MainCategory(CATEGORY.WORLD, "https://vnexpress.net/the-gioi", CSS.VNEXPRESS_TITLE_LINK);
+
     static {
         WORLD.addSub("https://vnexpress.net/the-gioi/tu-lieu");
         WORLD.addSub("https://vnexpress.net/the-gioi/phan-tich");
@@ -77,7 +86,9 @@ public class VNExpress extends NewsOutlet{
         WORLD.addSub("https://vnexpress.net/the-gioi/cuoc-song-do-day");
         WORLD.addSub("https://vnexpress.net/the-gioi/quan-su");
     }
+
     private static final Category OTHERS = new MainCategory(CATEGORY.OTHERS, "", CSS.VNEXPRESS_TITLE_LINK);
+
     static {
         OTHERS.addSub("https://vnexpress.net/giao-duc");
         OTHERS.addSub("https://vnexpress.net/thoi-su");
@@ -88,17 +99,18 @@ public class VNExpress extends NewsOutlet{
         OTHERS.addSub("https://vnexpress.net/so-hoa");
         OTHERS.addSub("https://vnexpress.net/oto-xe-may");
     }
-    public static NewsOutlet init(){
+
+    public static NewsOutlet init() {
         HashMap<String, Category> categories = new HashMap<>();
-        categories.put(CATEGORY.COVID,COVID);
-        categories.put(CATEGORY.POLITICS,POLITICS);
-        categories.put(CATEGORY.BUSINESS,BUSINESS);
-        categories.put(CATEGORY.TECHNOLOGY,TECHNOLOGY);
-        categories.put(CATEGORY.HEALTH,HEALTH);
-        categories.put(CATEGORY.SPORTS,SPORTS);
-        categories.put(CATEGORY.ENTERTAINMENT,ENTERTAINMENT);
-        categories.put(CATEGORY.WORLD,WORLD);
-        categories.put(CATEGORY.OTHERS,OTHERS);
+        categories.put(CATEGORY.COVID, COVID);
+        categories.put(CATEGORY.POLITICS, POLITICS);
+        categories.put(CATEGORY.BUSINESS, BUSINESS);
+        categories.put(CATEGORY.TECHNOLOGY, TECHNOLOGY);
+        categories.put(CATEGORY.HEALTH, HEALTH);
+        categories.put(CATEGORY.SPORTS, SPORTS);
+        categories.put(CATEGORY.ENTERTAINMENT, ENTERTAINMENT);
+        categories.put(CATEGORY.WORLD, WORLD);
+        categories.put(CATEGORY.OTHERS, OTHERS);
 
         CssConfiguration VNExpressConfig = new CssConfiguration(
                 "https://vnexpress.net/",
@@ -123,7 +135,7 @@ public class VNExpress extends NewsOutlet{
         Elements dateTimeTag = doc.getElementsByAttributeValue("itemprop", cssConfiguration.publishedTime);
         String dateTimeStr = dateTimeTag.attr("content");
 
-        if (StringUtils.isEmpty(dateTimeStr)){
+        if (StringUtils.isEmpty(dateTimeStr)) {
             return LocalDateTime.now();
         }
 
@@ -137,10 +149,9 @@ public class VNExpress extends NewsOutlet{
         String parentCategory;
 
         // if no parent tag is found, set the category to default "others"
-        if (parentTag == null){
+        if (parentTag == null) {
             parentCategory = CATEGORY.OTHERS;
-        }
-        else{
+        } else {
             parentCategory = parentTag.attr("catename");
             parentCategory = CATEGORY.convert(parentCategory);
         }
@@ -151,12 +162,12 @@ public class VNExpress extends NewsOutlet{
         // scape all categories in body
         Element tag = doc.selectFirst(".breadcrumb");
 
-        if (tag != null){
+        if (tag != null) {
             Elements categoryTags = tag.getElementsByTag("li");
-            for (Element e: categoryTags){
+            for (Element e : categoryTags) {
                 String category = e.attr("title");
                 category = CATEGORY.convert(category);
-                if (!categoryList.contains(category)){
+                if (!categoryList.contains(category)) {
                     categoryList.add(category);
                 }
             }

@@ -11,11 +11,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-public class TuoiTre extends NewsOutlet{
+public class TuoiTre extends NewsOutlet {
     private static final Category COVID = new SubCategory(CATEGORY.COVID, "https://tuoitre.vn/covid-19.html", CSS.TUOITRE_TITLE_LINK);
     private static final Category POLITICS = new MainCategory(CATEGORY.POLITICS, "https://tuoitre.vn/thoi-su.htm", CSS.TUOITRE_TITLE_LINK);
+
     static {
         POLITICS.addSub("https://tuoitre.vn/thoi-su/but-bi.htm");
         POLITICS.addSub("https://tuoitre.vn/thoi-su/xa-hoi.htm");
@@ -25,6 +28,7 @@ public class TuoiTre extends NewsOutlet{
 
 
     private static final Category BUSINESS = new MainCategory(CATEGORY.BUSINESS, "https://tuoitre.vn/kinh-doanh.htm", CSS.TUOITRE_TITLE_LINK);
+
     static {
         BUSINESS.addSub("https://tuoitre.vn/kinh-doanh/tai-chinh.htm");
         BUSINESS.addSub("https://tuoitre.vn/kinh-doanh/doanh-nghiep.htm");
@@ -33,12 +37,14 @@ public class TuoiTre extends NewsOutlet{
     }
 
     private static final Category TECHNOLOGY = new MainCategory(CATEGORY.TECHNOLOGY, "https://tuoitre.vn/khoa-hoc.htm", CSS.TUOITRE_TITLE_LINK);
+
     static {
         TECHNOLOGY.addSub("https://tuoitre.vn/khoa-hoc/thuong-thuc.htm");
         TECHNOLOGY.addSub("https://tuoitre.vn/khoa-hoc/phat-minh.htm");
     }
 
     private static final Category HEALTH = new MainCategory(CATEGORY.HEALTH, "https://tuoitre.vn/suc-khoe.htm", CSS.TUOITRE_TITLE_LINK);
+
     static {
         HEALTH.addSub("https://tuoitre.vn/suc-khoe/dinh-duong.htm");
         HEALTH.addSub("https://tuoitre.vn/suc-khoe/me-va-be.htm");
@@ -48,6 +54,7 @@ public class TuoiTre extends NewsOutlet{
     }
 
     private static final Category SPORTS = new MainCategory(CATEGORY.SPORTS, "https://tuoitre.vn/the-thao.htm", CSS.TUOITRE_TITLE_LINK);
+
     static {
         SPORTS.addSub("https://tuoitre.vn/the-thao/bong-da.htm");
         SPORTS.addSub("https://tuoitre.vn/the-thao/bong-ro.htm");
@@ -58,6 +65,7 @@ public class TuoiTre extends NewsOutlet{
     }
 
     private static final Category ENTERTAINMENT = new MainCategory(CATEGORY.ENTERTAINMENT, "https://tuoitre.vn/giai-tri.htm", CSS.TUOITRE_TITLE_LINK);
+
     static {
         ENTERTAINMENT.addSub("https://tuoitre.vn/giai-tri/nghe-gi-hom-nay.htm");
         ENTERTAINMENT.addSub("https://tuoitre.vn/giai-tri/am-nhac.htm");
@@ -66,14 +74,18 @@ public class TuoiTre extends NewsOutlet{
         ENTERTAINMENT.addSub("https://tuoitre.vn/giai-tri/thoi-trang.htm");
         ENTERTAINMENT.addSub("https://tuoitre.vn/giai-tri/hau-truong.htm");
     }
+
     private static final Category WORLD = new MainCategory(CATEGORY.WORLD, "https://tuoitre.vn/the-gioi.htm", CSS.TUOITRE_TITLE_LINK);
+
     static {
         WORLD.addSub("https://tuoitre.vn/the-gioi/binh-luan.htm");
         WORLD.addSub("https://tuoitre.vn/the-gioi/kieu-bao.htm");
         WORLD.addSub("https://tuoitre.vn/the-gioi/muon-mau.htm");
         WORLD.addSub("https://tuoitre.vn/the-gioi/ho-so.htm");
     }
+
     private static final Category OTHERS = new MainCategory(CATEGORY.OTHERS, "", CSS.TUOITRE_TITLE_LINK);
+
     static {
         OTHERS.addSub("https://tuoitre.vn/phap-luat.htm");
         OTHERS.addSub("https://tuoitre.vn/xe.htm");
@@ -86,17 +98,17 @@ public class TuoiTre extends NewsOutlet{
     }
 
 
-    public static NewsOutlet init(){
+    public static NewsOutlet init() {
         HashMap<String, Category> categories = new HashMap<>();
-        categories.put(CATEGORY.COVID,COVID);
-        categories.put(CATEGORY.POLITICS,POLITICS);
-        categories.put(CATEGORY.BUSINESS,BUSINESS);
-        categories.put(CATEGORY.TECHNOLOGY,TECHNOLOGY);
-        categories.put(CATEGORY.HEALTH,HEALTH);
-        categories.put(CATEGORY.SPORTS,SPORTS);
-        categories.put(CATEGORY.ENTERTAINMENT,ENTERTAINMENT);
-        categories.put(CATEGORY.WORLD,WORLD);
-        categories.put(CATEGORY.OTHERS,OTHERS);
+        categories.put(CATEGORY.COVID, COVID);
+        categories.put(CATEGORY.POLITICS, POLITICS);
+        categories.put(CATEGORY.BUSINESS, BUSINESS);
+        categories.put(CATEGORY.TECHNOLOGY, TECHNOLOGY);
+        categories.put(CATEGORY.HEALTH, HEALTH);
+        categories.put(CATEGORY.SPORTS, SPORTS);
+        categories.put(CATEGORY.ENTERTAINMENT, ENTERTAINMENT);
+        categories.put(CATEGORY.WORLD, WORLD);
+        categories.put(CATEGORY.OTHERS, OTHERS);
 
         CssConfiguration TuoiTreCssConfig = new CssConfiguration(
                 "https://tuoitre.vn/",
@@ -112,7 +124,7 @@ public class TuoiTre extends NewsOutlet{
                 new TuoiTreSanitizer());
     }
 
-    public TuoiTre(String name, String defaultThumbnail,  HashMap<String, Category> categories, CssConfiguration cssConfiguration, HtmlSanitizer sanitizer) {
+    public TuoiTre(String name, String defaultThumbnail, HashMap<String, Category> categories, CssConfiguration cssConfiguration, HtmlSanitizer sanitizer) {
         super(name, defaultThumbnail, categories, cssConfiguration, sanitizer);
     }
 
@@ -121,7 +133,7 @@ public class TuoiTre extends NewsOutlet{
         Elements dateTimeTag = doc.getElementsByAttributeValue("property", cssConfiguration.publishedTime);
 
         String dateTimeStr = dateTimeTag.attr("content");
-        if (StringUtils.isEmpty(dateTimeStr)){
+        if (StringUtils.isEmpty(dateTimeStr)) {
             return LocalDateTime.now();
         }
 
@@ -133,10 +145,9 @@ public class TuoiTre extends NewsOutlet{
         // get parent category
         Element tag = doc.getElementsByAttributeValue("property", "article:section").first();
         String parentCategory;
-        if (tag == null){
+        if (tag == null) {
             parentCategory = CATEGORY.OTHERS;
-        }
-        else{
+        } else {
             parentCategory = tag.attr("content");
             parentCategory = CATEGORY.convert(parentCategory);
         }
@@ -146,12 +157,12 @@ public class TuoiTre extends NewsOutlet{
 
         // get child category
         Element childrenCategoryTag = doc.selectFirst(".breadcrumbs");
-        if (childrenCategoryTag != null){
+        if (childrenCategoryTag != null) {
             Elements children = childrenCategoryTag.getElementsByTag("a");
-            for (Element e: children){
+            for (Element e : children) {
                 String category = e.attr("title");
                 category = CATEGORY.convert(category);
-                if (!categoryList.contains(category)){
+                if (!categoryList.contains(category)) {
                     categoryList.add(category);
                 }
             }

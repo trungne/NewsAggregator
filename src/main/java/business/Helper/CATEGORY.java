@@ -1,7 +1,6 @@
 package business.Helper;
 
 import java.util.HashMap;
-import java.util.Locale;
 
 public class CATEGORY {
     public static final String COVID = "Covid";
@@ -26,7 +25,7 @@ public class CATEGORY {
 
     public static final HashMap<String, String> CATEGORIES = new HashMap<>();
 
-    public static final String convert(String category){
+    public static String convert(String category) {
 //        if (category.toLowerCase(Locale.ROOT).equals(""))
         return "";
     }

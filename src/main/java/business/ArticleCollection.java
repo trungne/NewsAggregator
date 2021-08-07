@@ -1,12 +1,21 @@
 package business;
 
-import business.Helper.*;
-import business.News.*;
-import business.NewsSources.*;
+import business.Helper.ArticleListGenerator;
+import business.Helper.GetNewsOutlets;
+import business.News.Article;
+import business.News.Preview;
+import business.NewsSources.NewsOutlet;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
+import static business.Helper.ScrapingConfiguration.MAX_TERMINATION_TIME;
 
 // an interface for presentation layer to access scraped articles
 public class ArticleCollection {
@@ -20,29 +29,18 @@ public class ArticleCollection {
     public static List<Preview> getPreviewsByCategory(String category) {
         // load articles if they haven't been loaded before
         if (articlesByCategories.get(category) == null) {
-            try {
-                loadArticlesByCategory(category);
-
-            } catch (InterruptedException e) {
-                // TODO: display error message when articles cannot be load
-                e.printStackTrace();
-                return new ArrayList<>();
-            }
-
+            loadArticlesByCategory(category);
         }
 
         return createPreviewsByCategory(category);
-
-
-
-
     }
-    private static List<Preview> createPreviewsByCategory(String category){
+
+    private static List<Preview> createPreviewsByCategory(String category) {
         // loop through articles in the category and create a list of their previews
         // sort article by published time
         List<Article> articles = articlesByCategories.get(category);
-        if (articles == null){
-            return null;
+        if (articles == null) {
+            return new ArrayList<>();
         }
         return articles
                 .stream()
@@ -53,11 +51,11 @@ public class ArticleCollection {
 
 
     // MULTI THREADING!
-    private static void loadArticlesByCategory(String category) throws InterruptedException{
+    private static void loadArticlesByCategory(String category) {
         List<Article> safeArticleList = Collections.synchronizedList(new ArrayList<>());
         ExecutorService es = Executors.newCachedThreadPool();
 //        CovidInfo.loadInfo();
-        for (NewsOutlet newsOutlet: newsOutlets.values()){
+        for (NewsOutlet newsOutlet : newsOutlets.values()) {
             es.execute(() -> {
                 List<Article> articles = ArticleListGenerator
                         .getArticlesInCategory(newsOutlet, category);
@@ -66,20 +64,18 @@ public class ArticleCollection {
             });
         }
 
-        es.shutdown();
-//        while (!es.isTerminated()) {
-//
-//        }
-        // TODO: if wating time if more than 30s, no articles will be added
-        boolean finished = es.awaitTermination(30, TimeUnit.SECONDS);
-
-        if (finished){
-            articlesByCategories.put(category, safeArticleList);
-            System.out.println("added to articlesByCategories");
+        es.shutdown(); // Disable new tasks from being submitted
+        try {
+            if (!es.awaitTermination(MAX_TERMINATION_TIME, TimeUnit.SECONDS)) {
+                es.shutdownNow(); // Cancel currently executing tasks
+                // Wait a while for tasks to respond to being cancelled
+                if (!es.awaitTermination(MAX_TERMINATION_TIME, TimeUnit.SECONDS))
+                    System.err.println("Pool did not terminate");
+            }
+        } catch (InterruptedException e) {
+            es.shutdownNow();
         }
-        else{
-            System.out.println("not added to articlesByCategories");
-        }
+        articlesByCategories.put(category, safeArticleList);
     }
 }
 

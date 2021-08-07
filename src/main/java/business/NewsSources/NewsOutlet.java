@@ -1,15 +1,17 @@
 package business.NewsSources;
 
-import business.Helper.CATEGORY;
-import business.Sanitizer.*;
-import org.jsoup.nodes.*;
+import business.Sanitizer.HtmlSanitizer;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
-import static business.Helper.Scraper.*;
+import static business.Helper.Scraper.createCleanImgTag;
+import static business.Helper.Scraper.scrapeFirstElementByClass;
 
 public abstract class NewsOutlet {
     protected final String name;
@@ -33,50 +35,49 @@ public abstract class NewsOutlet {
     // by default, scrape the first element that matches provided css
     public Element getTitle(Document doc) {
         Element title = scrapeFirstElementByClass(doc, cssConfiguration.title);
-        if(title != null) title = sanitizer.sanitizeTitle(title);
+        if (title != null) title = sanitizer.sanitizeTitle(title);
         return title;
     }
 
     // by default, scrape the first element that matches provided css
     public Element getDescription(Document doc) {
         Element desp = scrapeFirstElementByClass(doc, cssConfiguration.description);
-        if(desp != null) desp = sanitizer.sanitizeDescription(desp);
+        if (desp != null) desp = sanitizer.sanitizeDescription(desp);
         return desp;
     }
 
     // by default, scrape the first element that matches provided css
     public Element getMainContent(Document doc) {
         Element content = scrapeFirstElementByClass(doc, cssConfiguration.mainContent);
-        if(content != null) content = sanitizer.sanitizeMainContent(content);
+        if (content != null) content = sanitizer.sanitizeMainContent(content);
         return content;
     }
 
     // by default, set the first img as the thumbnail
-    public Element getThumbnail(Document doc){
-        try{
+    public Element getThumbnail(Document doc) {
+        try {
             Element elementContainsImgs = scrapeFirstElementByClass(doc, cssConfiguration.picture);
             Element thumbnail = elementContainsImgs.getElementsByTag("img").first();
             thumbnail = createCleanImgTag(thumbnail);
             thumbnail = sanitizer.sanitizeThumbNail(thumbnail);
             return thumbnail;
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             return getDefaultThumbnail();
         }
     }
 
-    protected Element getDefaultThumbnail(){
+    protected Element getDefaultThumbnail() {
         Element thumbnail = new Element("img");
         thumbnail.attr("src", defaultThumbnail);
         thumbnail = sanitizer.sanitizeThumbNail(thumbnail);
         return thumbnail;
     }
 
-    public Set<URL> getLinksFromCategory(String categoryName){
-        if (categories.containsKey(categoryName)){
+    public Set<URL> getLinksFromCategory(String categoryName) {
+        if (categories.containsKey(categoryName)) {
             Category category = categories.get(categoryName);
             return category.getLinks();
-        }
-        else {
+        } else {
             return null;
         }
 
@@ -87,10 +88,13 @@ public abstract class NewsOutlet {
     // one article can have multiple categories. The first category will be the parent category
     public abstract List<String> getCategoryNames(Document doc);
 
-    public String toString(){
+    public String toString() {
         return this.name;
     }
-    public String getName() {return this.name;}
+
+    public String getName() {
+        return this.name;
+    }
 }
 
 class CssConfiguration {

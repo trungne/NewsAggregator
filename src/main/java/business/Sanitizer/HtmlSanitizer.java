@@ -4,29 +4,29 @@ import business.Helper.CSS;
 import org.jsoup.nodes.Element;
 
 public abstract class HtmlSanitizer {
-    public Element sanitizeTitle(Element e){
+    public Element sanitizeTitle(Element e) {
         e.clearAttributes();
         e.addClass(CSS.TITLE);
         return e;
     }
 
     // TODO: make this abstract later!
-    public Element sanitizeDescription(Element e){
+    public Element sanitizeDescription(Element e) {
         return e;
     }
 
 
     // TODO: make this abstract later!
-    public Element sanitizeMainContent(Element e){
+    public Element sanitizeMainContent(Element e) {
         return e;
     }
 
     // TODO: make this abstract later!
-    public Element sanitizeThumbNail(Element e){
+    public Element sanitizeThumbNail(Element e) {
         return e.addClass(CSS.THUMBNAIL);
     }
 
-    public Element sanitize(Element e, String type){
+    public Element sanitize(Element e, String type) {
         Element target = e;
 
         switch (type) {
@@ -49,6 +49,7 @@ public abstract class HtmlSanitizer {
 
         return target;
     }
+
     protected abstract Element sanitizeNonTitleTag(Element e, String tag);
 
 }

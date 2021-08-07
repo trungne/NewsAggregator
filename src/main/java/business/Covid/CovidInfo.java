@@ -31,8 +31,8 @@ public class CovidInfo {
     // blockquote to contain all covidinfo
     static Element blockquote = new Element("blockquote");
 
-    public static String getCovidInfo(){
-        if (StringUtils.isEmpty(blockquote.text())){
+    public static String getCovidInfo() {
+        if (StringUtils.isEmpty(blockquote.text())) {
             loadInfo();
         }
 
@@ -40,25 +40,24 @@ public class CovidInfo {
     }
 
 
-
-    public static void loadInfo(){
-        if (driver == null){
+    public static void loadInfo() {
+        if (driver == null) {
             activateWebDriver();
         }
 
-        String infectedToday = getStats("item-nhiem","today-item");
-        String infectedTotal = getStats("item-nhiem","number-item");
+        String infectedToday = getStats("item-nhiem", "today-item");
+        String infectedTotal = getStats("item-nhiem", "number-item");
         infected = new CovidCategory("Infected*", "covid-infected", infectedToday, infectedTotal);
 
-        String recoveredToday = getStats("item-khoi","today-item");
-        String recoveredTotal = getStats("item-khoi","number-item");
+        String recoveredToday = getStats("item-khoi", "today-item");
+        String recoveredTotal = getStats("item-khoi", "number-item");
         recovered = new CovidCategory("Recovered", "covid-recovered", recoveredToday, recoveredTotal);
 
-        String deathToday = getStats("item-tuvong","today-item");
-        String deathTotal = getStats("item-tuvong","number-item");
+        String deathToday = getStats("item-tuvong", "today-item");
+        String deathTotal = getStats("item-tuvong", "number-item");
         death = new CovidCategory("Death", "covid-death", deathToday, deathTotal);
 
-        String beingTreatedToday = getStats("item-dangdieutri","today-item");
+        String beingTreatedToday = getStats("item-dangdieutri", "today-item");
         String beingTreatedTotal = getStats("item-dangdieutri", "number-item");
         beingTreated = new CovidCategory("Being treated", "covid-being-treated", beingTreatedToday, beingTreatedTotal);
 
@@ -70,7 +69,7 @@ public class CovidInfo {
         deactivateWebDriver();
     }
 
-    private static void createHtmlTag(){
+    private static void createHtmlTag() {
         Element containerForCategories = new Element("div");
         containerForCategories.attr("style", "display: flex; justify-content: space-around;");
         containerForCategories.addClass("covid-info");
@@ -83,7 +82,7 @@ public class CovidInfo {
         blockquote.appendChild(containerForCategories);
         blockquote.append("<p>* Số ca nhiễm bao gồm cả trong nước và nhập cảnh</p>");
 
-        if(!StringUtils.isEmpty(caseByDayGraph) || !StringUtils.isEmpty(caseTotalGraph)){
+        if (!StringUtils.isEmpty(caseByDayGraph) || !StringUtils.isEmpty(caseTotalGraph)) {
             Element graphs = new Element("div");
             graphs.addClass("covid-graphs");
             graphs.append(caseByDayGraph);
@@ -94,41 +93,41 @@ public class CovidInfo {
         }
     }
 
-    private static String getStats(String parentClass, String childCss){
-        try{
+    private static String getStats(String parentClass, String childCss) {
+        try {
             return driver
                     .findElement(By.className(parentClass))
                     .findElement(By.className(childCss))
                     .getText();
-        } catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             return "";
         }
     }
 
-    private static String loadGraphByID(String graphID){
-        try{
+    private static String loadGraphByID(String graphID) {
+        try {
             return driver
                     .findElement(By.id(graphID))
                     .getAttribute("outerHTML");
-        } catch (NoSuchSessionException e){
+        } catch (NoSuchSessionException e) {
             return "";
         }
     }
 
 
-    private static void activateWebDriver(){
-        if (driver == null){
+    private static void activateWebDriver() {
+        if (driver == null) {
             WebDriverManager.chromedriver().setup();
 //            WebDriverManager.chromedriver().browserVersion(stableChromeVersion).setup();
             ChromeOptions options = new ChromeOptions();
-            options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200","--ignore-certificate-errors");
+            options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200", "--ignore-certificate-errors");
             driver = new ChromeDriver(options);
             driver.get(source);
         }
     }
 
-    private static void deactivateWebDriver(){
-        if (driver != null){
+    private static void deactivateWebDriver() {
+        if (driver != null) {
             driver.quit();
         }
     }
@@ -141,14 +140,14 @@ final class CovidCategory {
     private final String todayCount;
     private final String totalCount;
 
-    public CovidCategory(String description, String cssClass, String todayCount, String totalCount){
+    public CovidCategory(String description, String cssClass, String todayCount, String totalCount) {
         this.description = description;
         this.cssClass = cssClass;
         this.todayCount = todayCount;
         this.totalCount = totalCount;
     }
 
-    public Element getDiv(){
+    public Element getDiv() {
         Element container = new Element("div");
         container.id(cssClass);
         container.addClass("covid-count");

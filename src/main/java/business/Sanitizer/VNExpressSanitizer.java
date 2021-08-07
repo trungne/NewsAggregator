@@ -80,6 +80,7 @@ public class VNExpressSanitizer extends HtmlSanitizer {
 
 final class VNExpressFilter implements NodeFilter {
     final Element root;
+
     public VNExpressFilter(Element newRoot) {
         this.root = newRoot;
     }
@@ -177,20 +178,19 @@ final class VNExpressFilter implements NodeFilter {
         return null;
     }
 
-    private static Element filterRelevantNewsTag(Element tag){
+    private static Element filterRelevantNewsTag(Element tag) {
         Safelist safelist = Safelist.basic();
         safelist.removeTags("span");
         String cleanHtml = Jsoup.clean(tag.html(), safelist);
         Element relevantNews = new Element("ul");
 
-        if(!StringUtils.isEmpty(cleanHtml)){
+        if (!StringUtils.isEmpty(cleanHtml)) {
             return relevantNews.html(cleanHtml);
-        }
-        else return null;
+        } else return null;
     }
 
     // create a figure tag with img AND figcaption tagS
-    private static Element filterFigureTag(Element tag){
+    private static Element filterFigureTag(Element tag) {
         Safelist safelist = Safelist.basicWithImages();
         safelist.addTags("figcaption");
         Element figure = new Element("figure");
@@ -201,7 +201,7 @@ final class VNExpressFilter implements NodeFilter {
         return figure.html(cleanHtml);
     }
 
-    private static Element filterVideoTag(Element tag){
+    private static Element filterVideoTag(Element tag) {
         URL src;
         try {
             src = new URL(tag.attr("src"));
@@ -227,9 +227,9 @@ final class VNExpressFilter implements NodeFilter {
         // change extension to mp4
         file = file.replaceFirst(Pattern.quote("/vne/master.m3u8"), Matcher.quoteReplacement(".mp4"));
 
-        try{
+        try {
             src = new URL(protocol, host, file);
-        } catch (MalformedURLException e){
+        } catch (MalformedURLException e) {
             return null;
         }
 
@@ -243,7 +243,6 @@ final class VNExpressFilter implements NodeFilter {
         return newVideo;
     }
 }
-
 
 
 //                for (Element child: e.children()){

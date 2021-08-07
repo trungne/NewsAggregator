@@ -22,7 +22,6 @@ public class CSS {
     public static final String AUTHOR = "author";
 
 
-
     // CSS for previews
     public static final String PREVIEW = "preview";
     public static final String THUMBNAIL_HEADER = "thumb-header";

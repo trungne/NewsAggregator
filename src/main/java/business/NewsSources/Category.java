@@ -3,7 +3,6 @@ package business.NewsSources;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.Set;
 
 import static business.Helper.Scraper.scrapeLinksByClass;
@@ -14,7 +13,7 @@ public abstract class Category {
     String url;
     String cssForScraping;
 
-    protected Category(String name, String url, String cssForScraping){
+    protected Category(String name, String url, String cssForScraping) {
         this.name = name;
         this.url = url;
         this.cssForScraping = cssForScraping;
@@ -24,28 +23,28 @@ public abstract class Category {
     }
 
     // composite methods
-    public void add(Category category){
+    public void add(Category category) {
         throw new UnsupportedOperationException();
     }
 
-    public void addSub(String url){
+    public void addSub(String url) {
         throw new UnsupportedOperationException();
     }
 
-    public void remove(Category category){
+    public void remove(Category category) {
         throw new UnsupportedOperationException();
     }
 
     // operation methods used by both composite and child class
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
-    public Set<URL> getLinks(){
-        try{
+    public Set<URL> getLinks() {
+        try {
             URL link = new URL(this.url);
             return scrapeLinksByClass(link, cssForScraping);
-        } catch (MalformedURLException e){
+        } catch (MalformedURLException e) {
             return null;
         }
     }
