@@ -10,8 +10,10 @@ import java.net.*;
 
 import java.util.*;
 
+import static business.Helper.ScrapingConfiguration.MAX_LINKS_SCRAPED_IN_A_PAGE;
+
 public class Scraper {
-    static final int MAX_LINKS_SCRAPED = 5;
+
     public static Set<URL> scrapeLinksByClass(URL baseUrl, String cssClass) {
         Document doc;
         Set<URL> links = new HashSet<>();
@@ -20,14 +22,14 @@ public class Scraper {
             Elements titleTags = doc.getElementsByClass(cssClass);
             // target all title tags and pull out links for articles
             for (Element tag : titleTags) {
-                if (links.size() > MAX_LINKS_SCRAPED) return links;
+                if (links.size() > MAX_LINKS_SCRAPED_IN_A_PAGE) return links;
                 // link is stored in href attribute of <a> tag
                 URL link = new URL(baseUrl, tag.getElementsByTag("a").attr("href"));
                 links.add(link);
             }
         } catch (IOException e) {
             // TODO: disable this in production
-            System.out.println("EORRORORORO");
+            System.out.println(baseUrl);
             e.printStackTrace();
         }
         return links;

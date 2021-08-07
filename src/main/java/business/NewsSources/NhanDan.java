@@ -113,7 +113,7 @@ public class NhanDan extends NewsOutlet{
                 new NhanDanSanitizer());
     }
 
-    private String thumbnailCss = "";
+    private final String thumbnailCss;
     public NhanDan(String name,
                    String defaultThumbnail,
                    HashMap<String, Category> categories,
@@ -225,6 +225,6 @@ public class NhanDan extends NewsOutlet{
                 builder.append(ch);
             }
         }
-        return "";
+        return builder.toString();
     }
 }

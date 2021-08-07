@@ -7,49 +7,59 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import static business.Helper.ScrapingConfiguration.MAX_WAIT_TIME_WHEN_ACCESS_URL;
 
 public class ArticleListGenerator {
-    private static final int MAX_WAIT_TIME = 5000; // ms
-
     public static List<Article> getArticlesInCategory(NewsOutlet newsOutlet, String category){
-        return extractArticlesFromCategory(newsOutlet, category);
+        Set<URL> articleUrls = newsOutlet.getLinksFromCategory(category);
+        return extractArticlesFromLinks(newsOutlet, category, articleUrls);
     }
 
-    private static List<Article> extractArticlesFromCategory(NewsOutlet newsOutlet, String category){
-        ArrayList<Article> articles = new ArrayList<>();
-        Set<URL> articleUrls = newsOutlet.getLinksFromCategory(category);
-        System.out.println(articleUrls);
+    private static List<Article> extractArticlesFromLinks(NewsOutlet newsOutlet, String category, Collection<URL> urls){
+        List<Article> articles = Collections.synchronizedList(new ArrayList<>());
         // TODO: MULTI threading here
-        for (URL url: articleUrls){
-            Document articleDoc;
-            try {
-                articleDoc = Jsoup.connect(url.toString()).timeout(MAX_WAIT_TIME).get();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-                continue;
-            }
-
-            Article article = new Article(url, newsOutlet, category);
-            boolean ok = addContentToArticle(articleDoc, newsOutlet, article);
-            if (ok){
-                articles.add(article);
-            }
+        ExecutorService es = Executors.newCachedThreadPool();
+        for (URL url: urls){
+            es.execute(() ->{
+                try {
+                    Document articleDoc = Jsoup
+                            .connect(url.toString())
+                            .timeout(MAX_WAIT_TIME_WHEN_ACCESS_URL)
+                            .get();
+                    Article article = new Article(url, newsOutlet, category);
+                    boolean ok = extractContentFromDocument(articleDoc, newsOutlet, article);
+                    if (ok){
+                        articles.add(article);
+                    }
+                } catch (SocketTimeoutException e){
+                    System.out.println("Cannot scrape: " + url);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            });
         }
+        es.shutdown();
+        while (!es.isTerminated()) {}
 
         return articles;
     }
-
-
     private static Article createArticle(URL url, String name){
         NewsOutlet newsOutlet = GetNewsOutlets.newsOutlets.get(name);
         if (newsOutlet == null) return null;
 
         Document articleDoc;
         try {
-            articleDoc = Jsoup.connect(url.toString()).timeout(MAX_WAIT_TIME).get();
+            articleDoc = Jsoup
+                    .connect(url.toString())
+                    .timeout(MAX_WAIT_TIME_WHEN_ACCESS_URL)
+                    .get();
         } catch (IOException ioException) {
             ioException.printStackTrace();
             return null;
@@ -58,7 +68,7 @@ public class ArticleListGenerator {
         List<String> category = newsOutlet.getCategoryNames(articleDoc);
         Article article = new Article(url, newsOutlet, category);
 
-        boolean isAddedSuccessfully = addContentToArticle(articleDoc, newsOutlet, article);
+        boolean isAddedSuccessfully = extractContentFromDocument(articleDoc, newsOutlet, article);
 
         if (isAddedSuccessfully)
             return article;
@@ -66,7 +76,7 @@ public class ArticleListGenerator {
         return null;
     }
 
-    private static boolean addContentToArticle(Document articleDoc, NewsOutlet newsOutlet, Article article){
+    private static boolean extractContentFromDocument(Document articleDoc, NewsOutlet newsOutlet, Article article){
         Element titleTag = newsOutlet.getTitle(articleDoc);
         Element descriptionTag = newsOutlet.getDescription(articleDoc);
         Element mainContentTag = newsOutlet.getMainContent(articleDoc);
@@ -94,8 +104,6 @@ public class ArticleListGenerator {
             article.addCategory(categories);
         }
         catch (Exception e){
-            // TODO write to err log
-            System.out.println(e.toString());
             return false;
         }
 

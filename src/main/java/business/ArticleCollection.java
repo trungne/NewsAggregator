@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 // an interface for presentation layer to access scraped articles
 public class ArticleCollection {
     // map articles with their category
-    public static final HashMap<String, Collection<Article>> articlesByCategories = new HashMap<>();
+    public static final HashMap<String, List<Article>> articlesByCategories = new HashMap<>();
 
     // get all news outlet css info
     public static final HashMap<String, NewsOutlet> newsOutlets = GetNewsOutlets.newsOutlets;
@@ -22,20 +22,29 @@ public class ArticleCollection {
         if (articlesByCategories.get(category) == null) {
             try {
                 loadArticlesByCategory(category);
+
             } catch (InterruptedException e) {
                 // TODO: display error message when articles cannot be load
                 e.printStackTrace();
                 return new ArrayList<>();
             }
+
         }
+
         return createPreviewsByCategory(category);
+
+
 
 
     }
     private static List<Preview> createPreviewsByCategory(String category){
         // loop through articles in the category and create a list of their previews
         // sort article by published time
-        return articlesByCategories.get(category)
+        List<Article> articles = articlesByCategories.get(category);
+        if (articles == null){
+            return null;
+        }
+        return articles
                 .stream()
                 .map(Article::getPreview)
                 .sorted()
@@ -52,18 +61,32 @@ public class ArticleCollection {
             es.execute(() -> {
                 List<Article> articles = ArticleListGenerator
                         .getArticlesInCategory(newsOutlet, category);
+
                 safeArticleList.addAll(articles);
             });
         }
 
         es.shutdown();
+//        while (!es.isTerminated()) {
+//
+//        }
+        // TODO: if wating time if more than 30s, no articles will be added
         boolean finished = es.awaitTermination(30, TimeUnit.SECONDS);
 
+        if (finished){
+            articlesByCategories.put(category, safeArticleList);
+            System.out.println("added to articlesByCategories");
+        }
+        else{
+            System.out.println("not added to articlesByCategories");
+        }
+    }
+}
 
-        /*
-         * Special add-on info for Covid news
-         * Delete this when Covid is not a thing anymore
-         */
+/*
+ * Special add-on info for Covid news
+ * Delete this when Covid is not a thing anymore
+ */
 //        if (category.equals(CATEGORY.COVID)){
 //            for (Article article: articlesByCategories.get(category)){
 //                try{
@@ -74,10 +97,3 @@ public class ArticleCollection {
 //                }
 //            }
 //        }
-
-
-        if (finished){
-            articlesByCategories.put(category, safeArticleList);
-        }
-    }
-}
