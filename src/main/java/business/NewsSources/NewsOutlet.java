@@ -85,15 +85,21 @@ public abstract class NewsOutlet {
         }
         return null;
     }
+    // find category by name
+    private Category find(String name){
 
-    public Set<URL> getLinksFromCategory(String categoryName) {
-        Set<URL> urls = new HashSet<>();
-        if (categories.containsKey(categoryName)) {
-            Category category = categories.get(categoryName);
-            urls = category.getLinks();
+        Category matched;
+        for (Category category: categories.values()){
+            matched = category.find(name);
+            if (matched != null) return matched;
         }
-        return urls;
-
+        return null;
+    }
+    public Set<URL> getLinksFromCategory(String categoryName) {
+        Category category = find(categoryName);
+        if(category == null)
+            return new HashSet<>();
+        return category.getLinks();
     }
 
     public abstract LocalDateTime getPublishedTime(Document doc);

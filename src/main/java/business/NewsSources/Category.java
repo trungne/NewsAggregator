@@ -40,8 +40,19 @@ public class Category {
         add("", url);
     }
 
-    public void find(String name) {
-        throw new UnsupportedOperationException();
+    public Category find(String name) {
+        if (this.name.equals(name)){
+            return this;
+        }
+
+        for (Category category: subCategories){
+            Category matched = category.find(name);
+            if (matched != null){
+                return matched;
+            }
+        }
+
+        return null;
     }
 
     // operation methods used by both composite and child class
@@ -51,19 +62,13 @@ public class Category {
 
     public Set<URL> getLinks() {
         Set<URL> urls = new HashSet<>();
-        // base case
-        if (subCategories.isEmpty()){
-            try {
-                URL link = new URL(this.url);
-                return scrapeLinksByClass(link, cssForScraping);
-            } catch (MalformedURLException e) {
-                return new HashSet<>();
-            }
-        }
-        else{
-            for (Category category: subCategories){
-                urls.addAll(category.getLinks());
-            }
+        try {
+            URL link = new URL(this.url);
+            urls = scrapeLinksByClass(link, cssForScraping);
+        } catch (MalformedURLException ignored){}
+
+        for (Category category: subCategories){
+            urls.addAll(category.getLinks());
         }
 
         return urls;
