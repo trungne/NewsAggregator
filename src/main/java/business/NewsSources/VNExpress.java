@@ -16,10 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class VNExpress extends NewsOutlet {
-    private static final Category COVID = new SubCategory(CATEGORY.COVID, "https://vnexpress.net/covid-19/tin-tuc", CSS.VNEXPRESS_TITLE_LINK);
-    private static final Category POLITICS = new SubCategory(CATEGORY.POLITICS, "https://vnexpress.net/thoi-su/chinh-tri", CSS.VNEXPRESS_TITLE_LINK);
-    private static final Category BUSINESS = new MainCategory(CATEGORY.BUSINESS, "https://vnexpress.net/kinh-doanh", CSS.VNEXPRESS_TITLE_LINK);
-
+    private static final Category COVID = new Category(CATEGORY.COVID, "https://vnexpress.net/covid-19/tin-tuc", CSS.VNEXPRESS_TITLE_LINK);
+    private static final Category POLITICS = new Category(CATEGORY.POLITICS, "https://vnexpress.net/thoi-su/chinh-tri", CSS.VNEXPRESS_TITLE_LINK);
+    private static final Category BUSINESS = new Category(CATEGORY.BUSINESS, "https://vnexpress.net/kinh-doanh", CSS.VNEXPRESS_TITLE_LINK);
     static {
         BUSINESS.addSub("https://vnexpress.net/kinh-doanh/quoc-te");
         BUSINESS.addSub("https://vnexpress.net/kinh-doanh/doanh-nghiep");
@@ -33,8 +32,7 @@ public class VNExpress extends NewsOutlet {
         BUSINESS.addSub("https://vnexpress.net/kinh-doanh/e-commerce-40");
     }
 
-    private static final Category TECHNOLOGY = new MainCategory(CATEGORY.TECHNOLOGY, "https://vnexpress.net/khoa-hoc", CSS.VNEXPRESS_TITLE_LINK);
-
+    private static final Category TECHNOLOGY = new Category(CATEGORY.TECHNOLOGY, "https://vnexpress.net/khoa-hoc", CSS.VNEXPRESS_TITLE_LINK);
     static {
         TECHNOLOGY.addSub("https://vnexpress.net/khoa-hoc/tin-tuc");
         TECHNOLOGY.addSub("https://vnexpress.net/khoa-hoc/phat-minh");
@@ -44,7 +42,7 @@ public class VNExpress extends NewsOutlet {
         TECHNOLOGY.addSub("https://vnexpress.net/khoa-hoc/khoa-hoc-trong-nuoc");
     }
 
-    private static final Category HEALTH = new MainCategory(CATEGORY.HEALTH, "https://vnexpress.net/suc-khoe", CSS.VNEXPRESS_TITLE_LINK);
+    private static final Category HEALTH = new Category(CATEGORY.HEALTH, "https://vnexpress.net/suc-khoe", CSS.VNEXPRESS_TITLE_LINK);
 
     static {
         HEALTH.addSub("https://vnexpress.net/suc-khoe/tin-tuc");
@@ -56,8 +54,7 @@ public class VNExpress extends NewsOutlet {
         HEALTH.addSub("https://vnexpress.net/suc-khoe/vaccine");
     }
 
-    private static final Category SPORTS = new MainCategory(CATEGORY.SPORTS, "https://vnexpress.net/the-thao", CSS.VNEXPRESS_TITLE_LINK);
-
+    private static final Category SPORTS = new Category(CATEGORY.SPORTS, "https://vnexpress.net/the-thao", CSS.VNEXPRESS_TITLE_LINK);
     static {
         SPORTS.addSub("https://vnexpress.net/the-thao/video");
         SPORTS.addSub("https://vnexpress.net/bong-da");
@@ -65,8 +62,7 @@ public class VNExpress extends NewsOutlet {
         SPORTS.addSub("https://vnexpress.net/the-thao/cac-mon-khac");
     }
 
-    private static final Category ENTERTAINMENT = new MainCategory(CATEGORY.ENTERTAINMENT, "https://vnexpress.net/giai-tri", CSS.VNEXPRESS_TITLE_LINK);
-
+    private static final Category ENTERTAINMENT = new Category(CATEGORY.ENTERTAINMENT, "https://vnexpress.net/giai-tri", CSS.VNEXPRESS_TITLE_LINK);
     static {
         ENTERTAINMENT.addSub("https://vnexpress.net/giai-tri/gioi-sao");
         ENTERTAINMENT.addSub("https://vnexpress.net/giai-tri/phim");
@@ -77,8 +73,7 @@ public class VNExpress extends NewsOutlet {
         ENTERTAINMENT.addSub("https://vnexpress.net/giai-tri/san-khau-my-thuat");
     }
 
-    private static final Category WORLD = new MainCategory(CATEGORY.WORLD, "https://vnexpress.net/the-gioi", CSS.VNEXPRESS_TITLE_LINK);
-
+    private static final Category WORLD = new Category(CATEGORY.WORLD, "https://vnexpress.net/the-gioi", CSS.VNEXPRESS_TITLE_LINK);
     static {
         WORLD.addSub("https://vnexpress.net/the-gioi/tu-lieu");
         WORLD.addSub("https://vnexpress.net/the-gioi/phan-tich");
@@ -87,8 +82,7 @@ public class VNExpress extends NewsOutlet {
         WORLD.addSub("https://vnexpress.net/the-gioi/quan-su");
     }
 
-    private static final Category OTHERS = new MainCategory(CATEGORY.OTHERS, "", CSS.VNEXPRESS_TITLE_LINK);
-
+    private static final Category OTHERS = new Category(CATEGORY.OTHERS, "", CSS.VNEXPRESS_TITLE_LINK);
     static {
         OTHERS.addSub("https://vnexpress.net/giao-duc");
         OTHERS.addSub("https://vnexpress.net/thoi-su");

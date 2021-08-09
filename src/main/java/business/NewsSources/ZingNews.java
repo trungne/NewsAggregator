@@ -18,10 +18,9 @@ import java.util.List;
 
 public class ZingNews extends NewsOutlet {
     // main category
-    private static final Category COVID = new SubCategory(CATEGORY.COVID, "https://zingnews.vn/tieu-diem/covid-19.html", CSS.ZING_TITLE_LINK);
-    private static final Category POLITICS = new SubCategory(CATEGORY.POLITICS, "https://zingnews.vn/chinh-tri.html", CSS.ZING_TITLE_LINK);
-    private static final Category BUSINESS = new MainCategory(CATEGORY.BUSINESS, "https://zingnews.vn/kinh-doanh-tai-chinh.html", CSS.ZING_TITLE_LINK);
-
+    private static final Category COVID = new Category(CATEGORY.COVID, "https://zingnews.vn/tieu-diem/covid-19.html", CSS.ZING_TITLE_LINK);
+    private static final Category POLITICS = new Category(CATEGORY.POLITICS, "https://zingnews.vn/chinh-tri.html", CSS.ZING_TITLE_LINK);
+    private static final Category BUSINESS = new Category(CATEGORY.BUSINESS, "https://zingnews.vn/kinh-doanh-tai-chinh.html", CSS.ZING_TITLE_LINK);
     static {
         BUSINESS.addSub("https://zingnews.vn/bat-dong-san.html");
         BUSINESS.addSub("https://zingnews.vn/tieu-dung.html");
@@ -30,8 +29,7 @@ public class ZingNews extends NewsOutlet {
         BUSINESS.addSub("https://zingnews.vn/ttdn.html");
     }
 
-    private static final Category TECHNOLOGY = new MainCategory(CATEGORY.TECHNOLOGY, "https://zingnews.vn/cong-nghe.html", CSS.ZING_TITLE_LINK);
-
+    private static final Category TECHNOLOGY = new Category(CATEGORY.TECHNOLOGY, "https://zingnews.vn/cong-nghe.html", CSS.ZING_TITLE_LINK);
     static {
         TECHNOLOGY.addSub("https://zingnews.vn/mobile.html");
         TECHNOLOGY.addSub("https://zingnews.vn/gadget.html");
@@ -39,8 +37,7 @@ public class ZingNews extends NewsOutlet {
         TECHNOLOGY.addSub("https://zingnews.vn/esports.html");
     }
 
-    private static final Category HEALTH = new MainCategory(CATEGORY.HEALTH, "https://zingnews.vn/suc-khoe.html", CSS.ZING_TITLE_LINK);
-
+    private static final Category HEALTH = new Category(CATEGORY.HEALTH, "https://zingnews.vn/suc-khoe.html", CSS.ZING_TITLE_LINK);
     static {
         HEALTH.addSub("https://zingnews.vn/khoe-dep.html");
         HEALTH.addSub("https://zingnews.vn/dinh-duong.html");
@@ -48,8 +45,7 @@ public class ZingNews extends NewsOutlet {
         HEALTH.addSub("https://zingnews.vn/benh-thuong-gap.html");
     }
 
-    private static final Category SPORTS = new MainCategory(CATEGORY.SPORTS, "https://zingnews.vn/the-thao.html", CSS.ZING_TITLE_LINK);
-
+    private static final Category SPORTS = new Category(CATEGORY.SPORTS, "https://zingnews.vn/the-thao.html", CSS.ZING_TITLE_LINK);
     static {
         SPORTS.addSub("https://zingnews.vn/bong-da-viet-nam.html");
         SPORTS.addSub("https://zingnews.vn/bong-da-anh.html");
@@ -57,8 +53,7 @@ public class ZingNews extends NewsOutlet {
         SPORTS.addSub("https://zingnews.vn/esports-the-thao.html");
     }
 
-    private static final Category ENTERTAINMENT = new MainCategory(CATEGORY.ENTERTAINMENT, "https://zingnews.vn/giai-tri.html", CSS.ZING_TITLE_LINK);
-
+    private static final Category ENTERTAINMENT = new Category(CATEGORY.ENTERTAINMENT, "https://zingnews.vn/giai-tri.html", CSS.ZING_TITLE_LINK);
     static {
         ENTERTAINMENT.addSub("https://zingnews.vn/sao-viet.html");
         ENTERTAINMENT.addSub("https://zingnews.vn/am-nhac.html");
@@ -66,8 +61,7 @@ public class ZingNews extends NewsOutlet {
         ENTERTAINMENT.addSub("https://zingnews.vn/thoi-trang.html");
     }
 
-    private static final Category WORLD = new MainCategory(CATEGORY.WORLD, "https://zingnews.vn/the-gioi.html", CSS.ZING_TITLE_LINK);
-
+    private static final Category WORLD = new Category(CATEGORY.WORLD, "https://zingnews.vn/the-gioi.html", CSS.ZING_TITLE_LINK);
     static {
         WORLD.addSub("https://zingnews.vn/quan-su-the-gioi.html");
         WORLD.addSub("https://zingnews.vn/tu-lieu-the-gioi.html");
@@ -77,8 +71,7 @@ public class ZingNews extends NewsOutlet {
     }
 
     // others
-    private static final Category OTHERS = new MainCategory(CATEGORY.OTHERS, "", CSS.ZING_TITLE_LINK);
-
+    private static final Category OTHERS = new Category(CATEGORY.OTHERS, "", CSS.ZING_TITLE_LINK);
     static {
         OTHERS.addSub("https://zingnews.vn/thoi-su.html");
         OTHERS.addSub("https://zingnews.vn/phap-luat.html");

@@ -20,7 +20,6 @@ public abstract class NewsOutlet {
     protected final HashMap<String, Category> categories;
     protected final CssConfiguration cssConfiguration;
     protected final HtmlSanitizer sanitizer;
-
     public NewsOutlet(String name,
                       String defaultThumbnail,
                       HashMap<String, Category> categories,
@@ -72,6 +71,19 @@ public abstract class NewsOutlet {
         thumbnail.attr("src", defaultThumbnail);
         thumbnail = sanitizer.sanitizeThumbNail(thumbnail);
         return thumbnail;
+    }
+
+    protected Category getCategory(String categoryName){
+        if (categories.containsKey(categoryName)){
+            return categories.get(categoryName);
+        }
+
+        for (Category category: categories.values()){
+            if(category.getName().equals(categoryName)){
+                return category;
+            }
+        }
+        return null;
     }
 
     public Set<URL> getLinksFromCategory(String categoryName) {

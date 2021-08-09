@@ -18,9 +18,8 @@ import static business.Helper.Scraper.createCleanImgTag;
 import static business.Helper.Scraper.scrapeFirstElementByClass;
 
 public class NhanDan extends NewsOutlet {
-    private static final Category COVID = new SubCategory(CATEGORY.COVID, "https://nhandan.vn/tieu-diem", CSS.NHANDAN_TITLE_LINK);
-    private static final Category POLITICS = new MainCategory(CATEGORY.POLITICS, "https://nhandan.vn/chinhtri", CSS.NHANDAN_TITLE_LINK);
-
+    private static final Category COVID = new Category(CATEGORY.COVID, "https://nhandan.vn/tieu-diem", CSS.NHANDAN_TITLE_LINK);
+    private static final Category POLITICS = new Category(CATEGORY.POLITICS, "https://nhandan.vn/chinhtri", CSS.NHANDAN_TITLE_LINK);
     static {
         POLITICS.addSub("https://nhandan.vn/tin-tuc-su-kien");
         POLITICS.addSub("https://nhandan.vn/xa-luan");
@@ -31,8 +30,7 @@ public class NhanDan extends NewsOutlet {
         POLITICS.addSub("https://nhandan.vn/dan-toc-mien-nui");
     }
 
-    private static final Category BUSINESS = new MainCategory(CATEGORY.BUSINESS, "https://nhandan.vn/kinhte", CSS.NHANDAN_TITLE_LINK);
-
+    private static final Category BUSINESS = new Category(CATEGORY.BUSINESS, "https://nhandan.vn/kinhte", CSS.NHANDAN_TITLE_LINK);
     static {
         BUSINESS.addSub("https://nhandan.vn/tin-tuc-kinh-te");
         BUSINESS.addSub("https://nhandan.vn/nhan-dinh");
@@ -41,24 +39,21 @@ public class NhanDan extends NewsOutlet {
         BUSINESS.addSub("https://nhandan.vn/hanggiahangthat");
     }
 
-    private static final Category TECHNOLOGY = new MainCategory(CATEGORY.TECHNOLOGY, "https://nhandan.vn/khoahoc-congnghe", CSS.NHANDAN_TITLE_LINK);
-
+    private static final Category TECHNOLOGY = new Category(CATEGORY.TECHNOLOGY, "https://nhandan.vn/khoahoc-congnghe", CSS.NHANDAN_TITLE_LINK);
     static {
         TECHNOLOGY.addSub("https://nhandan.vn/khoa-hoc");
         TECHNOLOGY.addSub("https://nhandan.vn/vi-moi-truong-xanh");
         TECHNOLOGY.addSub("https://nhandan.vn/thong-tin-so");
     }
 
-    private static final Category HEALTH = new MainCategory(CATEGORY.HEALTH, "https://nhandan.vn/y-te", CSS.NHANDAN_TITLE_LINK);
-
+    private static final Category HEALTH = new Category(CATEGORY.HEALTH, "https://nhandan.vn/y-te", CSS.NHANDAN_TITLE_LINK);
     static {
         HEALTH.addSub("https://nhandan.vn/benh-thuong-gap");
         HEALTH.addSub("https://nhandan.vn/goc-tu-van");
         HEALTH.addSub("https://nhandan.vn/tin-tuc-y-te");
     }
 
-    private static final Category SPORTS = new MainCategory(CATEGORY.SPORTS, "https://nhandan.vn/thethao", CSS.NHANDAN_TITLE_LINK);
-
+    private static final Category SPORTS = new Category(CATEGORY.SPORTS, "https://nhandan.vn/thethao", CSS.NHANDAN_TITLE_LINK);
     static {
         SPORTS.addSub("https://nhandan.vn/nhip-song-the-thao");
         SPORTS.addSub("https://nhandan.vn/guong-mat");
@@ -66,8 +61,7 @@ public class NhanDan extends NewsOutlet {
         SPORTS.addSub("https://nhandan.vn/bong-da-quoc-te");
     }
 
-    private static final Category ENTERTAINMENT = new MainCategory(CATEGORY.ENTERTAINMENT, "https://nhandan.vn/vanhoa", CSS.NHANDAN_TITLE_LINK);
-
+    private static final Category ENTERTAINMENT = new Category(CATEGORY.ENTERTAINMENT, "https://nhandan.vn/vanhoa", CSS.NHANDAN_TITLE_LINK);
     static {
         ENTERTAINMENT.addSub("https://nhandan.vn/dong-chay");
         ENTERTAINMENT.addSub("https://nhandan.vn/dien-dan");
@@ -76,8 +70,7 @@ public class NhanDan extends NewsOutlet {
         ENTERTAINMENT.addSub("https://nhandan.vn/chan-dung");
     }
 
-    private static final Category WORLD = new MainCategory(CATEGORY.WORLD, "https://nhandan.vn/thegioi", CSS.NHANDAN_TITLE_LINK);
-
+    private static final Category WORLD = new Category(CATEGORY.WORLD, "https://nhandan.vn/thegioi", CSS.NHANDAN_TITLE_LINK);
     static {
         WORLD.addSub("https://nhandan.vn/cua-so-the-gioi");
         WORLD.addSub("https://nhandan.vn/cong-dong-asean");
@@ -87,8 +80,7 @@ public class NhanDan extends NewsOutlet {
         WORLD.addSub("https://nhandan.vn/tin-tuc-the-gioi");
     }
 
-    private static final Category OTHERS = new MainCategory(CATEGORY.OTHERS, "", CSS.NHANDAN_TITLE_LINK);
-
+    private static final Category OTHERS = new Category(CATEGORY.OTHERS, "", CSS.NHANDAN_TITLE_LINK);
     static {
         OTHERS.addSub("https://nhandan.vn/phapluat");
         OTHERS.addSub("https://nhandan.vn/du-lich");

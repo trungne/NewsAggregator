@@ -13,7 +13,7 @@ public class ScraperTestDrive {
         Collection<Preview> previews = ArticleCollection.getPreviewsByCategory(CATEGORY.COVID);
 
         for (Preview preview : previews) {
-            System.out.println(preview.getCategory());
+            System.out.println(preview);
         }
 
         final long endTime = System.currentTimeMillis();

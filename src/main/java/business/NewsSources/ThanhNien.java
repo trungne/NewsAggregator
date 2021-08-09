@@ -16,11 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ThanhNien extends NewsOutlet {
-    private static final Category COVID = new SubCategory(CATEGORY.COVID, "https://thanhnien.vn/covid-19/", CSS.THANHNIEN_TITLE_LINK);
-    private static final Category POLITICS = new SubCategory(CATEGORY.POLITICS, "https://thanhnien.vn/thoi-su/chinh-tri/", CSS.THANHNIEN_TITLE_LINK);
-
-    private static final Category BUSINESS = new MainCategory(CATEGORY.BUSINESS, "https://thanhnien.vn/tai-chinh-kinh-doanh", CSS.THANHNIEN_TITLE_LINK);
-
+    private static final Category COVID = new Category(CATEGORY.COVID, "https://thanhnien.vn/covid-19/", CSS.THANHNIEN_TITLE_LINK);
+    private static final Category POLITICS = new Category(CATEGORY.POLITICS, "https://thanhnien.vn/thoi-su/chinh-tri/", CSS.THANHNIEN_TITLE_LINK);
+    private static final Category BUSINESS = new Category(CATEGORY.BUSINESS, "https://thanhnien.vn/tai-chinh-kinh-doanh", CSS.THANHNIEN_TITLE_LINK);
     static {
         BUSINESS.addSub("https://thanhnien.vn/tai-chinh-kinh-doanh/kinh-te-xanh/");
         BUSINESS.addSub("https://thanhnien.vn/kinh-doanh/chinh-sach-phat-trien/");
@@ -33,8 +31,7 @@ public class ThanhNien extends NewsOutlet {
         BUSINESS.addSub("https://thanhnien.vn/tai-chinh-kinh-doanh/dia-oc/");
     }
 
-    private static final Category TECHNOLOGY = new MainCategory(CATEGORY.TECHNOLOGY, "https://thanhnien.vn/cong-nghe/", CSS.THANHNIEN_TITLE_LINK);
-
+    private static final Category TECHNOLOGY = new Category(CATEGORY.TECHNOLOGY, "https://thanhnien.vn/cong-nghe/", CSS.THANHNIEN_TITLE_LINK);
     static {
         TECHNOLOGY.addSub("https://thanhnien.vn/cong-nghe/xu-huong/");
         TECHNOLOGY.addSub("https://thanhnien.vn/cong-nghe/san-pham-moi/");
@@ -43,8 +40,7 @@ public class ThanhNien extends NewsOutlet {
         TECHNOLOGY.addSub("https://thanhnien.vn/cong-nghe/chuyen-doi-so/");
     }
 
-    private static final Category HEALTH = new MainCategory(CATEGORY.HEALTH, "https://thanhnien.vn/suc-khoe/", CSS.THANHNIEN_TITLE_LINK);
-
+    private static final Category HEALTH = new Category(CATEGORY.HEALTH, "https://thanhnien.vn/suc-khoe/", CSS.THANHNIEN_TITLE_LINK);
     static {
         HEALTH.addSub("https://thanhnien.vn/suc-khoe/lam-dep/");
         HEALTH.addSub("https://thanhnien.vn/suc-khoe/khoe-dep-moi-ngay/");
@@ -52,8 +48,7 @@ public class ThanhNien extends NewsOutlet {
         HEALTH.addSub("https://thanhnien.vn/suc-khoe/song-vui-khoe/");
     }
 
-    private static final Category SPORTS = new MainCategory(CATEGORY.SPORTS, "https://thanhnien.vn/the-thao/", CSS.THANHNIEN_TITLE_LINK);
-
+    private static final Category SPORTS = new Category(CATEGORY.SPORTS, "https://thanhnien.vn/the-thao/", CSS.THANHNIEN_TITLE_LINK);
     static {
         SPORTS.addSub("https://thanhnien.vn/the-thao/bong-da-viet-nam/");
         SPORTS.addSub("https://thanhnien.vn/the-thao/bong-da-quoc-te/");
@@ -63,8 +58,7 @@ public class ThanhNien extends NewsOutlet {
         SPORTS.addSub("https://thanhnien.vn/the-thao/toan-canh-the-thao/");
     }
 
-    private static final Category ENTERTAINMENT = new MainCategory(CATEGORY.ENTERTAINMENT, "https://thanhnien.vn/giai-tri/", CSS.THANHNIEN_TITLE_LINK);
-
+    private static final Category ENTERTAINMENT = new Category(CATEGORY.ENTERTAINMENT, "https://thanhnien.vn/giai-tri/", CSS.THANHNIEN_TITLE_LINK);
     static {
         ENTERTAINMENT.addSub("https://thanhnien.vn/giai-tri/phim/");
         ENTERTAINMENT.addSub("https://thanhnien.vn/giai-tri/truyen-hinh/");
@@ -72,8 +66,7 @@ public class ThanhNien extends NewsOutlet {
 
     }
 
-    private static final Category WORLD = new MainCategory(CATEGORY.WORLD, "https://thanhnien.vn/the-gioi/", CSS.THANHNIEN_TITLE_LINK);
-
+    private static final Category WORLD = new Category(CATEGORY.WORLD, "https://thanhnien.vn/the-gioi/", CSS.THANHNIEN_TITLE_LINK);
     static {
         WORLD.addSub("https://thanhnien.vn/the-gioi/kinh-te-the-gioi/");
         WORLD.addSub("https://thanhnien.vn/the-gioi/quan-su/");
@@ -83,7 +76,7 @@ public class ThanhNien extends NewsOutlet {
         WORLD.addSub("https://thanhnien.vn/the-gioi/chuyen-la/");
     }
 
-    private static final Category OTHERS = new MainCategory(CATEGORY.OTHERS, "", CSS.THANHNIEN_TITLE_LINK);
+    private static final Category OTHERS = new Category(CATEGORY.OTHERS, "", CSS.THANHNIEN_TITLE_LINK);
 
     static {
         OTHERS.addSub("https://thanhnien.vn/thoi-su/");

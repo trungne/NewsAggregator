@@ -3,16 +3,18 @@ package business.NewsSources;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static business.Helper.Scraper.scrapeLinksByClass;
 
-// the design is inspired by composite pattern: https://refactoring.guru/design-patterns/composite
-public abstract class Category {
-    String name;
+public class Category {
+    String name = "";
     String url;
     String cssForScraping;
+    List<Category> subCategories = new ArrayList<>();
 
     protected Category(String name, String url, String cssForScraping) {
         this.name = name;
@@ -20,19 +22,25 @@ public abstract class Category {
         this.cssForScraping = cssForScraping;
     }
 
-    protected Category() {
-    }
+    public void add(String name, String url) {
+        Category newCategory = new Category(name, url, cssForScraping);
 
-    // composite methods
-    public void add(Category category) {
-        throw new UnsupportedOperationException();
+        for (Category category: subCategories){
+            // update category if the category already exists in subcategory list
+            if (category.getName().equals(name)){
+                subCategories.set(subCategories.indexOf(category), newCategory);
+                return;
+            }
+        }
+
+        subCategories.add(newCategory);
     }
 
     public void addSub(String url) {
-        throw new UnsupportedOperationException();
+        add("", url);
     }
 
-    public void remove(Category category) {
+    public void find(String name) {
         throw new UnsupportedOperationException();
     }
 
@@ -42,12 +50,23 @@ public abstract class Category {
     }
 
     public Set<URL> getLinks() {
-        try {
-            URL link = new URL(this.url);
-            return scrapeLinksByClass(link, cssForScraping);
-        } catch (MalformedURLException e) {
-            return new HashSet<>();
+        Set<URL> urls = new HashSet<>();
+        // base case
+        if (subCategories.isEmpty()){
+            try {
+                URL link = new URL(this.url);
+                return scrapeLinksByClass(link, cssForScraping);
+            } catch (MalformedURLException e) {
+                return new HashSet<>();
+            }
         }
+        else{
+            for (Category category: subCategories){
+                urls.addAll(category.getLinks());
+            }
+        }
+
+        return urls;
     }
 
     @Override
