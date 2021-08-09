@@ -56,7 +56,9 @@ public class Article {
         }
     }
 
-
+    public String getCategory(){
+        return categories.toString();
+    }
     public boolean belongsToCategory(String category) {
         return this.categories.contains(category);
     }

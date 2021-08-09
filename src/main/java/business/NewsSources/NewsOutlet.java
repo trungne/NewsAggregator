@@ -7,6 +7,7 @@ import org.jsoup.nodes.Element;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -74,12 +75,12 @@ public abstract class NewsOutlet {
     }
 
     public Set<URL> getLinksFromCategory(String categoryName) {
+        Set<URL> urls = new HashSet<>();
         if (categories.containsKey(categoryName)) {
             Category category = categories.get(categoryName);
-            return category.getLinks();
-        } else {
-            return null;
+            urls = category.getLinks();
         }
+        return urls;
 
     }
 

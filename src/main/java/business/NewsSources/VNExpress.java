@@ -163,7 +163,7 @@ public class VNExpress extends NewsOutlet {
         Element tag = doc.selectFirst(".breadcrumb");
 
         if (tag != null) {
-            Elements categoryTags = tag.getElementsByTag("li");
+            Elements categoryTags = tag.getElementsByTag("a");
             for (Element e : categoryTags) {
                 String category = e.attr("title");
                 category = CATEGORY.convert(category);

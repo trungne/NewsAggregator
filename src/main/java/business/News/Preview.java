@@ -23,7 +23,9 @@ public class Preview implements Comparable<Preview> {
         return article.getHtml();
     }
 
-
+    public String getCategory(){
+        return article.getCategory();
+    }
     @Override
     public int compareTo(Preview p) {
         return (int) (this.article.getMinutesSincePublished() - p.article.getMinutesSincePublished());

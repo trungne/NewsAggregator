@@ -3,6 +3,7 @@ package business.NewsSources;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.Set;
 
 import static business.Helper.Scraper.scrapeLinksByClass;
@@ -45,7 +46,7 @@ public abstract class Category {
             URL link = new URL(this.url);
             return scrapeLinksByClass(link, cssForScraping);
         } catch (MalformedURLException e) {
-            return null;
+            return new HashSet<>();
         }
     }
 

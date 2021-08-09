@@ -161,6 +161,7 @@ public class TuoiTre extends NewsOutlet {
             Elements children = childrenCategoryTag.getElementsByTag("a");
             for (Element e : children) {
                 String category = e.attr("title");
+                System.out.println(category);
                 category = CATEGORY.convert(category);
                 if (!categoryList.contains(category)) {
                     categoryList.add(category);
