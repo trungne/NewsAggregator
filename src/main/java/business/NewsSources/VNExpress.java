@@ -20,78 +20,78 @@ public class VNExpress extends NewsOutlet {
     private static final Category POLITICS = new Category(CATEGORY.POLITICS, "https://vnexpress.net/thoi-su/chinh-tri", CSS.VNEXPRESS_TITLE_LINK);
     private static final Category BUSINESS = new Category(CATEGORY.BUSINESS, "https://vnexpress.net/kinh-doanh", CSS.VNEXPRESS_TITLE_LINK);
     static {
-        BUSINESS.addSub("https://vnexpress.net/kinh-doanh/quoc-te");
-        BUSINESS.addSub("https://vnexpress.net/kinh-doanh/doanh-nghiep");
-        BUSINESS.addSub("https://vnexpress.net/kinh-doanh/chung-khoan");
-        BUSINESS.addSub("https://vnexpress.net/kinh-doanh/bat-dong-san");
-        BUSINESS.addSub("https://vnexpress.net/kinh-doanh/ebank");
-        BUSINESS.addSub("https://vnexpress.net/kinh-doanh/vi-mo");
-        BUSINESS.addSub("https://vnexpress.net/kinh-doanh/tien-cua-toi");
-        BUSINESS.addSub("https://vnexpress.net/kinh-doanh/bao-hiem");
-        BUSINESS.addSub("https://vnexpress.net/kinh-doanh/hang-hoa");
-        BUSINESS.addSub("https://vnexpress.net/kinh-doanh/e-commerce-40");
+        BUSINESS.add("https://vnexpress.net/kinh-doanh/quoc-te");
+        BUSINESS.add("https://vnexpress.net/kinh-doanh/doanh-nghiep");
+        BUSINESS.add("https://vnexpress.net/kinh-doanh/chung-khoan");
+        BUSINESS.add("https://vnexpress.net/kinh-doanh/bat-dong-san");
+        BUSINESS.add("https://vnexpress.net/kinh-doanh/ebank");
+        BUSINESS.add("https://vnexpress.net/kinh-doanh/vi-mo");
+        BUSINESS.add("https://vnexpress.net/kinh-doanh/tien-cua-toi");
+        BUSINESS.add("https://vnexpress.net/kinh-doanh/bao-hiem");
+        BUSINESS.add("https://vnexpress.net/kinh-doanh/hang-hoa");
+        BUSINESS.add("https://vnexpress.net/kinh-doanh/e-commerce-40");
     }
 
     private static final Category TECHNOLOGY = new Category(CATEGORY.TECHNOLOGY, "https://vnexpress.net/khoa-hoc", CSS.VNEXPRESS_TITLE_LINK);
     static {
-        TECHNOLOGY.addSub("https://vnexpress.net/khoa-hoc/tin-tuc");
-        TECHNOLOGY.addSub("https://vnexpress.net/khoa-hoc/phat-minh");
-        TECHNOLOGY.addSub("https://vnexpress.net/khoa-hoc/ung-dung");
-        TECHNOLOGY.addSub("https://vnexpress.net/khoa-hoc/the-gioi-tu-nhien");
-        TECHNOLOGY.addSub("https://vnexpress.net/khoa-hoc/thuong-thuc");
-        TECHNOLOGY.addSub("https://vnexpress.net/khoa-hoc/khoa-hoc-trong-nuoc");
+        TECHNOLOGY.add("https://vnexpress.net/khoa-hoc/tin-tuc");
+        TECHNOLOGY.add("https://vnexpress.net/khoa-hoc/phat-minh");
+        TECHNOLOGY.add("https://vnexpress.net/khoa-hoc/ung-dung");
+        TECHNOLOGY.add("https://vnexpress.net/khoa-hoc/the-gioi-tu-nhien");
+        TECHNOLOGY.add("https://vnexpress.net/khoa-hoc/thuong-thuc");
+        TECHNOLOGY.add("https://vnexpress.net/khoa-hoc/khoa-hoc-trong-nuoc");
     }
 
     private static final Category HEALTH = new Category(CATEGORY.HEALTH, "https://vnexpress.net/suc-khoe", CSS.VNEXPRESS_TITLE_LINK);
 
     static {
-        HEALTH.addSub("https://vnexpress.net/suc-khoe/tin-tuc");
-        HEALTH.addSub("https://vnexpress.net/suc-khoe/tu-van");
-        HEALTH.addSub("https://vnexpress.net/suc-khoe/dinh-duong");
-        HEALTH.addSub("https://vnexpress.net/suc-khoe/khoe-dep");
-        HEALTH.addSub("https://vnexpress.net/suc-khoe/dan-ong");
-        HEALTH.addSub("https://vnexpress.net/suc-khoe/cac-benh");
-        HEALTH.addSub("https://vnexpress.net/suc-khoe/vaccine");
+        HEALTH.add("https://vnexpress.net/suc-khoe/tin-tuc");
+        HEALTH.add("https://vnexpress.net/suc-khoe/tu-van");
+        HEALTH.add("https://vnexpress.net/suc-khoe/dinh-duong");
+        HEALTH.add("https://vnexpress.net/suc-khoe/khoe-dep");
+        HEALTH.add("https://vnexpress.net/suc-khoe/dan-ong");
+        HEALTH.add("https://vnexpress.net/suc-khoe/cac-benh");
+        HEALTH.add("https://vnexpress.net/suc-khoe/vaccine");
     }
 
     private static final Category SPORTS = new Category(CATEGORY.SPORTS, "https://vnexpress.net/the-thao", CSS.VNEXPRESS_TITLE_LINK);
     static {
-        SPORTS.addSub("https://vnexpress.net/the-thao/video");
-        SPORTS.addSub("https://vnexpress.net/bong-da");
-        SPORTS.addSub("https://vnexpress.net/the-thao/v-league");
-        SPORTS.addSub("https://vnexpress.net/the-thao/cac-mon-khac");
+        SPORTS.add("https://vnexpress.net/the-thao/video");
+        SPORTS.add("https://vnexpress.net/bong-da");
+        SPORTS.add("https://vnexpress.net/the-thao/v-league");
+        SPORTS.add("https://vnexpress.net/the-thao/cac-mon-khac");
     }
 
     private static final Category ENTERTAINMENT = new Category(CATEGORY.ENTERTAINMENT, "https://vnexpress.net/giai-tri", CSS.VNEXPRESS_TITLE_LINK);
     static {
-        ENTERTAINMENT.addSub("https://vnexpress.net/giai-tri/gioi-sao");
-        ENTERTAINMENT.addSub("https://vnexpress.net/giai-tri/phim");
-        ENTERTAINMENT.addSub("https://vnexpress.net/giai-tri/nhac");
-        ENTERTAINMENT.addSub("https://vnexpress.net/giai-tri/thoi-trang");
-        ENTERTAINMENT.addSub("https://vnexpress.net/giai-tri/lam-dep");
-        ENTERTAINMENT.addSub("https://vnexpress.net/giai-tri/sach");
-        ENTERTAINMENT.addSub("https://vnexpress.net/giai-tri/san-khau-my-thuat");
+        ENTERTAINMENT.add("https://vnexpress.net/giai-tri/gioi-sao");
+        ENTERTAINMENT.add("https://vnexpress.net/giai-tri/phim");
+        ENTERTAINMENT.add("https://vnexpress.net/giai-tri/nhac");
+        ENTERTAINMENT.add("https://vnexpress.net/giai-tri/thoi-trang");
+        ENTERTAINMENT.add("https://vnexpress.net/giai-tri/lam-dep");
+        ENTERTAINMENT.add("https://vnexpress.net/giai-tri/sach");
+        ENTERTAINMENT.add("https://vnexpress.net/giai-tri/san-khau-my-thuat");
     }
 
     private static final Category WORLD = new Category(CATEGORY.WORLD, "https://vnexpress.net/the-gioi", CSS.VNEXPRESS_TITLE_LINK);
     static {
-        WORLD.addSub("https://vnexpress.net/the-gioi/tu-lieu");
-        WORLD.addSub("https://vnexpress.net/the-gioi/phan-tich");
-        WORLD.addSub("https://vnexpress.net/the-gioi/nguoi-viet-5-chau");
-        WORLD.addSub("https://vnexpress.net/the-gioi/cuoc-song-do-day");
-        WORLD.addSub("https://vnexpress.net/the-gioi/quan-su");
+        WORLD.add("https://vnexpress.net/the-gioi/tu-lieu");
+        WORLD.add("https://vnexpress.net/the-gioi/phan-tich");
+        WORLD.add("https://vnexpress.net/the-gioi/nguoi-viet-5-chau");
+        WORLD.add("https://vnexpress.net/the-gioi/cuoc-song-do-day");
+        WORLD.add("https://vnexpress.net/the-gioi/quan-su");
     }
 
     private static final Category OTHERS = new Category(CATEGORY.OTHERS, "", CSS.VNEXPRESS_TITLE_LINK);
     static {
-        OTHERS.addSub("https://vnexpress.net/giao-duc");
-        OTHERS.addSub("https://vnexpress.net/thoi-su");
-        OTHERS.addSub("https://vnexpress.net/goc-nhin");
-        OTHERS.addSub("https://vnexpress.net/phap-luat");
-        OTHERS.addSub("https://vnexpress.net/doi-song");
-        OTHERS.addSub("https://vnexpress.net/du-lich");
-        OTHERS.addSub("https://vnexpress.net/so-hoa");
-        OTHERS.addSub("https://vnexpress.net/oto-xe-may");
+        OTHERS.add("https://vnexpress.net/giao-duc");
+        OTHERS.add("https://vnexpress.net/thoi-su");
+        OTHERS.add("https://vnexpress.net/goc-nhin");
+        OTHERS.add("https://vnexpress.net/phap-luat");
+        OTHERS.add("https://vnexpress.net/doi-song");
+        OTHERS.add("https://vnexpress.net/du-lich");
+        OTHERS.add("https://vnexpress.net/so-hoa");
+        OTHERS.add("https://vnexpress.net/oto-xe-may");
     }
 
     public static NewsOutlet init() {

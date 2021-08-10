@@ -19,74 +19,74 @@ public class TuoiTre extends NewsOutlet {
     private static final Category COVID = new Category(CATEGORY.COVID, "https://tuoitre.vn/covid-19.html", CSS.TUOITRE_TITLE_LINK);
     private static final Category POLITICS = new Category(CATEGORY.POLITICS, "https://tuoitre.vn/thoi-su.htm", CSS.TUOITRE_TITLE_LINK);
     static {
-        POLITICS.addSub("https://tuoitre.vn/thoi-su/but-bi.htm");
-        POLITICS.addSub("https://tuoitre.vn/thoi-su/xa-hoi.htm");
-        POLITICS.addSub("https://tuoitre.vn/thoi-su/phong-su.htm");
-        POLITICS.addSub("https://tuoitre.vn/thoi-su/binh-luan.htm");
+        POLITICS.add("https://tuoitre.vn/thoi-su/but-bi.htm");
+        POLITICS.add("https://tuoitre.vn/thoi-su/xa-hoi.htm");
+        POLITICS.add("https://tuoitre.vn/thoi-su/phong-su.htm");
+        POLITICS.add("https://tuoitre.vn/thoi-su/binh-luan.htm");
     }
 
 
     private static final Category BUSINESS = new Category(CATEGORY.BUSINESS, "https://tuoitre.vn/kinh-doanh.htm", CSS.TUOITRE_TITLE_LINK);
     static {
-        BUSINESS.addSub("https://tuoitre.vn/kinh-doanh/tai-chinh.htm");
-        BUSINESS.addSub("https://tuoitre.vn/kinh-doanh/doanh-nghiep.htm");
-        BUSINESS.addSub("https://tuoitre.vn/kinh-doanh/mua-sam.htm");
-        BUSINESS.addSub("https://tuoitre.vn/kinh-doanh/dau-tu.htm");
+        BUSINESS.add("https://tuoitre.vn/kinh-doanh/tai-chinh.htm");
+        BUSINESS.add("https://tuoitre.vn/kinh-doanh/doanh-nghiep.htm");
+        BUSINESS.add("https://tuoitre.vn/kinh-doanh/mua-sam.htm");
+        BUSINESS.add("https://tuoitre.vn/kinh-doanh/dau-tu.htm");
     }
 
     private static final Category TECHNOLOGY = new Category(CATEGORY.TECHNOLOGY, "https://tuoitre.vn/khoa-hoc.htm", CSS.TUOITRE_TITLE_LINK);
     static {
-        TECHNOLOGY.addSub("https://tuoitre.vn/khoa-hoc/thuong-thuc.htm");
-        TECHNOLOGY.addSub("https://tuoitre.vn/khoa-hoc/phat-minh.htm");
+        TECHNOLOGY.add("https://tuoitre.vn/khoa-hoc/thuong-thuc.htm");
+        TECHNOLOGY.add("https://tuoitre.vn/khoa-hoc/phat-minh.htm");
     }
 
     private static final Category HEALTH = new Category(CATEGORY.HEALTH, "https://tuoitre.vn/suc-khoe.htm", CSS.TUOITRE_TITLE_LINK);
     static {
-        HEALTH.addSub("https://tuoitre.vn/suc-khoe/dinh-duong.htm");
-        HEALTH.addSub("https://tuoitre.vn/suc-khoe/me-va-be.htm");
-        HEALTH.addSub("https://tuoitre.vn/suc-khoe/gioi-tinh.htm");
-        HEALTH.addSub("https://tuoitre.vn/suc-khoe/phong-mach.htm");
-        HEALTH.addSub("https://tuoitre.vn/suc-khoe/biet-de-khoe.htm");
+        HEALTH.add("https://tuoitre.vn/suc-khoe/dinh-duong.htm");
+        HEALTH.add("https://tuoitre.vn/suc-khoe/me-va-be.htm");
+        HEALTH.add("https://tuoitre.vn/suc-khoe/gioi-tinh.htm");
+        HEALTH.add("https://tuoitre.vn/suc-khoe/phong-mach.htm");
+        HEALTH.add("https://tuoitre.vn/suc-khoe/biet-de-khoe.htm");
     }
 
     private static final Category SPORTS = new Category(CATEGORY.SPORTS, "https://tuoitre.vn/the-thao.htm", CSS.TUOITRE_TITLE_LINK);
     static {
-        SPORTS.addSub("https://tuoitre.vn/the-thao/bong-da.htm");
-        SPORTS.addSub("https://tuoitre.vn/the-thao/bong-ro.htm");
-        SPORTS.addSub("https://tuoitre.vn/the-thao/vo-thuat.htm");
-        SPORTS.addSub("https://tuoitre.vn/the-thao/cac-mon-khac.htm");
-        SPORTS.addSub("https://tuoitre.vn/the-thao/khoe-360.htm");
-        SPORTS.addSub("https://tuoitre.vn/the-thao/nguoi-ham-mo.htm");
+        SPORTS.add("https://tuoitre.vn/the-thao/bong-da.htm");
+        SPORTS.add("https://tuoitre.vn/the-thao/bong-ro.htm");
+        SPORTS.add("https://tuoitre.vn/the-thao/vo-thuat.htm");
+        SPORTS.add("https://tuoitre.vn/the-thao/cac-mon-khac.htm");
+        SPORTS.add("https://tuoitre.vn/the-thao/khoe-360.htm");
+        SPORTS.add("https://tuoitre.vn/the-thao/nguoi-ham-mo.htm");
     }
 
     private static final Category ENTERTAINMENT = new Category(CATEGORY.ENTERTAINMENT, "https://tuoitre.vn/giai-tri.htm", CSS.TUOITRE_TITLE_LINK);
     static {
-        ENTERTAINMENT.addSub("https://tuoitre.vn/giai-tri/nghe-gi-hom-nay.htm");
-        ENTERTAINMENT.addSub("https://tuoitre.vn/giai-tri/am-nhac.htm");
-        ENTERTAINMENT.addSub("https://tuoitre.vn/giai-tri/dien-anh.htm");
-        ENTERTAINMENT.addSub("https://tuoitre.vn/giai-tri/tv-show.htm");
-        ENTERTAINMENT.addSub("https://tuoitre.vn/giai-tri/thoi-trang.htm");
-        ENTERTAINMENT.addSub("https://tuoitre.vn/giai-tri/hau-truong.htm");
+        ENTERTAINMENT.add("https://tuoitre.vn/giai-tri/nghe-gi-hom-nay.htm");
+        ENTERTAINMENT.add("https://tuoitre.vn/giai-tri/am-nhac.htm");
+        ENTERTAINMENT.add("https://tuoitre.vn/giai-tri/dien-anh.htm");
+        ENTERTAINMENT.add("https://tuoitre.vn/giai-tri/tv-show.htm");
+        ENTERTAINMENT.add("https://tuoitre.vn/giai-tri/thoi-trang.htm");
+        ENTERTAINMENT.add("https://tuoitre.vn/giai-tri/hau-truong.htm");
     }
 
     private static final Category WORLD = new Category(CATEGORY.WORLD, "https://tuoitre.vn/the-gioi.htm", CSS.TUOITRE_TITLE_LINK);
     static {
-        WORLD.addSub("https://tuoitre.vn/the-gioi/binh-luan.htm");
-        WORLD.addSub("https://tuoitre.vn/the-gioi/kieu-bao.htm");
-        WORLD.addSub("https://tuoitre.vn/the-gioi/muon-mau.htm");
-        WORLD.addSub("https://tuoitre.vn/the-gioi/ho-so.htm");
+        WORLD.add("https://tuoitre.vn/the-gioi/binh-luan.htm");
+        WORLD.add("https://tuoitre.vn/the-gioi/kieu-bao.htm");
+        WORLD.add("https://tuoitre.vn/the-gioi/muon-mau.htm");
+        WORLD.add("https://tuoitre.vn/the-gioi/ho-so.htm");
     }
 
     private static final Category OTHERS = new Category(CATEGORY.OTHERS, "", CSS.TUOITRE_TITLE_LINK);
     static {
-        OTHERS.addSub("https://tuoitre.vn/phap-luat.htm");
-        OTHERS.addSub("https://tuoitre.vn/xe.htm");
-        OTHERS.addSub("https://dulich.tuoitre.vn/");
-        OTHERS.addSub("https://tuoitre.vn/nhip-song-tre.htm");
-        OTHERS.addSub("https://tuoitre.vn/van-hoa.htm");
-        OTHERS.addSub("https://tuoitre.vn/giao-duc.htm");
-        OTHERS.addSub("https://tuoitre.vn/gia-that.htm");
-        OTHERS.addSub("https://tuoitre.vn/ban-doc-lam-bao.htm");
+        OTHERS.add("https://tuoitre.vn/phap-luat.htm");
+        OTHERS.add("https://tuoitre.vn/xe.htm");
+        OTHERS.add("https://dulich.tuoitre.vn/");
+        OTHERS.add("https://tuoitre.vn/nhip-song-tre.htm");
+        OTHERS.add("https://tuoitre.vn/van-hoa.htm");
+        OTHERS.add("https://tuoitre.vn/giao-duc.htm");
+        OTHERS.add("https://tuoitre.vn/gia-that.htm");
+        OTHERS.add("https://tuoitre.vn/ban-doc-lam-bao.htm");
     }
 
 

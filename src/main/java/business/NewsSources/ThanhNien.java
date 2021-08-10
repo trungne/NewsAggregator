@@ -20,75 +20,75 @@ public class ThanhNien extends NewsOutlet {
     private static final Category POLITICS = new Category(CATEGORY.POLITICS, "https://thanhnien.vn/thoi-su/chinh-tri/", CSS.THANHNIEN_TITLE_LINK);
     private static final Category BUSINESS = new Category(CATEGORY.BUSINESS, "https://thanhnien.vn/tai-chinh-kinh-doanh", CSS.THANHNIEN_TITLE_LINK);
     static {
-        BUSINESS.addSub("https://thanhnien.vn/tai-chinh-kinh-doanh/kinh-te-xanh/");
-        BUSINESS.addSub("https://thanhnien.vn/kinh-doanh/chinh-sach-phat-trien/");
-        BUSINESS.addSub("https://thanhnien.vn/tai-chinh-kinh-doanh/ngan-hang/");
-        BUSINESS.addSub("https://thanhnien.vn/tai-chinh-kinh-doanh/chung-khoan/");
-        BUSINESS.addSub("https://thanhnien.vn/tai-chinh-kinh-doanh/doanh-nghiep/");
-        BUSINESS.addSub("https://thanhnien.vn/tai-chinh-kinh-doanh/doanh-nhan/");
-        BUSINESS.addSub("https://thanhnien.vn/tai-chinh-kinh-doanh/tieu-dung/");
-        BUSINESS.addSub("https://thanhnien.vn/tai-chinh-kinh-doanh/lam-giau/");
-        BUSINESS.addSub("https://thanhnien.vn/tai-chinh-kinh-doanh/dia-oc/");
+        BUSINESS.add("https://thanhnien.vn/tai-chinh-kinh-doanh/kinh-te-xanh/");
+        BUSINESS.add("https://thanhnien.vn/kinh-doanh/chinh-sach-phat-trien/");
+        BUSINESS.add("https://thanhnien.vn/tai-chinh-kinh-doanh/ngan-hang/");
+        BUSINESS.add("https://thanhnien.vn/tai-chinh-kinh-doanh/chung-khoan/");
+        BUSINESS.add("https://thanhnien.vn/tai-chinh-kinh-doanh/doanh-nghiep/");
+        BUSINESS.add("https://thanhnien.vn/tai-chinh-kinh-doanh/doanh-nhan/");
+        BUSINESS.add("https://thanhnien.vn/tai-chinh-kinh-doanh/tieu-dung/");
+        BUSINESS.add("https://thanhnien.vn/tai-chinh-kinh-doanh/lam-giau/");
+        BUSINESS.add("https://thanhnien.vn/tai-chinh-kinh-doanh/dia-oc/");
     }
 
     private static final Category TECHNOLOGY = new Category(CATEGORY.TECHNOLOGY, "https://thanhnien.vn/cong-nghe/", CSS.THANHNIEN_TITLE_LINK);
     static {
-        TECHNOLOGY.addSub("https://thanhnien.vn/cong-nghe/xu-huong/");
-        TECHNOLOGY.addSub("https://thanhnien.vn/cong-nghe/san-pham-moi/");
-        TECHNOLOGY.addSub("https://thanhnien.vn/cong-nghe/kinh-nghiem/");
-        TECHNOLOGY.addSub("https://thanhnien.vn/cong-nghe/y-tuong/");
-        TECHNOLOGY.addSub("https://thanhnien.vn/cong-nghe/chuyen-doi-so/");
+        TECHNOLOGY.add("https://thanhnien.vn/cong-nghe/xu-huong/");
+        TECHNOLOGY.add("https://thanhnien.vn/cong-nghe/san-pham-moi/");
+        TECHNOLOGY.add("https://thanhnien.vn/cong-nghe/kinh-nghiem/");
+        TECHNOLOGY.add("https://thanhnien.vn/cong-nghe/y-tuong/");
+        TECHNOLOGY.add("https://thanhnien.vn/cong-nghe/chuyen-doi-so/");
     }
 
     private static final Category HEALTH = new Category(CATEGORY.HEALTH, "https://thanhnien.vn/suc-khoe/", CSS.THANHNIEN_TITLE_LINK);
     static {
-        HEALTH.addSub("https://thanhnien.vn/suc-khoe/lam-dep/");
-        HEALTH.addSub("https://thanhnien.vn/suc-khoe/khoe-dep-moi-ngay/");
-        HEALTH.addSub("https://thanhnien.vn/suc-khoe/gioi-tinh/");
-        HEALTH.addSub("https://thanhnien.vn/suc-khoe/song-vui-khoe/");
+        HEALTH.add("https://thanhnien.vn/suc-khoe/lam-dep/");
+        HEALTH.add("https://thanhnien.vn/suc-khoe/khoe-dep-moi-ngay/");
+        HEALTH.add("https://thanhnien.vn/suc-khoe/gioi-tinh/");
+        HEALTH.add("https://thanhnien.vn/suc-khoe/song-vui-khoe/");
     }
 
     private static final Category SPORTS = new Category(CATEGORY.SPORTS, "https://thanhnien.vn/the-thao/", CSS.THANHNIEN_TITLE_LINK);
     static {
-        SPORTS.addSub("https://thanhnien.vn/the-thao/bong-da-viet-nam/");
-        SPORTS.addSub("https://thanhnien.vn/the-thao/bong-da-quoc-te/");
-        SPORTS.addSub("https://thanhnien.vn/the-thao/tin-chuyen-nhuong/");
-        SPORTS.addSub("https://thanhnien.vn/the-thao/bong-ro/");
-        SPORTS.addSub("https://thanhnien.vn/the-thao/the-thao-cong-dong/");
-        SPORTS.addSub("https://thanhnien.vn/the-thao/toan-canh-the-thao/");
+        SPORTS.add("https://thanhnien.vn/the-thao/bong-da-viet-nam/");
+        SPORTS.add("https://thanhnien.vn/the-thao/bong-da-quoc-te/");
+        SPORTS.add("https://thanhnien.vn/the-thao/tin-chuyen-nhuong/");
+        SPORTS.add("https://thanhnien.vn/the-thao/bong-ro/");
+        SPORTS.add("https://thanhnien.vn/the-thao/the-thao-cong-dong/");
+        SPORTS.add("https://thanhnien.vn/the-thao/toan-canh-the-thao/");
     }
 
     private static final Category ENTERTAINMENT = new Category(CATEGORY.ENTERTAINMENT, "https://thanhnien.vn/giai-tri/", CSS.THANHNIEN_TITLE_LINK);
     static {
-        ENTERTAINMENT.addSub("https://thanhnien.vn/giai-tri/phim/");
-        ENTERTAINMENT.addSub("https://thanhnien.vn/giai-tri/truyen-hinh/");
-        ENTERTAINMENT.addSub("https://thanhnien.vn/giai-tri/doi-nghe-si/");
+        ENTERTAINMENT.add("https://thanhnien.vn/giai-tri/phim/");
+        ENTERTAINMENT.add("https://thanhnien.vn/giai-tri/truyen-hinh/");
+        ENTERTAINMENT.add("https://thanhnien.vn/giai-tri/doi-nghe-si/");
 
     }
 
     private static final Category WORLD = new Category(CATEGORY.WORLD, "https://thanhnien.vn/the-gioi/", CSS.THANHNIEN_TITLE_LINK);
     static {
-        WORLD.addSub("https://thanhnien.vn/the-gioi/kinh-te-the-gioi/");
-        WORLD.addSub("https://thanhnien.vn/the-gioi/quan-su/");
-        WORLD.addSub("https://thanhnien.vn/the-gioi/goc-nhin/");
-        WORLD.addSub("https://thanhnien.vn/the-gioi/ho-so/");
-        WORLD.addSub("https://thanhnien.vn/the-gioi/nguoi-viet-nam-chau/");
-        WORLD.addSub("https://thanhnien.vn/the-gioi/chuyen-la/");
+        WORLD.add("https://thanhnien.vn/the-gioi/kinh-te-the-gioi/");
+        WORLD.add("https://thanhnien.vn/the-gioi/quan-su/");
+        WORLD.add("https://thanhnien.vn/the-gioi/goc-nhin/");
+        WORLD.add("https://thanhnien.vn/the-gioi/ho-so/");
+        WORLD.add("https://thanhnien.vn/the-gioi/nguoi-viet-nam-chau/");
+        WORLD.add("https://thanhnien.vn/the-gioi/chuyen-la/");
     }
 
     private static final Category OTHERS = new Category(CATEGORY.OTHERS, "", CSS.THANHNIEN_TITLE_LINK);
 
     static {
-        OTHERS.addSub("https://thanhnien.vn/thoi-su/");
-        OTHERS.addSub("https://thanhnien.vn/toi-viet/");
-        OTHERS.addSub("https://thanhnien.vn/van-hoa/");
-        OTHERS.addSub("https://thanhnien.vn/doi-song/");
-        OTHERS.addSub("https://thanhnien.vn/gioi-tre/");
-        OTHERS.addSub("https://thanhnien.vn/giao-duc/");
-        OTHERS.addSub("https://thanhnien.vn/game/");
-        OTHERS.addSub("https://thanhnien.vn/du-lich/");
-        OTHERS.addSub("https://thanhnien.vn/xe/");
-        OTHERS.addSub("https://thanhnien.vn/ban-can-biet/");
+        OTHERS.add("https://thanhnien.vn/thoi-su/");
+        OTHERS.add("https://thanhnien.vn/toi-viet/");
+        OTHERS.add("https://thanhnien.vn/van-hoa/");
+        OTHERS.add("https://thanhnien.vn/doi-song/");
+        OTHERS.add("https://thanhnien.vn/gioi-tre/");
+        OTHERS.add("https://thanhnien.vn/giao-duc/");
+        OTHERS.add("https://thanhnien.vn/game/");
+        OTHERS.add("https://thanhnien.vn/du-lich/");
+        OTHERS.add("https://thanhnien.vn/xe/");
+        OTHERS.add("https://thanhnien.vn/ban-can-biet/");
     }
 
 

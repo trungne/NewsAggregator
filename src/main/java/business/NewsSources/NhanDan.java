@@ -21,71 +21,71 @@ public class NhanDan extends NewsOutlet {
     private static final Category COVID = new Category(CATEGORY.COVID, "https://nhandan.vn/tieu-diem", CSS.NHANDAN_TITLE_LINK);
     private static final Category POLITICS = new Category(CATEGORY.POLITICS, "https://nhandan.vn/chinhtri", CSS.NHANDAN_TITLE_LINK);
     static {
-        POLITICS.addSub("https://nhandan.vn/tin-tuc-su-kien");
-        POLITICS.addSub("https://nhandan.vn/xa-luan");
-        POLITICS.addSub("https://nhandan.vn/cung-suy-ngam");
-        POLITICS.addSub("https://nhandan.vn/binh-luan-phe-phan");
-        POLITICS.addSub("https://nhandan.vn/nguoi-viet-xa-xu");
-        POLITICS.addSub("https://nhandan.vn/dang-va-cuoc-song");
-        POLITICS.addSub("https://nhandan.vn/dan-toc-mien-nui");
+        POLITICS.add("https://nhandan.vn/tin-tuc-su-kien");
+        POLITICS.add("https://nhandan.vn/xa-luan");
+        POLITICS.add("https://nhandan.vn/cung-suy-ngam");
+        POLITICS.add("https://nhandan.vn/binh-luan-phe-phan");
+        POLITICS.add("https://nhandan.vn/nguoi-viet-xa-xu");
+        POLITICS.add("https://nhandan.vn/dang-va-cuoc-song");
+        POLITICS.add("https://nhandan.vn/dan-toc-mien-nui");
     }
 
     private static final Category BUSINESS = new Category(CATEGORY.BUSINESS, "https://nhandan.vn/kinhte", CSS.NHANDAN_TITLE_LINK);
     static {
-        BUSINESS.addSub("https://nhandan.vn/tin-tuc-kinh-te");
-        BUSINESS.addSub("https://nhandan.vn/nhan-dinh");
-        BUSINESS.addSub("https://nhandan.vn/chuyen-lam-an");
-        BUSINESS.addSub("https://nhandan.vn/chungkhoan");
-        BUSINESS.addSub("https://nhandan.vn/hanggiahangthat");
+        BUSINESS.add("https://nhandan.vn/tin-tuc-kinh-te");
+        BUSINESS.add("https://nhandan.vn/nhan-dinh");
+        BUSINESS.add("https://nhandan.vn/chuyen-lam-an");
+        BUSINESS.add("https://nhandan.vn/chungkhoan");
+        BUSINESS.add("https://nhandan.vn/hanggiahangthat");
     }
 
     private static final Category TECHNOLOGY = new Category(CATEGORY.TECHNOLOGY, "https://nhandan.vn/khoahoc-congnghe", CSS.NHANDAN_TITLE_LINK);
     static {
-        TECHNOLOGY.addSub("https://nhandan.vn/khoa-hoc");
-        TECHNOLOGY.addSub("https://nhandan.vn/vi-moi-truong-xanh");
-        TECHNOLOGY.addSub("https://nhandan.vn/thong-tin-so");
+        TECHNOLOGY.add("https://nhandan.vn/khoa-hoc");
+        TECHNOLOGY.add("https://nhandan.vn/vi-moi-truong-xanh");
+        TECHNOLOGY.add("https://nhandan.vn/thong-tin-so");
     }
 
     private static final Category HEALTH = new Category(CATEGORY.HEALTH, "https://nhandan.vn/y-te", CSS.NHANDAN_TITLE_LINK);
     static {
-        HEALTH.addSub("https://nhandan.vn/benh-thuong-gap");
-        HEALTH.addSub("https://nhandan.vn/goc-tu-van");
-        HEALTH.addSub("https://nhandan.vn/tin-tuc-y-te");
+        HEALTH.add("https://nhandan.vn/benh-thuong-gap");
+        HEALTH.add("https://nhandan.vn/goc-tu-van");
+        HEALTH.add("https://nhandan.vn/tin-tuc-y-te");
     }
 
     private static final Category SPORTS = new Category(CATEGORY.SPORTS, "https://nhandan.vn/thethao", CSS.NHANDAN_TITLE_LINK);
     static {
-        SPORTS.addSub("https://nhandan.vn/nhip-song-the-thao");
-        SPORTS.addSub("https://nhandan.vn/guong-mat");
-        SPORTS.addSub("https://nhandan.vn/bong-da-viet-nam");
-        SPORTS.addSub("https://nhandan.vn/bong-da-quoc-te");
+        SPORTS.add("https://nhandan.vn/nhip-song-the-thao");
+        SPORTS.add("https://nhandan.vn/guong-mat");
+        SPORTS.add("https://nhandan.vn/bong-da-viet-nam");
+        SPORTS.add("https://nhandan.vn/bong-da-quoc-te");
     }
 
     private static final Category ENTERTAINMENT = new Category(CATEGORY.ENTERTAINMENT, "https://nhandan.vn/vanhoa", CSS.NHANDAN_TITLE_LINK);
     static {
-        ENTERTAINMENT.addSub("https://nhandan.vn/dong-chay");
-        ENTERTAINMENT.addSub("https://nhandan.vn/dien-dan");
-        ENTERTAINMENT.addSub("https://nhandan.vn/nghe-doc-xem");
-        ENTERTAINMENT.addSub("https://nhandan.vn/di-san");
-        ENTERTAINMENT.addSub("https://nhandan.vn/chan-dung");
+        ENTERTAINMENT.add("https://nhandan.vn/dong-chay");
+        ENTERTAINMENT.add("https://nhandan.vn/dien-dan");
+        ENTERTAINMENT.add("https://nhandan.vn/nghe-doc-xem");
+        ENTERTAINMENT.add("https://nhandan.vn/di-san");
+        ENTERTAINMENT.add("https://nhandan.vn/chan-dung");
     }
 
     private static final Category WORLD = new Category(CATEGORY.WORLD, "https://nhandan.vn/thegioi", CSS.NHANDAN_TITLE_LINK);
     static {
-        WORLD.addSub("https://nhandan.vn/cua-so-the-gioi");
-        WORLD.addSub("https://nhandan.vn/cong-dong-asean");
-        WORLD.addSub("https://nhandan.vn/binh-luan-quoc-te");
-        WORLD.addSub("https://nhandan.vn/ho-so-tu-lieu");
-        WORLD.addSub("https://nhandan.vn/chuyen-thoi-su");
-        WORLD.addSub("https://nhandan.vn/tin-tuc-the-gioi");
+        WORLD.add("https://nhandan.vn/cua-so-the-gioi");
+        WORLD.add("https://nhandan.vn/cong-dong-asean");
+        WORLD.add("https://nhandan.vn/binh-luan-quoc-te");
+        WORLD.add("https://nhandan.vn/ho-so-tu-lieu");
+        WORLD.add("https://nhandan.vn/chuyen-thoi-su");
+        WORLD.add("https://nhandan.vn/tin-tuc-the-gioi");
     }
 
     private static final Category OTHERS = new Category(CATEGORY.OTHERS, "", CSS.NHANDAN_TITLE_LINK);
     static {
-        OTHERS.addSub("https://nhandan.vn/phapluat");
-        OTHERS.addSub("https://nhandan.vn/du-lich");
-        OTHERS.addSub("https://nhandan.vn/giaoduc");
-        OTHERS.addSub("https://nhandan.vn/bandoc");
+        OTHERS.add("https://nhandan.vn/phapluat");
+        OTHERS.add("https://nhandan.vn/du-lich");
+        OTHERS.add("https://nhandan.vn/giaoduc");
+        OTHERS.add("https://nhandan.vn/bandoc");
     }
 
     public static NewsOutlet init() {

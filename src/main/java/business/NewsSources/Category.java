@@ -36,7 +36,7 @@ public class Category {
         subCategories.add(newCategory);
     }
 
-    public void addSub(String url) {
+    public void add(String url) {
         add("", url);
     }
 
