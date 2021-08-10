@@ -137,18 +137,17 @@ public class ThanhNien extends NewsOutlet {
 
     @Override
     public List<String> getCategoryNames(Document doc) {
+        List<String> categoryList = new ArrayList<>();
+
         // get parent category
         Element tag = doc.getElementsByAttributeValue("property", "article:section").first();
-        String parentCategory;
-        if (tag == null) {
-            parentCategory = CATEGORY.OTHERS;
-        } else {
-            parentCategory = tag.attr("content");
-            parentCategory = CATEGORY.convert(parentCategory);
-        }
 
-        List<String> categoryList = new ArrayList<>();
-        categoryList.add(parentCategory);
+        if (tag != null) {
+            String parentCategory = tag.attr("content");
+            parentCategory = CATEGORY.convert(parentCategory);
+            if (!StringUtils.isEmpty(parentCategory))
+                categoryList.add(parentCategory);
+        }
 
         // get child category
         Element childrenCategoryTag = doc.selectFirst(".breadcrumbs");
@@ -157,11 +156,19 @@ public class ThanhNien extends NewsOutlet {
             for (Element e : children) {
                 String category = e.attr("title");
                 category = CATEGORY.convert(category);
+
+                if (StringUtils.isEmpty(category))
+                    continue;
+
                 if (!categoryList.contains(category)) {
                     categoryList.add(category);
                 }
             }
         }
+
+        if (categoryList.isEmpty())
+            categoryList.add(CATEGORY.OTHERS);
+
         return categoryList;
     }
 }

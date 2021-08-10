@@ -132,14 +132,16 @@ public class ZingNews extends NewsOutlet {
             for (Element e : categoryTags) {
                 String category = e.attr("title");
                 category = CATEGORY.convert(category);
+
+                if (StringUtils.isEmpty(category))
+                    continue;
+
                 if (!categoryList.contains(category)) {
                     categoryList.add(category);
                 }
             }
-
         }
-
-        if (categoryList.isEmpty()) {
+        else{
             categoryList.add(CATEGORY.OTHERS);
         }
 

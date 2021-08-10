@@ -196,10 +196,13 @@ public class NhanDan extends NewsOutlet {
             for (Element e : tags) {
                 String category = e.text();
                 category = CATEGORY.convert(category);
+
+                if (StringUtils.isEmpty(category))
+                    continue;
+
                 if (!categoryList.contains(category)) {
                     categoryList.add(category);
                 }
-
             }
         } else {
             categoryList.add(CATEGORY.OTHERS);

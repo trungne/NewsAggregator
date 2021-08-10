@@ -138,20 +138,17 @@ public class VNExpress extends NewsOutlet {
 
     @Override
     public List<String> getCategoryNames(Document doc) {
-        // scrape the parent category in meta tag
-        Element parentTag = doc.getElementsByAttributeValue("name", "tt_site_id_detail").first();
-        String parentCategory;
+        List<String> categoryList = new ArrayList<>();
 
-        // if no parent tag is found, set the category to default "others"
-        if (parentTag == null) {
-            parentCategory = CATEGORY.OTHERS;
-        } else {
-            parentCategory = parentTag.attr("catename");
+        Element parentCategoryTag = doc.getElementsByAttributeValue("name","tt_site_id_detail").first();
+        if (parentCategoryTag != null){
+            String parentCategory = parentCategoryTag.attr("catename");
             parentCategory = CATEGORY.convert(parentCategory);
+            if (!StringUtils.isEmpty(parentCategory))
+                categoryList.add(parentCategory);
         }
 
-        List<String> categoryList = new ArrayList<>();
-        categoryList.add(parentCategory);
+
 
         // scape all categories in body
         Element tag = doc.selectFirst(".breadcrumb");
@@ -161,11 +158,20 @@ public class VNExpress extends NewsOutlet {
             for (Element e : categoryTags) {
                 String category = e.attr("title");
                 category = CATEGORY.convert(category);
+
+                if (StringUtils.isEmpty(category))
+                    continue;
+
                 if (!categoryList.contains(category)) {
                     categoryList.add(category);
                 }
             }
         }
+
+        if(categoryList.isEmpty()){
+            categoryList.add(CATEGORY.OTHERS);
+        }
+
         return categoryList;
     }
 }
