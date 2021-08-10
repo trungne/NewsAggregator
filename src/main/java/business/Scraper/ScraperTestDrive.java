@@ -10,9 +10,11 @@ public class ScraperTestDrive {
     public static void main(String[] args) {
         final long startTime = System.currentTimeMillis();
 
-        Collection<Preview> previews = ArticleCollection.getPreviewsByCategory(CATEGORY.BUSINESS);
+        Collection<Preview> previews = ArticleCollection.getPreviewsByCategory(CATEGORY.NEW);
 
         for (Preview preview : previews) {
+            System.out.println("=============");
+            System.out.println(preview.getUrl());
             System.out.println(preview.getCategory());
         }
 

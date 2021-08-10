@@ -26,7 +26,7 @@ public class CATEGORY {
     // map Vietnamese names to English
     private static final HashMap<String, String[]> CategoriesMapping = new HashMap<>();
     static {
-        CategoriesMapping.put(COVID, new String[]{""});
+//        CategoriesMapping.put(COVID, new String[]{""});
         CategoriesMapping.put(POLITICS, new String[]{"chính trị"});
         CategoriesMapping.put(BUSINESS, new String[]{"kinh doanh", "tài chính - kinh doanh", "kinh tế"});
         CategoriesMapping.put(TECHNOLOGY, new String[]{"khoa học - công nghệ", "công nghệ", "khoa học"});

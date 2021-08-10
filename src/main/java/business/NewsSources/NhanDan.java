@@ -18,6 +18,7 @@ import static business.Helper.Scraper.createCleanImgTag;
 import static business.Helper.Scraper.scrapeFirstElementByClass;
 
 public class NhanDan extends NewsOutlet {
+    private static final Category NEW = new Category(CATEGORY.NEW, "https://nhandan.vn/", CSS.NHANDAN_TITLE_LINK);
     private static final Category COVID = new Category(CATEGORY.COVID, "https://nhandan.vn/tieu-diem", CSS.NHANDAN_TITLE_LINK);
     private static final Category POLITICS = new Category(CATEGORY.POLITICS, "https://nhandan.vn/chinhtri", CSS.NHANDAN_TITLE_LINK);
     static {
@@ -90,6 +91,7 @@ public class NhanDan extends NewsOutlet {
 
     public static NewsOutlet init() {
         HashMap<String, Category> categories = new HashMap<>();
+        categories.put(CATEGORY.NEW, NEW);
         categories.put(CATEGORY.COVID, COVID);
         categories.put(CATEGORY.POLITICS, POLITICS);
         categories.put(CATEGORY.BUSINESS, BUSINESS);
@@ -204,7 +206,9 @@ public class NhanDan extends NewsOutlet {
                     categoryList.add(category);
                 }
             }
-        } else {
+        }
+
+        if(categoryList.isEmpty()){
             categoryList.add(CATEGORY.OTHERS);
         }
 

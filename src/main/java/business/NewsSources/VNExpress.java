@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class VNExpress extends NewsOutlet {
+    private static final Category NEW = new Category(CATEGORY.NEW, "https://vnexpress.net/", CSS.VNEXPRESS_TITLE_LINK);
     private static final Category COVID = new Category(CATEGORY.COVID, "https://vnexpress.net/covid-19/tin-tuc", CSS.VNEXPRESS_TITLE_LINK);
     private static final Category POLITICS = new Category(CATEGORY.POLITICS, "https://vnexpress.net/thoi-su/chinh-tri", CSS.VNEXPRESS_TITLE_LINK);
     private static final Category BUSINESS = new Category(CATEGORY.BUSINESS, "https://vnexpress.net/kinh-doanh", CSS.VNEXPRESS_TITLE_LINK);
@@ -96,6 +97,7 @@ public class VNExpress extends NewsOutlet {
 
     public static NewsOutlet init() {
         HashMap<String, Category> categories = new HashMap<>();
+        categories.put(CATEGORY.NEW, NEW);
         categories.put(CATEGORY.COVID, COVID);
         categories.put(CATEGORY.POLITICS, POLITICS);
         categories.put(CATEGORY.BUSINESS, BUSINESS);

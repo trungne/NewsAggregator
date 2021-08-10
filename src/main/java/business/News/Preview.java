@@ -22,7 +22,9 @@ public class Preview implements Comparable<Preview> {
     public String getArticleHtml() {
         return article.getHtml();
     }
-
+    public String getUrl(){
+        return article.getUrl();
+    }
     public String getCategory(){
         return article.getCategory();
     }

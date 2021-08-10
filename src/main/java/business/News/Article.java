@@ -59,6 +59,11 @@ public class Article {
     public String getCategory(){
         return categories.toString();
     }
+
+    public String getUrl() {
+        return url.toString();
+    }
+
     public boolean belongsToCategory(String category) {
         return this.categories.contains(category);
     }

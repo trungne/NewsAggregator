@@ -18,6 +18,7 @@ import java.util.List;
 
 public class ZingNews extends NewsOutlet {
     // main category
+    private static final Category NEW = new Category(CATEGORY.NEW, "https://zingnews.vn/", CSS.ZING_TITLE_LINK);
     private static final Category COVID = new Category(CATEGORY.COVID, "https://zingnews.vn/tieu-diem/covid-19.html", CSS.ZING_TITLE_LINK);
     private static final Category POLITICS = new Category(CATEGORY.POLITICS, "https://zingnews.vn/chinh-tri.html", CSS.ZING_TITLE_LINK);
     private static final Category BUSINESS = new Category(CATEGORY.BUSINESS, "https://zingnews.vn/kinh-doanh-tai-chinh.html", CSS.ZING_TITLE_LINK);
@@ -82,6 +83,7 @@ public class ZingNews extends NewsOutlet {
 
     public static NewsOutlet init() {
         HashMap<String, Category> categories = new HashMap<>();
+        categories.put(CATEGORY.NEW, NEW);
         categories.put(CATEGORY.COVID, COVID);
         categories.put(CATEGORY.POLITICS, POLITICS);
         categories.put(CATEGORY.BUSINESS, BUSINESS);
@@ -141,7 +143,9 @@ public class ZingNews extends NewsOutlet {
                 }
             }
         }
-        else{
+
+
+        if(categoryList.isEmpty()){
             categoryList.add(CATEGORY.OTHERS);
         }
 
