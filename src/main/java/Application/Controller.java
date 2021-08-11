@@ -28,11 +28,6 @@ public class Controller {
     @FXML
     private ScrollPane mainArea;
 
-    private Scene articleScene;
-
-    private final WebView browser = new WebView();
-    private final WebEngine webEngine = browser.getEngine();
-
     List<Article> articles;
     public void displayNews(ActionEvent e){
         Object o = e.getSource();
@@ -101,7 +96,7 @@ public class Controller {
             WebView browser = new WebView();
             WebEngine webEngine = browser.getEngine();
             webEngine.loadContent(a.getHtml());
-            articleScene = new Scene(browser);
+            Scene articleScene = new Scene(browser);
             Stage stage = new Stage();
             stage.setScene(articleScene);
             stage.show();
