@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static business.Helper.ScrapingConfiguration.MAX_TERMINATION_TIME;
 import static business.Helper.ScrapingConfiguration.MAX_WAIT_TIME_WHEN_ACCESS_URL;
@@ -27,10 +28,13 @@ public class ArticleListGenerator {
 
     private static List<Article> extractArticlesFromLinks(NewsOutlet newsOutlet, String category, Collection<URL> urls) {
         List<Article> articles = Collections.synchronizedList(new ArrayList<>());
-        // TODO: MULTI threading here
         ExecutorService es = Executors.newCachedThreadPool();
         for (URL url : urls) {
             es.execute(() -> {
+                if (articles.size() == 10){
+                    es.shutdownNow();
+                }
+
                 try {
                     Document articleDoc = Jsoup
                             .connect(url.toString())
@@ -46,7 +50,11 @@ public class ArticleListGenerator {
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
+
+
             });
+
+
         }
         es.shutdown(); // Disable new tasks from being submitted
         try {
@@ -59,6 +67,8 @@ public class ArticleListGenerator {
         } catch (InterruptedException e) {
             es.shutdownNow();
         }
+
+
 
         return articles;
     }

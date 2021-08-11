@@ -11,7 +11,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Article {
+public class Article implements Comparable<Article>{
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EE, dd/MMMM/yyyy, kk:mm ");
 
     static boolean validateTag(Element e, String type, URL url) throws Exception {
@@ -180,10 +180,8 @@ public class Article {
         this.dateTime = dateTime;
     }
 
-
-    public Preview getPreview() {
-        return new Preview(this);
+    @Override
+    public int compareTo(Article a) {
+        return (int) (this.getMinutesSincePublished() - a.getMinutesSincePublished());
     }
-
-
 }

@@ -1,5 +1,6 @@
 package business.Helper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -15,6 +16,10 @@ public class CATEGORY {
     public static final String ENTERTAINMENT = "Entertainment";
     public static final String WORLD = "World";
     public static final String OTHERS = "Others";
+
+    public static final String[] ALL_CATEGORIES = new String[]{
+            NEW, COVID, POLITICS, BUSINESS, TECHNOLOGY, HEALTH, SPORTS, ENTERTAINMENT, WORLD, OTHERS
+    };
 
     public static final String SOCIETY = "Society";
     public static final String LAWS = "Laws";
