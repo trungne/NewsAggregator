@@ -178,13 +178,12 @@ public class NhanDan extends NewsOutlet {
     }
 
     @Override
-    public Element getThumbnail(Document doc) {
+    public String getThumbnail(Document doc) {
         try {
             Element elementContainsImgs = scrapeFirstElementByClass(doc, thumbnailCss);
             Element thumbnail = elementContainsImgs.getElementsByTag("img").first();
             thumbnail = createCleanImgTag(thumbnail);
-            thumbnail = sanitizer.sanitizeThumbNail(thumbnail);
-            return thumbnail;
+            return thumbnail.attr("src");
         } catch (NullPointerException e) {
             return getDefaultThumbnail();
         }

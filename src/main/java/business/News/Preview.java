@@ -3,25 +3,53 @@ package business.News;
 import org.jsoup.nodes.Element;
 
 public class Preview implements Comparable<Preview> {
-    private final Element preview;
+    private final String title;
+    private final String description;
+    private final String thumbnail;
+    private final String relativePublishedTime;
     private final Article article;
 
-    public Preview(Element preview, Article article) {
-        this.preview = preview;
+    public Preview(Article article){
         this.article = article;
+        this.title = article.getTitle();
+        this.description = article.getDescription();
+        this.thumbnail = article.getThumbNail();
+        this.relativePublishedTime = article.getRelativeTime();
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public String getRelativePublishedTime() {
+        return relativePublishedTime;
+    }
+
+    public String getNewsSource(){
+        return article.getNewsSource();
+    }
+
+
     public String toString() {
-        return preview.outerHtml();
+        return article.getHtml();
     }
 
     public String getHtml() {
-        return preview.outerHtml();
+        return article.getHtml();
     }
 
     public String getArticleHtml() {
         return article.getHtml();
     }
+
     public String getUrl(){
         return article.getUrl();
     }

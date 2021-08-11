@@ -24,20 +24,20 @@ public class Article {
     private Element title;
     private Element description;
     private Element mainContent;
-    private Element thumbNail;
+    private String thumbNail;
     private LocalDateTime dateTime;
     private final List<String> categories = new ArrayList<>();
-    private String newsSource;
+    private final String newsSource;
 
     public Article(URL url, NewsOutlet newsOutlet, List<String> categoryList) {
         this.url = url;
-        setNewsSource(newsOutlet.getName());
+        this.newsSource = newsOutlet.getName();
         addCategory(categoryList);
     }
 
     public Article(URL url, NewsOutlet newsOutlet, String parentCategory) {
         this.url = url;
-        setNewsSource(newsOutlet.getName());
+        this.newsSource = newsOutlet.getName();
         addCategory(parentCategory);
     }
 
@@ -62,6 +62,22 @@ public class Article {
 
     public String getUrl() {
         return url.toString();
+    }
+
+    public String getTitle() {
+        return title.text();
+    }
+
+    public String getDescription(){
+        return description.text();
+    }
+
+    public String getThumbNail() {
+        return thumbNail;
+    }
+
+    public String getNewsSource() {
+        return newsSource;
     }
 
     public boolean belongsToCategory(String category) {
@@ -156,9 +172,8 @@ public class Article {
             this.mainContent = mainContent;
     }
 
-    public void setThumbNailUrl(Element thumbNail) throws Exception {
-        if (validateTag(mainContent, "Thumbnail", url))
-            this.thumbNail = thumbNail;
+    public void setThumbNailUrl(String thumbNail){
+        this.thumbNail = thumbNail;
     }
 
     public void setDateTime(LocalDateTime dateTime) {
@@ -166,44 +181,8 @@ public class Article {
     }
 
 
-    public void setNewsSource(String newsSource) {
-        this.newsSource = newsSource;
-    }
-
     public Preview getPreview() {
-        Element source = new Element("div");
-        source.addClass(CSS.SOURCE);
-        source.text(newsSource);
-
-        Element relativeTime = new Element("div");
-        relativeTime.addClass(CSS.PUBLISHED_TIME);
-        relativeTime.text(getRelativeTime());
-
-        Element thumbHeader = new Element("div");
-        thumbHeader.addClass(CSS.THUMBNAIL_HEADER);
-        thumbHeader.appendChild(source);
-        thumbHeader.appendChild(relativeTime);
-
-
-        Element thumbTitle = new Element("div");
-        thumbTitle.addClass(CSS.THUMBNAIL_TITLE);
-        thumbTitle.text(title.text());
-
-        Element thumbDesp = new Element("div");
-        thumbDesp.addClass(CSS.THUMBNAIL_DESCRIPTION);
-        thumbDesp.text(description.text());
-
-
-        Element preview = new Element("div");
-        preview.addClass(CSS.PREVIEW);
-
-        preview.appendChild(thumbNail);
-        preview.appendChild(thumbHeader);
-        preview.appendChild(thumbTitle);
-        preview.appendChild(thumbDesp);
-
-        return new Preview(preview, this);
-
+        return new Preview(this);
     }
 
 

@@ -2,6 +2,7 @@ package business.Scraper;
 
 import business.ArticleCollection;
 import business.Helper.CATEGORY;
+import business.News.Article;
 import business.News.Preview;
 
 import java.util.Collection;
@@ -10,9 +11,9 @@ public class ScraperTestDrive {
     public static void main(String[] args) {
         final long startTime = System.currentTimeMillis();
 
-        Collection<Preview> previews = ArticleCollection.getPreviewsByCategory(CATEGORY.NEW);
+        Collection<Article> previews = ArticleCollection.getPreviewsByCategory(CATEGORY.NEW);
 
-        for (Preview preview : previews) {
+        for (Article preview : previews) {
             System.out.println("=============");
             System.out.println(preview.getUrl());
             System.out.println(preview.getCategory());

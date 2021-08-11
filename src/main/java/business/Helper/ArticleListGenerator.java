@@ -93,7 +93,7 @@ public class ArticleListGenerator {
         Element titleTag = newsOutlet.getTitle(articleDoc);
         Element descriptionTag = newsOutlet.getDescription(articleDoc);
         Element mainContentTag = newsOutlet.getMainContent(articleDoc);
-        Element thumbNail = newsOutlet.getThumbnail(articleDoc);
+        String thumbNail = newsOutlet.getThumbnail(articleDoc);
         List<String> categories = newsOutlet.getCategoryNames(articleDoc);
         LocalDateTime publishedTime = newsOutlet.getPublishedTime(articleDoc);
 
@@ -102,12 +102,7 @@ public class ArticleListGenerator {
             return false;
         }
 
-        // assign default alt if there is none
-        if (!thumbNail.hasAttr("alt"))
-            thumbNail.attr("alt", StringUtils.isEmpty(titleTag.text()) ? "thumbnail" : titleTag.text());
-
         article.setDateTime(publishedTime);
-        article.setNewsSource(newsOutlet.getName());
 
         try {
             article.setTitle(titleTag);

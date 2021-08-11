@@ -54,23 +54,20 @@ public abstract class NewsOutlet {
     }
 
     // by default, set the first img as the thumbnail
-    public Element getThumbnail(Document doc) {
+    public String getThumbnail(Document doc) {
         try {
             Element elementContainsImgs = scrapeFirstElementByClass(doc, cssConfiguration.picture);
             Element thumbnail = elementContainsImgs.getElementsByTag("img").first();
             thumbnail = createCleanImgTag(thumbnail);
-            thumbnail = sanitizer.sanitizeThumbNail(thumbnail);
-            return thumbnail;
+            return thumbnail.attr("src");
+
         } catch (NullPointerException e) {
             return getDefaultThumbnail();
         }
     }
 
-    protected Element getDefaultThumbnail() {
-        Element thumbnail = new Element("img");
-        thumbnail.attr("src", defaultThumbnail);
-        thumbnail = sanitizer.sanitizeThumbNail(thumbnail);
-        return thumbnail;
+    protected String getDefaultThumbnail() {
+        return defaultThumbnail;
     }
 
     protected Category getCategory(String categoryName){

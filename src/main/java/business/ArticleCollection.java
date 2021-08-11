@@ -26,13 +26,13 @@ public class ArticleCollection {
     public static final HashMap<String, NewsOutlet> newsOutlets = GetNewsOutlets.newsOutlets;
 
     // generate previews from articles scraped
-    public static List<Preview> getPreviewsByCategory(String category) {
+    public static List<Article> getPreviewsByCategory(String category) {
         // load articles if they haven't been loaded before
         if (articlesByCategories.get(category) == null) {
             loadArticlesByCategory(category);
         }
 
-        return createPreviewsByCategory(category);
+        return articlesByCategories.get(category);
     }
 
     private static List<Preview> createPreviewsByCategory(String category) {
