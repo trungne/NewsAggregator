@@ -77,7 +77,7 @@
             <Font name="Calibri Bold" size="20.0" />
          </font>
       </Button>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="80.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="776.0" spacing="80.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
          <children>
             <Button mnemonicParsing="false" prefWidth="70.0" text="1" />
             <Button mnemonicParsing="false" prefWidth="70.0" text="2" />

@@ -1,7 +1,6 @@
 package business;
 
 import business.Helper.ArticleListGenerator;
-import business.Helper.CATEGORY;
 import business.Helper.GetNewsOutlets;
 import business.News.Article;
 import business.NewsSources.NewsOutlet;
@@ -18,42 +17,31 @@ import java.util.stream.Collectors;
 import static business.Helper.ScrapingConfiguration.MAX_TERMINATION_TIME;
 
 // an interface for presentation layer to access scraped articles
-public class ArticleCollection {
-    // map articles with their category
-    public static final HashMap<String, List<Article>> articlesByCategories = new HashMap<>();
-    // get all news outlet css info
-    public static final HashMap<String, NewsOutlet> newsOutlets = GetNewsOutlets.newsOutlets;
+public class ArticleCollection{
+    public static List<Article> currentArticleList;
 
-    public static void loadAllArticles(){
-        for (String category: CATEGORY.ALL_CATEGORIES){
-            articlesByCategories.put(category, getArticlesByCategory(category));
-        }
-    }
+    // map articles with their category
+    private static final HashMap<String, List<Article>> articlesByCategories = new HashMap<>();
+    // get all news outlet css info
+    private static final HashMap<String, NewsOutlet> newsOutlets = GetNewsOutlets.newsOutlets;
 
     // generate previews from articles scraped
     public static List<Article> getArticlesByCategory(String category) {
         // load articles if they haven't been loaded before
         if (articlesByCategories.get(category) == null) {
-            loadArticlesByCategory(category);
+            loadArticles(category);
         }
-
-        return articlesByCategories.get(category);
+        currentArticleList = articlesByCategories.get(category);
+        return currentArticleList;
     }
 
-
-
-    // MULTI THREADING!
-    public static void loadArticlesByCategory(String category) {
-        List<Article> safeArticleList = Collections.synchronizedList(new ArrayList<>());
+    public static void loadArticles(String category) {
+        currentArticleList = Collections.synchronizedList(new ArrayList<>());
         ExecutorService es = Executors.newCachedThreadPool();
-//        CovidInfo.loadInfo();
         for (NewsOutlet newsOutlet : newsOutlets.values()) {
-            List<Article> finalSafeArticleList = safeArticleList;
             es.execute(() -> {
-                List<Article> articles = ArticleListGenerator
-                        .getArticlesInCategory(newsOutlet, category);
-
-                finalSafeArticleList.addAll(articles);
+                ArticleListGenerator articleListGenerator = new ArticleListGenerator(newsOutlet, category);
+                articleListGenerator.populateArticleList(currentArticleList);
             });
         }
 
@@ -69,8 +57,8 @@ public class ArticleCollection {
             es.shutdownNow();
         }
 
-        safeArticleList = safeArticleList.stream().sorted().collect(Collectors.toList());
-        articlesByCategories.put(category, safeArticleList);
+        currentArticleList = currentArticleList.stream().sorted().collect(Collectors.toList());
+        articlesByCategories.put(category, currentArticleList);
     }
 }
 

@@ -2,36 +2,36 @@ package business.Helper;
 
 import business.News.Article;
 import business.NewsSources.NewsOutlet;
-import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+import org.jsoup.nodes.*;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
+import java.net.*;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
+import java.util.concurrent.*;
 
-import static business.Helper.ScrapingConfiguration.MAX_TERMINATION_TIME;
-import static business.Helper.ScrapingConfiguration.MAX_WAIT_TIME_WHEN_ACCESS_URL;
+import static business.Helper.ScrapingConfiguration.*;
+
 
 public class ArticleListGenerator {
-    public static List<Article> getArticlesInCategory(NewsOutlet newsOutlet, String category) {
+    private final NewsOutlet newsOutlet;
+    private final String category;
+    private int articleSuccessfullyAdded = 0;
+    public ArticleListGenerator(NewsOutlet newsOutlet, String category){
+        this.newsOutlet = newsOutlet;
+        this.category = category;
+    }
+    public void populateArticleList(List<Article> articleList) {
         Set<URL> articleUrls = newsOutlet.getLinksFromCategory(category);
-        return extractArticlesFromLinks(newsOutlet, category, articleUrls);
+        extractArticlesFromLinks(articleUrls, articleList);
     }
 
-    private static List<Article> extractArticlesFromLinks(NewsOutlet newsOutlet, String category, Collection<URL> urls) {
-        List<Article> articles = Collections.synchronizedList(new ArrayList<>());
+    private void extractArticlesFromLinks(Set<URL> urls, List<Article> articles) {
         ExecutorService es = Executors.newCachedThreadPool();
         for (URL url : urls) {
             es.execute(() -> {
-                if (articles.size() == 10){
+                if (articleSuccessfullyAdded == 10){
                     es.shutdownNow();
                 }
 
@@ -44,14 +44,13 @@ public class ArticleListGenerator {
                     boolean ok = extractContentFromDocument(articleDoc, newsOutlet, article);
                     if (ok) {
                         articles.add(article);
+                        articleSuccessfullyAdded++;
                     }
                 } catch (SocketTimeoutException e) {
                     System.out.println("Cannot scrape: " + url);
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
-
-
             });
 
 
@@ -67,10 +66,6 @@ public class ArticleListGenerator {
         } catch (InterruptedException e) {
             es.shutdownNow();
         }
-
-
-
-        return articles;
     }
 
     private static Article createArticle(URL url, String name) {

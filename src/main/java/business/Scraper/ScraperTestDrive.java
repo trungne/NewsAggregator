@@ -7,12 +7,9 @@ import business.News.Article;
 import java.util.Collection;
 import java.util.List;
 
-import static business.ArticleCollection.loadAllArticles;
-
 public class ScraperTestDrive {
     public static void main(String[] args) {
         final long startTime = System.currentTimeMillis();
-        loadAllArticles();
         List<Article> articles = ArticleCollection.getArticlesByCategory(CATEGORY.NEW);
 
         for (Article article : articles) {

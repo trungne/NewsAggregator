@@ -8,16 +8,18 @@ import javafx.stage.Stage;
 
 import java.util.Objects;
 
-import static business.ArticleCollection.loadAllArticles;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        Parent root;
         // TODO: add loading screen here
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/MainMenu.fxml")));
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/MainMenu.fxml")));
+
         primaryStage.setTitle("News Aggregator");
         primaryStage.setScene(new Scene(root, 720, 600));
+
         primaryStage.show();
     }
 
