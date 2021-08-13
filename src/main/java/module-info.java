@@ -12,5 +12,8 @@ module JavaFxApplication {
 
     opens Application to javafx.fxml;
     exports Application;
+    exports business.News;
+    exports business;
+    opens business to javafx.fxml;
 
 }

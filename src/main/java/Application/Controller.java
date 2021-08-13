@@ -1,25 +1,15 @@
 package Application;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.ProgressBar;
+import business.GetArticleListService;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 
-import business.ArticleCollection;
 import business.News.Article;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.util.*;
 
@@ -33,6 +23,7 @@ public class Controller {
 
     List<Article> articles;
 
+    private static final int PREVIEWS_PER_PAGE = 10;
     public void initialize(){
         System.out.println("system initialized!");
     }
@@ -44,24 +35,44 @@ public class Controller {
         }
     }
 
-    public void displayPreviews(String category){
+    private void displayPreviews(String category){
+        loadArticles(category);
+    }
+
+    private void generatePreviews(){
         previewBox.getChildren().clear();
-        articles = ArticleCollection.getArticlesByCategory(category);
-
-
-        for (int i = 0; i < 10; i++){
+        // TODO: Create task to show loading screen
+        for (int i = 0; i < PREVIEWS_PER_PAGE; i++){
             previewBox.getChildren().add(createPreviewPane(articles.get(i)));
         }
         mainArea.setContent(previewBox);
     }
 
     private void loadArticles(String category){
-        final GetArticleService service = new GetArticleService();
-        ProgressBar progressBar = new ProgressBar();
+        GetArticleListService service = new GetArticleListService(category);
+        service.setOnSucceeded(e -> {
+            articles = (List<Article>) e.getSource().getValue();
+            generatePreviews();
+        });
 
-        progressBar.progressProperty().bind(service.progressProperty());
-        progressBar.visibleProperty().bind(service.runningProperty());
+        StackPane stackPane = new StackPane();
 
+        Region veil = new Region();
+        veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4)");
+        veil.setPrefSize(500, 500);
+
+        ProgressIndicator p = new ProgressIndicator();
+        p.setMaxSize(140, 140);
+        p.setStyle(" -fx-progress-color: orange;");
+
+        p.progressProperty().bind(service.progressProperty());
+        veil.visibleProperty().bind(service.runningProperty());
+        p.visibleProperty().bind(service.runningProperty());
+
+        stackPane.getChildren().addAll(veil, p);
+        mainArea.setContent(stackPane);
+
+        service.start();
     }
 
 

@@ -9,62 +9,55 @@ import java.io.IOException;
 import java.net.*;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.*;
 
 import static business.Helper.ScrapingConfiguration.*;
 
 
-public class ArticleListGenerator {
+public class ArticleListGenerator extends Thread {
     private final NewsOutlet newsOutlet;
     private final String category;
+    private List<Article> articleList = null;
     private int articleSuccessfullyAdded = 0;
-    public ArticleListGenerator(NewsOutlet newsOutlet, String category){
+    public ArticleListGenerator(NewsOutlet newsOutlet, String category, List<Article> articleList){
         this.newsOutlet = newsOutlet;
         this.category = category;
+        this.articleList = articleList;
     }
-    public void populateArticleList(List<Article> articleList) {
+
+    @Override
+    public void run(){
+        populateArticleList();
+    }
+    public void populateArticleList() {
         Set<URL> articleUrls = newsOutlet.getLinksFromCategory(category);
         extractArticlesFromLinks(articleUrls, articleList);
     }
 
     private void extractArticlesFromLinks(Set<URL> urls, List<Article> articles) {
-        ExecutorService es = Executors.newCachedThreadPool();
         for (URL url : urls) {
-            es.execute(() -> {
-                if (articleSuccessfullyAdded == 10){
-                    es.shutdownNow();
-                }
-
-                try {
-                    Document articleDoc = Jsoup
-                            .connect(url.toString())
-                            .timeout(MAX_WAIT_TIME_WHEN_ACCESS_URL)
-                            .get();
-                    Article article = new Article(url, newsOutlet, category);
-                    boolean ok = extractContentFromDocument(articleDoc, newsOutlet, article);
-                    if (ok) {
-                        articles.add(article);
-                        articleSuccessfullyAdded++;
-                    }
-                } catch (SocketTimeoutException e) {
-                    System.out.println("Cannot scrape: " + url);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-            });
-
-
-        }
-        es.shutdown(); // Disable new tasks from being submitted
-        try {
-            if (!es.awaitTermination(MAX_TERMINATION_TIME, TimeUnit.SECONDS)) {
-                es.shutdownNow(); // Cancel currently executing tasks
-                // Wait a while for tasks to respond to being cancelled
-                if (!es.awaitTermination(MAX_TERMINATION_TIME, TimeUnit.SECONDS))
-                    System.err.println("Pool did not terminate");
+            if(articleSuccessfullyAdded == 10){
+                break;
             }
-        } catch (InterruptedException e) {
-            es.shutdownNow();
+            Document articleDoc;
+            try {
+                articleDoc = Jsoup
+                        .connect(url.toString())
+                        .timeout(MAX_WAIT_TIME_WHEN_ACCESS_URL)
+                        .get();
+            } catch (SocketTimeoutException e) {
+                System.out.println("Cannot scrape: " + url);
+                continue;
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+                continue;
+            }
+
+            Article article = new Article(url, newsOutlet, category);
+            boolean addedSuccessfully = extractContentFromDocument(articleDoc, newsOutlet, article);
+            if (addedSuccessfully) {
+                articles.add(article);
+                articleSuccessfullyAdded++;
+            }
         }
     }
 
