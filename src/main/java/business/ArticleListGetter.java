@@ -22,7 +22,8 @@ import static business.Helper.ScrapingConfiguration.MAX_TERMINATION_TIME;
 // an interface for presentation layer to access scraped articles
 public class ArticleListGetter extends Task<List<Article>> {
     // map articles with their category
-    private static final HashMap<String, List<Article>> articlesByCategories = new HashMap<>();
+    private static final
+    HashMap<String, List<Article>> articlesByCategories = new HashMap<>();
     // get all news outlet css info
     private static final HashMap<String, NewsOutlet> newsOutlets = GetNewsOutlets.newsOutlets;
 
@@ -38,6 +39,7 @@ public class ArticleListGetter extends Task<List<Article>> {
             return articlesByCategories.get(category);
         }
 
+        // scrape articles if there is none
         ObservableList<Article> articles = FXCollections
                 .synchronizedObservableList(
                         FXCollections.observableList(
@@ -65,7 +67,6 @@ public class ArticleListGetter extends Task<List<Article>> {
 
         Collections.sort(articles);
         articlesByCategories.put(category, articles);
-
     }
 
 // https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html

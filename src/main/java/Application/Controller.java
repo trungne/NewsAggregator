@@ -21,7 +21,7 @@ public class Controller {
     @FXML
     private ScrollPane mainArea;
 
-    List<Article> articles;
+    List<Article> articles; // keep reference to change pages
     GetArticleListService service;
     private static final int PREVIEWS_PER_PAGE = 10;
     public void initialize(){
@@ -34,8 +34,8 @@ public class Controller {
             if(service != null){
                 service.cancel();
             }
-
-            displayPreviews(b.getText());
+            String category = b.getText();
+            displayPreviews(category);
         }
     }
 
@@ -43,9 +43,13 @@ public class Controller {
         loadArticles(category);
     }
 
+    private void changePage(int pageNum){
+        // TODO: implement change page behavior
+//        generatePreviews();
+    }
+
     private void generatePreviews(){
         previewBox.getChildren().clear();
-        // TODO: Create task to show loading screen
         for (int i = 0; i < PREVIEWS_PER_PAGE; i++){
             previewBox.getChildren().add(createPreviewPane(articles.get(i)));
         }
@@ -61,16 +65,16 @@ public class Controller {
 
         StackPane stackPane = new StackPane();
 
-        Region veil = new Region();
-        veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4)");
-        veil.setPrefSize(500, 500);
+//        Region veil = new Region();
+//        veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4)");
+//        veil.setPrefSize(500, 500);
 
         ProgressIndicator p = new ProgressIndicator();
         p.setMaxSize(140, 140);
         p.setStyle(" -fx-progress-color: orange;");
 
         p.progressProperty().bind(service.progressProperty());
-        veil.visibleProperty().bind(service.runningProperty());
+//        veil.visibleProperty().bind(service.runningProperty());
         p.visibleProperty().bind(service.runningProperty());
 
         stackPane.getChildren().addAll(p);
