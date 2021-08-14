@@ -13,27 +13,22 @@ import java.util.*;
 import static business.Helper.ScrapingConfiguration.*;
 
 
-public class ArticleListGenerator extends Thread {
+public class ArticleListGenerator{
     private final NewsOutlet newsOutlet;
     private final String category;
-    private List<Article> articleList = null;
-    private int articleSuccessfullyAdded = 0;
-    public ArticleListGenerator(NewsOutlet newsOutlet, String category, List<Article> articleList){
+
+    public ArticleListGenerator(NewsOutlet newsOutlet, String category){
         this.newsOutlet = newsOutlet;
         this.category = category;
-        this.articleList = articleList;
     }
 
-    @Override
-    public void run(){
-        populateArticleList();
-    }
-    public void populateArticleList() {
+    public void populateArticleList(List<Article> articleList) {
         Set<URL> articleUrls = newsOutlet.getLinksFromCategory(category);
         extractArticlesFromLinks(articleUrls, articleList);
     }
 
     private void extractArticlesFromLinks(Set<URL> urls, List<Article> articles) {
+        int articleSuccessfullyAdded = 0;
         for (URL url : urls) {
             if(articleSuccessfullyAdded == 10){
                 break;
@@ -53,41 +48,41 @@ public class ArticleListGenerator extends Thread {
             }
 
             Article article = new Article(url, newsOutlet, category);
-            boolean addedSuccessfully = extractContentFromDocument(articleDoc, newsOutlet, article);
+            boolean addedSuccessfully = extractContentFromDocument(articleDoc, article);
             if (addedSuccessfully) {
                 articles.add(article);
+                // TODO: update progress bar
                 articleSuccessfullyAdded++;
             }
         }
     }
+//    private Article createArticle(URL url, String name) {
+//        NewsOutlet newsOutlet = GetNewsOutlets.newsOutlets.get(name);
+//        if (newsOutlet == null) return null;
+//
+//        Document articleDoc;
+//        try {
+//            articleDoc = Jsoup
+//                    .connect(url.toString())
+//                    .timeout(MAX_WAIT_TIME_WHEN_ACCESS_URL)
+//                    .get();
+//        } catch (IOException ioException) {
+//            ioException.printStackTrace();
+//            return null;
+//        }
+//
+//        List<String> category = newsOutlet.getCategoryNames(articleDoc);
+//        Article article = new Article(url, newsOutlet, category);
+//
+//        boolean isAddedSuccessfully = extractContentFromDocument(articleDoc, article);
+//
+//        if (isAddedSuccessfully)
+//            return article;
+//
+//        return null;
+//    }
 
-    private static Article createArticle(URL url, String name) {
-        NewsOutlet newsOutlet = GetNewsOutlets.newsOutlets.get(name);
-        if (newsOutlet == null) return null;
-
-        Document articleDoc;
-        try {
-            articleDoc = Jsoup
-                    .connect(url.toString())
-                    .timeout(MAX_WAIT_TIME_WHEN_ACCESS_URL)
-                    .get();
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-            return null;
-        }
-
-        List<String> category = newsOutlet.getCategoryNames(articleDoc);
-        Article article = new Article(url, newsOutlet, category);
-
-        boolean isAddedSuccessfully = extractContentFromDocument(articleDoc, newsOutlet, article);
-
-        if (isAddedSuccessfully)
-            return article;
-
-        return null;
-    }
-
-    private static boolean extractContentFromDocument(Document articleDoc, NewsOutlet newsOutlet, Article article) {
+    private boolean extractContentFromDocument(Document articleDoc, Article article) {
         Element titleTag = newsOutlet.getTitle(articleDoc);
         Element descriptionTag = newsOutlet.getDescription(articleDoc);
         Element mainContentTag = newsOutlet.getMainContent(articleDoc);

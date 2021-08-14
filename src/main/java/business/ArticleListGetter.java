@@ -28,7 +28,7 @@ public class ArticleListGetter extends Task<List<Article>> {
     private static final HashMap<String, NewsOutlet> newsOutlets = GetNewsOutlets.newsOutlets;
 
     private final String category;
-    private boolean finished = false;
+
     public ArticleListGetter(String category){
         this.category = category;
     }
@@ -39,40 +39,56 @@ public class ArticleListGetter extends Task<List<Article>> {
             return articlesByCategories.get(category);
         }
 
-        List<Article> articles = Collections.synchronizedList(new ArrayList<>());
+        ObservableList<Article> articles = FXCollections
+                .synchronizedObservableList(
+                        FXCollections.observableList(
+                        new ArrayList<>()));
+
+        // update progress bar
+        articles.addListener((ListChangeListener<Article>) change ->
+                updateProgress(change.getList().size(), 50));
+
         updateArticleList(articles);
+
         return articles;
     }
 
     public void updateArticleList(List<Article> articles) {
-        List<ArticleListGenerator> generators = new ArrayList<>();
+        ExecutorService es = Executors.newSingleThreadExecutor();
         for (NewsOutlet newsOutlet : newsOutlets.values()) {
-            ArticleListGenerator generator = new ArticleListGenerator(newsOutlet, category, articles);
-            generator.start();
-            generators.add(generator);
+            es.execute(()->{
+                ArticleListGenerator generator = new ArticleListGenerator(newsOutlet, category);
+                generator.populateArticleList(articles);
+            });
         }
 
-        Executors.newSingleThreadExecutor().execute(
-                () -> {
-                    while(true){
-                        updateProgress(articles.size(), 50);
-                        if (finished) break;
-                    }
-                });
-
-
-        for (ArticleListGenerator generator: generators){
-            try {
-                generator.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        shutdownAndAwaitTermination(es);
 
         Collections.sort(articles);
         articlesByCategories.put(category, articles);
-        finished = true;
+
+    }
+
+// https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html
+    public void shutdownAndAwaitTermination(ExecutorService pool) {
+        pool.shutdown(); // Disable new tasks from being submitted
+        try {
+            // Wait a while for existing tasks to terminate
+            if (!pool.awaitTermination(30, TimeUnit.SECONDS)) {
+                pool.shutdownNow(); // Cancel currently executing tasks
+                // Wait a while for tasks to respond to being cancelled
+                if (!pool.awaitTermination(30, TimeUnit.SECONDS))
+                    System.err.println("Pool did not terminate");
+            }
+        } catch (InterruptedException ie) {
+            // (Re-)Cancel if current thread also interrupted
+            pool.shutdownNow();
+            // Preserve interrupt status
+            Thread.currentThread().interrupt();
+        }
+
     }
 
 
 }
+
