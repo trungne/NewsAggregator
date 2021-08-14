@@ -16,8 +16,10 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 public class Helper {
-    static GridPane createPreviewPane(Article article){
-        GridPane grid = new GridPane();
+    static void displayArticleInGrid(Article article, GridPane grid){
+        if (!grid.getChildren().isEmpty()){
+            grid.getChildren().clear();
+        }
 
         // thumbnail
         Image image = new Image(article.getThumbNail(), 160, 90, false, false);
@@ -50,8 +52,6 @@ public class Helper {
         grid.addEventHandler(MouseEvent.MOUSE_RELEASED, new OpenArticle());
         grid.addEventHandler(MouseEvent.MOUSE_ENTERED, new UnderlineText());
         grid.addEventHandler(MouseEvent.MOUSE_EXITED, new UndoUnderlineText());
-
-        return grid;
     }
 
     static class OpenArticle implements EventHandler<MouseEvent> {

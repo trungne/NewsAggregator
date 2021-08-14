@@ -17,6 +17,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import static business.Helper.ScrapingConfiguration.MAX_ARTICLES_DISPLAYED;
 import static business.Helper.ScrapingConfiguration.MAX_TERMINATION_TIME;
 
 // an interface for presentation layer to access scraped articles
@@ -44,10 +45,13 @@ public class ArticleListGetter extends Task<List<Article>> {
                 .synchronizedObservableList(
                         FXCollections.observableList(
                         new ArrayList<>()));
-
+        if(isCancelled()){
+            updateMessage("wtf man");
+            System.out.println("wtf");
+        }
         // update progress bar
         articles.addListener((ListChangeListener<Article>) change ->
-                updateProgress(change.getList().size(), 50));
+                updateProgress(change.getList().size(), MAX_ARTICLES_DISPLAYED));
 
         updateArticleList(articles);
 

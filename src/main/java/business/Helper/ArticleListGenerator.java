@@ -30,7 +30,7 @@ public class ArticleListGenerator{
     private void extractArticlesFromLinks(Set<URL> urls, List<Article> articles) {
         int articleSuccessfullyAdded = 0;
         for (URL url : urls) {
-            if(articleSuccessfullyAdded == 10){
+            if(articleSuccessfullyAdded == MAX_ARTICLES_PER_SOURCE){
                 break;
             }
             Document articleDoc;
