@@ -26,10 +26,27 @@ public class Controller {
     @FXML
     private ScrollPane mainArea;
 
+    @FXML
+    private Button page1;
+    @FXML
+    private Button page2;
+    @FXML
+    private Button page3;
+    @FXML
+    private Button page4;
+    @FXML
+    private Button page5;
+
     List<Article> articles; // keep reference to change pages
     GetArticleListService service;
     private static final int PREVIEWS_PER_PAGE = 10;
     public void initialize(){
+        page1.setDisable(true);
+        page2.setDisable(true);
+        page3.setDisable(true);
+        page4.setDisable(true);
+        page5.setDisable(true);
+
         System.out.println("system initialized!");
     }
     public void displayNews(ActionEvent e){
@@ -81,11 +98,25 @@ public class Controller {
 
     private void loadArticles(String category){
         service = new GetArticleListService(category);
-        // async
+
+        // disable all page buttons;
+        page1.setDisable(true);
+        page2.setDisable(true);
+        page3.setDisable(true);
+        page4.setDisable(true);
+        page5.setDisable(true);
+
+
         service.setOnSucceeded(e -> {
             // store 50 articles
             articles = (List<Article>) e.getSource().getValue();
             changePage(1);
+            page1.setDisable(false);
+            page2.setDisable(false);
+            page3.setDisable(false);
+            page4.setDisable(false);
+            page5.setDisable(false);
+
         });
 
 
