@@ -22,7 +22,7 @@ public class Controller {
     private ScrollPane mainArea;
 
     List<Article> articles;
-    GetArticleListService service = new GetArticleListService();
+    GetArticleListService service;
     private static final int PREVIEWS_PER_PAGE = 10;
     public void initialize(){
         System.out.println("system initialized!");
@@ -31,6 +31,10 @@ public class Controller {
         Object o = e.getSource();
         if (o instanceof Button){
             Button b = (Button) o;
+            if(service != null){
+                service.cancel();
+            }
+
             displayPreviews(b.getText());
         }
     }
@@ -49,8 +53,7 @@ public class Controller {
     }
 
     private void loadArticles(String category){
-        service.reset();
-        service.setCategory(category);
+        service = new GetArticleListService(category);
         service.setOnSucceeded(e -> {
             articles = (List<Article>) e.getSource().getValue();
             generatePreviews();
@@ -70,13 +73,11 @@ public class Controller {
         veil.visibleProperty().bind(service.runningProperty());
         p.visibleProperty().bind(service.runningProperty());
 
-        stackPane.getChildren().addAll(veil, p);
+        stackPane.getChildren().addAll(p);
         mainArea.setContent(stackPane);
 
         service.start();
     }
-
-
 }
 
 

@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static business.Helper.ScrapingConfiguration.MAX_TERMINATION_TIME;
 
@@ -54,7 +53,7 @@ public class ArticleListGetter extends Task<List<Article>> {
     }
 
     public void updateArticleList(List<Article> articles) {
-        ExecutorService es = Executors.newSingleThreadExecutor();
+        ExecutorService es = Executors.newCachedThreadPool();
         for (NewsOutlet newsOutlet : newsOutlets.values()) {
             es.execute(()->{
                 ArticleListGenerator generator = new ArticleListGenerator(newsOutlet, category);
@@ -74,10 +73,10 @@ public class ArticleListGetter extends Task<List<Article>> {
         pool.shutdown(); // Disable new tasks from being submitted
         try {
             // Wait a while for existing tasks to terminate
-            if (!pool.awaitTermination(30, TimeUnit.SECONDS)) {
+            if (!pool.awaitTermination(MAX_TERMINATION_TIME, TimeUnit.SECONDS)) {
                 pool.shutdownNow(); // Cancel currently executing tasks
                 // Wait a while for tasks to respond to being cancelled
-                if (!pool.awaitTermination(30, TimeUnit.SECONDS))
+                if (!pool.awaitTermination(MAX_TERMINATION_TIME, TimeUnit.SECONDS))
                     System.err.println("Pool did not terminate");
             }
         } catch (InterruptedException ie) {
