@@ -123,7 +123,9 @@ public class Article implements Comparable<Article>{
 
         return article.outerHtml();
     }
-
+    public void setStyle(String style){
+        // TODO: add style tag to head.
+    }
     public String getAbsoluteTime() {
         return dtf.format(this.dateTime);
     }

@@ -59,14 +59,20 @@ public class Helper {
         public void handle(MouseEvent mouseEvent) {
             Node p = (Node) mouseEvent.getSource();
             Article a = (Article) p.getUserData();
+
             WebView browser = new WebView();
             WebEngine webEngine = browser.getEngine();
-            webEngine.loadContent(a.getHtml());
+
+            String content = a.getHtml();
+            //TODO: add css tyle
+            String css = "<style></style>";
+
+            a.setStyle(css);
+            webEngine.loadContent(content);
             Scene articleScene = new Scene(browser);
             Stage stage = new Stage();
             stage.setScene(articleScene);
             stage.show();
-//            mainArea.setContent(browser);
         }
     }
 

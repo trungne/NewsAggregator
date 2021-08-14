@@ -79,11 +79,11 @@
       </Button>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="776.0" spacing="80.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
          <children>
-            <Button mnemonicParsing="false" prefWidth="70.0" text="1" />
-            <Button mnemonicParsing="false" prefWidth="70.0" text="2" />
-            <Button mnemonicParsing="false" prefWidth="70.0" text="3" />
-            <Button mnemonicParsing="false" prefWidth="70.0" text="4" />
-            <Button mnemonicParsing="false" prefWidth="70.0" text="5" />
+            <Button mnemonicParsing="false" onAction="#changePageBtn" prefWidth="70.0" text="1" />
+            <Button mnemonicParsing="false" onAction="#changePageBtn" prefWidth="70.0" text="2" />
+            <Button mnemonicParsing="false" onAction="#changePageBtn" prefWidth="70.0" text="3" />
+            <Button mnemonicParsing="false" onAction="#changePageBtn" prefWidth="70.0" text="4" />
+            <Button mnemonicParsing="false" onAction="#changePageBtn" prefWidth="70.0" text="5" />
          </children>
       </HBox>
       <ScrollPane fx:id="mainArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowSpan="9">

@@ -1,7 +1,11 @@
 package Application;
 import business.GetArticleListService;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
@@ -10,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 
 import java.util.*;
 
@@ -43,43 +48,57 @@ public class Controller {
         loadArticles(category);
     }
 
-    private void changePage(int pageNum){
-        // TODO: implement change page behavior
-//        generatePreviews();
+    public void changePageBtn(ActionEvent e){
+        Button b = (Button) e.getSource();
+        b.getText();
+        int pageNum = Integer.parseInt(b.getText());
+        changePage(pageNum);
     }
 
-    private void generatePreviews(){
+
+
+
+
+
+    private void changePage(int pageNum){
         previewBox.getChildren().clear();
-        for (int i = 0; i < PREVIEWS_PER_PAGE; i++){
+        int upperBound = PREVIEWS_PER_PAGE * pageNum;
+
+        // TODO: fix cases when articles < 50
+        if (upperBound < 50 && pageNum == 5){
+            System.out.println(upperBound);
+            upperBound = articles.size();
+        }
+
+        int lowerBound = (pageNum - 1) * PREVIEWS_PER_PAGE;
+        // TODO: lag
+        for(int i = lowerBound; i < upperBound; i++){
             previewBox.getChildren().add(createPreviewPane(articles.get(i)));
         }
         mainArea.setContent(previewBox);
     }
 
+
     private void loadArticles(String category){
         service = new GetArticleListService(category);
+        // async
         service.setOnSucceeded(e -> {
+            // store 50 articles
             articles = (List<Article>) e.getSource().getValue();
-            generatePreviews();
+            changePage(1);
         });
 
-        StackPane stackPane = new StackPane();
-
-//        Region veil = new Region();
-//        veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4)");
-//        veil.setPrefSize(500, 500);
 
         ProgressIndicator p = new ProgressIndicator();
         p.setMaxSize(140, 140);
         p.setStyle(" -fx-progress-color: orange;");
-
         p.progressProperty().bind(service.progressProperty());
-//        veil.visibleProperty().bind(service.runningProperty());
         p.visibleProperty().bind(service.runningProperty());
 
+        StackPane stackPane = new StackPane();
         stackPane.getChildren().addAll(p);
-        mainArea.setContent(stackPane);
 
+        mainArea.setContent(stackPane);
         service.start();
     }
 }
