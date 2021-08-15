@@ -1,7 +1,8 @@
 package Application;
 import business.GetArticleListService;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
@@ -26,17 +27,7 @@ public class Controller {
     @FXML private Button page4;
     @FXML private Button page5;
 
-    private final GridPane article1 = new GridPane();
-    private final GridPane article2 = new GridPane();
-    private final GridPane article3 = new GridPane();
-    private final GridPane article4 = new GridPane();
-    private final GridPane article5 = new GridPane();
-    private final GridPane article6 = new GridPane();
-    private final GridPane article7 = new GridPane();
-    private final GridPane article8 = new GridPane();
-    private final GridPane article9 = new GridPane();
-    private final GridPane article10 = new GridPane();
-    GridPane[] articleGridPanes = new GridPane[10];
+
 
     // category buttons
     @FXML private Button newCategory;
@@ -51,41 +42,65 @@ public class Controller {
     @FXML private Button othersCategory;
 
     List<Article> articles; // keep reference to change pages
+    List<GridPane> articleGridPanes = new ArrayList<>();
     GetArticleListService service;
-    Button currentClickedButton;
+
+    Button currentCategoryButton;
+    Button currentPageButton;
+    static final int MAX_PREVIEWS_PER_PAGE = 10;
 
     public void initialize(){
-        disableAllPageButtons();
-        articleGridPanes = new GridPane[]{article1, article2, article3, article4,
-                article5, article6, article7, article8, article9, article10};
-        for (GridPane pane: articleGridPanes){
-            previewBox.getChildren().add(pane);
+        for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
+            GridPane grid = new GridPane();
+            grid.addEventHandler(MouseEvent.MOUSE_RELEASED, new Helper.OpenArticle());
+            grid.addEventHandler(MouseEvent.MOUSE_ENTERED, new Helper.UnderlineText());
+            grid.addEventHandler(MouseEvent.MOUSE_EXITED, new Helper.UndoUnderlineText());
+            articleGridPanes.add(grid);
+            previewBox.getChildren().add(grid);
         }
+        // select new category as a default category when open app
+        newCategory.fire();
     }
     public void displayNews(ActionEvent e){
         Object o = e.getSource();
         if (o instanceof Button){
-            currentClickedButton = (Button) o;
+            Button b = (Button) o;
+
             if(service != null){
                 service.cancel();
             }
-            currentClickedButton.setStyle(
+
+            if(currentCategoryButton != null){
+                // do nothing if the same category is clicked
+                if(currentCategoryButton.getText().equals(b.getText())){
+                    return;
+                }
+                currentCategoryButton.setStyle(null);
+            }
+
+            currentCategoryButton = b;
+            currentCategoryButton.setStyle(
                     "-fx-background-color: rgb(255,255,102);"
             );
-            String category = currentClickedButton.getText();
+            String category = currentCategoryButton.getText();
             displayPreviews(category);
-
         }
     }
 
     private void displayPreviews(String category){
+        disableAllPageButtons();
+        disableAllCategoryButtons();
+
         loadArticles(category);
     }
 
     public void changePageBtn(ActionEvent e){
-        Button b = (Button) e.getSource();
-        b.getText();
-        int pageNum = Integer.parseInt(b.getText());
+        if(currentPageButton != null){
+            currentPageButton.setStyle(null);
+        }
+        currentPageButton = (Button) e.getSource();
+        currentPageButton.getText();
+        int pageNum = Integer.parseInt(currentPageButton.getText());
         changePage(pageNum);
     }
 
@@ -95,17 +110,24 @@ public class Controller {
 
 
     private void changePage(int pageNum){
-        int size = articleGridPanes.length;
-        int upperBound = size * pageNum;
-        int lowerBound = (pageNum - 1) * size;
+        currentPageButton.setStyle(
+                "-fx-background-color: rgb(255,255,102);"
+        );
+        int upperBound = MAX_PREVIEWS_PER_PAGE * pageNum;
+        int lowerBound = (pageNum - 1) * MAX_PREVIEWS_PER_PAGE;
 
         List<Article> currentArticles = new ArrayList<>();
         for(int i = lowerBound; i < upperBound; i++){
+            if (articles.get(i) == null){
+                break;
+            }
             currentArticles.add(articles.get(i));
         }
 
+        clearAllArticleGrids();
+
         for(int i = 0; i < currentArticles.size(); i++){
-            displayArticleInGrid(currentArticles.get(i), articleGridPanes[i]);
+            displayArticleInGrid(currentArticles.get(i), articleGridPanes.get(i));
         }
 
         mainArea.setContent(previewBox);
@@ -115,22 +137,23 @@ public class Controller {
     private void loadArticles(String category){
         service = new GetArticleListService(category);
 
-        disableAllPageButtons();
-        disableAllCategoryButtons();
-
         service.setOnSucceeded(e -> {
             // store 50 articles
             articles = (List<Article>) e.getSource().getValue();
+            if (currentPageButton != null){
+                currentPageButton.setStyle(null);
+            }
+            currentPageButton = page1;
             changePage(1);
             enableAllPageButtons();
             enableAllCategoryButtons();
-            currentClickedButton.setStyle(null);
         });
 
-        ProgressIndicator p = new ProgressIndicator();
-        p.setMaxSize(140, 140);
+        ProgressBar p = new ProgressBar();
+        p.setPrefSize(500, 50);
         p.setStyle(" -fx-progress-color: orange;");
         p.progressProperty().bind(service.progressProperty());
+
         p.visibleProperty().bind(service.runningProperty());
 
         StackPane stackPane = new StackPane();
@@ -138,6 +161,14 @@ public class Controller {
 
         mainArea.setContent(stackPane);
         service.start();
+    }
+
+    private void clearAllArticleGrids(){
+        for(GridPane grid: articleGridPanes){
+            if (!grid.getChildren().isEmpty()){
+                grid.getChildren().clear();
+            }
+        }
     }
 
     private void disableAllCategoryButtons(){

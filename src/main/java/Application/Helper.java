@@ -17,10 +17,6 @@ import javafx.stage.Stage;
 
 public class Helper {
     static void displayArticleInGrid(Article article, GridPane grid){
-        if (!grid.getChildren().isEmpty()){
-            grid.getChildren().clear();
-        }
-
         // thumbnail
         Image image = new Image(article.getThumbNail(), 160, 90, false, false);
         ImageView thumbnail = new ImageView(image);
@@ -47,11 +43,6 @@ public class Helper {
         grid.add(publishedTime,2,3);
         grid.add(newsSource,1,3);
         grid.setUserData(article);
-
-        // add events to grid
-        grid.addEventHandler(MouseEvent.MOUSE_RELEASED, new OpenArticle());
-        grid.addEventHandler(MouseEvent.MOUSE_ENTERED, new UnderlineText());
-        grid.addEventHandler(MouseEvent.MOUSE_EXITED, new UndoUnderlineText());
     }
 
     static class OpenArticle implements EventHandler<MouseEvent> {

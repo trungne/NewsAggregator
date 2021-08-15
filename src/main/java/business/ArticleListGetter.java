@@ -45,13 +45,11 @@ public class ArticleListGetter extends Task<List<Article>> {
                 .synchronizedObservableList(
                         FXCollections.observableList(
                         new ArrayList<>()));
-        if(isCancelled()){
-            updateMessage("wtf man");
-            System.out.println("wtf");
-        }
+
         // update progress bar
-        articles.addListener((ListChangeListener<Article>) change ->
-                updateProgress(change.getList().size(), MAX_ARTICLES_DISPLAYED));
+        articles.addListener((ListChangeListener<Article>) change -> {
+            updateProgress(change.getList().size(), MAX_ARTICLES_DISPLAYED);
+        });
 
         updateArticleList(articles);
 

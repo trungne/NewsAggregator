@@ -33,6 +33,7 @@ public class ArticleListGenerator{
             if(articleSuccessfullyAdded == MAX_ARTICLES_PER_SOURCE){
                 break;
             }
+
             Document articleDoc;
             try {
                 articleDoc = Jsoup
@@ -51,11 +52,33 @@ public class ArticleListGenerator{
             boolean addedSuccessfully = extractContentFromDocument(articleDoc, article);
             if (addedSuccessfully) {
                 articles.add(article);
-                // TODO: update progress bar
                 articleSuccessfullyAdded++;
             }
         }
     }
+
+    private boolean extractContentFromDocument(Document articleDoc, Article article) {
+        Element titleTag = newsOutlet.getTitle(articleDoc);
+        Element descriptionTag = newsOutlet.getDescription(articleDoc);
+        Element mainContentTag = newsOutlet.getMainContent(articleDoc);
+        String thumbNail = newsOutlet.getThumbnail(articleDoc);
+        List<String> categories = newsOutlet.getCategoryNames(articleDoc);
+        LocalDateTime publishedTime = newsOutlet.getPublishedTime(articleDoc);
+
+        try {
+            article.setDateTime(publishedTime);
+            article.setTitle(titleTag);
+            article.setDescription(descriptionTag);
+            article.setMainContent(mainContentTag);
+            article.setThumbNailUrl(thumbNail);
+            article.addCategory(categories);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
+    }
+
 //    private Article createArticle(URL url, String name) {
 //        NewsOutlet newsOutlet = GetNewsOutlets.newsOutlets.get(name);
 //        if (newsOutlet == null) return null;
@@ -81,32 +104,6 @@ public class ArticleListGenerator{
 //
 //        return null;
 //    }
-
-    private boolean extractContentFromDocument(Document articleDoc, Article article) {
-        Element titleTag = newsOutlet.getTitle(articleDoc);
-        Element descriptionTag = newsOutlet.getDescription(articleDoc);
-        Element mainContentTag = newsOutlet.getMainContent(articleDoc);
-        String thumbNail = newsOutlet.getThumbnail(articleDoc);
-        List<String> categories = newsOutlet.getCategoryNames(articleDoc);
-        LocalDateTime publishedTime = newsOutlet.getPublishedTime(articleDoc);
-
-        // no need to check for thumbnail and datetime because default values will be assigned if they are null
-        if (titleTag == null || descriptionTag == null || mainContentTag == null) {
-            return false;
-        }
-
-        article.setDateTime(publishedTime);
-
-        try {
-            article.setTitle(titleTag);
-            article.setDescription(descriptionTag);
-            article.setMainContent(mainContentTag);
-            article.setThumbNailUrl(thumbNail);
-            article.addCategory(categories);
-        } catch (Exception e) {
-            return false;
-        }
-
-        return true;
-    }
 }
+
+
