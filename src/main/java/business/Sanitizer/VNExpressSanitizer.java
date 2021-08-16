@@ -4,6 +4,7 @@ import business.Helper.CSS;
 import business.Helper.Scraper;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.safety.Safelist;
@@ -18,37 +19,6 @@ import java.util.regex.Pattern;
 
 
 public class VNExpressSanitizer extends HtmlSanitizer {
-
-    @Override
-    protected Element sanitizeNonTitleTag(Element e, String type) {
-        switch (type) {
-            case CSS.DESCRIPTION:
-                String cleanHtml;
-                Element newHtmlElement;
-
-                cleanHtml = Jsoup.clean(e.html(), Safelist.basic());
-                newHtmlElement = new Element("p").html(cleanHtml);
-
-                // deal with span tag (for location)
-                Elements spanTags = newHtmlElement.getElementsByTag("span");
-
-                spanTags.tagName("strong");
-                for (Element span : spanTags) {
-                    span.addClass(CSS.LOCATION);
-                    span.text(span.text() + " - ");
-                }
-
-                return newHtmlElement;
-            case CSS.MAIN_CONTENT:
-                Element newRoot = new Element("div");
-                NodeFilter VNExpressFilter = new VNExpressFilter(newRoot);
-                NodeTraversor.filter(VNExpressFilter, e);
-                return newRoot;
-            default:
-                return e;
-        }
-    }
-
     @Override
     public Element sanitizeDescription(Element e) {
         String cleanHtml;
@@ -107,7 +77,7 @@ final class VNExpressFilter implements NodeFilter {
 //                para.addClass(CSS.AUTHOR);
 
             Safelist safelist = Safelist.basic();
-            String cleanHtml = Jsoup.clean(child.html(), safelist); // TODO Would we need safelist cleaning here???
+            String cleanHtml = Jsoup.clean(child.html(), safelist);
             para.html(cleanHtml);
 
             root.append(para.outerHtml());
@@ -131,6 +101,7 @@ final class VNExpressFilter implements NodeFilter {
                 child.addClass(CSS.FIGURE);
                 root.append(child.outerHtml());
             }
+
             validTag = true;
         }
 
@@ -191,13 +162,22 @@ final class VNExpressFilter implements NodeFilter {
 
     // create a figure tag with img AND figcaption tagS
     private static Element filterFigureTag(Element tag) {
+        for (Element img: tag.getElementsByTag("img")){
+            String src = img.attr("data-src");
+            if (!StringUtils.isEmpty(src)){
+                img.attr("src", src);
+            }
+        }
         Safelist safelist = Safelist.basicWithImages();
         safelist.addTags("figcaption");
-        Element figure = new Element("figure");
+
         String cleanHtml = Jsoup.clean(tag.html(), safelist);
+
 
         if (StringUtils.isEmpty(cleanHtml))
             return null;
+
+        Element figure = new Element("figure");
         return figure.html(cleanHtml);
     }
 

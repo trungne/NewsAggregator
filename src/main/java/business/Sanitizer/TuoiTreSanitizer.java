@@ -11,28 +11,22 @@ import org.jsoup.select.NodeTraversor;
 
 public class TuoiTreSanitizer extends HtmlSanitizer {
     @Override
-    protected Element sanitizeNonTitleTag(Element e, String type) {
-        Safelist safelist; // modify this safe list according to the type
+    public Element sanitizeDescription(Element e) {
+        Safelist safelist;
         String cleanHtml;
         Element newHtmlElement;
+        safelist = Safelist.basic();
+        cleanHtml = Jsoup.clean(e.html(), safelist);
+        newHtmlElement = new Element("p").html(cleanHtml);
+        return newHtmlElement;
+    }
 
-        switch (type) {
-            case CSS.DESCRIPTION:
-                safelist = Safelist.basic();
-                cleanHtml = Jsoup.clean(e.html(), safelist);
-                newHtmlElement = new Element("p").html(cleanHtml);
-
-                return newHtmlElement;
-            case CSS.MAIN_CONTENT:
-                Element newRoot = new Element("div");
-                NodeFilter TuoiTreFilter = new TuoiTreFilter(newRoot);
-                NodeTraversor.filter(TuoiTreFilter, e);
-                return newRoot;
-//                return e;
-            default:
-                return e;
-
-        }
+    @Override
+    public Element sanitizeMainContent(Element e) {
+        Element newRoot = new Element("div");
+        NodeFilter TuoiTreFilter = new TuoiTreFilter(newRoot);
+        NodeTraversor.filter(TuoiTreFilter, e);
+        return newRoot;
     }
 }
 

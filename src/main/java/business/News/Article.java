@@ -29,7 +29,6 @@ public class Article implements Comparable<Article>{
     private final List<String> categories = new ArrayList<>();
     private final String newsSource;
 
-    private final Element style = new Element("style");
     private final Element head = new Element("head");
     private final Element body = new Element("body");
 
@@ -40,8 +39,21 @@ public class Article implements Comparable<Article>{
 
     private Element getHeadTag(){
         Element title = new Element("title");
-        title.text(getTitle());
+        Element style = new Element("style");
+        String css = "html {width: 100%;height: 100%;margin: 0 auto;overflow-x: hidden;}\n" +
+                "body {margin: 30px;}\n" +
+                ".article-header{display: flex; font-style: italic;}\n" +
+                ".article-category{margin-right: .75rem;color: #007bff;}\n" +
+                ".published-time{color:#6c757d;}\n" +
+                ".article-content h1 + p{font-weight: bold;}\n" +
+                ".article-content p {text-align: justify;}\n" +
+                "img {width: 350px;height:250px;} article {padding: 0 4em 2em 4em;margin-right: auto;margin-left: auto;}\n" +
+                ".content-pic {text-align: center; margin-top: 1em; margin-bottom: 1em;}\n" +
+                "figcaption em {color:#6c757d;font-style: italic;font-size: 14px;}\n" +
+                ".content-video {width: 600px;height:400px;}\n";
+        style.text(css);
 
+        title.text(getTitle());
         head.append("<meta charset=\"UTF-8\">");
         head.append("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">");
         head.append("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
@@ -67,10 +79,6 @@ public class Article implements Comparable<Article>{
         Element scriptTag = new Element("script");
         scriptTag.text(script);
         head.appendChild(scriptTag);
-    }
-
-    public void setStyle(String css){
-        this.style.text(css);
     }
 
     public Article(URL url, NewsOutlet newsOutlet, List<String> categoryList) {

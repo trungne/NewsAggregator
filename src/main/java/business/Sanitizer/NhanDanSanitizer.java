@@ -11,32 +11,6 @@ import org.jsoup.select.NodeTraversor;
 
 public class NhanDanSanitizer extends HtmlSanitizer {
     @Override
-    protected Element sanitizeNonTitleTag(Element e, String type) {
-
-
-        switch (type) {
-            case CSS.DESCRIPTION:
-                Safelist safelist; // modify this safe list according to the type
-                String cleanHtml;
-                Element newHtmlElement;
-                safelist = Safelist.basic();
-                safelist.removeTags("span", "p");
-                cleanHtml = Jsoup.clean(e.html(), safelist);
-
-                newHtmlElement = new Element("p").html(cleanHtml);
-
-                return newHtmlElement;
-            case CSS.MAIN_CONTENT:
-                Element newRoot = new Element("div");
-                NodeFilter NhanDanFilter = new NhanDanFilter(newRoot);
-                NodeTraversor.filter(NhanDanFilter, e);
-                return newRoot;
-            default:
-                return e;
-        }
-    }
-
-    @Override
     public Element sanitizeDescription(Element e) {
         Safelist safelist; // modify this safe list according to the type
         String cleanHtml;

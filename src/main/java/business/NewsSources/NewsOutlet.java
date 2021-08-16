@@ -2,6 +2,7 @@ package business.NewsSources;
 
 import business.Helper.CSS;
 import business.Sanitizer.HtmlSanitizer;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -36,24 +37,27 @@ public abstract class NewsOutlet {
     // by default, scrape the first element that matches provided css
     public Element getTitle(Document doc) {
         Element title = scrapeFirstElementByClass(doc, cssConfiguration.title);
-//        if (title != null) title = sanitizer.sanitizeTitle(title);
-        if (title != null) title = sanitizer.sanitize(title, CSS.TITLE);
+        if (title != null) {
+            title = sanitizer.sanitizeTitle(title);
+        }
         return title;
     }
 
     // by default, scrape the first element that matches provided css
     public Element getDescription(Document doc) {
         Element desp = scrapeFirstElementByClass(doc, cssConfiguration.description);
-//        if (desp != null) desp = sanitizer.sanitizeDescription(desp);
-        if (desp != null) desp = sanitizer.sanitize(desp, CSS.DESCRIPTION);
+        if (desp != null) {
+            desp = sanitizer.sanitizeDescription(desp);
+        }
         return desp;
     }
 
     // by default, scrape the first element that matches provided css
     public Element getMainContent(Document doc) {
         Element content = scrapeFirstElementByClass(doc, cssConfiguration.mainContent);
-//        if (content != null) content = sanitizer.sanitizeMainContent(content);
-        if (content != null) content = sanitizer.sanitize(content, CSS.MAIN_CONTENT);
+        if (content != null) {
+            content = sanitizer.sanitizeMainContent(content);
+        }
         return content;
     }
 
@@ -62,8 +66,19 @@ public abstract class NewsOutlet {
         try {
             Element elementContainsImgs = scrapeFirstElementByClass(doc, cssConfiguration.picture);
             Element thumbnail = elementContainsImgs.getElementsByTag("img").first();
-            thumbnail = createCleanImgTag(thumbnail);
-            return thumbnail.attr("src");
+            String url = thumbnail.attr("data-src");
+            if (StringUtils.isEmpty(url)){
+                url = thumbnail.attr("src");
+                if (StringUtils.isEmpty(url)){
+                    return getDefaultThumbnail();
+                }
+                else{
+                    return url;
+                }
+            }
+            else{
+                return url;
+            }
 
         } catch (NullPointerException e) {
             return getDefaultThumbnail();

@@ -9,47 +9,6 @@ public abstract class HtmlSanitizer {
         e.addClass(CSS.TITLE);
         return e;
     }
-
-    // TODO: make this abstract later!
-    public Element sanitizeDescription(Element e) {
-        return e;
-    }
-
-
-    // TODO: make this abstract later!
-    public Element sanitizeMainContent(Element e) {
-        return e;
-    }
-
-    // TODO: make this abstract later!
-    public Element sanitizeThumbNail(Element e) {
-        return e.addClass(CSS.THUMBNAIL);
-    }
-
-    public Element sanitize(Element e, String type) {
-        Element target = e;
-
-        switch (type) {
-            case CSS.TITLE: {
-                target.clearAttributes();
-                break;
-            }
-            case CSS.THUMBNAIL: {
-
-            }
-
-            default:
-                target = sanitizeNonTitleTag(target, type);
-        }
-
-        // Add specific css classes to each detail
-        if (target != null)
-            target.addClass(type);
-
-
-        return target;
-    }
-
-    protected abstract Element sanitizeNonTitleTag(Element e, String tag);
-
+    abstract public Element sanitizeDescription(Element e);
+    abstract public Element sanitizeMainContent(Element e);
 }

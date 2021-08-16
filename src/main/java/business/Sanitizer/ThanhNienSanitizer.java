@@ -13,30 +13,22 @@ import org.jsoup.select.NodeTraversor;
 
 public class ThanhNienSanitizer extends HtmlSanitizer {
     @Override
-    protected Element sanitizeNonTitleTag(Element e, String type) {
+    public Element sanitizeDescription(Element e) {
         Safelist safelist; // modify this safe list according to the type
         String cleanHtml;
         Element newHtmlElement;
+        safelist = Safelist.basic();
+        cleanHtml = Jsoup.clean(e.html(), safelist);
+        newHtmlElement = new Element("p").html(cleanHtml);
+        return newHtmlElement;
+    }
 
-        switch (type) {
-            case CSS.DESCRIPTION:
-                safelist = Safelist.basic();
-                cleanHtml = Jsoup.clean(e.html(), safelist);
-
-                // TODO: parse clean html with doc to decode special chars
-
-                newHtmlElement = new Element("p").html(cleanHtml);
-
-                return newHtmlElement;
-            case CSS.MAIN_CONTENT:
-                Element newRoot = new Element("div"); //<div></div>
-                NodeFilter ThanhNienFilter = new ThanhNienFilter(newRoot);
-                NodeTraversor.filter(ThanhNienFilter, e);
-                return newRoot;
-//                return e;
-            default:
-                return e;
-        }
+    @Override
+    public Element sanitizeMainContent(Element e) {
+        Element newRoot = new Element("div"); //<div></div>
+        NodeFilter ThanhNienFilter = new ThanhNienFilter(newRoot);
+        NodeTraversor.filter(ThanhNienFilter, e);
+        return newRoot;
     }
 }
 
