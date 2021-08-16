@@ -20,6 +20,38 @@ public class Article implements Comparable<Article>{
         return true;
     }
 
+    private Element getBodyTag(){
+        Element body = new Element("body");
+        body.appendChild(getArticleTag());
+        return body;
+    }
+
+    private Element getHeadTag(){
+        Element head = new Element("head");
+        Element title = new Element("title");
+        title.text(getTitle());
+
+        head.append("<meta charset=\"UTF-8\">");
+        head.append("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">");
+        head.append("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+        head.appendChild(title);
+        head.appendChild(style);
+        return head;
+    }
+
+    private Element getHtmlTag(){
+        Element html = new Element("html");
+        html.attr("lang", "vi");
+        return html;
+    }
+    public String getHtml(){
+        String docString = "<!DOCTYPE html>";
+        Element html = getHtmlTag();
+        html.appendChild(getHeadTag());
+        html.appendChild(getBodyTag());
+        return docString + html.outerHtml();
+    }
+
     private URL url;
     private Element title;
     private Element description;
@@ -28,6 +60,8 @@ public class Article implements Comparable<Article>{
     private LocalDateTime dateTime;
     private final List<String> categories = new ArrayList<>();
     private final String newsSource;
+
+    private final Element style = new Element("style");
 
     public Article(URL url, NewsOutlet newsOutlet, List<String> categoryList) {
         this.url = url;
@@ -84,7 +118,7 @@ public class Article implements Comparable<Article>{
         return this.categories.contains(category);
     }
 
-    public String getHtml() {
+    private Element getArticleTag() {
         Element article = new Element("article");
 
         // create header div
@@ -121,10 +155,10 @@ public class Article implements Comparable<Article>{
         article.appendChild(header);
         article.appendChild(content);
 
-        return article.outerHtml();
+        return article;
     }
-    public void setStyle(String style){
-        // TODO: add style tag to head.
+    public void setStyle(String css){
+        this.style.text(css);
     }
     public String getAbsoluteTime() {
         return dtf.format(this.dateTime);
