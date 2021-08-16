@@ -20,14 +20,25 @@ public class Article implements Comparable<Article>{
         return true;
     }
 
+    private URL url;
+    private Element title;
+    private Element description;
+    private Element mainContent;
+    private String thumbNail;
+    private LocalDateTime dateTime;
+    private final List<String> categories = new ArrayList<>();
+    private final String newsSource;
+
+    private final Element style = new Element("style");
+    private final Element head = new Element("head");
+    private final Element body = new Element("body");
+
     private Element getBodyTag(){
-        Element body = new Element("body");
         body.appendChild(getArticleTag());
         return body;
     }
 
     private Element getHeadTag(){
-        Element head = new Element("head");
         Element title = new Element("title");
         title.text(getTitle());
 
@@ -52,16 +63,15 @@ public class Article implements Comparable<Article>{
         return docString + html.outerHtml();
     }
 
-    private URL url;
-    private Element title;
-    private Element description;
-    private Element mainContent;
-    private String thumbNail;
-    private LocalDateTime dateTime;
-    private final List<String> categories = new ArrayList<>();
-    private final String newsSource;
+    public void addScript(String script){
+        Element scriptTag = new Element("script");
+        scriptTag.text(script);
+        head.appendChild(scriptTag);
+    }
 
-    private final Element style = new Element("style");
+    public void setStyle(String css){
+        this.style.text(css);
+    }
 
     public Article(URL url, NewsOutlet newsOutlet, List<String> categoryList) {
         this.url = url;
@@ -114,10 +124,6 @@ public class Article implements Comparable<Article>{
         return newsSource;
     }
 
-    public boolean belongsToCategory(String category) {
-        return this.categories.contains(category);
-    }
-
     private Element getArticleTag() {
         Element article = new Element("article");
 
@@ -157,9 +163,8 @@ public class Article implements Comparable<Article>{
 
         return article;
     }
-    public void setStyle(String css){
-        this.style.text(css);
-    }
+
+
     public String getAbsoluteTime() {
         return dtf.format(this.dateTime);
     }
