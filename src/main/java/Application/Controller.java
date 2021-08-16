@@ -104,11 +104,6 @@ public class Controller {
         changePage(pageNum);
     }
 
-
-
-
-
-
     private void changePage(int pageNum){
         currentPageButton.setStyle(
                 "-fx-background-color: rgb(255,255,102);"
