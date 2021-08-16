@@ -15,7 +15,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root;
         // TODO: add loading screen here
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/MainMenu.fxml")));
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/TabPane.fxml")));
 
         primaryStage.setTitle("News Aggregator");
         primaryStage.setScene(new Scene(root, 720, 600));
