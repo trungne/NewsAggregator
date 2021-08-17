@@ -2,6 +2,7 @@ package business.News;
 
 import business.Helper.CSS;
 import business.NewsSources.NewsOutlet;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Element;
 
 import java.net.URL;
@@ -20,7 +21,7 @@ public class Article implements Comparable<Article>{
         return true;
     }
 
-    private URL url;
+    private final URL url;
     private Element title;
     private Element description;
     private Element mainContent;
@@ -29,15 +30,16 @@ public class Article implements Comparable<Article>{
     private final List<String> categories = new ArrayList<>();
     private final String newsSource;
 
-    private final Element head = new Element("head");
-    private final Element body = new Element("body");
+    private String html = "";
 
     private Element getBodyTag(){
+        final Element body = new Element("body");
         body.appendChild(getArticleTag());
         return body;
     }
 
-    private Element getHeadTag(){
+    private Element createHeadTag(){
+        final Element head = new Element("head");
         Element title = new Element("title");
         Element style = new Element("style");
         String css = "html {width: 100%;height: 100%;margin: 0 auto;overflow-x: hidden;}\n" +
@@ -62,23 +64,21 @@ public class Article implements Comparable<Article>{
         return head;
     }
 
-    private Element getHtmlTag(){
+    private String createHtml(){
         Element html = new Element("html");
         html.attr("lang", "vi");
-        return html;
-    }
-    public String getHtml(){
-        String docString = "<!DOCTYPE html>";
-        Element html = getHtmlTag();
-        html.appendChild(getHeadTag());
+        html.appendChild(createHeadTag());
         html.appendChild(getBodyTag());
+
+        String docString = "<!DOCTYPE html>\n";
         return docString + html.outerHtml();
     }
 
-    public void addScript(String script){
-        Element scriptTag = new Element("script");
-        scriptTag.text(script);
-        head.appendChild(scriptTag);
+    public String getHtml(){
+        if (StringUtils.isEmpty(html)){
+            html = createHtml();
+        }
+        return html;
     }
 
     public Article(URL url, NewsOutlet newsOutlet, List<String> categoryList) {
@@ -202,10 +202,6 @@ public class Article implements Comparable<Article>{
 
 
     // setters
-    public void setUrl(URL url) {
-        this.url = url;
-    }
-
     public void setTitle(Element title) throws Exception {
         if (validateTag(title, "Title", url))
             this.title = title;

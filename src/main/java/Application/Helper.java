@@ -14,8 +14,35 @@ import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class Helper {
+    private static final WebView browser = new WebView();
+    private static final WebEngine webEngine = browser.getEngine();
+    private static final Pane articlePane = new Pane();
+    private static final Scene articleScene = new Scene(articlePane);
+    private static final Stage articleStage = new Stage();
+    static {
+        articleStage.setScene(articleScene);
+    }
+
+    static class OpenArticle implements EventHandler<MouseEvent> {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            Node p = (Node) mouseEvent.getSource();
+            Article a = (Article) p.getUserData();
+            String content = a.getHtml();
+
+            articlePane.getChildren().clear();
+            articlePane.getChildren().add(browser);
+
+            webEngine.loadContent(content);
+            articleStage.setOnCloseRequest(event -> {
+                browser.getEngine().load(null);
+            });
+            articleStage.show();
+        }
+    }
     static void displayArticleInGrid(Article article, GridPane grid){
         // thumbnail
         Image image = new Image(article.getThumbNail(), 160, 90, false, false);
@@ -45,23 +72,7 @@ public class Helper {
         grid.setUserData(article);
     }
 
-    static class OpenArticle implements EventHandler<MouseEvent> {
-        @Override
-        public void handle(MouseEvent mouseEvent) {
-            Node p = (Node) mouseEvent.getSource();
-            Article a = (Article) p.getUserData();
-            WebView browser = new WebView();
-            WebEngine webEngine = browser.getEngine();
 
-            String content = a.getHtml();
-            webEngine.loadContent(content);
-
-            Scene articleScene = new Scene(browser);
-            Stage stage = new Stage();
-            stage.setScene(articleScene);
-            stage.show();
-        }
-    }
 
     static class UnderlineText implements EventHandler<MouseEvent>{
         @Override
