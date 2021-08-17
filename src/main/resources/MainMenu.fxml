@@ -13,7 +13,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Application.Controller">
    <center>
       <GridPane prefHeight="601.0" prefWidth="779.0">
@@ -86,27 +85,27 @@
             </Button>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="776.0" spacing="80.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
                <children>
-                  <Button fx:id="page1" mnemonicParsing="false" onAction="#changePageBtn" prefHeight="50.0" prefWidth="100.0" text="1">
+                  <Button fx:id="page1" mnemonicParsing="false" onAction="#changePageBtn" prefHeight="40.0" prefWidth="70.0" text="1">
                      <font>
                         <Font name="Calibri" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="page2" mnemonicParsing="false" onAction="#changePageBtn" prefHeight="50.0" prefWidth="100.0" text="2">
+                  <Button fx:id="page2" mnemonicParsing="false" onAction="#changePageBtn" prefHeight="40.0" prefWidth="70.0" text="2">
                      <font>
                         <Font name="Calibri" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="page3" mnemonicParsing="false" onAction="#changePageBtn" prefHeight="50.0" prefWidth="100.0" text="3">
+                  <Button fx:id="page3" mnemonicParsing="false" onAction="#changePageBtn" prefHeight="40.0" prefWidth="70.0" text="3">
                      <font>
                         <Font name="Calibri" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="page4" mnemonicParsing="false" onAction="#changePageBtn" prefHeight="50.0" prefWidth="100.0" text="4">
+                  <Button fx:id="page4" mnemonicParsing="false" onAction="#changePageBtn" prefHeight="40.0" prefWidth="70.0" text="4">
                      <font>
                         <Font name="Calibri" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="page5" mnemonicParsing="false" onAction="#changePageBtn" prefHeight="50.0" prefWidth="100.0" text="5">
+                  <Button fx:id="page5" mnemonicParsing="false" onAction="#changePageBtn" prefHeight="40.0" prefWidth="70.0" text="5">
                      <font>
                         <Font name="Calibri" size="14.0" />
                      </font>
