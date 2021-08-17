@@ -1,6 +1,5 @@
 package business.NewsSources;
 
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import java.util.Set;
 import static business.Helper.Scraper.scrapeLinksByClass;
 
 public class Category {
-    String name = "";
+    String name;
     String url;
     String cssForScraping;
     List<Category> subCategories = new ArrayList<>();
@@ -27,12 +26,11 @@ public class Category {
 
         for (Category category: subCategories){
             // update category if the category already exists in subcategory list
-            if (category.getName().equals(name)){
+            if (category.getUrl().equals(url)){
                 subCategories.set(subCategories.indexOf(category), newCategory);
                 return;
             }
         }
-
         subCategories.add(newCategory);
     }
 
@@ -55,13 +53,10 @@ public class Category {
         return null;
     }
 
-    // operation methods used by both composite and child class
-    public String getName() {
-        return this.name;
-    }
-
+    public String getUrl() {return this.url;}
     public Set<URL> getLinks() {
         Set<URL> urls = new HashSet<>();
+        System.out.println(url);
         try {
             URL link = new URL(this.url);
             urls = scrapeLinksByClass(link, cssForScraping);

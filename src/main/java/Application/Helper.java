@@ -100,3 +100,7 @@ public class Helper {
         }
     }
 }
+
+class ArticleDisplayer{
+
+}

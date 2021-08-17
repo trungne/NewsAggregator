@@ -27,8 +27,6 @@ public class Controller {
     @FXML private Button page4;
     @FXML private Button page5;
 
-
-
     // category buttons
     @FXML private Button newCategory;
     @FXML private Button covidCategory;

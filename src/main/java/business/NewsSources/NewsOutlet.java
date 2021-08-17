@@ -89,18 +89,6 @@ public abstract class NewsOutlet {
         return defaultThumbnail;
     }
 
-    protected Category getCategory(String categoryName){
-        if (categories.containsKey(categoryName)){
-            return categories.get(categoryName);
-        }
-
-        for (Category category: categories.values()){
-            if(category.getName().equals(categoryName)){
-                return category;
-            }
-        }
-        return null;
-    }
     // find category by name
     private Category find(String name){
 

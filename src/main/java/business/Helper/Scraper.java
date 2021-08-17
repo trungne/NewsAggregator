@@ -33,8 +33,6 @@ public class Scraper {
                 links.add(link);
             }
         } catch (IOException e) {
-            // TODO: disable this in production
-            System.out.println(baseUrl);
             e.printStackTrace();
         }
         return links;
