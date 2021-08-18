@@ -30,8 +30,7 @@ public class Helper {
         @Override
         public void handle(MouseEvent mouseEvent) {
             Node p = (Node) mouseEvent.getSource();
-            Article a = (Article) p.getUserData();
-            String content = a.getHtml();
+            String content = (String) p.getUserData();
 
             articlePane.getChildren().clear();
             articlePane.getChildren().add(browser);
@@ -69,7 +68,7 @@ public class Helper {
         grid.add(description,2,2);
         grid.add(publishedTime,2,3);
         grid.add(newsSource,1,3);
-        grid.setUserData(article);
+        grid.setUserData(article.getHtml());
     }
 
 

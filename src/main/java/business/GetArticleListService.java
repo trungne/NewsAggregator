@@ -1,12 +1,8 @@
 package business;
 
-import business.ArticleListGetter;
 import business.News.Article;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 
 import java.util.List;
 

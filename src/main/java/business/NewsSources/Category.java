@@ -37,7 +37,6 @@ public class Category {
     public void add(String url) {
         add("", url);
     }
-
     public Category find(String name) {
         if (this.name.equals(name)){
             return this;
@@ -56,7 +55,6 @@ public class Category {
     public String getUrl() {return this.url;}
     public Set<URL> getLinks() {
         Set<URL> urls = new HashSet<>();
-        System.out.println(url);
         try {
             URL link = new URL(this.url);
             urls = scrapeLinksByClass(link, cssForScraping);

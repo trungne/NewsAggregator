@@ -48,8 +48,9 @@ public class ArticleListGenerator{
                 continue;
             }
 
-            Article article = new Article(url, newsOutlet, category);
+            Article article = new Article(url, category);
             boolean addedSuccessfully = extractContentFromDocument(articleDoc, article);
+
             if (addedSuccessfully) {
                 articles.add(article);
                 articleSuccessfullyAdded++;
@@ -66,44 +67,14 @@ public class ArticleListGenerator{
         LocalDateTime publishedTime = newsOutlet.getPublishedTime(articleDoc);
 
         try {
-            article.setDateTime(publishedTime);
-            article.setTitle(titleTag);
-            article.setDescription(descriptionTag);
-            article.setMainContent(mainContentTag);
-            article.setThumbNailUrl(thumbNail);
-            article.addCategory(categories);
-        } catch (Exception e) {
+            article.setContent(titleTag, descriptionTag, mainContentTag,
+                                publishedTime, thumbNail, categories);
+        } catch (IllegalArgumentException e) {
             return false;
         }
 
         return true;
     }
-
-//    private Article createArticle(URL url, String name) {
-//        NewsOutlet newsOutlet = GetNewsOutlets.newsOutlets.get(name);
-//        if (newsOutlet == null) return null;
-//
-//        Document articleDoc;
-//        try {
-//            articleDoc = Jsoup
-//                    .connect(url.toString())
-//                    .timeout(MAX_WAIT_TIME_WHEN_ACCESS_URL)
-//                    .get();
-//        } catch (IOException ioException) {
-//            ioException.printStackTrace();
-//            return null;
-//        }
-//
-//        List<String> category = newsOutlet.getCategoryNames(articleDoc);
-//        Article article = new Article(url, newsOutlet, category);
-//
-//        boolean isAddedSuccessfully = extractContentFromDocument(articleDoc, article);
-//
-//        if (isAddedSuccessfully)
-//            return article;
-//
-//        return null;
-//    }
 }
 
 

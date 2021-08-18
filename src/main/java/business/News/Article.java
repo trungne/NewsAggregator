@@ -2,43 +2,35 @@ package business.News;
 
 import business.Helper.CSS;
 import business.NewsSources.NewsOutlet;
-import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Element;
 
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Article implements Comparable<Article>{
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EE, dd/MMMM/yyyy, kk:mm ");
 
-    static boolean validateTag(Element e, String type, URL url) throws Exception {
-        if (e == null)
-            throw new Exception("Element For " + type + " Not Found");
-        return true;
-    }
-
     private final URL url;
     private Element title;
     private Element description;
-    private Element mainContent;
     private String thumbNail;
     private LocalDateTime dateTime;
-    private final List<String> categories = new ArrayList<>();
+    private final String mainCategory;
+    private final Set<String> categories = new HashSet<>();
     private final String newsSource;
 
-    private String html = "";
+    private String html;
 
-    private Element getBodyTag(){
+    private Element getBodyTag(Element mainContent){
         final Element body = new Element("body");
-        body.appendChild(getArticleTag());
+        body.appendChild(getArticleTag(mainContent));
         return body;
     }
 
-    private Element createHeadTag(){
+    private Element getHeadTag(){
         final Element head = new Element("head");
         Element title = new Element("title");
         Element style = new Element("style");
@@ -64,56 +56,81 @@ public class Article implements Comparable<Article>{
         return head;
     }
 
-    private String createHtml(){
+    private String createHtml(Element mainContent){
         Element html = new Element("html");
         html.attr("lang", "vi");
-        html.appendChild(createHeadTag());
-        html.appendChild(getBodyTag());
+
+        html.appendChild(getHeadTag());
+        html.appendChild(getBodyTag(mainContent));
 
         String docString = "<!DOCTYPE html>\n";
         return docString + html.outerHtml();
     }
 
-    public String getHtml(){
-        if (StringUtils.isEmpty(html)){
-            html = createHtml();
+    private Element getDescriptionTag(){
+        // category div
+        Element categories = new Element("div");
+        categories.addClass(CSS.ARTICLE_CATEGORY);
+        StringBuilder categoriesStrBuilder = new StringBuilder();
+        categoriesStrBuilder.append(mainCategory).append(" - ");
+        for (String category : this.categories) {
+            categoriesStrBuilder.append(category).append(" - ");
         }
+
+        // remove the " - " at the end;
+        String categoriesStr = categoriesStrBuilder.substring(0, categoriesStrBuilder.length() - 2);
+        categories.text(categoriesStr);
+
+        return categories;
+    }
+    private Element getPublishedTimeTag(){
+        Element publishedTime = new Element("div");
+        publishedTime.addClass(CSS.PUBLISHED_TIME);
+        publishedTime.text(getAbsoluteTime());
+        return publishedTime;
+
+    }
+    private Element getArticleTag(Element mainContent) {
+        // create header div
+        Element header = new Element("div");
+        header.addClass(CSS.ARTICLE_HEADER);
+
+        Element categories = getDescriptionTag();
+        Element publishedTime = getPublishedTimeTag();
+
+        header.appendChild(categories);
+        header.appendChild(publishedTime);
+
+        // create article content div which contains title, desp, and main content
+        Element article = new Element("article");
+        Element content = new Element("div");
+        content.addClass(CSS.ARTICLE_CONTENT);
+        content.appendChild(title);
+        content.appendChild(description);
+        content.appendChild(mainContent);
+
+        article.appendChild(header);
+        article.appendChild(content);
+
+        return article;
+    }
+
+    public String getHtml(){
         return html;
     }
 
-    public Article(URL url, NewsOutlet newsOutlet, List<String> categoryList) {
+    public Article(URL url, String mainCategory){
         this.url = url;
-        this.newsSource = newsOutlet.getName();
-        addCategory(categoryList);
-    }
-
-    public Article(URL url, NewsOutlet newsOutlet, String parentCategory) {
-        this.url = url;
-        this.newsSource = newsOutlet.getName();
-        addCategory(parentCategory);
-    }
-
-    public void addCategory(String category) {
-        if (!this.categories.contains(category)) {
-            this.categories.add(category);
-        }
-
+        this.mainCategory = mainCategory;
+        this.newsSource = NewsOutlet.toName(url);
     }
 
     public void addCategory(List<String> categoryList) {
-        for (String category : categoryList) {
-            if (!this.categories.contains(category)) {
-                this.categories.add(category);
-            }
-        }
+        this.categories.addAll(categoryList);
     }
 
-    public String getCategory(){
-        return categories.toString();
-    }
-
-    public String getUrl() {
-        return url.toString();
+    public String getNewsSource() {
+        return newsSource;
     }
 
     public String getTitle() {
@@ -127,51 +144,6 @@ public class Article implements Comparable<Article>{
     public String getThumbNail() {
         return thumbNail;
     }
-
-    public String getNewsSource() {
-        return newsSource;
-    }
-
-    private Element getArticleTag() {
-        Element article = new Element("article");
-
-        // create header div
-        Element header = new Element("div");
-        header.addClass(CSS.ARTICLE_HEADER);
-
-        // category div
-        Element categories = new Element("div");
-        categories.addClass(CSS.ARTICLE_CATEGORY);
-        StringBuilder categoriesStrBuilder = new StringBuilder();
-        for (String category : this.categories) {
-            categoriesStrBuilder.append(category).append(" - ");
-        }
-
-        // remove the " - " at the end;
-        String categoriesStr = categoriesStrBuilder.substring(0, categoriesStrBuilder.length() - 2);
-        categories.text(categoriesStr);
-
-        // published time div
-        Element publishedTime = new Element("div");
-        publishedTime.addClass(CSS.PUBLISHED_TIME);
-        publishedTime.text(getAbsoluteTime());
-
-        header.appendChild(categories);
-        header.appendChild(publishedTime);
-
-        // create article content div which contains title, desp, and main content
-        Element content = new Element("div");
-        content.addClass(CSS.ARTICLE_CONTENT);
-        content.appendChild(title);
-        content.appendChild(description);
-        content.appendChild(mainContent);
-
-        article.appendChild(header);
-        article.appendChild(content);
-
-        return article;
-    }
-
 
     public String getAbsoluteTime() {
         return dtf.format(this.dateTime);
@@ -201,28 +173,19 @@ public class Article implements Comparable<Article>{
     }
 
 
-    // setters
-    public void setTitle(Element title) throws Exception {
-        if (validateTag(title, "Title", url))
-            this.title = title;
-    }
-
-    public void setDescription(Element description) throws Exception {
-        if (validateTag(description, "Description", url))
-            this.description = description;
-    }
-
-    public void setMainContent(Element mainContent) throws Exception {
-        if (validateTag(mainContent, "Main Content", url))
-            this.mainContent = mainContent;
-    }
-
-    public void setThumbNailUrl(String thumbNail){
+    // setter
+    public void setContent(Element title, Element description, Element mainContent,
+                           LocalDateTime publishedTime, String thumbNail, List<String> categories){
+        if (title == null || description == null || mainContent == null){
+            throw new IllegalArgumentException();
+        }
+        this.title = title;
+        this.description = description;
+        this.dateTime = publishedTime;
         this.thumbNail = thumbNail;
-    }
+        addCategory(categories);
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+        this.html = createHtml(mainContent);
     }
 
     @Override
