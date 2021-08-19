@@ -1,10 +1,4 @@
-package business.Scraper;
-
-import business.ArticleListGetter;
-import business.Helper.CATEGORY;
-import business.News.Article;
-
-import java.util.List;
+package business.Test;
 
 public class ScraperTestDrive {
     public static void main(String[] args) {

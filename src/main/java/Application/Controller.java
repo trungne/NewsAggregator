@@ -1,215 +1,171 @@
 package Application;
-import business.GetArticleListService;
+
+import Application.Model.Model;
+import Application.View.PreviewGrid;
+import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 
 import business.News.Article;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 
 import java.util.*;
 
-import static Application.Helper.displayArticleInGrid;
 
 public class Controller {
-    @FXML private Pane previewBox;
+    @FXML private VBox previewBox;
     @FXML private ScrollPane mainArea;
+    @FXML private HBox pageBox;
+    @FXML private VBox categoryBox;
+    private final Model model;
+    public static final int MAX_PREVIEWS_PER_PAGE = 10;
 
-    // change page buttons
-    @FXML private Button page1;
-    @FXML private Button page2;
-    @FXML private Button page3;
-    @FXML private Button page4;
-    @FXML private Button page5;
+    List<PreviewGrid> previewGrids = new ArrayList<>();
+    ProgressBar progressBar = new ProgressBar();
+    private final WebView browser = new WebView();
+    private final Pane articlePane = new Pane();
+    private final Scene articleScene = new Scene(articlePane);
+    private final Stage articleStage = new Stage();
 
-    // category buttons
-    @FXML private Button newCategory;
-    @FXML private Button covidCategory;
-    @FXML private Button politicsCategory;
-    @FXML private Button businessCategory;
-    @FXML private Button technologyCategory;
-    @FXML private Button healthCategory;
-    @FXML private Button sportsCategory;
-    @FXML private Button entertainmentCategory;
-    @FXML private Button worldCategory;
-    @FXML private Button othersCategory;
+    private Button currentCategoryButton;
+    private Button currentPageButton;
 
-    List<Article> articles; // keep reference to change pages
-    List<GridPane> articleGridPanes = new ArrayList<>();
-    GetArticleListService service;
-
-    Button currentCategoryButton;
-    Button currentPageButton;
-    static final int MAX_PREVIEWS_PER_PAGE = 10;
-
+    public Controller(){
+        this.model = new Model(this);
+        progressBar.progressProperty().bind(this.model.getService().progressProperty());
+        progressBar.visibleProperty().bind(this.model.getService().runningProperty());
+    }
     public void initialize(){
         for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
-            GridPane grid = new GridPane();
-            grid.addEventHandler(MouseEvent.MOUSE_RELEASED, new Helper.OpenArticle());
-            grid.addEventHandler(MouseEvent.MOUSE_ENTERED, new Helper.UnderlineText());
-            grid.addEventHandler(MouseEvent.MOUSE_EXITED, new Helper.UndoUnderlineText());
-            articleGridPanes.add(grid);
-            previewBox.getChildren().add(grid);
+            PreviewGrid grid = new PreviewGrid();
+            this.previewGrids.add(grid);
+            this.previewBox.getChildren().add(grid);
         }
-        // select new category as a default category when open app
-        newCategory.fire();
+        articlePane.getChildren().add(browser);
+        articleStage.setScene(articleScene);
+        articleStage.setOnCloseRequest(event -> {
+            browser.getEngine().load(null);
+        });
+
+        progressBar.setPrefSize(500, 50);
+        progressBar.setStyle(" -fx-progress-color: orange;");
+
     }
     public void displayNews(ActionEvent e){
         Object o = e.getSource();
         if (o instanceof Button){
             Button b = (Button) o;
-
-            if(service != null){
-                service.cancel();
-            }
-
-            if(currentCategoryButton != null){
-                // do nothing if the same category is clicked
-                if(currentCategoryButton.getText().equals(b.getText())){
-                    return;
-                }
-                currentCategoryButton.setStyle(null);
-            }
-
             currentCategoryButton = b;
-            currentCategoryButton.setStyle(
-                    "-fx-background-color: rgb(255,255,102);"
-            );
-            String category = currentCategoryButton.getText();
-            displayPreviews(category);
+            String category = b.getText();
+            getPreviews(category);
         }
     }
 
-    private void displayPreviews(String category){
-        disableAllPageButtons();
-        disableAllCategoryButtons();
-
-        loadArticles(category);
-    }
-
-    public void changePageBtn(ActionEvent e){
-        if(currentPageButton != null){
-            currentPageButton.setStyle(null);
-        }
-        currentPageButton = (Button) e.getSource();
-        currentPageButton.getText();
-        int pageNum = Integer.parseInt(currentPageButton.getText());
-        changePage(pageNum);
-    }
-
-    private void changePage(int pageNum){
-        currentPageButton.setStyle(
-                "-fx-background-color: rgb(255,255,102);"
-        );
-        int upperBound = MAX_PREVIEWS_PER_PAGE * pageNum;
-        int lowerBound = (pageNum - 1) * MAX_PREVIEWS_PER_PAGE;
-
-        List<Article> currentArticles = new ArrayList<>();
-        for(int i = lowerBound; i < upperBound; i++){
-            if (articles.get(i) == null){
-                break;
-            }
-            currentArticles.add(articles.get(i));
-        }
-
-        clearAllArticleGrids();
-
-        for(int i = 0; i < currentArticles.size(); i++){
-            displayArticleInGrid(currentArticles.get(i), articleGridPanes.get(i));
-        }
-
-        mainArea.setContent(previewBox);
-    }
-
-
-    private void loadArticles(String category){
-        service = new GetArticleListService(category);
-
-        service.setOnSucceeded(e -> {
-            // store 50 articles
-            articles = (List<Article>) e.getSource().getValue();
-            if (currentPageButton != null){
-                currentPageButton.setStyle(null);
-            }
-            currentPageButton = page1;
-            changePage(1);
-            enableAllPageButtons();
-            enableAllCategoryButtons();
-        });
-
-        ProgressBar p = new ProgressBar();
-        p.setPrefSize(500, 50);
-        p.setStyle(" -fx-progress-color: orange;");
-        p.progressProperty().bind(service.progressProperty());
-
-        p.visibleProperty().bind(service.runningProperty());
-
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().addAll(p);
-
-        mainArea.setContent(stackPane);
-        service.start();
-    }
-
-    private void clearAllArticleGrids(){
-        for(GridPane grid: articleGridPanes){
+    public void clearAllArticleGrids(){
+        for(GridPane grid: previewGrids){
             if (!grid.getChildren().isEmpty()){
                 grid.getChildren().clear();
             }
         }
     }
 
-    private void disableAllCategoryButtons(){
-        newCategory.setDisable(true);
-        covidCategory.setDisable(true);
-        politicsCategory.setDisable(true);
-        businessCategory.setDisable(true);
-        technologyCategory.setDisable(true);
-        healthCategory.setDisable(true);
-        sportsCategory.setDisable(true);
-        entertainmentCategory.setDisable(true);
-        worldCategory.setDisable(true);
-        othersCategory.setDisable(true);
+    public void changePage(ActionEvent e){
+        Button b = (Button) e.getSource();
+        int pageNum = Integer.parseInt(b.getText());
+        currentPageButton = b;
+        displayPreviews(pageNum);
     }
 
-    private void enableAllCategoryButtons(){
-        newCategory.setDisable(false);
-        covidCategory.setDisable(false);
-        politicsCategory.setDisable(false);
-        businessCategory.setDisable(false);
-        technologyCategory.setDisable(false);
-        healthCategory.setDisable(false);
-        sportsCategory.setDisable(false);
-        entertainmentCategory.setDisable(false);
-        worldCategory.setDisable(false);
-        othersCategory.setDisable(false);
+    public void displayProgressBar(){
+        mainArea.setContent(progressBar);
     }
 
-    private void disableAllPageButtons(){
-        page1.setDisable(true);
-        page2.setDisable(true);
-        page3.setDisable(true);
-        page4.setDisable(true);
-        page5.setDisable(true);
+    private void getPreviews(String category){
+        this.model.loadArticles(category);
+        disableAllPageButtons();
+        disableAllCategoryButtons();
+        displayProgressBar();
     }
 
-    private void enableAllPageButtons(){
-        page1.setDisable(false);
-        page2.setDisable(false);
-        page3.setDisable(false);
-        page4.setDisable(false);
-        page5.setDisable(false);
+    public void displayPreviews(int pageNum){
+        List<Article> articles = model.getArticles(pageNum);
+        setCurrentPageButton(pageNum);
+
+        // clear all previous displayed previews
+        clearAllArticleGrids();
+
+        // display article to each grid in view
+        for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
+            Article a = articles.get(i);
+            String thumbnail = a.getThumbNail();
+            String title = a.getTitle();
+            String description = a.getDescription();
+            String publishedTime = a.getRelativeTime();
+            String source = a.getNewsSource();
+            String articleHtml = a.getHtml();
+            previewGrids.get(i).setPreviewToGrid(thumbnail, title, description, publishedTime, source, articleHtml);
+        }
+
+        displayPreviews();
     }
 
-    private void underlineText(ActionEvent event){
-
+    public void displayArticle(String html){
+        articlePane.getChildren().clear();
+        browser.getEngine().loadContent(html);
+        articleStage.show();
+    }
+    public void displayPreviews(){
+        mainArea.setContent(previewBox);
+    }
+    public void setCurrentCategoryButton(Button b){
+        if (currentCategoryButton != null){
+            currentCategoryButton.setStyle(null);
+        }
+        currentCategoryButton = b;
+        currentCategoryButton.setStyle("-fx-background-color: rgb(255,255,102);");
+    }
+    public void setCurrentPageButton(int page){
+        if (page <= 0 || page > 5){
+            throw new IllegalArgumentException();
+        }
+        if(currentPageButton != null){
+            currentPageButton.setStyle(null);
+        }
+        currentPageButton = (Button) pageBox.getChildren().get(page);
+        currentPageButton.setStyle("-fx-background-color: rgb(255,255,102);");
+    }
+    public void disableAllCategoryButtons(){
+        for(Node node: categoryBox.getChildren()){
+            node.setDisable(false);
+        }
     }
 
+    public void enableAllCategoryButtons(){
+        for(Node node: categoryBox.getChildren()){
+            node.setDisable(true);
+        }
+    }
+
+    public void disableAllPageButtons(){
+        for(Node node: pageBox.getChildren()){
+            node.setDisable(false);
+        }
+    }
+
+    public void enableAllPageButtons(){
+        for(Node node: pageBox.getChildren()){
+            node.setDisable(true);
+        }
+    }
 }
 
 

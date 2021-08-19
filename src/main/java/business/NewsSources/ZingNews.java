@@ -1,6 +1,5 @@
 package business.NewsSources;
 
-import business.Helper.CATEGORY;
 import business.Helper.CSS;
 import business.Helper.LocalDateTimeParser;
 import business.Sanitizer.HtmlSanitizer;
@@ -18,10 +17,10 @@ import java.util.List;
 
 public class ZingNews extends NewsOutlet {
     // main category
-    private static final Category NEW = new Category(CATEGORY.NEW, "https://zingnews.vn/", CSS.ZING_TITLE_LINK);
-    private static final Category COVID = new Category(CATEGORY.COVID, "https://zingnews.vn/tieu-diem/covid-19.html", CSS.ZING_TITLE_LINK);
-    private static final Category POLITICS = new Category(CATEGORY.POLITICS, "https://zingnews.vn/chinh-tri.html", CSS.ZING_TITLE_LINK);
-    private static final Category BUSINESS = new Category(CATEGORY.BUSINESS, "https://zingnews.vn/kinh-doanh-tai-chinh.html", CSS.ZING_TITLE_LINK);
+    private static final Category NEW = new Category(Category.NEW, "https://zingnews.vn/", CSS.ZING_TITLE_LINK);
+    private static final Category COVID = new Category(Category.COVID, "https://zingnews.vn/tieu-diem/covid-19.html", CSS.ZING_TITLE_LINK);
+    private static final Category POLITICS = new Category(Category.POLITICS, "https://zingnews.vn/chinh-tri.html", CSS.ZING_TITLE_LINK);
+    private static final Category BUSINESS = new Category(Category.BUSINESS, "https://zingnews.vn/kinh-doanh-tai-chinh.html", CSS.ZING_TITLE_LINK);
     static {
         BUSINESS.add("https://zingnews.vn/bat-dong-san.html");
         BUSINESS.add("https://zingnews.vn/tieu-dung.html");
@@ -30,7 +29,7 @@ public class ZingNews extends NewsOutlet {
         BUSINESS.add("https://zingnews.vn/ttdn.html");
     }
 
-    private static final Category TECHNOLOGY = new Category(CATEGORY.TECHNOLOGY, "https://zingnews.vn/cong-nghe.html", CSS.ZING_TITLE_LINK);
+    private static final Category TECHNOLOGY = new Category(Category.TECHNOLOGY, "https://zingnews.vn/cong-nghe.html", CSS.ZING_TITLE_LINK);
     static {
         TECHNOLOGY.add("https://zingnews.vn/mobile.html");
         TECHNOLOGY.add("https://zingnews.vn/gadget.html");
@@ -38,7 +37,7 @@ public class ZingNews extends NewsOutlet {
         TECHNOLOGY.add("https://zingnews.vn/esports.html");
     }
 
-    private static final Category HEALTH = new Category(CATEGORY.HEALTH, "https://zingnews.vn/suc-khoe.html", CSS.ZING_TITLE_LINK);
+    private static final Category HEALTH = new Category(Category.HEALTH, "https://zingnews.vn/suc-khoe.html", CSS.ZING_TITLE_LINK);
     static {
         HEALTH.add("https://zingnews.vn/khoe-dep.html");
         HEALTH.add("https://zingnews.vn/dinh-duong.html");
@@ -46,7 +45,7 @@ public class ZingNews extends NewsOutlet {
         HEALTH.add("https://zingnews.vn/benh-thuong-gap.html");
     }
 
-    private static final Category SPORTS = new Category(CATEGORY.SPORTS, "https://zingnews.vn/the-thao.html", CSS.ZING_TITLE_LINK);
+    private static final Category SPORTS = new Category(Category.SPORTS, "https://zingnews.vn/the-thao.html", CSS.ZING_TITLE_LINK);
     static {
         SPORTS.add("https://zingnews.vn/bong-da-viet-nam.html");
         SPORTS.add("https://zingnews.vn/bong-da-anh.html");
@@ -54,7 +53,7 @@ public class ZingNews extends NewsOutlet {
         SPORTS.add("https://zingnews.vn/esports-the-thao.html");
     }
 
-    private static final Category ENTERTAINMENT = new Category(CATEGORY.ENTERTAINMENT, "https://zingnews.vn/giai-tri.html", CSS.ZING_TITLE_LINK);
+    private static final Category ENTERTAINMENT = new Category(Category.ENTERTAINMENT, "https://zingnews.vn/giai-tri.html", CSS.ZING_TITLE_LINK);
     static {
         ENTERTAINMENT.add("https://zingnews.vn/sao-viet.html");
         ENTERTAINMENT.add("https://zingnews.vn/am-nhac.html");
@@ -62,7 +61,7 @@ public class ZingNews extends NewsOutlet {
         ENTERTAINMENT.add("https://zingnews.vn/thoi-trang.html");
     }
 
-    private static final Category WORLD = new Category(CATEGORY.WORLD, "https://zingnews.vn/the-gioi.html", CSS.ZING_TITLE_LINK);
+    private static final Category WORLD = new Category(Category.WORLD, "https://zingnews.vn/the-gioi.html", CSS.ZING_TITLE_LINK);
     static {
         WORLD.add("https://zingnews.vn/quan-su-the-gioi.html");
         WORLD.add("https://zingnews.vn/tu-lieu-the-gioi.html");
@@ -72,7 +71,7 @@ public class ZingNews extends NewsOutlet {
     }
 
     // others
-    private static final Category OTHERS = new Category(CATEGORY.OTHERS, "", CSS.ZING_TITLE_LINK);
+    private static final Category OTHERS = new Category(Category.OTHERS, "", CSS.ZING_TITLE_LINK);
     static {
         OTHERS.add("https://zingnews.vn/thoi-su.html");
         OTHERS.add("https://zingnews.vn/phap-luat.html");
@@ -83,16 +82,16 @@ public class ZingNews extends NewsOutlet {
 
     public static NewsOutlet init() {
         HashMap<String, Category> categories = new HashMap<>();
-        categories.put(CATEGORY.NEW, NEW);
-        categories.put(CATEGORY.COVID, COVID);
-        categories.put(CATEGORY.POLITICS, POLITICS);
-        categories.put(CATEGORY.BUSINESS, BUSINESS);
-        categories.put(CATEGORY.TECHNOLOGY, TECHNOLOGY);
-        categories.put(CATEGORY.HEALTH, HEALTH);
-        categories.put(CATEGORY.SPORTS, SPORTS);
-        categories.put(CATEGORY.ENTERTAINMENT, ENTERTAINMENT);
-        categories.put(CATEGORY.WORLD, WORLD);
-        categories.put(CATEGORY.OTHERS, OTHERS);
+        categories.put(Category.NEW, NEW);
+        categories.put(Category.COVID, COVID);
+        categories.put(Category.POLITICS, POLITICS);
+        categories.put(Category.BUSINESS, BUSINESS);
+        categories.put(Category.TECHNOLOGY, TECHNOLOGY);
+        categories.put(Category.HEALTH, HEALTH);
+        categories.put(Category.SPORTS, SPORTS);
+        categories.put(Category.ENTERTAINMENT, ENTERTAINMENT);
+        categories.put(Category.WORLD, WORLD);
+        categories.put(Category.OTHERS, OTHERS);
 
         CssConfiguration ZingCssConfig = new CssConfiguration(
                 "https://zingnews.vn/",
@@ -133,7 +132,7 @@ public class ZingNews extends NewsOutlet {
             Elements categoryTags = tag.getElementsByClass("parent_cate");
             for (Element e : categoryTags) {
                 String category = e.attr("title");
-                category = CATEGORY.convert(category);
+                category = Category.convert(category);
 
                 if (StringUtils.isEmpty(category))
                     continue;
@@ -146,7 +145,7 @@ public class ZingNews extends NewsOutlet {
 
 
         if(categoryList.isEmpty()){
-            categoryList.add(CATEGORY.OTHERS);
+            categoryList.add(Category.OTHERS);
         }
 
         return categoryList;

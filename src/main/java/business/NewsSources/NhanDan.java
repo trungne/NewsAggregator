@@ -1,6 +1,5 @@
 package business.NewsSources;
 
-import business.Helper.CATEGORY;
 import business.Helper.CSS;
 import business.Sanitizer.HtmlSanitizer;
 import business.Sanitizer.NhanDanSanitizer;
@@ -13,14 +12,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import static business.Helper.Scraper.createCleanImgTag;
 import static business.Helper.Scraper.scrapeFirstElementByClass;
 
 public class NhanDan extends NewsOutlet {
-    private static final Category NEW = new Category(CATEGORY.NEW, "https://nhandan.vn/", CSS.NHANDAN_TITLE_LINK);
-    private static final Category COVID = new Category(CATEGORY.COVID, "https://nhandan.vn/tieu-diem", CSS.NHANDAN_TITLE_LINK);
-    private static final Category POLITICS = new Category(CATEGORY.POLITICS, "https://nhandan.vn/chinhtri", CSS.NHANDAN_TITLE_LINK);
+    private static final Category NEW = new Category(Category.NEW, "https://nhandan.vn/", CSS.NHANDAN_TITLE_LINK);
+    private static final Category COVID = new Category(Category.COVID, "https://nhandan.vn/tieu-diem", CSS.NHANDAN_TITLE_LINK);
+    private static final Category POLITICS = new Category(Category.POLITICS, "https://nhandan.vn/chinhtri", CSS.NHANDAN_TITLE_LINK);
     static {
         POLITICS.add("https://nhandan.vn/tin-tuc-su-kien");
         POLITICS.add("https://nhandan.vn/xa-luan");
@@ -31,7 +29,7 @@ public class NhanDan extends NewsOutlet {
         POLITICS.add("https://nhandan.vn/dan-toc-mien-nui");
     }
 
-    private static final Category BUSINESS = new Category(CATEGORY.BUSINESS, "https://nhandan.vn/kinhte", CSS.NHANDAN_TITLE_LINK);
+    private static final Category BUSINESS = new Category(Category.BUSINESS, "https://nhandan.vn/kinhte", CSS.NHANDAN_TITLE_LINK);
     static {
         BUSINESS.add("https://nhandan.vn/tin-tuc-kinh-te");
         BUSINESS.add("https://nhandan.vn/nhan-dinh");
@@ -40,21 +38,21 @@ public class NhanDan extends NewsOutlet {
         BUSINESS.add("https://nhandan.vn/hanggiahangthat");
     }
 
-    private static final Category TECHNOLOGY = new Category(CATEGORY.TECHNOLOGY, "https://nhandan.vn/khoahoc-congnghe", CSS.NHANDAN_TITLE_LINK);
+    private static final Category TECHNOLOGY = new Category(Category.TECHNOLOGY, "https://nhandan.vn/khoahoc-congnghe", CSS.NHANDAN_TITLE_LINK);
     static {
         TECHNOLOGY.add("https://nhandan.vn/khoa-hoc");
         TECHNOLOGY.add("https://nhandan.vn/vi-moi-truong-xanh");
         TECHNOLOGY.add("https://nhandan.vn/thong-tin-so");
     }
 
-    private static final Category HEALTH = new Category(CATEGORY.HEALTH, "https://nhandan.vn/y-te", CSS.NHANDAN_TITLE_LINK);
+    private static final Category HEALTH = new Category(Category.HEALTH, "https://nhandan.vn/y-te", CSS.NHANDAN_TITLE_LINK);
     static {
         HEALTH.add("https://nhandan.vn/benh-thuong-gap");
         HEALTH.add("https://nhandan.vn/goc-tu-van");
         HEALTH.add("https://nhandan.vn/tin-tuc-y-te");
     }
 
-    private static final Category SPORTS = new Category(CATEGORY.SPORTS, "https://nhandan.vn/thethao", CSS.NHANDAN_TITLE_LINK);
+    private static final Category SPORTS = new Category(Category.SPORTS, "https://nhandan.vn/thethao", CSS.NHANDAN_TITLE_LINK);
     static {
         SPORTS.add("https://nhandan.vn/nhip-song-the-thao");
         SPORTS.add("https://nhandan.vn/guong-mat");
@@ -62,7 +60,7 @@ public class NhanDan extends NewsOutlet {
         SPORTS.add("https://nhandan.vn/bong-da-quoc-te");
     }
 
-    private static final Category ENTERTAINMENT = new Category(CATEGORY.ENTERTAINMENT, "https://nhandan.vn/vanhoa", CSS.NHANDAN_TITLE_LINK);
+    private static final Category ENTERTAINMENT = new Category(Category.ENTERTAINMENT, "https://nhandan.vn/vanhoa", CSS.NHANDAN_TITLE_LINK);
     static {
         ENTERTAINMENT.add("https://nhandan.vn/dong-chay");
         ENTERTAINMENT.add("https://nhandan.vn/dien-dan");
@@ -71,7 +69,7 @@ public class NhanDan extends NewsOutlet {
         ENTERTAINMENT.add("https://nhandan.vn/chan-dung");
     }
 
-    private static final Category WORLD = new Category(CATEGORY.WORLD, "https://nhandan.vn/thegioi", CSS.NHANDAN_TITLE_LINK);
+    private static final Category WORLD = new Category(Category.WORLD, "https://nhandan.vn/thegioi", CSS.NHANDAN_TITLE_LINK);
     static {
         WORLD.add("https://nhandan.vn/cua-so-the-gioi");
         WORLD.add("https://nhandan.vn/cong-dong-asean");
@@ -81,7 +79,7 @@ public class NhanDan extends NewsOutlet {
         WORLD.add("https://nhandan.vn/tin-tuc-the-gioi");
     }
 
-    private static final Category OTHERS = new Category(CATEGORY.OTHERS, "", CSS.NHANDAN_TITLE_LINK);
+    private static final Category OTHERS = new Category(Category.OTHERS, "", CSS.NHANDAN_TITLE_LINK);
     static {
         OTHERS.add("https://nhandan.vn/phapluat");
         OTHERS.add("https://nhandan.vn/du-lich");
@@ -91,16 +89,16 @@ public class NhanDan extends NewsOutlet {
 
     public static NewsOutlet init() {
         HashMap<String, Category> categories = new HashMap<>();
-        categories.put(CATEGORY.NEW, NEW);
-        categories.put(CATEGORY.COVID, COVID);
-        categories.put(CATEGORY.POLITICS, POLITICS);
-        categories.put(CATEGORY.BUSINESS, BUSINESS);
-        categories.put(CATEGORY.TECHNOLOGY, TECHNOLOGY);
-        categories.put(CATEGORY.HEALTH, HEALTH);
-        categories.put(CATEGORY.SPORTS, SPORTS);
-        categories.put(CATEGORY.ENTERTAINMENT, ENTERTAINMENT);
-        categories.put(CATEGORY.WORLD, WORLD);
-        categories.put(CATEGORY.OTHERS, OTHERS);
+        categories.put(Category.NEW, NEW);
+        categories.put(Category.COVID, COVID);
+        categories.put(Category.POLITICS, POLITICS);
+        categories.put(Category.BUSINESS, BUSINESS);
+        categories.put(Category.TECHNOLOGY, TECHNOLOGY);
+        categories.put(Category.HEALTH, HEALTH);
+        categories.put(Category.SPORTS, SPORTS);
+        categories.put(Category.ENTERTAINMENT, ENTERTAINMENT);
+        categories.put(Category.WORLD, WORLD);
+        categories.put(Category.OTHERS, OTHERS);
 
         CssConfiguration NhanDanCssConfig = new CssConfiguration(
                 "https://nhandan.vn/",
@@ -196,7 +194,7 @@ public class NhanDan extends NewsOutlet {
         if (!tags.isEmpty()) {
             for (Element e : tags) {
                 String category = e.text();
-                category = CATEGORY.convert(category);
+                category = Category.convert(category);
 
                 if (StringUtils.isEmpty(category))
                     continue;
@@ -208,7 +206,7 @@ public class NhanDan extends NewsOutlet {
         }
 
         if(categoryList.isEmpty()){
-            categoryList.add(CATEGORY.OTHERS);
+            categoryList.add(Category.OTHERS);
         }
 
         return categoryList;

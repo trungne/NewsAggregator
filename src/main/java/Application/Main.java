@@ -14,7 +14,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root;
-        // TODO: add loading screen here
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/MainMenu.fxml")));
 
         primaryStage.setTitle("News Aggregator");

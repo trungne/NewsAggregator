@@ -1,6 +1,5 @@
 package business.NewsSources;
 
-import business.Helper.CATEGORY;
 import business.Helper.CSS;
 import business.Helper.LocalDateTimeParser;
 import business.Sanitizer.HtmlSanitizer;
@@ -16,9 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class TuoiTre extends NewsOutlet {
-    private static final Category NEW = new Category(CATEGORY.NEW, "https://tuoitre.vn/", CSS.TUOITRE_TITLE_LINK);
-    private static final Category COVID = new Category(CATEGORY.COVID, "https://tuoitre.vn/covid-19.html", CSS.TUOITRE_TITLE_LINK);
-    private static final Category POLITICS = new Category(CATEGORY.POLITICS, "https://tuoitre.vn/thoi-su.htm", CSS.TUOITRE_TITLE_LINK);
+    private static final Category NEW = new Category(Category.NEW, "https://tuoitre.vn/", CSS.TUOITRE_TITLE_LINK);
+    private static final Category COVID = new Category(Category.COVID, "https://tuoitre.vn/covid-19.html", CSS.TUOITRE_TITLE_LINK);
+    private static final Category POLITICS = new Category(Category.POLITICS, "https://tuoitre.vn/thoi-su.htm", CSS.TUOITRE_TITLE_LINK);
     static {
         POLITICS.add("https://tuoitre.vn/thoi-su/but-bi.htm");
         POLITICS.add("https://tuoitre.vn/thoi-su/xa-hoi.htm");
@@ -27,7 +26,7 @@ public class TuoiTre extends NewsOutlet {
     }
 
 
-    private static final Category BUSINESS = new Category(CATEGORY.BUSINESS, "https://tuoitre.vn/kinh-doanh.htm", CSS.TUOITRE_TITLE_LINK);
+    private static final Category BUSINESS = new Category(Category.BUSINESS, "https://tuoitre.vn/kinh-doanh.htm", CSS.TUOITRE_TITLE_LINK);
     static {
         BUSINESS.add("https://tuoitre.vn/kinh-doanh/tai-chinh.htm");
         BUSINESS.add("https://tuoitre.vn/kinh-doanh/doanh-nghiep.htm");
@@ -35,13 +34,13 @@ public class TuoiTre extends NewsOutlet {
         BUSINESS.add("https://tuoitre.vn/kinh-doanh/dau-tu.htm");
     }
 
-    private static final Category TECHNOLOGY = new Category(CATEGORY.TECHNOLOGY, "https://tuoitre.vn/khoa-hoc.htm", CSS.TUOITRE_TITLE_LINK);
+    private static final Category TECHNOLOGY = new Category(Category.TECHNOLOGY, "https://tuoitre.vn/khoa-hoc.htm", CSS.TUOITRE_TITLE_LINK);
     static {
         TECHNOLOGY.add("https://tuoitre.vn/khoa-hoc/thuong-thuc.htm");
         TECHNOLOGY.add("https://tuoitre.vn/khoa-hoc/phat-minh.htm");
     }
 
-    private static final Category HEALTH = new Category(CATEGORY.HEALTH, "https://tuoitre.vn/suc-khoe.htm", CSS.TUOITRE_TITLE_LINK);
+    private static final Category HEALTH = new Category(Category.HEALTH, "https://tuoitre.vn/suc-khoe.htm", CSS.TUOITRE_TITLE_LINK);
     static {
         HEALTH.add("https://tuoitre.vn/suc-khoe/dinh-duong.htm");
         HEALTH.add("https://tuoitre.vn/suc-khoe/me-va-be.htm");
@@ -50,7 +49,7 @@ public class TuoiTre extends NewsOutlet {
         HEALTH.add("https://tuoitre.vn/suc-khoe/biet-de-khoe.htm");
     }
 
-    private static final Category SPORTS = new Category(CATEGORY.SPORTS, "https://tuoitre.vn/the-thao.htm", CSS.TUOITRE_TITLE_LINK);
+    private static final Category SPORTS = new Category(Category.SPORTS, "https://tuoitre.vn/the-thao.htm", CSS.TUOITRE_TITLE_LINK);
     static {
         SPORTS.add("https://tuoitre.vn/the-thao/bong-da.htm");
         SPORTS.add("https://tuoitre.vn/the-thao/bong-ro.htm");
@@ -60,7 +59,7 @@ public class TuoiTre extends NewsOutlet {
         SPORTS.add("https://tuoitre.vn/the-thao/nguoi-ham-mo.htm");
     }
 
-    private static final Category ENTERTAINMENT = new Category(CATEGORY.ENTERTAINMENT, "https://tuoitre.vn/giai-tri.htm", CSS.TUOITRE_TITLE_LINK);
+    private static final Category ENTERTAINMENT = new Category(Category.ENTERTAINMENT, "https://tuoitre.vn/giai-tri.htm", CSS.TUOITRE_TITLE_LINK);
     static {
         ENTERTAINMENT.add("https://tuoitre.vn/giai-tri/nghe-gi-hom-nay.htm");
         ENTERTAINMENT.add("https://tuoitre.vn/giai-tri/am-nhac.htm");
@@ -70,7 +69,7 @@ public class TuoiTre extends NewsOutlet {
         ENTERTAINMENT.add("https://tuoitre.vn/giai-tri/hau-truong.htm");
     }
 
-    private static final Category WORLD = new Category(CATEGORY.WORLD, "https://tuoitre.vn/the-gioi.htm", CSS.TUOITRE_TITLE_LINK);
+    private static final Category WORLD = new Category(Category.WORLD, "https://tuoitre.vn/the-gioi.htm", CSS.TUOITRE_TITLE_LINK);
     static {
         WORLD.add("https://tuoitre.vn/the-gioi/binh-luan.htm");
         WORLD.add("https://tuoitre.vn/the-gioi/kieu-bao.htm");
@@ -78,7 +77,7 @@ public class TuoiTre extends NewsOutlet {
         WORLD.add("https://tuoitre.vn/the-gioi/ho-so.htm");
     }
 
-    private static final Category OTHERS = new Category(CATEGORY.OTHERS, "", CSS.TUOITRE_TITLE_LINK);
+    private static final Category OTHERS = new Category(Category.OTHERS, "", CSS.TUOITRE_TITLE_LINK);
     static {
         OTHERS.add("https://tuoitre.vn/phap-luat.htm");
         OTHERS.add("https://tuoitre.vn/xe.htm");
@@ -93,16 +92,16 @@ public class TuoiTre extends NewsOutlet {
 
     public static NewsOutlet init() {
         HashMap<String, Category> categories = new HashMap<>();
-        categories.put(CATEGORY.NEW, NEW);
-        categories.put(CATEGORY.COVID, COVID);
-        categories.put(CATEGORY.POLITICS, POLITICS);
-        categories.put(CATEGORY.BUSINESS, BUSINESS);
-        categories.put(CATEGORY.TECHNOLOGY, TECHNOLOGY);
-        categories.put(CATEGORY.HEALTH, HEALTH);
-        categories.put(CATEGORY.SPORTS, SPORTS);
-        categories.put(CATEGORY.ENTERTAINMENT, ENTERTAINMENT);
-        categories.put(CATEGORY.WORLD, WORLD);
-        categories.put(CATEGORY.OTHERS, OTHERS);
+        categories.put(Category.NEW, NEW);
+        categories.put(Category.COVID, COVID);
+        categories.put(Category.POLITICS, POLITICS);
+        categories.put(Category.BUSINESS, BUSINESS);
+        categories.put(Category.TECHNOLOGY, TECHNOLOGY);
+        categories.put(Category.HEALTH, HEALTH);
+        categories.put(Category.SPORTS, SPORTS);
+        categories.put(Category.ENTERTAINMENT, ENTERTAINMENT);
+        categories.put(Category.WORLD, WORLD);
+        categories.put(Category.OTHERS, OTHERS);
 
         CssConfiguration TuoiTreCssConfig = new CssConfiguration(
                 "https://tuoitre.vn/",
@@ -142,7 +141,7 @@ public class TuoiTre extends NewsOutlet {
         Element tag = doc.getElementsByAttributeValue("property", "article:section").first();
         if (tag != null) {
             String parentCategory = tag.attr("content");
-            parentCategory = CATEGORY.convert(parentCategory);
+            parentCategory = Category.convert(parentCategory);
             if (!StringUtils.isEmpty(parentCategory))
                 categoryList.add(parentCategory);
         }
@@ -153,7 +152,7 @@ public class TuoiTre extends NewsOutlet {
             Elements children = childrenCategoryTag.getElementsByTag("a");
             for (Element e : children) {
                 String category = e.attr("title");
-                category = CATEGORY.convert(category);
+                category = Category.convert(category);
 
                 if(StringUtils.isEmpty(category))
                     continue;
@@ -165,7 +164,7 @@ public class TuoiTre extends NewsOutlet {
         }
 
         if (categoryList.isEmpty())
-            categoryList.add(CATEGORY.OTHERS);
+            categoryList.add(Category.OTHERS);
 
         return categoryList;
     }

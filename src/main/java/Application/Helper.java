@@ -22,6 +22,7 @@ public class Helper {
     private static final Pane articlePane = new Pane();
     private static final Scene articleScene = new Scene(articlePane);
     private static final Stage articleStage = new Stage();
+
     static {
         articleStage.setScene(articleScene);
     }
@@ -42,7 +43,8 @@ public class Helper {
             articleStage.show();
         }
     }
-    static void displayArticleInGrid(Article article, GridPane grid){
+
+    static void displayArticleInGrid(Article article, GridPane grid) {
         // thumbnail
         Image image = new Image(article.getThumbNail(), 160, 90, false, false);
         ImageView thumbnail = new ImageView(image);
@@ -63,43 +65,11 @@ public class Helper {
         Text newsSource = new Text(article.getNewsSource());
 
         // arrange components in grid to make a preview
-        grid.add(thumbnail,1,1,1,2);
-        grid.add(title,2,1);
-        grid.add(description,2,2);
-        grid.add(publishedTime,2,3);
-        grid.add(newsSource,1,3);
+        grid.add(thumbnail, 1, 1, 1, 2);
+        grid.add(title, 2, 1);
+        grid.add(description, 2, 2);
+        grid.add(publishedTime, 2, 3);
+        grid.add(newsSource, 1, 3);
         grid.setUserData(article.getHtml());
     }
-
-
-
-    static class UnderlineText implements EventHandler<MouseEvent>{
-        @Override
-        public void handle(MouseEvent mouseEvent) {
-            Pane g = (Pane) mouseEvent.getSource();
-            for(Node node: g.getChildren()){
-                if(node instanceof Text){
-                    Text t = (Text) node;
-                    t.setUnderline(true);
-                }
-            }
-        }
-    }
-
-    static class UndoUnderlineText implements EventHandler<MouseEvent>{
-        @Override
-        public void handle(MouseEvent mouseEvent) {
-            Pane g = (Pane) mouseEvent.getSource();
-            for(Node node: g.getChildren()){
-                if(node instanceof Text){
-                    Text t = (Text) node;
-                    t.setUnderline(false);
-                }
-            }
-        }
-    }
-}
-
-class ArticleDisplayer{
-
 }

@@ -10,10 +10,14 @@ module JavaFxApplication {
     requires selenium.api;
     requires org.apache.commons.lang3;
 
-    opens Application to javafx.fxml;
     exports Application;
     exports business.News;
-    exports business;
-    opens business to javafx.fxml;
+
+    opens Application to javafx.fxml;
+    opens Application.View to javafx.fxml;
+    opens Application.Model to javafx.fxml;
+
+    exports Application.View;
+    exports Application.Model;
 
 }

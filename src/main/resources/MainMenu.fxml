@@ -33,79 +33,29 @@
             <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
         </rowConstraints>
          <children>
-            <Button fx:id="newCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="New">
-               <font>
-                  <Font name="Calibri Bold" size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="covidCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Covid" GridPane.rowIndex="1">
-               <font>
-                  <Font name="Calibri Bold" size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="politicsCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Politics" GridPane.rowIndex="2">
-               <font>
-                  <Font name="Calibri Bold" size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="businessCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Business" GridPane.rowIndex="3">
-               <font>
-                  <Font name="Calibri Bold" size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="technologyCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Technology" GridPane.rowIndex="4">
-               <font>
-                  <Font name="Calibri Bold" size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="healthCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Health" GridPane.rowIndex="5">
-               <font>
-                  <Font name="Calibri Bold" size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="sportsCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Sports" GridPane.rowIndex="6">
-               <font>
-                  <Font name="Calibri Bold" size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="entertainmentCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Entertainment" GridPane.rowIndex="7">
-               <font>
-                  <Font name="Calibri Bold" size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="worldCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="World" GridPane.rowIndex="8">
-               <font>
-                  <Font name="Calibri Bold" size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="othersCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Others" GridPane.rowIndex="9">
-               <font>
-                  <Font name="Calibri Bold" size="20.0" />
-               </font>
-            </Button>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="776.0" spacing="80.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+            <HBox fx:id="pageBox" alignment="CENTER" prefHeight="100.0" prefWidth="776.0" spacing="80.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
                <children>
-                  <Button fx:id="page1" mnemonicParsing="false" onAction="#changePageBtn" prefHeight="40.0" prefWidth="70.0" text="1">
+                  <Button fx:id="page1" mnemonicParsing="false" onAction="#changePage" prefHeight="40.0" prefWidth="70.0" text="1">
                      <font>
                         <Font name="Calibri" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="page2" mnemonicParsing="false" onAction="#changePageBtn" prefHeight="40.0" prefWidth="70.0" text="2">
+                  <Button fx:id="page2" mnemonicParsing="false" onAction="#changePage" prefHeight="40.0" prefWidth="70.0" text="2">
                      <font>
                         <Font name="Calibri" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="page3" mnemonicParsing="false" onAction="#changePageBtn" prefHeight="40.0" prefWidth="70.0" text="3">
+                  <Button fx:id="page3" mnemonicParsing="false" onAction="#changePage" prefHeight="40.0" prefWidth="70.0" text="3">
                      <font>
                         <Font name="Calibri" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="page4" mnemonicParsing="false" onAction="#changePageBtn" prefHeight="40.0" prefWidth="70.0" text="4">
+                  <Button fx:id="page4" mnemonicParsing="false" onAction="#changePage" prefHeight="40.0" prefWidth="70.0" text="4">
                      <font>
                         <Font name="Calibri" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="page5" mnemonicParsing="false" onAction="#changePageBtn" prefHeight="40.0" prefWidth="70.0" text="5">
+                  <Button fx:id="page5" mnemonicParsing="false" onAction="#changePage" prefHeight="40.0" prefWidth="70.0" text="5">
                      <font>
                         <Font name="Calibri" size="14.0" />
                      </font>
@@ -117,6 +67,60 @@
                   <VBox fx:id="previewBox" alignment="CENTER" prefHeight="536.0" prefWidth="616.0" spacing="10.0" />
                </content>
             </ScrollPane>
+            <VBox fx:id="categoryBox" prefHeight="200.0" prefWidth="100.0" GridPane.rowSpan="10">
+               <children>
+                  <Button fx:id="newCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="New">
+                     <font>
+                        <Font name="Calibri Bold" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="covidCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Covid">
+                     <font>
+                        <Font name="Calibri Bold" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="politicsCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Politics">
+                     <font>
+                        <Font name="Calibri Bold" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="businessCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Business">
+                     <font>
+                        <Font name="Calibri Bold" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="technologyCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Technology">
+                     <font>
+                        <Font name="Calibri Bold" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="healthCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Health">
+                     <font>
+                        <Font name="Calibri Bold" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="sportsCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Sports">
+                     <font>
+                        <Font name="Calibri Bold" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="entertainmentCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Entertainment">
+                     <font>
+                        <Font name="Calibri Bold" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="worldCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="World">
+                     <font>
+                        <Font name="Calibri Bold" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="othersCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Others">
+                     <font>
+                        <Font name="Calibri Bold" size="20.0" />
+                     </font>
+                  </Button>
+               </children>
+            </VBox>
          </children>
       </GridPane>
    </center>

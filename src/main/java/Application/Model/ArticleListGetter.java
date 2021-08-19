@@ -1,4 +1,4 @@
-package business;
+package Application.Model;
 
 import business.Helper.ArticleListGenerator;
 import business.Helper.GetNewsOutlets;
