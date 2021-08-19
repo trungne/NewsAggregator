@@ -18,6 +18,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
@@ -40,7 +42,7 @@ public class Controller {
     private final Stage articleStage = new Stage();
 
     private Button currentCategoryButton;
-    private Button currentPageButton;
+    public Button currentPageButton;
 
     public Controller(){
         this.model = new Model(this);
@@ -51,6 +53,14 @@ public class Controller {
     public void initialize(){
         for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
             PreviewGrid grid = new PreviewGrid();
+
+            grid.setOnMouseEntered(event -> {
+                grid.underline();
+            });
+
+            grid.setOnMouseExited(event -> {
+                grid.underline();
+            });
 
             grid.setOnMouseClicked(event -> {
                 Node node = (Node) event.getSource();
@@ -90,6 +100,7 @@ public class Controller {
     }
 
     public void displayPreviews(int pageNum){
+        setCurrentPageButton(1);
         enableAllPageButtons();
         enableAllCategoryButtons();
         List<Article> articles = model.getArticles(pageNum);
@@ -102,13 +113,17 @@ public class Controller {
         // display article to each grid in view
         for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
             Article a = articles.get(i);
+
             String thumbnail = a.getThumbNail();
             String title = a.getTitle();
             String description = a.getDescription();
             String publishedTime = a.getRelativeTime();
             String source = a.getNewsSource();
             String articleHtml = a.getHtml();
-            previewGrids.get(i).setPreviewToGrid(thumbnail, title, description, publishedTime, source, articleHtml);
+
+            previewGrids.get(i).setPreviewToGrid(thumbnail, title,
+                                                description, publishedTime,
+                                                source, articleHtml);
         }
     }
 
@@ -132,7 +147,6 @@ public class Controller {
     }
 
     public void displayArticle(String html){
-        articlePane.getChildren().clear();
         browser.getEngine().loadContent(html);
         articleStage.show();
     }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Model extends Task<List<Article>> {
+public class Model{
     private final HashMap<String, List<Article>> articlesByCategories = new HashMap<>();
     private final HashMap<Integer, List<Article>> currentArticles = new HashMap<>();
     private final ObservableList<Article> articles =
@@ -44,11 +44,6 @@ public class Model extends Task<List<Article>> {
             } catch (IndexOutOfBoundsException ignored){};
 
         }
-    }
-
-    @Override
-    protected List<Article> call() throws Exception {
-        return null;
     }
 
     public List<Article> getArticles(int page){
