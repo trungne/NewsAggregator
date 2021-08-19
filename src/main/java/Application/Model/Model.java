@@ -60,6 +60,7 @@ public class Model extends Task<List<Article>> {
 
 
     public void loadArticles(String category){
+        service.reset();
         service.setCategory(category);
         service.start();
     }
