@@ -26,10 +26,6 @@ public class Model {
         this.controller.updatePreviewsPane();
     }
 
-    public void notifyController(List<Article> newlyScrapedArticles){
-        this.controller.updatePreviewsPane();
-    }
-
     public List<IndexedArticle> getArticleSublist(String category, int startIndex, int endIndex){
         List<IndexedArticle> subList = new ArrayList<>();
         List<Article> articleList = articlesByCategories.get(category);

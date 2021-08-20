@@ -120,7 +120,6 @@ public class Controller {
     }
 
     private void placePreviewsOnGrids(List<IndexedArticle> articles){
-        // TODO: why is this so SLOWWWWW!
         for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
             IndexedArticle a = articles.get(i);
             String thumbnail = a.getThumbNail();

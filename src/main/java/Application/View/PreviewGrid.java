@@ -35,7 +35,12 @@ public class PreviewGrid extends GridPane {
                                  String publishedTime,
                                  String source,
                                  int index) {
-        Image image = new Image(thumbnail, 160, 90, false, false, true);
+        Image image = new Image(thumbnail,
+                160,
+                90,
+                false,
+                false,
+                true);
         this.imageView.setImage(image);
         this.titleText.setText(title);
         this.descriptionText.setText(description);
