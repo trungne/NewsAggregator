@@ -20,7 +20,7 @@ public class NhanDanSanitizer extends HtmlSanitizer {
         cleanHtml = Jsoup.clean(e.html(), safelist);
 
         newHtmlElement = new Element("p").html(cleanHtml);
-
+        newHtmlElement.addClass(CSS.DESCRIPTION);
         return newHtmlElement;
     }
 
@@ -29,7 +29,7 @@ public class NhanDanSanitizer extends HtmlSanitizer {
         Element newRoot = new Element("div");
         NodeFilter NhanDanFilter = new NhanDanFilter(newRoot);
         NodeTraversor.filter(NhanDanFilter, e);
-        return newRoot;
+        return newRoot.addClass(CSS.MAIN_CONTENT);
     }
 }
 
@@ -92,19 +92,6 @@ final class NhanDanFilter implements NodeFilter {
             }
 
         }
-//        else if (child.hasClass(CSS.NHANDAN_RELEVANT_NEWS)){
-//            System.out.println(child);
-//
-//            Element div = new Element("div");
-//            div.addClass(CSS.RELEVANT_NEWS);
-//
-//            Safelist safelist = Safelist.basicWithImages();
-//
-//            String cleanHtml = Jsoup.clean(child.html(), safelist);
-//            div.html(cleanHtml);
-//            root.append(div.outerHtml());
-//            validTag = true;
-//        }
 
         if (validTag)
             return FilterResult.SKIP_ENTIRELY;

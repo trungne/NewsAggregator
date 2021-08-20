@@ -18,6 +18,7 @@ public class TuoiTreSanitizer extends HtmlSanitizer {
         safelist = Safelist.basic();
         cleanHtml = Jsoup.clean(e.html(), safelist);
         newHtmlElement = new Element("p").html(cleanHtml);
+        newHtmlElement.addClass(CSS.DESCRIPTION);
         return newHtmlElement;
     }
 
@@ -26,7 +27,7 @@ public class TuoiTreSanitizer extends HtmlSanitizer {
         Element newRoot = new Element("div");
         NodeFilter TuoiTreFilter = new TuoiTreFilter(newRoot);
         NodeTraversor.filter(TuoiTreFilter, e);
-        return newRoot;
+        return newRoot.addClass(CSS.MAIN_CONTENT);
     }
 }
 

@@ -2,6 +2,7 @@ package business.Helper;
 
 public class CSS {
     // CSS for main content in articles
+    // TODO: add news source to article html
     public static final String SOURCE = "source";
     public static final String ARTICLE_HEADER = "article-header";
     public static final String ARTICLE_CATEGORY = "article-category";
@@ -16,19 +17,10 @@ public class CSS {
     public static final String PARAGRAPH = "content-paragraph";
     public static final String FIGURE = "content-pic";
     public static final String QUOTE = "content-quote";
-    public static final String GRAPH = "content-graph";
     public static final String VIDEO = "content-video";
     public static final String RELEVANT_NEWS = "relevant-news";
     public static final String AUTHOR = "author";
-
-
-    // CSS for previews
-    public static final String PREVIEW = "preview";
-    public static final String THUMBNAIL_HEADER = "thumb-header";
-    public static final String THUMBNAIL = "thumbnail";
     public static final String PUBLISHED_TIME = "published-time";
-    public static final String THUMBNAIL_TITLE = "thumb-title";
-    public static final String THUMBNAIL_DESCRIPTION = "thumb-desp";
 
     /* The following CSS Classes are used to initialize NewsOutletInfo */
 
@@ -80,5 +72,4 @@ public class CSS {
     public static final String NHANDAN_PIC = "box-detail-thumb";
     public static final String NHANDAN_THUMBNAIL = "box-detail-thumb";
     public static final String NHANDAN_AUTHOR = "box-author";
-    public static final String NHANDAN_RELEVANT_NEWS = "list-by-topic";
 }

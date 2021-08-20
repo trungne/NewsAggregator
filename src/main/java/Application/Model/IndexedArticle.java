@@ -2,7 +2,6 @@ package Application.Model;
 
 import business.News.Article;
 
-import java.net.URL;
 
 public class IndexedArticle{
     private final int index;

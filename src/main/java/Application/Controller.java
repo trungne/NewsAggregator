@@ -8,11 +8,9 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
 
-import business.News.Article;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -60,9 +58,8 @@ public class Controller {
         }
         articlePane.getChildren().add(browser);
         articleStage.setScene(articleScene);
-        articleStage.setOnCloseRequest(event -> {
-            browser.getEngine().load(null);
-        });
+        articleStage.setOnCloseRequest(event ->
+                browser.getEngine().load(null));
 
         progressBar.setPrefSize(500, 30);
 //        progressBar.setStyle(" -fx-progress-color: orange;");

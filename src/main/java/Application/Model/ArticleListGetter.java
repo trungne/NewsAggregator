@@ -32,16 +32,15 @@ public class ArticleListGetter extends Task<List<Article>> {
     }
 
     @Override
-    protected List<Article> call() throws Exception {
+    protected List<Article> call(){
         ObservableList<Article> articles = FXCollections
                 .synchronizedObservableList(
                         FXCollections.observableList(
                         new ArrayList<>()));
 
         // update progress bar
-        articles.addListener((ListChangeListener<Article>) change -> {
-            updateProgress(change.getList().size(), MAX_ARTICLES_DISPLAYED);
-        });
+        articles.addListener((ListChangeListener<Article>)
+                change -> updateProgress(change.getList().size(), MAX_ARTICLES_DISPLAYED));
 
         updateArticleList(articles);
         return articles;

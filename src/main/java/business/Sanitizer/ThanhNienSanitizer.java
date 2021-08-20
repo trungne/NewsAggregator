@@ -1,13 +1,11 @@
 package business.Sanitizer;
 
 import business.Helper.CSS;
-import business.Sanitizer.HtmlSanitizer;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.safety.Safelist;
-import org.jsoup.select.Elements;
 import org.jsoup.select.NodeFilter;
 import org.jsoup.select.NodeTraversor;
 
@@ -20,6 +18,7 @@ public class ThanhNienSanitizer extends HtmlSanitizer {
         safelist = Safelist.basic();
         cleanHtml = Jsoup.clean(e.html(), safelist);
         newHtmlElement = new Element("p").html(cleanHtml);
+        newHtmlElement.addClass(CSS.DESCRIPTION);
         return newHtmlElement;
     }
 
@@ -28,7 +27,7 @@ public class ThanhNienSanitizer extends HtmlSanitizer {
         Element newRoot = new Element("div"); //<div></div>
         NodeFilter ThanhNienFilter = new ThanhNienFilter(newRoot);
         NodeTraversor.filter(ThanhNienFilter, e);
-        return newRoot;
+        return newRoot.addClass(CSS.MAIN_CONTENT);
     }
 }
 
@@ -48,19 +47,15 @@ final class ThanhNienFilter implements NodeFilter {
         // get video
         if (child.tagName().equals("table") && child.hasClass("video")) {
             Element videoTag = filterVideoTag(child);
-            if (videoTag != null){
-                videoTag.addClass(CSS.VIDEO);
-                root.append(videoTag.outerHtml());
-            }
+            videoTag.addClass(CSS.VIDEO);
+            root.append(videoTag.outerHtml());
             validTag = true;
         }
         // get image
         else if (child.tagName().equals("table") && child.hasClass("imagefull")) {
             Element figureTag = filterFigureTag(child);
-            if (figureTag != null){
-                figureTag.addClass(CSS.FIGURE);
-                root.append(figureTag.outerHtml());
-            }
+            figureTag.addClass(CSS.FIGURE);
+            root.append(figureTag.outerHtml());
             validTag = true;
         }
 

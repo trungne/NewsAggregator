@@ -12,7 +12,7 @@ import java.util.*;
 
 public class Article implements Comparable<Article>{
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EE, dd/MMMM/yyyy, kk:mm ");
-
+    // TODO: display url at the end with news source
     private final URL url;
     private Element title;
     private Element description;

@@ -35,7 +35,7 @@ public class VNExpressSanitizer extends HtmlSanitizer {
             span.addClass(CSS.LOCATION);
             span.text(span.text() + " - ");
         }
-
+        newHtmlElement.addClass(CSS.DESCRIPTION);
         return newHtmlElement;
     }
 
@@ -44,7 +44,7 @@ public class VNExpressSanitizer extends HtmlSanitizer {
         Element newRoot = new Element("div");
         NodeFilter VNExpressFilter = new VNExpressFilter(newRoot);
         NodeTraversor.filter(VNExpressFilter, e);
-        return newRoot;
+        return newRoot.addClass(CSS.MAIN_CONTENT);
     }
 }
 
@@ -114,17 +114,6 @@ final class VNExpressFilter implements NodeFilter {
             }
             validTag = true;
         }
-
-        // get chart // TODO svg tag is not rendered somehow
-//        else if (child.tagName().equals("svg") && child.hasClass("highcharts-root")){
-//            for(String className: child.classNames()){
-//                child.removeClass(className);
-//            }
-//
-//            child.addClass(CSS.GRAPH);
-//            root.append(child.outerHtml());
-//        validTag = true;
-        //        }
 
         // get relevant news at the end of the article
         else if (child.hasClass("list-news")) {

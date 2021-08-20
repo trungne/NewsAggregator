@@ -2,9 +2,6 @@ package Application.Model;
 
 import Application.Controller;
 import business.News.Article;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;

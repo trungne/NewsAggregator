@@ -17,6 +17,7 @@ public class ZingNewsSanitizer extends HtmlSanitizer {
         safelist = Safelist.basic();
         cleanHtml = Jsoup.clean(e.html(), safelist);
         newHtmlElement = new Element("p").html(cleanHtml);
+        newHtmlElement.addClass(CSS.DESCRIPTION);
         return newHtmlElement;
     }
 
@@ -25,7 +26,7 @@ public class ZingNewsSanitizer extends HtmlSanitizer {
         Element newRoot = new Element("div");
         NodeFilter ZingNewsFilter = new ZingNewsFilter(newRoot);
         NodeTraversor.filter(ZingNewsFilter, e);
-        return newRoot;
+        return newRoot.addClass(CSS.MAIN_CONTENT);
     }
 }
 
