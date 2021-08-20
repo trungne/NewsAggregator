@@ -12,6 +12,7 @@ public class GetArticleListService extends Service<List<Article>> {
     public GetArticleListService(){
 
     }
+
     public void setCategory(String category) {
         this.category = category;
     }

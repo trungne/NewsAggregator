@@ -24,7 +24,9 @@ public class Model{
     public Model(Controller controller){
         this.controller = controller;
         service.setOnSucceeded(e -> {
-            List<Article> newlyScrapedArticles = (List<Article>) e.getSource().getValue();
+            List<Article> newlyScrapedArticles =
+
+            (List<Article>) e.getSource().getValue();
             populateArticlePages(newlyScrapedArticles);
             this.controller.displayPreviews(1);
         });

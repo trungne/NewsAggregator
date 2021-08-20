@@ -2,8 +2,6 @@ package Application;
 
 import Application.Model.Model;
 import Application.View.PreviewGrid;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -13,13 +11,10 @@ import business.News.Article;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
@@ -53,18 +48,11 @@ public class Controller {
     public void initialize(){
         for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
             PreviewGrid grid = new PreviewGrid();
-
-            grid.setOnMouseEntered(event -> {
-                grid.underline();
-            });
-
-            grid.setOnMouseExited(event -> {
-                grid.underline();
-            });
-
-            grid.setOnMouseClicked(event -> {
-                Node node = (Node) event.getSource();
-                displayArticle( (String) node.getUserData());
+            grid.setOnMouseEntered(e -> grid.underline());
+            grid.setOnMouseExited(e -> grid.underline());
+            grid.setOnMouseClicked(e -> {
+                Node node = (Node) e.getSource();
+                openArticleInNewStage( (String) node.getUserData());
             });
             this.previewGrids.add(grid);
             this.previewBox.getChildren().add(grid);
@@ -83,13 +71,13 @@ public class Controller {
     }
 
     public void displayNews(ActionEvent e){
-        Object o = e.getSource();
-        if (o instanceof Button){
-            Button b = (Button) o;
-            setCurrentCategoryButton(b);
-            String category = b.getText();
-            getPreviews(category);
+        Button b = (Button) e.getSource();
+        // do nothing if the category has already been selected
+        if (b == currentCategoryButton) {
+            return;
         }
+        highlightCategory(b);
+        getPreviews(b.getText());
     }
 
     private void getPreviews(String category){
@@ -99,13 +87,19 @@ public class Controller {
         model.loadArticles(category);
     }
 
+    // this function is called after articles have been scraped by the model
     public void displayPreviews(int pageNum){
-        setCurrentPageButton(1);
+        highlightPage(pageNum);
+
+        // enable category and page buttons when
         enableAllPageButtons();
         enableAllCategoryButtons();
+
         List<Article> articles = model.getArticles(pageNum);
+
         clearAllArticleGrids();
         populatePreviewGrids(articles);
+
         mainArea.setContent(previewBox);
     }
 
@@ -138,7 +132,6 @@ public class Controller {
     public void changePage(ActionEvent e){
         Button b = (Button) e.getSource();
         int pageNum = Integer.parseInt(b.getText());
-        setCurrentPageButton(pageNum);
         displayPreviews(pageNum);
     }
 
@@ -146,12 +139,13 @@ public class Controller {
         mainArea.setContent(progressBar);
     }
 
-    public void displayArticle(String html){
+    public void openArticleInNewStage(String html){
         browser.getEngine().loadContent(html);
         articleStage.show();
     }
 
-    public void setCurrentCategoryButton(Button b){
+    // set currentCategoryButton and change highlighting to the new current category button
+    public void highlightCategory(Button b){
         if (currentCategoryButton != null){
             currentCategoryButton.setStyle(null);
         }
@@ -159,8 +153,9 @@ public class Controller {
         currentCategoryButton.setStyle("-fx-background-color: rgb(255,255,102);");
     }
 
-    public void setCurrentPageButton(int page){
-        if (page <= 0 || page > 5){
+    // set currentPageButton and change highlighting to the new current page button
+    public void highlightPage(int page){
+        if (page <= 0 || page > pageBox.getChildren().size()){
             throw new IllegalArgumentException();
         }
         if(currentPageButton != null){
@@ -169,6 +164,7 @@ public class Controller {
         currentPageButton = (Button) pageBox.getChildren().get(page-1);
         currentPageButton.setStyle("-fx-background-color: rgb(255,255,102);");
     }
+
     public void disableAllCategoryButtons(){
         for(Node node: categoryBox.getChildren()){
             node.setDisable(true);

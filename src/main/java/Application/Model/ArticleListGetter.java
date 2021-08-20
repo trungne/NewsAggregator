@@ -52,7 +52,6 @@ public class ArticleListGetter extends Task<List<Article>> {
         });
 
         updateArticleList(articles);
-
         return articles;
     }
 
