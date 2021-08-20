@@ -70,6 +70,7 @@ public class Controller {
         newCategory.fire();
     }
 
+    // Eventhanlder for category buttons
     public void displayNews(ActionEvent e){
         Button b = (Button) e.getSource();
         // do nothing if the category has already been selected
@@ -84,6 +85,9 @@ public class Controller {
         disableAllPageButtons();
         disableAllCategoryButtons();
         displayProgressBar();
+
+        // this will trigger model to scrape articles
+        // when finished, the model will trigger controller to display previews
         model.loadArticles(category);
     }
 
@@ -95,12 +99,22 @@ public class Controller {
         enableAllPageButtons();
         enableAllCategoryButtons();
 
-        List<Article> articles = model.getArticles(pageNum);
+        List<Article> articles = getArticleSublist(pageNum);
 
         clearAllArticleGrids();
         populatePreviewGrids(articles);
 
         mainArea.setContent(previewBox);
+    }
+
+    public void receiveNotificationByModel(){
+        displayPreviews(1);
+    }
+    private List<Article> getArticleSublist(int page){
+        // generate the start and end indices
+        int startIndex = (page - 1) * MAX_PREVIEWS_PER_PAGE;
+        int endIndex = page * MAX_PREVIEWS_PER_PAGE;
+        return model.getArticleSublist(currentCategoryButton.getText(), startIndex, endIndex);
     }
 
     private void populatePreviewGrids(List<Article> articles){
@@ -121,7 +135,7 @@ public class Controller {
         }
     }
 
-    public void clearAllArticleGrids(){
+    private void clearAllArticleGrids(){
         for(GridPane grid: previewGrids){
             if (!grid.getChildren().isEmpty()){
                 grid.getChildren().clear();
@@ -129,23 +143,24 @@ public class Controller {
         }
     }
 
+    // Eventhanlder for page buttons
     public void changePage(ActionEvent e){
         Button b = (Button) e.getSource();
         int pageNum = Integer.parseInt(b.getText());
         displayPreviews(pageNum);
     }
 
-    public void displayProgressBar(){
+    private void displayProgressBar(){
         mainArea.setContent(progressBar);
     }
 
-    public void openArticleInNewStage(String html){
+    private void openArticleInNewStage(String html){
         browser.getEngine().loadContent(html);
         articleStage.show();
     }
 
     // set currentCategoryButton and change highlighting to the new current category button
-    public void highlightCategory(Button b){
+    private void highlightCategory(Button b){
         if (currentCategoryButton != null){
             currentCategoryButton.setStyle(null);
         }
@@ -154,7 +169,7 @@ public class Controller {
     }
 
     // set currentPageButton and change highlighting to the new current page button
-    public void highlightPage(int page){
+    private void highlightPage(int page){
         if (page <= 0 || page > pageBox.getChildren().size()){
             throw new IllegalArgumentException();
         }
@@ -165,25 +180,25 @@ public class Controller {
         currentPageButton.setStyle("-fx-background-color: rgb(255,255,102);");
     }
 
-    public void disableAllCategoryButtons(){
+    private void disableAllCategoryButtons(){
         for(Node node: categoryBox.getChildren()){
             node.setDisable(true);
         }
     }
 
-    public void enableAllCategoryButtons(){
+    private void enableAllCategoryButtons(){
         for(Node node: categoryBox.getChildren()){
             node.setDisable(false);
         }
     }
 
-    public void disableAllPageButtons(){
+    private void disableAllPageButtons(){
         for(Node node: pageBox.getChildren()){
             node.setDisable(true);
         }
     }
 
-    public void enableAllPageButtons(){
+    private void enableAllPageButtons(){
         for(Node node: pageBox.getChildren()){
             node.setDisable(false);
         }

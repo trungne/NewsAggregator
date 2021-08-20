@@ -22,9 +22,6 @@ import static business.Helper.ScrapingConfiguration.MAX_TERMINATION_TIME;
 
 // an interface for presentation layer to access scraped articles
 public class ArticleListGetter extends Task<List<Article>> {
-    // map articles with their category
-    private static final
-    HashMap<String, List<Article>> articlesByCategories = new HashMap<>();
     // get all news outlet css info
     private static final HashMap<String, NewsOutlet> newsOutlets = GetNewsOutlets.newsOutlets;
 
@@ -36,11 +33,6 @@ public class ArticleListGetter extends Task<List<Article>> {
 
     @Override
     protected List<Article> call() throws Exception {
-        if (articlesByCategories.get(category) != null){
-            return articlesByCategories.get(category);
-        }
-
-        // scrape articles if there is none
         ObservableList<Article> articles = FXCollections
                 .synchronizedObservableList(
                         FXCollections.observableList(
@@ -55,7 +47,7 @@ public class ArticleListGetter extends Task<List<Article>> {
         return articles;
     }
 
-    public void updateArticleList(List<Article> articles) {
+    private void updateArticleList(List<Article> articles) {
         ExecutorService es = Executors.newCachedThreadPool();
         for (NewsOutlet newsOutlet : newsOutlets.values()) {
             es.execute(()->{
@@ -67,11 +59,10 @@ public class ArticleListGetter extends Task<List<Article>> {
         shutdownAndAwaitTermination(es);
 
         Collections.sort(articles);
-        articlesByCategories.put(category, articles);
     }
 
 // https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html
-    public void shutdownAndAwaitTermination(ExecutorService pool) {
+    private void shutdownAndAwaitTermination(ExecutorService pool) {
         pool.shutdown(); // Disable new tasks from being submitted
         try {
             // Wait a while for existing tasks to terminate
