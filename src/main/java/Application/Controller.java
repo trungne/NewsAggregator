@@ -64,8 +64,8 @@ public class Controller {
             browser.getEngine().load(null);
         });
 
-        progressBar.setPrefSize(500, 50);
-        progressBar.setStyle(" -fx-progress-color: orange;");
+        progressBar.setPrefSize(500, 30);
+//        progressBar.setStyle(" -fx-progress-color: orange;");
 
         Button newCategory = (Button) categoryBox.getChildren().get(0);
         newCategory.fire();
@@ -95,8 +95,6 @@ public class Controller {
     // this function is called after articles have been scraped by the model
     public void displayPreviews(int pageNum){
         List<IndexedArticle> articles = getArticleSublist(pageNum);
-
-        clearAllArticleGrids();
         populatePreviewGrids(articles);
 
         mainArea.setContent(previewBox);
@@ -131,14 +129,6 @@ public class Controller {
             previewGrids.get(i).setPreviewToGrid(thumbnail, title,
                                                 description, publishedTime,
                                                 source, index);
-        }
-    }
-
-    private void clearAllArticleGrids(){
-        for(GridPane grid: previewGrids){
-            if (!grid.getChildren().isEmpty()){
-                grid.getChildren().clear();
-            }
         }
     }
 

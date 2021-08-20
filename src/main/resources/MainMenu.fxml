@@ -33,7 +33,7 @@
             <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
         </rowConstraints>
          <children>
-            <HBox fx:id="pageBox" alignment="CENTER" prefHeight="100.0" prefWidth="776.0" spacing="80.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+            <HBox fx:id="pageBox" alignment="CENTER" prefHeight="100.0" prefWidth="672.0" spacing="80.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
                <children>
                   <Button fx:id="page1" mnemonicParsing="false" onAction="#changePage" prefHeight="40.0" prefWidth="70.0" text="1">
                      <font>
@@ -64,7 +64,7 @@
             </HBox>
             <ScrollPane fx:id="mainArea" prefHeight="376.0" prefWidth="452.0" GridPane.columnIndex="1" GridPane.rowSpan="9">
                <content>
-                  <VBox fx:id="previewBox" alignment="CENTER" prefHeight="536.0" prefWidth="616.0" spacing="10.0" />
+                  <VBox fx:id="previewBox" alignment="CENTER" spacing="10.0" />
                </content>
             </ScrollPane>
             <VBox fx:id="categoryBox" prefHeight="200.0" prefWidth="100.0" GridPane.rowSpan="10">

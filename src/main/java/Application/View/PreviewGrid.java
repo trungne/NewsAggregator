@@ -7,58 +7,57 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class PreviewGrid extends GridPane {
-    private Text title;
-    private Text description;
-    private Text publishedTime;
-    private Text newsSource;
+    private static final Font titleFont = new Font("Helvetica", 20);
+    private static final Font descriptionFont = new Font("Helvetica", 12);
+
     private boolean isUnderlined = false;
+    private final ImageView imageView = new ImageView();
+    private final Text titleText = new Text();
+    private final Text descriptionText = new Text();
+    private final Text publishedTimeText = new Text();
+    private final Text newsSourceText = new Text();
+
+
+
+    public PreviewGrid(){
+        titleText.setFont(titleFont);
+        descriptionText.setFont(descriptionFont);
+        this.descriptionText.setWrappingWidth(500);
+
+        // arrange components in grid to create layout for preview components
+        this.add(imageView, 1, 1, 1, 2);
+        this.add(titleText, 2, 1);
+        this.add(descriptionText, 2, 2);
+        this.add(publishedTimeText, 2, 3);
+        this.add(newsSourceText, 1, 3);
+    }
     public void setPreviewToGrid(String thumbnail,
                                  String title,
                                  String description,
                                  String publishedTime,
                                  String source,
                                  int index) {
-        // thumbnail
         Image image = new Image(thumbnail, 160, 90, false, false);
-        ImageView iv = new ImageView(image);
-
-
-        // title
-        this.title = new Text(title);
-        Font titleFont = new Font("Helvetica", 20);
-        this.title.setFont(titleFont);
-
-        // description
-        this.description = new Text(description);
-        Font descriptionFont = new Font("Helvetica", 12);
-        this.description.setWrappingWidth(500);
-        this.description.setFont(descriptionFont);
-
-        // published time and newsource
-        this.publishedTime = new Text(publishedTime);
-        this.newsSource = new Text(source);
-
-        // arrange components in grid to make a preview
-        this.add(iv, 1, 1, 1, 2);
-        this.add(this.title, 2, 1);
-        this.add(this.description, 2, 2);
-        this.add(this.publishedTime, 2, 3);
-        this.add(this.newsSource, 1, 3);
+        this.imageView.setImage(image);
+        this.titleText.setText(title);
+        this.descriptionText.setText(description);
+        this.publishedTimeText.setText(publishedTime);
+        this.newsSourceText.setText(source);
         this.setUserData(index);
     }
 
     public void underline(){
         if (!isUnderlined){
-            title.setUnderline(true);
-            description.setUnderline(true);
-            publishedTime.setUnderline(true);
-            newsSource.setUnderline(true);
+            titleText.setUnderline(true);
+            descriptionText.setUnderline(true);
+            publishedTimeText.setUnderline(true);
+            newsSourceText.setUnderline(true);
         }
         else{
-            title.setUnderline(false);
-            description.setUnderline(false);
-            publishedTime.setUnderline(false);
-            newsSource.setUnderline(false);
+            titleText.setUnderline(false);
+            descriptionText.setUnderline(false);
+            publishedTimeText.setUnderline(false);
+            newsSourceText.setUnderline(false);
         }
 
         isUnderlined = !isUnderlined;
