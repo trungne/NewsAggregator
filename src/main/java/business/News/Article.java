@@ -69,7 +69,7 @@ public class Article implements Comparable<Article> {
         return docString + html.outerHtml();
     }
 
-    private Element getDescriptionTag() {
+    private Element getCategoryTag() {
         // category div
         Element categories = new Element("div");
         categories.addClass(CSS.ARTICLE_CATEGORY);
@@ -99,20 +99,20 @@ public class Article implements Comparable<Article> {
         Element header = new Element("div");
         header.addClass(CSS.ARTICLE_HEADER);
 
-        Element categories = getDescriptionTag();
+        Element categories = getCategoryTag();
         Element publishedTime = getPublishedTimeTag();
 
         header.appendChild(categories);
         header.appendChild(publishedTime);
 
         // create article content div which contains title, desp, and main content
-        Element article = new Element("article");
         Element content = new Element("div");
         content.addClass(CSS.ARTICLE_CONTENT);
         content.appendChild(title);
         content.appendChild(description);
         content.appendChild(mainContent);
 
+        Element article = new Element("article");
         article.appendChild(header);
         article.appendChild(content);
 
@@ -130,7 +130,12 @@ public class Article implements Comparable<Article> {
     }
 
     public void addCategory(List<String> categoryList) {
-        this.categories.addAll(categoryList);
+        for (String category: categoryList){
+            if (category.equals(mainCategory)){
+                continue;
+            }
+            this.categories.add(category);
+        }
     }
 
     public String getNewsSource() {

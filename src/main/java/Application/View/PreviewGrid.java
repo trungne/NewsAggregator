@@ -17,12 +17,10 @@ public class PreviewGrid extends GridPane {
     private final Text publishedTimeText = new Text();
     private final Text newsSourceText = new Text();
 
-
-
     public PreviewGrid(){
         titleText.setFont(titleFont);
         descriptionText.setFont(descriptionFont);
-        this.descriptionText.setWrappingWidth(500);
+        descriptionText.setWrappingWidth(500);
 
         // arrange components in grid to create layout for preview components
         this.add(imageView, 1, 1, 1, 2);
@@ -37,7 +35,7 @@ public class PreviewGrid extends GridPane {
                                  String publishedTime,
                                  String source,
                                  int index) {
-        Image image = new Image(thumbnail, 160, 90, false, false);
+        Image image = new Image(thumbnail, 160, 90, false, false, true);
         this.imageView.setImage(image);
         this.titleText.setText(title);
         this.descriptionText.setText(description);

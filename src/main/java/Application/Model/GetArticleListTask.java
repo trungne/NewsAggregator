@@ -4,10 +4,14 @@ import business.Helper.ArticleListGenerator;
 import business.Helper.GetNewsOutlets;
 import business.News.Article;
 import business.NewsSources.NewsOutlet;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,13 +25,13 @@ import static business.Helper.ScrapingConfiguration.MAX_ARTICLES_DISPLAYED;
 import static business.Helper.ScrapingConfiguration.MAX_TERMINATION_TIME;
 
 // an interface for presentation layer to access scraped articles
-public class ArticleListGetter extends Task<List<Article>> {
+public class GetArticleListTask extends Task<List<Article>> {
     // get all news outlet css info
     private static final HashMap<String, NewsOutlet> newsOutlets = GetNewsOutlets.newsOutlets;
 
     private final String category;
 
-    public ArticleListGetter(String category){
+    public GetArticleListTask(String category){
         this.category = category;
     }
 
@@ -56,7 +60,6 @@ public class ArticleListGetter extends Task<List<Article>> {
         }
 
         shutdownAndAwaitTermination(es);
-
         Collections.sort(articles);
     }
 
@@ -79,7 +82,5 @@ public class ArticleListGetter extends Task<List<Article>> {
         }
 
     }
-
-
 }
 

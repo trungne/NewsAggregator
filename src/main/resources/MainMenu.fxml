@@ -64,57 +64,57 @@
             </HBox>
             <ScrollPane fx:id="mainArea" prefHeight="376.0" prefWidth="452.0" GridPane.columnIndex="1" GridPane.rowSpan="9">
                <content>
-                  <VBox fx:id="previewBox" alignment="CENTER" spacing="10.0" />
+                  <VBox fx:id="previewBox" alignment="CENTER" prefHeight="486.0" prefWidth="596.0" spacing="10.0" />
                </content>
             </ScrollPane>
             <VBox fx:id="categoryBox" prefHeight="200.0" prefWidth="100.0" GridPane.rowSpan="10">
                <children>
-                  <Button fx:id="newCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="New">
+                  <Button fx:id="newCategory" alignment="CENTER" mnemonicParsing="false" onAction="#selectCategory" prefHeight="90.0" prefWidth="200.0" text="New">
                      <font>
                         <Font name="Calibri Bold" size="20.0" />
                      </font>
                   </Button>
-                  <Button fx:id="covidCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Covid">
+                  <Button fx:id="covidCategory" alignment="CENTER" mnemonicParsing="false" onAction="#selectCategory" prefHeight="90.0" prefWidth="200.0" text="Covid">
                      <font>
                         <Font name="Calibri Bold" size="20.0" />
                      </font>
                   </Button>
-                  <Button fx:id="politicsCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Politics">
+                  <Button fx:id="politicsCategory" alignment="CENTER" mnemonicParsing="false" onAction="#selectCategory" prefHeight="90.0" prefWidth="200.0" text="Politics">
                      <font>
                         <Font name="Calibri Bold" size="20.0" />
                      </font>
                   </Button>
-                  <Button fx:id="businessCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Business">
+                  <Button fx:id="businessCategory" alignment="CENTER" mnemonicParsing="false" onAction="#selectCategory" prefHeight="90.0" prefWidth="200.0" text="Business">
                      <font>
                         <Font name="Calibri Bold" size="20.0" />
                      </font>
                   </Button>
-                  <Button fx:id="technologyCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Technology">
+                  <Button fx:id="technologyCategory" alignment="CENTER" mnemonicParsing="false" onAction="#selectCategory" prefHeight="90.0" prefWidth="200.0" text="Technology">
                      <font>
                         <Font name="Calibri Bold" size="20.0" />
                      </font>
                   </Button>
-                  <Button fx:id="healthCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Health">
+                  <Button fx:id="healthCategory" alignment="CENTER" mnemonicParsing="false" onAction="#selectCategory" prefHeight="90.0" prefWidth="200.0" text="Health">
                      <font>
                         <Font name="Calibri Bold" size="20.0" />
                      </font>
                   </Button>
-                  <Button fx:id="sportsCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Sports">
+                  <Button fx:id="sportsCategory" alignment="CENTER" mnemonicParsing="false" onAction="#selectCategory" prefHeight="90.0" prefWidth="200.0" text="Sports">
                      <font>
                         <Font name="Calibri Bold" size="20.0" />
                      </font>
                   </Button>
-                  <Button fx:id="entertainmentCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Entertainment">
+                  <Button fx:id="entertainmentCategory" alignment="CENTER" mnemonicParsing="false" onAction="#selectCategory" prefHeight="90.0" prefWidth="200.0" text="Entertainment">
                      <font>
                         <Font name="Calibri Bold" size="20.0" />
                      </font>
                   </Button>
-                  <Button fx:id="worldCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="World">
+                  <Button fx:id="worldCategory" alignment="CENTER" mnemonicParsing="false" onAction="#selectCategory" prefHeight="90.0" prefWidth="200.0" text="World">
                      <font>
                         <Font name="Calibri Bold" size="20.0" />
                      </font>
                   </Button>
-                  <Button fx:id="othersCategory" alignment="CENTER" mnemonicParsing="false" onAction="#displayNews" prefHeight="90.0" prefWidth="200.0" text="Others">
+                  <Button fx:id="othersCategory" alignment="CENTER" mnemonicParsing="false" onAction="#selectCategory" prefHeight="90.0" prefWidth="200.0" text="Others">
                      <font>
                         <Font name="Calibri Bold" size="20.0" />
                      </font>

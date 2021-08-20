@@ -62,27 +62,33 @@ public class Controller {
                 browser.getEngine().load(null));
 
         progressBar.setPrefSize(500, 30);
-//        progressBar.setStyle(" -fx-progress-color: orange;");
 
         Button newCategory = (Button) categoryBox.getChildren().get(0);
         newCategory.fire();
     }
 
     // Eventhanlder for category buttons
-    public void displayNews(ActionEvent e){
+    public void selectCategory(ActionEvent e){
         Button b = (Button) e.getSource();
         // do nothing if the category has already been selected
         if (b == currentCategoryButton) {
             return;
         }
         highlightCategory(b);
-        getPreviews(b.getText());
+        requestPreviews(b.getText());
     }
 
-    private void getPreviews(String category){
-        disableAllPageButtons();
-        disableAllCategoryButtons();
-        displayProgressBar();
+    // Eventhanlder for page buttons
+    public void changePage(ActionEvent e){
+        Button b = (Button) e.getSource();
+        int pageNum = Integer.parseInt(b.getText());
+        updatePreviewsPane(pageNum);
+    }
+
+    private void requestPreviews(String category){
+        disableAllChildButtons(categoryBox);
+        disableAllChildButtons(pageBox);
+        mainArea.setContent(this.progressBar);
 
         // this will trigger model to scrape articles
         // when finished, the model will trigger controller to display previews
@@ -90,20 +96,22 @@ public class Controller {
     }
 
     // this function is called after articles have been scraped by the model
-    public void displayPreviews(int pageNum){
-        List<IndexedArticle> articles = getArticleSublist(pageNum);
-        populatePreviewGrids(articles);
+    public void updatePreviewsPane(){
+        enableAllChildButtons(categoryBox);
+        enableAllChildButtons(pageBox);
 
+        // select page 1 after scraping finishes
+        updatePreviewsPane(1);
+    }
+
+    private void updatePreviewsPane(int pageNum){
+        highlightPage(pageNum);
+        List<IndexedArticle> articles = getArticleSublist(pageNum);
+        placePreviewsOnGrids(articles);
         mainArea.setContent(previewBox);
     }
 
-    public void receiveNotificationByModel(){
-        // select page 1 after scraping finishes
-        enableAllPageButtons();
-        enableAllCategoryButtons();
-        Button pageOne = (Button) pageBox.getChildren().get(0);
-        pageOne.fire();
-    }
+
     private List<IndexedArticle> getArticleSublist(int page){
         // generate the start and end indices
         int startIndex = (page - 1) * MAX_PREVIEWS_PER_PAGE;
@@ -111,34 +119,22 @@ public class Controller {
         return model.getArticleSublist(currentCategoryButton.getText(), startIndex, endIndex);
     }
 
-    private void populatePreviewGrids(List<IndexedArticle> articles){
-        // display article to each grid in view
+    private void placePreviewsOnGrids(List<IndexedArticle> articles){
+        // TODO: why is this so SLOWWWWW!
         for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
             IndexedArticle a = articles.get(i);
-
             String thumbnail = a.getThumbNail();
             String title = a.getTitle();
             String description = a.getDescription();
             String publishedTime = a.getPublishedTime();
             String source = a.getSource();
-//            String articleHtml = a.getHtml();
+
+            // this is used to retrieve article in model later when a preview is clicked
             int index = a.getIndex();
             previewGrids.get(i).setPreviewToGrid(thumbnail, title,
                                                 description, publishedTime,
                                                 source, index);
         }
-    }
-
-    // Eventhanlder for page buttons
-    public void changePage(ActionEvent e){
-        Button b = (Button) e.getSource();
-        int pageNum = Integer.parseInt(b.getText());
-        highlightPage(pageNum);
-        displayPreviews(pageNum);
-    }
-
-    private void displayProgressBar(){
-        mainArea.setContent(progressBar);
     }
 
     private void openArticleInNewStage(int index){
@@ -168,28 +164,14 @@ public class Controller {
         currentPageButton.setStyle("-fx-background-color: rgb(255,255,102);");
     }
 
-    private void disableAllCategoryButtons(){
-        for(Node node: categoryBox.getChildren()){
+    private void disableAllChildButtons(Pane parent){
+        for (Node node: parent.getChildren())
             node.setDisable(true);
-        }
     }
 
-    private void enableAllCategoryButtons(){
-        for(Node node: categoryBox.getChildren()){
+    private void enableAllChildButtons(Pane parent){
+        for (Node node: parent.getChildren())
             node.setDisable(false);
-        }
-    }
-
-    private void disableAllPageButtons(){
-        for(Node node: pageBox.getChildren()){
-            node.setDisable(true);
-        }
-    }
-
-    private void enableAllPageButtons(){
-        for(Node node: pageBox.getChildren()){
-            node.setDisable(false);
-        }
     }
 }
 

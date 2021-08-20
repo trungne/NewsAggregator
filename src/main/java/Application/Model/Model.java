@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Model{
+public class Model {
     private final HashMap<String, List<Article>> articlesByCategories = new HashMap<>();
 
     private final Controller controller;
@@ -23,7 +23,11 @@ public class Model{
 
     // this function is called when the service finished, that is when scraping articles is done
     public void notifyController(){
-        this.controller.receiveNotificationByModel();
+        this.controller.updatePreviewsPane();
+    }
+
+    public void notifyController(List<Article> newlyScrapedArticles){
+        this.controller.updatePreviewsPane();
     }
 
     public List<IndexedArticle> getArticleSublist(String category, int startIndex, int endIndex){

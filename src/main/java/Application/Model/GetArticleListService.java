@@ -19,6 +19,6 @@ public class GetArticleListService extends Service<List<Article>> {
 
     @Override
     protected Task<List<Article>> createTask() {
-        return new ArticleListGetter(category);
+        return new GetArticleListTask(category);
     }
 }
