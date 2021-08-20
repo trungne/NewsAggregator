@@ -1,5 +1,6 @@
 package Application;
 
+import Application.Model.IndexedArticle;
 import Application.Model.Model;
 import Application.View.PreviewGrid;
 import javafx.fxml.FXML;
@@ -52,7 +53,7 @@ public class Controller {
             grid.setOnMouseExited(e -> grid.underline());
             grid.setOnMouseClicked(e -> {
                 Node node = (Node) e.getSource();
-                openArticleInNewStage( (String) node.getUserData());
+                openArticleInNewStage( (Integer) node.getUserData());
             });
             this.previewGrids.add(grid);
             this.previewBox.getChildren().add(grid);
@@ -93,13 +94,7 @@ public class Controller {
 
     // this function is called after articles have been scraped by the model
     public void displayPreviews(int pageNum){
-        highlightPage(pageNum);
-
-        // enable category and page buttons when
-        enableAllPageButtons();
-        enableAllCategoryButtons();
-
-        List<Article> articles = getArticleSublist(pageNum);
+        List<IndexedArticle> articles = getArticleSublist(pageNum);
 
         clearAllArticleGrids();
         populatePreviewGrids(articles);
@@ -108,30 +103,34 @@ public class Controller {
     }
 
     public void receiveNotificationByModel(){
-        displayPreviews(1);
+        // select page 1 after scraping finishes
+        enableAllPageButtons();
+        enableAllCategoryButtons();
+        Button pageOne = (Button) pageBox.getChildren().get(0);
+        pageOne.fire();
     }
-    private List<Article> getArticleSublist(int page){
+    private List<IndexedArticle> getArticleSublist(int page){
         // generate the start and end indices
         int startIndex = (page - 1) * MAX_PREVIEWS_PER_PAGE;
         int endIndex = page * MAX_PREVIEWS_PER_PAGE;
         return model.getArticleSublist(currentCategoryButton.getText(), startIndex, endIndex);
     }
 
-    private void populatePreviewGrids(List<Article> articles){
+    private void populatePreviewGrids(List<IndexedArticle> articles){
         // display article to each grid in view
         for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
-            Article a = articles.get(i);
+            IndexedArticle a = articles.get(i);
 
             String thumbnail = a.getThumbNail();
             String title = a.getTitle();
             String description = a.getDescription();
-            String publishedTime = a.getRelativeTime();
-            String source = a.getNewsSource();
-            String articleHtml = a.getHtml();
-
+            String publishedTime = a.getPublishedTime();
+            String source = a.getSource();
+//            String articleHtml = a.getHtml();
+            int index = a.getIndex();
             previewGrids.get(i).setPreviewToGrid(thumbnail, title,
                                                 description, publishedTime,
-                                                source, articleHtml);
+                                                source, index);
         }
     }
 
@@ -147,6 +146,7 @@ public class Controller {
     public void changePage(ActionEvent e){
         Button b = (Button) e.getSource();
         int pageNum = Integer.parseInt(b.getText());
+        highlightPage(pageNum);
         displayPreviews(pageNum);
     }
 
@@ -154,8 +154,9 @@ public class Controller {
         mainArea.setContent(progressBar);
     }
 
-    private void openArticleInNewStage(String html){
-        browser.getEngine().loadContent(html);
+    private void openArticleInNewStage(int index){
+        String content = model.getArticleContent(currentCategoryButton.getText(), index);
+        browser.getEngine().loadContent(content);
         articleStage.show();
     }
 

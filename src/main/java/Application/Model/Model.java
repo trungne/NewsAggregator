@@ -12,6 +12,7 @@ import java.util.List;
 
 public class Model{
     private final HashMap<String, List<Article>> articlesByCategories = new HashMap<>();
+
     private final Controller controller;
     private final GetArticleListService service = new GetArticleListService();
 
@@ -23,23 +24,27 @@ public class Model{
         return service;
     }
 
-    // this function is called when the service finished a.k.a when scraping articles is done
-    // the default behaviour is to display page 1 of category selected
+    // this function is called when the service finished, that is when scraping articles is done
     public void notifyController(){
         this.controller.receiveNotificationByModel();
     }
 
-    public List<Article> getArticleSublist(String category, int startIndex, int endIndex){
-        List<Article> subList = new ArrayList<>();
+    public List<IndexedArticle> getArticleSublist(String category, int startIndex, int endIndex){
+        List<IndexedArticle> subList = new ArrayList<>();
         List<Article> articleList = articlesByCategories.get(category);
         for (int i = startIndex; i < endIndex; i++){
             try {
-                subList.add(articleList.get(i));
+                IndexedArticle indexedArticle = new IndexedArticle(articleList.get(i), i);
+                subList.add(indexedArticle);
             } catch (IndexOutOfBoundsException e){
                 break;
             }
         }
         return subList;
+    }
+
+    public String getArticleContent(String category, int index){
+        return articlesByCategories.get(category).get(index).getHtml();
     }
 
     public void loadArticles(String category){
