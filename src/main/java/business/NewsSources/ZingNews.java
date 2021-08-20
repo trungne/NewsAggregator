@@ -108,7 +108,7 @@ public class ZingNews extends NewsOutlet {
                 CSS.ZING_TIME,
                 CSS.ZING_PIC);
         return new ZingNews("ZingNews",
-                "https://static-znews.zadn.vn/images/logo-zing-home.svg",
+                "https://brandcom.vn/wp-content/uploads/2016/02/zingnews-logo.png",
                 categories,
                 ZingCssConfig,
                 new ZingNewsSanitizer());
