@@ -19,6 +19,7 @@ public class ThanhNien extends NewsOutlet {
     private static final Category COVID = new Category(Category.COVID, "https://thanhnien.vn/covid-19/", CSS.THANHNIEN_TITLE_LINK);
     private static final Category POLITICS = new Category(Category.POLITICS, "https://thanhnien.vn/thoi-su/chinh-tri/", CSS.THANHNIEN_TITLE_LINK);
     private static final Category BUSINESS = new Category(Category.BUSINESS, "https://thanhnien.vn/tai-chinh-kinh-doanh", CSS.THANHNIEN_TITLE_LINK);
+
     static {
         BUSINESS.add("https://thanhnien.vn/tai-chinh-kinh-doanh/kinh-te-xanh/");
         BUSINESS.add("https://thanhnien.vn/kinh-doanh/chinh-sach-phat-trien/");
@@ -32,6 +33,7 @@ public class ThanhNien extends NewsOutlet {
     }
 
     private static final Category TECHNOLOGY = new Category(Category.TECHNOLOGY, "https://thanhnien.vn/cong-nghe/", CSS.THANHNIEN_TITLE_LINK);
+
     static {
         TECHNOLOGY.add("https://thanhnien.vn/cong-nghe/xu-huong/");
         TECHNOLOGY.add("https://thanhnien.vn/cong-nghe/san-pham-moi/");
@@ -41,6 +43,7 @@ public class ThanhNien extends NewsOutlet {
     }
 
     private static final Category HEALTH = new Category(Category.HEALTH, "https://thanhnien.vn/suc-khoe/", CSS.THANHNIEN_TITLE_LINK);
+
     static {
         HEALTH.add("https://thanhnien.vn/suc-khoe/lam-dep/");
         HEALTH.add("https://thanhnien.vn/suc-khoe/khoe-dep-moi-ngay/");
@@ -49,6 +52,7 @@ public class ThanhNien extends NewsOutlet {
     }
 
     private static final Category SPORTS = new Category(Category.SPORTS, "https://thanhnien.vn/the-thao/", CSS.THANHNIEN_TITLE_LINK);
+
     static {
         SPORTS.add("https://thanhnien.vn/the-thao/bong-da-viet-nam/");
         SPORTS.add("https://thanhnien.vn/the-thao/bong-da-quoc-te/");
@@ -59,6 +63,7 @@ public class ThanhNien extends NewsOutlet {
     }
 
     private static final Category ENTERTAINMENT = new Category(Category.ENTERTAINMENT, "https://thanhnien.vn/giai-tri/", CSS.THANHNIEN_TITLE_LINK);
+
     static {
         ENTERTAINMENT.add("https://thanhnien.vn/giai-tri/phim/");
         ENTERTAINMENT.add("https://thanhnien.vn/giai-tri/truyen-hinh/");
@@ -67,6 +72,7 @@ public class ThanhNien extends NewsOutlet {
     }
 
     private static final Category WORLD = new Category(Category.WORLD, "https://thanhnien.vn/the-gioi/", CSS.THANHNIEN_TITLE_LINK);
+
     static {
         WORLD.add("https://thanhnien.vn/the-gioi/kinh-te-the-gioi/");
         WORLD.add("https://thanhnien.vn/the-gioi/quan-su/");

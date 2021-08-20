@@ -18,6 +18,7 @@ public class TuoiTre extends NewsOutlet {
     private static final Category NEW = new Category(Category.NEW, "https://tuoitre.vn/", CSS.TUOITRE_TITLE_LINK);
     private static final Category COVID = new Category(Category.COVID, "https://tuoitre.vn/covid-19.html", CSS.TUOITRE_TITLE_LINK);
     private static final Category POLITICS = new Category(Category.POLITICS, "https://tuoitre.vn/thoi-su.htm", CSS.TUOITRE_TITLE_LINK);
+
     static {
         POLITICS.add("https://tuoitre.vn/thoi-su/but-bi.htm");
         POLITICS.add("https://tuoitre.vn/thoi-su/xa-hoi.htm");
@@ -27,6 +28,7 @@ public class TuoiTre extends NewsOutlet {
 
 
     private static final Category BUSINESS = new Category(Category.BUSINESS, "https://tuoitre.vn/kinh-doanh.htm", CSS.TUOITRE_TITLE_LINK);
+
     static {
         BUSINESS.add("https://tuoitre.vn/kinh-doanh/tai-chinh.htm");
         BUSINESS.add("https://tuoitre.vn/kinh-doanh/doanh-nghiep.htm");
@@ -35,12 +37,14 @@ public class TuoiTre extends NewsOutlet {
     }
 
     private static final Category TECHNOLOGY = new Category(Category.TECHNOLOGY, "https://tuoitre.vn/khoa-hoc.htm", CSS.TUOITRE_TITLE_LINK);
+
     static {
         TECHNOLOGY.add("https://tuoitre.vn/khoa-hoc/thuong-thuc.htm");
         TECHNOLOGY.add("https://tuoitre.vn/khoa-hoc/phat-minh.htm");
     }
 
     private static final Category HEALTH = new Category(Category.HEALTH, "https://tuoitre.vn/suc-khoe.htm", CSS.TUOITRE_TITLE_LINK);
+
     static {
         HEALTH.add("https://tuoitre.vn/suc-khoe/dinh-duong.htm");
         HEALTH.add("https://tuoitre.vn/suc-khoe/me-va-be.htm");
@@ -50,6 +54,7 @@ public class TuoiTre extends NewsOutlet {
     }
 
     private static final Category SPORTS = new Category(Category.SPORTS, "https://tuoitre.vn/the-thao.htm", CSS.TUOITRE_TITLE_LINK);
+
     static {
         SPORTS.add("https://tuoitre.vn/the-thao/bong-da.htm");
         SPORTS.add("https://tuoitre.vn/the-thao/bong-ro.htm");
@@ -60,6 +65,7 @@ public class TuoiTre extends NewsOutlet {
     }
 
     private static final Category ENTERTAINMENT = new Category(Category.ENTERTAINMENT, "https://tuoitre.vn/giai-tri.htm", CSS.TUOITRE_TITLE_LINK);
+
     static {
         ENTERTAINMENT.add("https://tuoitre.vn/giai-tri/nghe-gi-hom-nay.htm");
         ENTERTAINMENT.add("https://tuoitre.vn/giai-tri/am-nhac.htm");
@@ -70,6 +76,7 @@ public class TuoiTre extends NewsOutlet {
     }
 
     private static final Category WORLD = new Category(Category.WORLD, "https://tuoitre.vn/the-gioi.htm", CSS.TUOITRE_TITLE_LINK);
+
     static {
         WORLD.add("https://tuoitre.vn/the-gioi/binh-luan.htm");
         WORLD.add("https://tuoitre.vn/the-gioi/kieu-bao.htm");
@@ -78,6 +85,7 @@ public class TuoiTre extends NewsOutlet {
     }
 
     private static final Category OTHERS = new Category(Category.OTHERS, "", CSS.TUOITRE_TITLE_LINK);
+
     static {
         OTHERS.add("https://tuoitre.vn/phap-luat.htm");
         OTHERS.add("https://tuoitre.vn/xe.htm");
@@ -154,7 +162,7 @@ public class TuoiTre extends NewsOutlet {
                 String category = e.attr("title");
                 category = Category.convert(category);
 
-                if(StringUtils.isEmpty(category))
+                if (StringUtils.isEmpty(category))
                     continue;
 
                 if (!categoryList.contains(category)) {

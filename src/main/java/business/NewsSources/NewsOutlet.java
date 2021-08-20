@@ -1,6 +1,5 @@
 package business.NewsSources;
 
-import business.Helper.CSS;
 import business.Sanitizer.HtmlSanitizer;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
@@ -16,9 +15,9 @@ import java.util.Set;
 import static business.Helper.Scraper.scrapeFirstElementByClass;
 
 public abstract class NewsOutlet {
-    public static String toName(URL url){
+    public static String toName(URL url) {
         String host = url.getHost();
-        switch (host){
+        switch (host) {
             case "vnexpress.net": {
                 return "VNExpress";
             }
@@ -31,18 +30,21 @@ public abstract class NewsOutlet {
             case "nhandan.vn": {
                 return "Nhan Dan";
             }
-            case "thanhnien.vn":{
+            case "thanhnien.vn": {
                 return "Thanh Nien";
             }
-            default: return "";
+            default:
+                return "";
         }
 
     }
+
     protected final String name;
     protected final String defaultThumbnail;
     protected final HashMap<String, Category> categories;
     protected final CssConfiguration cssConfiguration;
     protected final HtmlSanitizer sanitizer;
+
     public NewsOutlet(String name,
                       String defaultThumbnail,
                       HashMap<String, Category> categories,
@@ -88,16 +90,14 @@ public abstract class NewsOutlet {
             Element elementContainsImgs = scrapeFirstElementByClass(doc, cssConfiguration.picture);
             Element thumbnail = elementContainsImgs.getElementsByTag("img").first();
             String url = thumbnail.attr("data-src");
-            if (StringUtils.isEmpty(url)){
+            if (StringUtils.isEmpty(url)) {
                 url = thumbnail.attr("src");
-                if (StringUtils.isEmpty(url)){
+                if (StringUtils.isEmpty(url)) {
                     return getDefaultThumbnail();
-                }
-                else{
+                } else {
                     return url;
                 }
-            }
-            else{
+            } else {
                 return url;
             }
 
@@ -111,18 +111,19 @@ public abstract class NewsOutlet {
     }
 
     // find category by name
-    private Category find(String name){
+    private Category find(String name) {
 
         Category matched;
-        for (Category category: categories.values()){
+        for (Category category : categories.values()) {
             matched = category.find(name);
             if (matched != null) return matched;
         }
         return null;
     }
+
     public Set<URL> getLinksFromCategory(String categoryName) {
         Category category = find(categoryName);
-        if(category == null)
+        if (category == null)
             return new HashSet<>();
         return category.getLinks();
     }

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import static business.Helper.Scraper.createCleanImgTag;
 import static business.Helper.Scraper.scrapeFirstElementByClass;
 
@@ -19,6 +20,7 @@ public class NhanDan extends NewsOutlet {
     private static final Category NEW = new Category(Category.NEW, "https://nhandan.vn/", CSS.NHANDAN_TITLE_LINK);
     private static final Category COVID = new Category(Category.COVID, "https://nhandan.vn/tieu-diem", CSS.NHANDAN_TITLE_LINK);
     private static final Category POLITICS = new Category(Category.POLITICS, "https://nhandan.vn/chinhtri", CSS.NHANDAN_TITLE_LINK);
+
     static {
         POLITICS.add("https://nhandan.vn/tin-tuc-su-kien");
         POLITICS.add("https://nhandan.vn/xa-luan");
@@ -30,6 +32,7 @@ public class NhanDan extends NewsOutlet {
     }
 
     private static final Category BUSINESS = new Category(Category.BUSINESS, "https://nhandan.vn/kinhte", CSS.NHANDAN_TITLE_LINK);
+
     static {
         BUSINESS.add("https://nhandan.vn/tin-tuc-kinh-te");
         BUSINESS.add("https://nhandan.vn/nhan-dinh");
@@ -39,6 +42,7 @@ public class NhanDan extends NewsOutlet {
     }
 
     private static final Category TECHNOLOGY = new Category(Category.TECHNOLOGY, "https://nhandan.vn/khoahoc-congnghe", CSS.NHANDAN_TITLE_LINK);
+
     static {
         TECHNOLOGY.add("https://nhandan.vn/khoa-hoc");
         TECHNOLOGY.add("https://nhandan.vn/vi-moi-truong-xanh");
@@ -46,6 +50,7 @@ public class NhanDan extends NewsOutlet {
     }
 
     private static final Category HEALTH = new Category(Category.HEALTH, "https://nhandan.vn/y-te", CSS.NHANDAN_TITLE_LINK);
+
     static {
         HEALTH.add("https://nhandan.vn/benh-thuong-gap");
         HEALTH.add("https://nhandan.vn/goc-tu-van");
@@ -53,6 +58,7 @@ public class NhanDan extends NewsOutlet {
     }
 
     private static final Category SPORTS = new Category(Category.SPORTS, "https://nhandan.vn/thethao", CSS.NHANDAN_TITLE_LINK);
+
     static {
         SPORTS.add("https://nhandan.vn/nhip-song-the-thao");
         SPORTS.add("https://nhandan.vn/guong-mat");
@@ -61,6 +67,7 @@ public class NhanDan extends NewsOutlet {
     }
 
     private static final Category ENTERTAINMENT = new Category(Category.ENTERTAINMENT, "https://nhandan.vn/vanhoa", CSS.NHANDAN_TITLE_LINK);
+
     static {
         ENTERTAINMENT.add("https://nhandan.vn/dong-chay");
         ENTERTAINMENT.add("https://nhandan.vn/dien-dan");
@@ -70,6 +77,7 @@ public class NhanDan extends NewsOutlet {
     }
 
     private static final Category WORLD = new Category(Category.WORLD, "https://nhandan.vn/thegioi", CSS.NHANDAN_TITLE_LINK);
+
     static {
         WORLD.add("https://nhandan.vn/cua-so-the-gioi");
         WORLD.add("https://nhandan.vn/cong-dong-asean");
@@ -80,6 +88,7 @@ public class NhanDan extends NewsOutlet {
     }
 
     private static final Category OTHERS = new Category(Category.OTHERS, "", CSS.NHANDAN_TITLE_LINK);
+
     static {
         OTHERS.add("https://nhandan.vn/phapluat");
         OTHERS.add("https://nhandan.vn/du-lich");
@@ -205,7 +214,7 @@ public class NhanDan extends NewsOutlet {
             }
         }
 
-        if(categoryList.isEmpty()){
+        if (categoryList.isEmpty()) {
             categoryList.add(Category.OTHERS);
         }
 

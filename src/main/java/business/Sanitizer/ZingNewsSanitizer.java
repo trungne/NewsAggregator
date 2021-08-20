@@ -33,7 +33,7 @@ public class ZingNewsSanitizer extends HtmlSanitizer {
 final class ZingNewsFilter implements NodeFilter {
     Element root;
 
-    public ZingNewsFilter(Element root){
+    public ZingNewsFilter(Element root) {
         this.root = root;
     }
 
@@ -45,17 +45,16 @@ final class ZingNewsFilter implements NodeFilter {
         boolean validTag = false;
 
         // get paragraph (some article have <div class="notebox"> )
-        if (child.tagName().equals("p")){
+        if (child.tagName().equals("p")) {
             // Remove "Bài liên quan" Section then get other paragraphs
-            if (!child.hasClass("summary") && !child.hasClass("cover") && !child.hasClass("article-meta")){
+            if (!child.hasClass("summary") && !child.hasClass("cover") && !child.hasClass("article-meta")) {
                 Element paragraphTag = filterParagraphTag(child);
                 if (paragraphTag != null) {
                     child.addClass(CSS.PARAGRAPH);
                     root.append(paragraphTag.outerHtml());
                 }
                 validTag = true;
-            }
-            else validTag = false;
+            } else validTag = false;
         }
         // get quote
         else if (child.tagName().equals("blockquote")) {
@@ -81,7 +80,7 @@ final class ZingNewsFilter implements NodeFilter {
         }
         // get relevant news (haven't include "Bài liên quan" Section)
 //        else if (child.tagName().equals("div") && child.hasClass("CSS.ZING_RELEVANT_NEWS") ) {
-        else if (child.tagName().equals("div") && child.hasClass("section-content") ) {
+        else if (child.tagName().equals("div") && child.hasClass("section-content")) {
             child.clearAttributes();
             Element relevantNews = filterRelevantNewsTag(child);
             if (relevantNews != null) {
@@ -92,7 +91,7 @@ final class ZingNewsFilter implements NodeFilter {
             validTag = true;
         }
         // get video
-        else if (child.tagName().equals("figure") ){
+        else if (child.tagName().equals("figure")) {
 //            if (child.hasClass("CSS.ZING_VIDEO")) {
             if (child.hasClass("video")) {
                 Element videoTag = filterVideoTag(child);
@@ -108,14 +107,15 @@ final class ZingNewsFilter implements NodeFilter {
         else return FilterResult.CONTINUE;
 
     }
-    private static Element filterParagraphTag(Element tag){
+
+    private static Element filterParagraphTag(Element tag) {
         Safelist safelist = Safelist.basic();
         Jsoup.clean(tag.html(), safelist);
 //        tag.clearAttributes();
         return tag;
     }
 
-    private static Element filterFigureTag(Element tag){
+    private static Element filterFigureTag(Element tag) {
 //        Safelist safelist = Safelist.relaxed();
 //        Element figure = new Element("figure");
 //        for (Element picture: tag.getElementsByTag("img")){
@@ -146,10 +146,10 @@ final class ZingNewsFilter implements NodeFilter {
         return newWrapTag;
     }
 
-    private static Element filterRelevantNewsTag(Element tag){
+    private static Element filterRelevantNewsTag(Element tag) {
         // get articleThumbnail of relevantNews
-        for (Element picture: tag.getElementsByTag("img")){
-            if(picture.hasAttr("data-src")){
+        for (Element picture : tag.getElementsByTag("img")) {
+            if (picture.hasAttr("data-src")) {
                 String src = picture.attr("data-src"); // store original "data-src" attribute
                 picture.removeAttr("data-src");
                 picture.removeAttr("src");
@@ -158,9 +158,9 @@ final class ZingNewsFilter implements NodeFilter {
             }
         }
         // get articleTitle of relevantNews
-        for (Element hyperlink: tag.getElementsByTag("p")){
+        for (Element hyperlink : tag.getElementsByTag("p")) {
             // only access paragraph with class = article-title
-            if (hyperlink.hasClass("article-title")){
+            if (hyperlink.hasClass("article-title")) {
                 String oldAttributeValue = tag.getElementsByTag("a").attr("href"); // store original attribute value (error link)
                 String newAttributeValue = "https://zingnews.vn" + oldAttributeValue; // fix original attribute value --> ((correct link)) stored as new string
                 hyperlink.getElementsByTag("a").removeAttr("href"); // remove original "href" attribute
@@ -175,12 +175,11 @@ final class ZingNewsFilter implements NodeFilter {
         tag.getElementsByClass("article-title").removeClass("article-title"); // remove redundant class
         tag.getElementsByClass("article-summary").removeClass("article-summary"); // remove redundant class
 
-        String newRelevantNewsHtml =""; // Empty String to store all html of RelevantNews
+        String newRelevantNewsHtml = ""; // Empty String to store all html of RelevantNews
         newRelevantNewsHtml += "<h3> Tin Liên Quan </h3>"; // Edit a little
 //        TempHtml += "<h3> Dịch Covid-19 </h3>"; // Edit a little
 
-        for (Element article: tag.getElementsByTag("article"))
-        {
+        for (Element article : tag.getElementsByTag("article")) {
             Element articleRelevantNews = new Element("li"); // empty <li> tag
             // content of RelevantNews include thumbnail, title and description
             String relevantNewsInfo = article.getElementsByClass("relevant-news-thumbnail").outerHtml()
@@ -194,13 +193,12 @@ final class ZingNewsFilter implements NodeFilter {
 //        String cleanHtml = tag.outerHtml();
         Element relevantNews = new Element("ul");
 
-        if(!cleanHtml.isEmpty()){
+        if (!cleanHtml.isEmpty()) {
             return relevantNews.html(cleanHtml);
-        }
-        else return null;
+        } else return null;
     }
 
-    private static Element filterVideoTag(Element tag){
+    private static Element filterVideoTag(Element tag) {
         // get the URL of video source
         String src = "";
         src += tag.getElementsByClass("video").attr("data-video-src");
@@ -231,6 +229,7 @@ final class ZingNewsFilter implements NodeFilter {
 //        return tag;
 
     }
+
     @Override
     public FilterResult tail(Node node, int i) {
         return null;

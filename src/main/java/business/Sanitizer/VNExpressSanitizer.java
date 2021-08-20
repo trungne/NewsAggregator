@@ -4,7 +4,6 @@ import business.Helper.CSS;
 import business.Helper.Scraper;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.safety.Safelist;
@@ -151,9 +150,9 @@ final class VNExpressFilter implements NodeFilter {
 
     // create a figure tag with img AND figcaption tagS
     private static Element filterFigureTag(Element tag) {
-        for (Element img: tag.getElementsByTag("img")){
+        for (Element img : tag.getElementsByTag("img")) {
             String src = img.attr("data-src");
-            if (!StringUtils.isEmpty(src)){
+            if (!StringUtils.isEmpty(src)) {
                 img.attr("src", src);
             }
         }

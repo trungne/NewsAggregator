@@ -1,7 +1,6 @@
 package business.Sanitizer;
 
 import business.Helper.CSS;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -33,7 +32,8 @@ public class ThanhNienSanitizer extends HtmlSanitizer {
 
 final class ThanhNienFilter implements NodeFilter {
     Element root;
-    public ThanhNienFilter(Element root){
+
+    public ThanhNienFilter(Element root) {
         this.root = root;
     }
 
@@ -57,9 +57,7 @@ final class ThanhNienFilter implements NodeFilter {
             figureTag.addClass(CSS.FIGURE);
             root.append(figureTag.outerHtml());
             validTag = true;
-        }
-
-        else if (child.hasClass("details__morenews")){
+        } else if (child.hasClass("details__morenews")) {
             child.clearAttributes();
             Element relevantNews = filterRelevantNewsTag(child);
             if (relevantNews != null) {
@@ -92,12 +90,12 @@ final class ThanhNienFilter implements NodeFilter {
 
 //         get paragraph
 //        else if (!child.tagName().equals("table") && !child.hasAttr("class") && !child.hasAttr("data-widget_id") && child.tagName().equals("div")){
-        else if (child.tagName().equals("div") && child.classNames().isEmpty()){
+        else if (child.tagName().equals("div") && child.classNames().isEmpty()) {
 //        else {
 //            if (child.tagName().equals("div") && !child.tagName().equals("script") && !child.hasAttr("class") && !child.hasAttr("data-widget_id") && !child.hasClass("video")){
 
             Element paragraphTag = filterParagraphTag(child);
-            if (paragraphTag != null){
+            if (paragraphTag != null) {
                 paragraphTag.addClass(CSS.PARAGRAPH);
 //                root.append(paragraphTag.outerHtml());
             }
@@ -109,11 +107,11 @@ final class ThanhNienFilter implements NodeFilter {
 
     }
 
-    private static Element filterParagraphTag(Element tag){
+    private static Element filterParagraphTag(Element tag) {
         Element paraContent = new Element("p");
-        for (Element para: tag.getElementsByTag("div")) {
-            if (para.text().length() > 0){
-                paraContent = para ;
+        for (Element para : tag.getElementsByTag("div")) {
+            if (para.text().length() > 0) {
+                paraContent = para;
             }
         }
 
@@ -127,7 +125,7 @@ final class ThanhNienFilter implements NodeFilter {
         return tag;
     }
 
-    private static Element filterFigureTag (Element tag) {
+    private static Element filterFigureTag(Element tag) {
         String src = tag.getElementsByTag("img").attr("data-src");
         Element figureCaption = new Element("figcaption").html(tag.getElementsByTag("p").html());
         Element figureSource = new Element("img");
@@ -140,7 +138,7 @@ final class ThanhNienFilter implements NodeFilter {
         return newWrapTag;
     }
 
-    private static Element filterVideoTag (Element tag){
+    private static Element filterVideoTag(Element tag) {
         // get video url source and create <source> tag for it
         String url = tag.getElementsByClass("clearfix").attr("data-video-src");
         String videoSrc = "<source src='" + url + "'>";
@@ -161,9 +159,9 @@ final class ThanhNienFilter implements NodeFilter {
         return newWrapTag;
     }
 
-    private static Element filterRelevantNewsTag (Element tag){
+    private static Element filterRelevantNewsTag(Element tag) {
 
-        for (Element hyperlink: tag.getElementsByTag("a")){
+        for (Element hyperlink : tag.getElementsByTag("a")) {
             String oldAttributeValue = tag.getElementsByTag("a").attr("href"); // store original attribute value (error link)
             String newAttributeValue = "https://thanhnien.vn" + oldAttributeValue; // fix original attribute value --> ((correct link)) stored as new string
             hyperlink.getElementsByTag("a").removeAttr("href"); // remove original "href" attribute
@@ -178,6 +176,7 @@ final class ThanhNienFilter implements NodeFilter {
 
         return newWrapTag;
     }
+
     @Override
     public FilterResult tail(Node node, int i) {
         return null;

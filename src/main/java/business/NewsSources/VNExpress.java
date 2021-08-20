@@ -19,6 +19,7 @@ public class VNExpress extends NewsOutlet {
     private static final Category COVID = new Category(Category.COVID, "https://vnexpress.net/covid-19/tin-tuc", CSS.VNEXPRESS_TITLE_LINK);
     private static final Category POLITICS = new Category(Category.POLITICS, "https://vnexpress.net/thoi-su/chinh-tri", CSS.VNEXPRESS_TITLE_LINK);
     private static final Category BUSINESS = new Category(Category.BUSINESS, "https://vnexpress.net/kinh-doanh", CSS.VNEXPRESS_TITLE_LINK);
+
     static {
         BUSINESS.add("https://vnexpress.net/kinh-doanh/quoc-te");
         BUSINESS.add("https://vnexpress.net/kinh-doanh/doanh-nghiep");
@@ -33,6 +34,7 @@ public class VNExpress extends NewsOutlet {
     }
 
     private static final Category TECHNOLOGY = new Category(Category.TECHNOLOGY, "https://vnexpress.net/khoa-hoc", CSS.VNEXPRESS_TITLE_LINK);
+
     static {
         TECHNOLOGY.add("https://vnexpress.net/khoa-hoc/tin-tuc");
         TECHNOLOGY.add("https://vnexpress.net/khoa-hoc/phat-minh");
@@ -55,6 +57,7 @@ public class VNExpress extends NewsOutlet {
     }
 
     private static final Category SPORTS = new Category(Category.SPORTS, "https://vnexpress.net/the-thao", CSS.VNEXPRESS_TITLE_LINK);
+
     static {
         SPORTS.add("https://vnexpress.net/the-thao/video");
         SPORTS.add("https://vnexpress.net/bong-da");
@@ -63,6 +66,7 @@ public class VNExpress extends NewsOutlet {
     }
 
     private static final Category ENTERTAINMENT = new Category(Category.ENTERTAINMENT, "https://vnexpress.net/giai-tri", CSS.VNEXPRESS_TITLE_LINK);
+
     static {
         ENTERTAINMENT.add("https://vnexpress.net/giai-tri/gioi-sao");
         ENTERTAINMENT.add("https://vnexpress.net/giai-tri/phim");
@@ -74,6 +78,7 @@ public class VNExpress extends NewsOutlet {
     }
 
     private static final Category WORLD = new Category(Category.WORLD, "https://vnexpress.net/the-gioi", CSS.VNEXPRESS_TITLE_LINK);
+
     static {
         WORLD.add("https://vnexpress.net/the-gioi/tu-lieu");
         WORLD.add("https://vnexpress.net/the-gioi/phan-tich");
@@ -83,6 +88,7 @@ public class VNExpress extends NewsOutlet {
     }
 
     private static final Category OTHERS = new Category(Category.OTHERS, "", CSS.VNEXPRESS_TITLE_LINK);
+
     static {
         OTHERS.add("https://vnexpress.net/giao-duc");
         OTHERS.add("https://vnexpress.net/thoi-su");
@@ -141,14 +147,13 @@ public class VNExpress extends NewsOutlet {
     public List<String> getCategoryNames(Document doc) {
         List<String> categoryList = new ArrayList<>();
 
-        Element parentCategoryTag = doc.getElementsByAttributeValue("name","tt_site_id_detail").first();
-        if (parentCategoryTag != null){
+        Element parentCategoryTag = doc.getElementsByAttributeValue("name", "tt_site_id_detail").first();
+        if (parentCategoryTag != null) {
             String parentCategory = parentCategoryTag.attr("catename");
             parentCategory = Category.convert(parentCategory);
             if (!StringUtils.isEmpty(parentCategory))
                 categoryList.add(parentCategory);
         }
-
 
 
         // scape all categories in body
@@ -169,7 +174,7 @@ public class VNExpress extends NewsOutlet {
             }
         }
 
-        if(categoryList.isEmpty()){
+        if (categoryList.isEmpty()) {
             categoryList.add(Category.OTHERS);
         }
 

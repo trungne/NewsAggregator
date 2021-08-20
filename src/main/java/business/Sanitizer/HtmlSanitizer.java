@@ -9,6 +9,8 @@ public abstract class HtmlSanitizer {
         e.addClass(CSS.TITLE);
         return e;
     }
+
     abstract public Element sanitizeDescription(Element e);
+
     abstract public Element sanitizeMainContent(Element e);
 }

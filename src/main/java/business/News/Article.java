@@ -8,9 +8,11 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-public class Article implements Comparable<Article>{
+public class Article implements Comparable<Article> {
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EE, dd/MMMM/yyyy, kk:mm ");
     // TODO: display url at the end with news source
     private final URL url;
@@ -24,13 +26,13 @@ public class Article implements Comparable<Article>{
 
     private String html;
 
-    private Element getBodyTag(Element mainContent){
+    private Element getBodyTag(Element mainContent) {
         final Element body = new Element("body");
         body.appendChild(getArticleTag(mainContent));
         return body;
     }
 
-    private Element getHeadTag(){
+    private Element getHeadTag() {
         final Element head = new Element("head");
         Element title = new Element("title");
         Element style = new Element("style");
@@ -56,7 +58,7 @@ public class Article implements Comparable<Article>{
         return head;
     }
 
-    private String createHtml(Element mainContent){
+    private String createHtml(Element mainContent) {
         Element html = new Element("html");
         html.attr("lang", "vi");
 
@@ -67,7 +69,7 @@ public class Article implements Comparable<Article>{
         return docString + html.outerHtml();
     }
 
-    private Element getDescriptionTag(){
+    private Element getDescriptionTag() {
         // category div
         Element categories = new Element("div");
         categories.addClass(CSS.ARTICLE_CATEGORY);
@@ -83,13 +85,15 @@ public class Article implements Comparable<Article>{
 
         return categories;
     }
-    private Element getPublishedTimeTag(){
+
+    private Element getPublishedTimeTag() {
         Element publishedTime = new Element("div");
         publishedTime.addClass(CSS.PUBLISHED_TIME);
         publishedTime.text(getAbsoluteTime());
         return publishedTime;
 
     }
+
     private Element getArticleTag(Element mainContent) {
         // create header div
         Element header = new Element("div");
@@ -115,11 +119,11 @@ public class Article implements Comparable<Article>{
         return article;
     }
 
-    public String getHtml(){
+    public String getHtml() {
         return html;
     }
 
-    public Article(URL url, String mainCategory){
+    public Article(URL url, String mainCategory) {
         this.url = url;
         this.mainCategory = mainCategory;
         this.newsSource = NewsOutlet.toName(url);
@@ -137,7 +141,7 @@ public class Article implements Comparable<Article>{
         return title.text();
     }
 
-    public String getDescription(){
+    public String getDescription() {
         return description.text();
     }
 
@@ -175,8 +179,8 @@ public class Article implements Comparable<Article>{
 
     // setter
     public void setContent(Element title, Element description, Element mainContent,
-                           LocalDateTime publishedTime, String thumbNail, List<String> categories){
-        if (title == null || description == null || mainContent == null){
+                           LocalDateTime publishedTime, String thumbNail, List<String> categories) {
+        if (title == null || description == null || mainContent == null) {
             throw new IllegalArgumentException();
         }
         this.title = title;

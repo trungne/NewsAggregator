@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 public class GetNewsOutlets {
     public static final HashMap<String, NewsOutlet> newsOutlets = new HashMap<>();
+
     static {
         newsOutlets.put("VNExpress", VNExpress.init());
         newsOutlets.put("ZingNews", ZingNews.init());

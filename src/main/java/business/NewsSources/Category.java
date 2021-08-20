@@ -27,6 +27,7 @@ public class Category {
 
     // map Vietnamese names to English
     private static final HashMap<String, String[]> CategoriesMapping = new HashMap<>();
+
     static {
 //        CategoriesMapping.put(COVID, new String[]{""});
         CategoriesMapping.put(POLITICS, new String[]{"chính trị"});
@@ -45,16 +46,15 @@ public class Category {
     }
 
     public static String convert(String category) {
-        for (String english: CategoriesMapping.keySet()){
-            for(String vietnamse: CategoriesMapping.get(english)){
-                if (category.toLowerCase(Locale.ROOT).equals(vietnamse)){
+        for (String english : CategoriesMapping.keySet()) {
+            for (String vietnamse : CategoriesMapping.get(english)) {
+                if (category.toLowerCase(Locale.ROOT).equals(vietnamse)) {
                     return english;
                 }
             }
         }
         return "";
     }
-
 
 
     String name;
@@ -71,9 +71,9 @@ public class Category {
     public void add(String name, String url) {
         Category newCategory = new Category(name, url, cssForScraping);
 
-        for (Category category: subCategories){
+        for (Category category : subCategories) {
             // update category if the category already exists in subcategory list
-            if (category.getUrl().equals(url)){
+            if (category.getUrl().equals(url)) {
                 subCategories.set(subCategories.indexOf(category), newCategory);
                 return;
             }
@@ -84,14 +84,15 @@ public class Category {
     public void add(String url) {
         add("", url);
     }
+
     public Category find(String name) {
-        if (this.name.equals(name)){
+        if (this.name.equals(name)) {
             return this;
         }
 
-        for (Category category: subCategories){
+        for (Category category : subCategories) {
             Category matched = category.find(name);
-            if (matched != null){
+            if (matched != null) {
                 return matched;
             }
         }
@@ -99,15 +100,19 @@ public class Category {
         return null;
     }
 
-    public String getUrl() {return this.url;}
+    public String getUrl() {
+        return this.url;
+    }
+
     public Set<URL> getLinks() {
         Set<URL> urls = new HashSet<>();
         try {
             URL link = new URL(this.url);
             urls = scrapeLinksByClass(link, cssForScraping);
-        } catch (MalformedURLException ignored){}
+        } catch (MalformedURLException ignored) {
+        }
 
-        for (Category category: subCategories){
+        for (Category category : subCategories) {
             urls.addAll(category.getLinks());
         }
 

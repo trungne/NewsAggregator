@@ -3,21 +3,25 @@ package business.Helper;
 import business.News.Article;
 import business.NewsSources.NewsOutlet;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.*;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.SocketTimeoutException;
+import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 
-import static business.Helper.ScrapingConfiguration.*;
+import static business.Helper.ScrapingConfiguration.MAX_ARTICLES_PER_SOURCE;
+import static business.Helper.ScrapingConfiguration.MAX_WAIT_TIME_WHEN_ACCESS_URL;
 
 
-public class ArticleListGenerator{
+public class ArticleListGenerator {
     private final NewsOutlet newsOutlet;
     private final String category;
 
-    public ArticleListGenerator(NewsOutlet newsOutlet, String category){
+    public ArticleListGenerator(NewsOutlet newsOutlet, String category) {
         this.newsOutlet = newsOutlet;
         this.category = category;
     }
@@ -30,7 +34,7 @@ public class ArticleListGenerator{
     private void extractArticlesFromLinks(Set<URL> urls, List<Article> articles) {
         int articleSuccessfullyAdded = 0;
         for (URL url : urls) {
-            if(articleSuccessfullyAdded == MAX_ARTICLES_PER_SOURCE){
+            if (articleSuccessfullyAdded == MAX_ARTICLES_PER_SOURCE) {
                 break;
             }
 
@@ -68,7 +72,7 @@ public class ArticleListGenerator{
 
         try {
             article.setContent(titleTag, descriptionTag, mainContentTag,
-                                publishedTime, thumbNail, categories);
+                    publishedTime, thumbNail, categories);
         } catch (IllegalArgumentException e) {
             return false;
         }
