@@ -7,51 +7,18 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.safety.Safelist;
-import org.jsoup.select.Elements;
 import org.jsoup.select.NodeFilter;
-import org.jsoup.select.NodeTraversor;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+public final class VNExpressFilter implements NodeFilter {
+    Element root;
 
-public class VNExpressSanitizer extends HtmlSanitizer {
-    @Override
-    public Element sanitizeDescription(Element e) {
-        String cleanHtml;
-        Element newHtmlElement;
-
-        cleanHtml = Jsoup.clean(e.html(), Safelist.basic());
-        newHtmlElement = new Element("p").html(cleanHtml);
-
-        // deal with span tag (for location)
-        Elements spanTags = newHtmlElement.getElementsByTag("span");
-
-        spanTags.tagName("strong");
-        for (Element span : spanTags) {
-            span.addClass(CSS.LOCATION);
-            span.text(span.text() + " - ");
-        }
-        newHtmlElement.addClass(CSS.DESCRIPTION);
-        return newHtmlElement;
-    }
-
-    @Override
-    public Element sanitizeMainContent(Element e) {
-        Element newRoot = new Element("div");
-        NodeFilter VNExpressFilter = new VNExpressFilter(newRoot);
-        NodeTraversor.filter(VNExpressFilter, e);
-        return newRoot.addClass(CSS.MAIN_CONTENT);
-    }
-}
-
-final class VNExpressFilter implements NodeFilter {
-    final Element root;
-
-    public VNExpressFilter(Element newRoot) {
-        this.root = newRoot;
+    public VNExpressFilter(Element root) {
+        this.root = root;
     }
 
     @Override
@@ -115,14 +82,14 @@ final class VNExpressFilter implements NodeFilter {
         }
 
         // get relevant news at the end of the article
-        else if (child.hasClass("list-news")) {
-            Element relevantNews = filterRelevantNewsTag(child);
-            if (relevantNews != null) {
-                relevantNews.addClass(CSS.RELEVANT_NEWS);
-                root.append(relevantNews.outerHtml());
-            }
-            validTag = true;
-        }
+//        else if (child.hasClass("list-news")) {
+//            Element relevantNews = filterRelevantNewsTag(child);
+//            if (relevantNews != null) {
+//                relevantNews.addClass(CSS.RELEVANT_NEWS);
+//                root.append(relevantNews.outerHtml());
+//            }
+//            validTag = true;
+//        }
 
         // stop traversing if a valid tag is found
         // regardless of if it has been appended
@@ -211,41 +178,3 @@ final class VNExpressFilter implements NodeFilter {
         return newVideo;
     }
 }
-
-
-//                for (Element child: e.children()){
-//                    if (child.tagName().equals("p") && child.hasClass("Normal")){
-//                        Element para = child.clearAttributes();
-//                        para.addClass(CSS.PARAGRAPH);
-//                        System.out.println(para);
-//                        newRoot.appendChild(para);
-//                    }
-//                    else if(child.tagName().equals("figure") && child.hasClass("tplCaption")){
-//                        Element figure = VNExpressSanitizer.sanitizeFigureTag(child);
-//                        if (figure == null) continue;
-//                        figure.addClass(CSS.FIGURE);
-//                        newRoot.appendChild(figure);
-//                    }
-//                    else if (child.tagName().equals("ul") && child.hasClass("list-news")){
-//                        Element relevantNews = VNExpressSanitizer.sanitizeRelevantNewsTag(child);
-//                        if (relevantNews == null) continue;
-//                        relevantNews.addClass(CSS.RELEVANT_NEWS);
-//                        newRoot.appendChild(relevantNews);
-//                    }
-//                    else if (child.tagName().equals("div")){
-//                        Element videoTag;
-//                        try {
-//                            videoTag = child.getElementsByClass("videoContainter").first();
-//                            videoTag = videoTag.getElementsByTag("video").first();
-//                        } catch (NullPointerException err){
-//                            continue;
-//                        }
-//
-//
-//                        videoTag = VNExpressSanitizer.sanitizeVideoTag(videoTag);
-//                        if (videoTag == null) continue;
-//
-//                        videoTag.addClass(CSS.VIDEO);
-//                        newRoot.appendChild(videoTag);
-//                    }
-//                }

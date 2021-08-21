@@ -6,31 +6,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.safety.Safelist;
 import org.jsoup.select.NodeFilter;
-import org.jsoup.select.NodeTraversor;
 
-public class ZingNewsSanitizer extends HtmlSanitizer {
-    @Override
-    public Element sanitizeDescription(Element e) {
-        Safelist safelist;
-        String cleanHtml;
-        Element newHtmlElement;
-        safelist = Safelist.basic();
-        cleanHtml = Jsoup.clean(e.html(), safelist);
-        newHtmlElement = new Element("p").html(cleanHtml);
-        newHtmlElement.addClass(CSS.DESCRIPTION);
-        return newHtmlElement;
-    }
-
-    @Override
-    public Element sanitizeMainContent(Element e) {
-        Element newRoot = new Element("div");
-        NodeFilter ZingNewsFilter = new ZingNewsFilter(newRoot);
-        NodeTraversor.filter(ZingNewsFilter, e);
-        return newRoot.addClass(CSS.MAIN_CONTENT);
-    }
-}
-
-final class ZingNewsFilter implements NodeFilter {
+public final class ZingNewsFilter implements NodeFilter {
     Element root;
 
     public ZingNewsFilter(Element root) {
@@ -80,16 +57,16 @@ final class ZingNewsFilter implements NodeFilter {
         }
         // get relevant news (haven't include "Bài liên quan" Section)
 //        else if (child.tagName().equals("div") && child.hasClass("CSS.ZING_RELEVANT_NEWS") ) {
-        else if (child.tagName().equals("div") && child.hasClass("section-content")) {
-            child.clearAttributes();
-            Element relevantNews = filterRelevantNewsTag(child);
-            if (relevantNews != null) {
-                relevantNews.addClass(CSS.RELEVANT_NEWS);
-                root.append(relevantNews.outerHtml());
-            }
-
-            validTag = true;
-        }
+//        else if (child.tagName().equals("div") && child.hasClass("section-content")) {
+//            child.clearAttributes();
+//            Element relevantNews = filterRelevantNewsTag(child);
+//            if (relevantNews != null) {
+//                relevantNews.addClass(CSS.RELEVANT_NEWS);
+//                root.append(relevantNews.outerHtml());
+//            }
+//
+//            validTag = true;
+//        }
         // get video
         else if (child.tagName().equals("figure")) {
 //            if (child.hasClass("CSS.ZING_VIDEO")) {

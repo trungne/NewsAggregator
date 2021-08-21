@@ -18,7 +18,6 @@ public class CSS {
     public static final String FIGURE = "content-pic";
     public static final String QUOTE = "content-quote";
     public static final String VIDEO = "content-video";
-    public static final String RELEVANT_NEWS = "relevant-news";
     public static final String AUTHOR = "author";
     public static final String PUBLISHED_TIME = "published-time";
 

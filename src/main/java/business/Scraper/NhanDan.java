@@ -1,22 +1,20 @@
-package business.NewsSources;
+package business.Scraper;
 
 import business.Helper.CSS;
-import business.Sanitizer.HtmlSanitizer;
-import business.Sanitizer.NhanDanSanitizer;
+import business.Sanitizer.NhanDanFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.jsoup.select.NodeFilter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import static business.Helper.Scraper.createCleanImgTag;
-import static business.Helper.Scraper.scrapeFirstElementByClass;
 
-public class NhanDan extends NewsOutlet {
+public final class NhanDan extends NewsOutlet {
     private static final Category NEW = new Category(Category.NEW, "https://nhandan.vn/", CSS.NHANDAN_TITLE_LINK);
     private static final Category COVID = new Category(Category.COVID, "https://nhandan.vn/tieu-diem", CSS.NHANDAN_TITLE_LINK);
     private static final Category POLITICS = new Category(Category.POLITICS, "https://nhandan.vn/chinhtri", CSS.NHANDAN_TITLE_LINK);
@@ -120,8 +118,7 @@ public class NhanDan extends NewsOutlet {
                 "https://www.nhandan-printing.vn/datafiles_D_D/setmulti/nhandan_copy.jpg",
                 categories,
                 NhanDanCssConfig,
-                CSS.NHANDAN_THUMBNAIL,
-                new NhanDanSanitizer());
+                CSS.NHANDAN_THUMBNAIL);
     }
 
     private final String thumbnailCss;
@@ -130,14 +127,13 @@ public class NhanDan extends NewsOutlet {
                    String defaultThumbnail,
                    HashMap<String, Category> categories,
                    CssConfiguration cssConfiguration,
-                   String thumbnailCss,
-                   HtmlSanitizer sanitizer) {
-        super(name, defaultThumbnail, categories, cssConfiguration, sanitizer);
+                   String thumbnailCss) {
+        super(name, defaultThumbnail, categories, cssConfiguration);
         this.thumbnailCss = thumbnailCss;
     }
 
     @Override
-    public LocalDateTime getPublishedTime(Document doc) {
+    public LocalDateTime scrapePublishedTime(Document doc) {
         Elements dateTimeTags = doc.select("." + cssConfiguration.publishedTime);
         Element dateTimeTag = dateTimeTags.last();
         if (dateTimeTag == null)
@@ -159,8 +155,6 @@ public class NhanDan extends NewsOutlet {
                 int year = Integer.parseInt(dateTimeStr.substring(11));
                 return (LocalDateTime.of(year, month, day, hours, minutes));
             } catch (NumberFormatException e) {
-                e.printStackTrace();
-                System.out.println(doc);
                 return LocalDateTime.now();
             }
         }
@@ -177,50 +171,43 @@ public class NhanDan extends NewsOutlet {
             int minutes = Integer.parseInt(dateTimeStr.substring(13));
             return (LocalDateTime.of(year, month, day, hours, minutes));
         } catch (NumberFormatException e) {
-            e.printStackTrace();
-            System.out.println(doc);
             return LocalDateTime.now();
         }
 
     }
 
     @Override
-    public String getThumbnail(Document doc) {
-        try {
-            Element elementContainsImgs = scrapeFirstElementByClass(doc, thumbnailCss);
-            Element thumbnail = elementContainsImgs.getElementsByTag("img").first();
-            thumbnail = createCleanImgTag(thumbnail);
-            return thumbnail.attr("src");
-        } catch (NullPointerException e) {
+    public String scrapeThumbnail(Document doc) {
+        String url = scrapeFirstImgUrl(doc, thumbnailCss);
+        if (StringUtils.isEmpty(url)){
             return getDefaultThumbnail();
         }
+        else{
+            return url;
+        }
+
+//        try {
+//            Element elementContainsImgs = scrapeFirstElementByClass(doc, thumbnailCss);
+//            Element thumbnail = elementContainsImgs.getElementsByTag("img").first();
+//            thumbnail = createCleanImgTag(thumbnail);
+//            return thumbnail.attr("src");
+//        } catch (NullPointerException e) {
+//            return getDefaultThumbnail();
+//        }
     }
 
     @Override
-    public List<String> getCategoryNames(Document doc) {
+    public Set<String> scrapeCategoryNames(Document doc) {
         Elements tags = doc.getElementsByClass("bc-item");
-        List<String> categoryList = new ArrayList<>();
+        Set<String> categoryList = new HashSet<>();
         if (!tags.isEmpty()) {
             for (Element e : tags) {
                 String category = e.text();
                 category = Category.convert(category);
-
-                if (StringUtils.isEmpty(category))
-                    continue;
-
-                if (!categoryList.contains(category)) {
-                    categoryList.add(category);
-                }
+                categoryList.add(category);
             }
         }
-
-        if (categoryList.isEmpty()) {
-            categoryList.add(Category.OTHERS);
-        }
-
         return categoryList;
-
-
     }
 
     // remove day of the week from the datetime string.
@@ -241,5 +228,10 @@ public class NhanDan extends NewsOutlet {
             }
         }
         return builder.toString();
+    }
+
+    @Override
+    public NodeFilter getNodeFilter(Element root) {
+        return new NhanDanFilter(root);
     }
 }

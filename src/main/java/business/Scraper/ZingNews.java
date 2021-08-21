@@ -1,21 +1,19 @@
-package business.NewsSources;
+package business.Scraper;
 
 import business.Helper.CSS;
-import business.Helper.LocalDateTimeParser;
-import business.Sanitizer.HtmlSanitizer;
-import business.Sanitizer.ZingNewsSanitizer;
-import org.apache.commons.lang3.StringUtils;
+import business.Sanitizer.ZingNewsFilter;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.jsoup.select.NodeFilter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 
-public class ZingNews extends NewsOutlet {
+public final class ZingNews extends NewsOutlet {
     // main category
     private static final Category NEW = new Category(Category.NEW, "https://zingnews.vn/", CSS.ZING_TITLE_LINK);
     private static final Category COVID = new Category(Category.COVID, "https://zingnews.vn/tieu-diem/covid-19.html", CSS.ZING_TITLE_LINK);
@@ -110,51 +108,40 @@ public class ZingNews extends NewsOutlet {
         return new ZingNews("ZingNews",
                 "https://brandcom.vn/wp-content/uploads/2016/02/zingnews-logo.png",
                 categories,
-                ZingCssConfig,
-                new ZingNewsSanitizer());
+                ZingCssConfig);
     }
 
 
-    public ZingNews(String name, String defaultThumbnail, HashMap<String, Category> categories, CssConfiguration cssConfiguration, HtmlSanitizer sanitizer) {
-        super(name, defaultThumbnail, categories, cssConfiguration, sanitizer);
-    }
-
-    @Override
-    public LocalDateTime getPublishedTime(Document doc) {
-        Elements dateTimeTag = doc.getElementsByAttributeValue("property", cssConfiguration.publishedTime);
-        String dateTimeStr = dateTimeTag.attr("content");
-
-        if (StringUtils.isEmpty(dateTimeStr)) {
-            return LocalDateTime.now();
-        }
-
-        return LocalDateTimeParser.parse(dateTimeStr);
+    public ZingNews(String name,
+                    String defaultThumbnail,
+                    HashMap<String, Category> categories,
+                    CssConfiguration cssConfiguration) {
+        super(name, defaultThumbnail, categories, cssConfiguration);
     }
 
     @Override
-    public List<String> getCategoryNames(Document doc) {
+    public LocalDateTime scrapePublishedTime(Document doc) {
+        return scrapePublishedTimeFromMeta(doc, "property", cssConfiguration.publishedTime, "content");
+    }
+
+    @Override
+    public Set<String> scrapeCategoryNames(Document doc) {
+        // only scrape category in body as there is no category info in meta
         Element tag = doc.selectFirst(".the-article-category");
-        List<String> categoryList = new ArrayList<>();
+        Set<String> categoryList = new HashSet<>();
         if (tag != null) {
             Elements categoryTags = tag.getElementsByClass("parent_cate");
             for (Element e : categoryTags) {
                 String category = e.attr("title");
                 category = Category.convert(category);
-
-                if (StringUtils.isEmpty(category))
-                    continue;
-
-                if (!categoryList.contains(category)) {
-                    categoryList.add(category);
-                }
+                categoryList.add(category);
             }
         }
-
-
-        if (categoryList.isEmpty()) {
-            categoryList.add(Category.OTHERS);
-        }
-
         return categoryList;
+    }
+
+    @Override
+    public NodeFilter getNodeFilter(Element root) {
+        return new ZingNewsFilter(root);
     }
 }

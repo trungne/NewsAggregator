@@ -38,17 +38,6 @@ public class Scraper {
         return links;
     }
 
-    // only scrape the first tag found!
-    public static Element scrapeFirstElementByClass(Document doc, String uniqueCssClass) {
-        String queryString = uniqueCssClass;
-
-        if (!queryString.startsWith(".")) {
-            queryString = "." + uniqueCssClass;
-        }
-
-        return doc.selectFirst(queryString);
-    }
-
     /* Create a new img with the src and alt of an img tag
      * Return null if the parameter is not an img tag
      * Return null if the no src is found

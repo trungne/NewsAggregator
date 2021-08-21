@@ -7,34 +7,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.safety.Safelist;
 import org.jsoup.select.NodeFilter;
-import org.jsoup.select.NodeTraversor;
 
-public class NhanDanSanitizer extends HtmlSanitizer {
-    @Override
-    public Element sanitizeDescription(Element e) {
-        Safelist safelist; // modify this safe list according to the type
-        String cleanHtml;
-        Element newHtmlElement;
-        safelist = Safelist.basic();
-        safelist.removeTags("span", "p");
-        cleanHtml = Jsoup.clean(e.html(), safelist);
-
-        newHtmlElement = new Element("p").html(cleanHtml);
-        newHtmlElement.addClass(CSS.DESCRIPTION);
-        return newHtmlElement;
-    }
-
-    @Override
-    public Element sanitizeMainContent(Element e) {
-        Element newRoot = new Element("div");
-        NodeFilter NhanDanFilter = new NhanDanFilter(newRoot);
-        NodeTraversor.filter(NhanDanFilter, e);
-        return newRoot.addClass(CSS.MAIN_CONTENT);
-    }
-}
-
-
-final class NhanDanFilter implements NodeFilter {
+public final class NhanDanFilter implements NodeFilter {
     Element root;
 
     public NhanDanFilter(Element root) {

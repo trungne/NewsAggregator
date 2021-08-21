@@ -1,7 +1,8 @@
 package business.Helper;
 
 import business.News.Article;
-import business.NewsSources.NewsOutlet;
+import business.Scraper.ElementNotFound;
+import business.Scraper.NewsOutlet;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -63,17 +64,17 @@ public class ArticleListGenerator {
     }
 
     private boolean extractContentFromDocument(Document articleDoc, Article article) {
-        Element titleTag = newsOutlet.getTitle(articleDoc);
-        Element descriptionTag = newsOutlet.getDescription(articleDoc);
-        Element mainContentTag = newsOutlet.getMainContent(articleDoc);
-        String thumbNail = newsOutlet.getThumbnail(articleDoc);
-        List<String> categories = newsOutlet.getCategoryNames(articleDoc);
-        LocalDateTime publishedTime = newsOutlet.getPublishedTime(articleDoc);
-
         try {
+            Element titleTag = newsOutlet.scrapeTitle(articleDoc);
+            Element descriptionTag = newsOutlet.scrapeDescription(articleDoc);
+            Element mainContentTag = newsOutlet.scrapeMainContent(articleDoc);
+            String thumbNail = newsOutlet.scrapeThumbnail(articleDoc);
+            Set<String> categories = newsOutlet.scrapeCategoryNames(articleDoc);
+            LocalDateTime publishedTime = newsOutlet.scrapePublishedTime(articleDoc);
             article.setContent(titleTag, descriptionTag, mainContentTag,
                     publishedTime, thumbNail, categories);
-        } catch (IllegalArgumentException e) {
+        }
+        catch (ElementNotFound | IllegalArgumentException e){
             return false;
         }
 

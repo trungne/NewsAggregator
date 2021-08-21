@@ -6,31 +6,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.safety.Safelist;
 import org.jsoup.select.NodeFilter;
-import org.jsoup.select.NodeTraversor;
 
-public class TuoiTreSanitizer extends HtmlSanitizer {
-    @Override
-    public Element sanitizeDescription(Element e) {
-        Safelist safelist;
-        String cleanHtml;
-        Element newHtmlElement;
-        safelist = Safelist.basic();
-        cleanHtml = Jsoup.clean(e.html(), safelist);
-        newHtmlElement = new Element("p").html(cleanHtml);
-        newHtmlElement.addClass(CSS.DESCRIPTION);
-        return newHtmlElement;
-    }
-
-    @Override
-    public Element sanitizeMainContent(Element e) {
-        Element newRoot = new Element("div");
-        NodeFilter TuoiTreFilter = new TuoiTreFilter(newRoot);
-        NodeTraversor.filter(TuoiTreFilter, e);
-        return newRoot.addClass(CSS.MAIN_CONTENT);
-    }
-}
-
-final class TuoiTreFilter implements NodeFilter {
+public final class TuoiTreFilter implements NodeFilter {
     Element root;
 
     public TuoiTreFilter(Element root) {
@@ -89,21 +66,16 @@ final class TuoiTreFilter implements NodeFilter {
 //            root.append("<div> ======== This is video ======== </div> ");
             validTag = true;
         }
-// https://vcplayer.mediacdn.vn/1.1/?_site=tuoitre&new_info_domain=true&stgdmn=hls.tuoitre.vn&vid=tuoitre/2021/8/16/canh-tuong-hon-loan-tai-san-bay-o-kabul-1629076101410637687007-9f5f3.mp4&autoplay=false&poster=https://video-thumbs.tuoitre.vn/tuoitre/2021/8/16/canh-tuong-hon-loan-tai-san-bay-o-kabul-1629076101410637687007-9f5f3.jpg&_info=78b439c0fe2e11eb9ee133497e1cea56
-// https://vcplayer.mediacdn.vn/1.1/?_site=tuoitre&new_info_domain=true&stgdmn=hls.tuoitre.vn&vid=tuoitre/2021/8/16/tt-hoi-suc-3-1629084913995275780961-35e6d.mp4&autoplay=false&poster=https://video-thumbs.tuoitre.vn/tuoitre/2021/8/16/tt-hoi-suc-3-1629084913995275780961-35e6d.jpg&_info=06ab84e0fe4311ebb7bb795867eb9fc4
-// https://vcplayer.mediacdn.vn/1.1/?_site=tuoitre&new_info_domain=true&stgdmn=hls.tuoitre.vn&vid=tuoitre/2021/8/16/tt-hoi-suc-3-1629084913995275780961-35e6d.mp4&autoplay=false&poster=https://video-thumbs.tuoitre.vn/tuoitre/2021/8/16/tt-hoi-suc-3-1629084913995275780961-35e6d.jpg&_info=06ab84e0fe4311ebb7bb795867eb9fc4
-// https://vcplayer.mediacdn.vn/1.1/?_site=tuoitre&amp;new_info_domain=true&amp;stgdmn=hls.tuoitre.vn&amp;vid=tuoitre/2021/8/16/tt-hoi-suc-3-1629084913995275780961-35e6d.mp4&amp;autoplay=false&amp;poster=https://video-thumbs.tuoitre.vn/tuoitre/2021/8/16/tt-hoi-suc-3-1629084913995275780961-35e6d.jpg&amp;_info=06ab84e0fe4311ebb7bb795867eb9fc4
-// & = &amp; ????
+
         // get relevant news // && child.hasClass("VCSortableInPreviewMode")
-        else if (child.tagName().equals("div") && child.attr("type").equals("RelatedOneNews")) {
-            Element relevantNewsTag = filterRelevantNewsTag(child);
-            if (relevantNewsTag != null) {
-                relevantNewsTag.addClass(CSS.RELEVANT_NEWS);
-                root.append(relevantNewsTag.outerHtml());
-            }
-//            root.append("<div> ======== This is relevant news ======== </div>");
-            validTag = true;
-        }
+//        else if (child.tagName().equals("div") && child.attr("type").equals("RelatedOneNews")) {
+//            Element relevantNewsTag = filterRelevantNewsTag(child);
+//            if (relevantNewsTag != null) {
+//                relevantNewsTag.addClass(CSS.RELEVANT_NEWS);
+//                root.append(relevantNewsTag.outerHtml());
+//            }
+//            validTag = true;
+//        }
 
         if (validTag) return FilterResult.SKIP_ENTIRELY;
         else return FilterResult.CONTINUE;

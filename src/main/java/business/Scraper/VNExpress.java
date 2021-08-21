@@ -1,20 +1,21 @@
-package business.NewsSources;
+package business.Scraper;
 
 import business.Helper.CSS;
-import business.Helper.LocalDateTimeParser;
-import business.Sanitizer.HtmlSanitizer;
-import business.Sanitizer.VNExpressSanitizer;
+import business.Sanitizer.VNExpressFilter;
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.safety.Safelist;
 import org.jsoup.select.Elements;
+import org.jsoup.select.NodeFilter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-public class VNExpress extends NewsOutlet {
+public final class VNExpress extends NewsOutlet {
     private static final Category NEW = new Category(Category.NEW, "https://vnexpress.net/", CSS.VNEXPRESS_TITLE_LINK);
     private static final Category COVID = new Category(Category.COVID, "https://vnexpress.net/covid-19/tin-tuc", CSS.VNEXPRESS_TITLE_LINK);
     private static final Category POLITICS = new Category(Category.POLITICS, "https://vnexpress.net/thoi-su/chinh-tri", CSS.VNEXPRESS_TITLE_LINK);
@@ -123,61 +124,93 @@ public class VNExpress extends NewsOutlet {
         return new VNExpress("VNExpress",
                 "https://s1.vnecdn.net/vnexpress/restruct/i/v395/logo_default.jpg",
                 categories,
-                VNExpressConfig,
-                new VNExpressSanitizer());
+                VNExpressConfig);
     }
 
-    public VNExpress(String name, String defaultThumbnail, HashMap<String, Category> categories, CssConfiguration cssConfiguration, HtmlSanitizer sanitizer) {
-        super(name, defaultThumbnail, categories, cssConfiguration, sanitizer);
-    }
-
-    @Override
-    public LocalDateTime getPublishedTime(Document doc) {
-        Elements dateTimeTag = doc.getElementsByAttributeValue("itemprop", cssConfiguration.publishedTime);
-        String dateTimeStr = dateTimeTag.attr("content");
-
-        if (StringUtils.isEmpty(dateTimeStr)) {
-            return LocalDateTime.now();
-        }
-
-        return LocalDateTimeParser.parse(dateTimeStr);
+    public VNExpress(String name,
+                     String defaultThumbnail,
+                     HashMap<String, Category> categories,
+                     CssConfiguration cssConfiguration) {
+        super(name, defaultThumbnail, categories, cssConfiguration);
     }
 
     @Override
-    public List<String> getCategoryNames(Document doc) {
-        List<String> categoryList = new ArrayList<>();
+    public LocalDateTime scrapePublishedTime(Document doc) {
+        return scrapePublishedTimeFromMeta(doc, "itemprop", cssConfiguration.publishedTime, "content");
+    }
 
-        Element parentCategoryTag = doc.getElementsByAttributeValue("name", "tt_site_id_detail").first();
-        if (parentCategoryTag != null) {
-            String parentCategory = parentCategoryTag.attr("catename");
-            parentCategory = Category.convert(parentCategory);
-            if (!StringUtils.isEmpty(parentCategory))
-                categoryList.add(parentCategory);
+    @Override
+    public Set<String> scrapeCategoryNames(Document doc) {
+        Set<String> categoryList = new HashSet<>();
+
+        // scrape category in meta tag
+        String categoryInMeta = scrapeCategoryNamesInMeta(doc, "name", "tt_site_id_detail", "catename");
+        if (!StringUtils.isEmpty(categoryInMeta)){
+            categoryList.add(categoryInMeta);
         }
 
-
-        // scape all categories in body
-        Element tag = doc.selectFirst(".breadcrumb");
-
-        if (tag != null) {
-            Elements categoryTags = tag.getElementsByTag("a");
-            for (Element e : categoryTags) {
-                String category = e.attr("title");
-                category = Category.convert(category);
-
-                if (StringUtils.isEmpty(category))
-                    continue;
-
-                if (!categoryList.contains(category)) {
-                    categoryList.add(category);
-                }
-            }
-        }
-
-        if (categoryList.isEmpty()) {
-            categoryList.add(Category.OTHERS);
-        }
-
+        // scrape category in breadcrumb
+        categoryList.addAll(scrapeCategoryNamesInBreadcrumb(doc, "breadcrumb"));
         return categoryList;
+
+
+//        List<String> categoryList = new ArrayList<>();
+//
+//        Element parentCategoryTag = doc.getElementsByAttributeValue("name", "tt_site_id_detail").first();
+//        if (parentCategoryTag != null) {
+//            String parentCategory = parentCategoryTag.attr("catename");
+//            parentCategory = Category.convert(parentCategory);
+//            if (!StringUtils.isEmpty(parentCategory))
+//                categoryList.add(parentCategory);
+//        }
+//
+//
+//        // scape all categories in body
+//        Element tag = doc.selectFirst(".breadcrumb");
+//
+//        if (tag != null) {
+//            Elements categoryTags = tag.getElementsByTag("a");
+//            for (Element e : categoryTags) {
+//                String category = e.attr("title");
+//                category = Category.convert(category);
+//
+//                if (StringUtils.isEmpty(category))
+//                    continue;
+//
+//                if (!categoryList.contains(category)) {
+//                    categoryList.add(category);
+//                }
+//            }
+//        }
+//
+//        if (categoryList.isEmpty()) {
+//            categoryList.add(Category.OTHERS);
+//        }
+//
+//        return categoryList;
+    }
+
+    @Override
+    public Element sanitizeDescription(Element e){
+        String cleanHtml;
+        cleanHtml = Jsoup.clean(e.html(), Safelist.basic());
+        Element newHtmlElement;
+        newHtmlElement = new Element("p").html(cleanHtml);
+
+        // deal with span tag (for location)
+        Elements spanTags = newHtmlElement.getElementsByTag("span");
+
+        spanTags.tagName("strong");
+        for (Element span : spanTags) {
+            span.addClass(CSS.LOCATION);
+            span.text(span.text() + " - ");
+        }
+
+        return newHtmlElement;
+    }
+
+    @Override
+    public NodeFilter getNodeFilter(Element root) {
+        return new VNExpressFilter(root);
     }
 }

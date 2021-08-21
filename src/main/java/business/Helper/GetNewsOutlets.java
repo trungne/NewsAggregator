@@ -1,7 +1,7 @@
 package business.Helper;
 
 
-import business.NewsSources.*;
+import business.Scraper.*;
 
 import java.util.HashMap;
 

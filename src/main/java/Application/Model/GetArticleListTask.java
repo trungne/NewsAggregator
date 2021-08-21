@@ -3,15 +3,11 @@ package Application.Model;
 import business.Helper.ArticleListGenerator;
 import business.Helper.GetNewsOutlets;
 import business.News.Article;
-import business.NewsSources.NewsOutlet;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import business.Scraper.NewsOutlet;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;

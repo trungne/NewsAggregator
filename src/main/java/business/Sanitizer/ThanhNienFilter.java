@@ -6,31 +6,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.safety.Safelist;
 import org.jsoup.select.NodeFilter;
-import org.jsoup.select.NodeTraversor;
 
-public class ThanhNienSanitizer extends HtmlSanitizer {
-    @Override
-    public Element sanitizeDescription(Element e) {
-        Safelist safelist; // modify this safe list according to the type
-        String cleanHtml;
-        Element newHtmlElement;
-        safelist = Safelist.basic();
-        cleanHtml = Jsoup.clean(e.html(), safelist);
-        newHtmlElement = new Element("p").html(cleanHtml);
-        newHtmlElement.addClass(CSS.DESCRIPTION);
-        return newHtmlElement;
-    }
-
-    @Override
-    public Element sanitizeMainContent(Element e) {
-        Element newRoot = new Element("div"); //<div></div>
-        NodeFilter ThanhNienFilter = new ThanhNienFilter(newRoot);
-        NodeTraversor.filter(ThanhNienFilter, e);
-        return newRoot.addClass(CSS.MAIN_CONTENT);
-    }
-}
-
-final class ThanhNienFilter implements NodeFilter {
+public final class ThanhNienFilter implements NodeFilter {
     Element root;
 
     public ThanhNienFilter(Element root) {
@@ -57,15 +34,16 @@ final class ThanhNienFilter implements NodeFilter {
             figureTag.addClass(CSS.FIGURE);
             root.append(figureTag.outerHtml());
             validTag = true;
-        } else if (child.hasClass("details__morenews")) {
-            child.clearAttributes();
-            Element relevantNews = filterRelevantNewsTag(child);
-            if (relevantNews != null) {
-                relevantNews.addClass(CSS.RELEVANT_NEWS);
-                root.append(relevantNews.outerHtml());
-            }
-            validTag = true;
         }
+//        else if (child.hasClass("details__morenews")) {
+//            child.clearAttributes();
+//            Element relevantNews = filterRelevantNewsTag(child);
+//            if (relevantNews != null) {
+//                relevantNews.addClass(CSS.RELEVANT_NEWS);
+//                root.append(relevantNews.outerHtml());
+//            }
+//            validTag = true;
+//        }
 
         // get quote . CSS.ThanhNien_Quote
 //        else if (child.hasClass("quote") && child.tagName().equals("div")){

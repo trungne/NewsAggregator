@@ -1,20 +1,18 @@
-package business.NewsSources;
+package business.Scraper;
 
 import business.Helper.CSS;
-import business.Helper.LocalDateTimeParser;
-import business.Sanitizer.HtmlSanitizer;
-import business.Sanitizer.ThanhNienSanitizer;
+import business.Sanitizer.ThanhNienFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.jsoup.select.NodeFilter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-public class ThanhNien extends NewsOutlet {
+public final class ThanhNien extends NewsOutlet {
     private static final Category NEW = new Category(Category.NEW, "https://thanhnien.vn/", CSS.THANHNIEN_TITLE_LINK);
     private static final Category COVID = new Category(Category.COVID, "https://thanhnien.vn/covid-19/", CSS.THANHNIEN_TITLE_LINK);
     private static final Category POLITICS = new Category(Category.POLITICS, "https://thanhnien.vn/thoi-su/chinh-tri/", CSS.THANHNIEN_TITLE_LINK);
@@ -122,60 +120,72 @@ public class ThanhNien extends NewsOutlet {
         return new ThanhNien("Thanh Nien",
                 "https://static.thanhnien.vn/v2/App_Themes/images/logo-tn-2.png",
                 categories,
-                ThanhNienCssConfig,
-                new ThanhNienSanitizer());
+                ThanhNienCssConfig);
     }
 
-    public ThanhNien(String name, String defaultThumbnail, HashMap<String, Category> categories, CssConfiguration cssConfiguration, HtmlSanitizer sanitizer) {
-        super(name, defaultThumbnail, categories, cssConfiguration, sanitizer);
-    }
-
-    @Override
-    public LocalDateTime getPublishedTime(Document doc) {
-        Elements dateTimeTag = doc.getElementsByAttributeValue("property", cssConfiguration.publishedTime);
-
-        String dateTimeStr = dateTimeTag.attr("content");
-
-        if (StringUtils.isEmpty(dateTimeStr)) {
-            return LocalDateTime.now();
-        }
-        return LocalDateTimeParser.parse(dateTimeStr);
+    public ThanhNien(String name,
+                     String defaultThumbnail,
+                     HashMap<String, Category> categories,
+                     CssConfiguration cssConfiguration) {
+        super(name, defaultThumbnail, categories, cssConfiguration);
     }
 
     @Override
-    public List<String> getCategoryNames(Document doc) {
-        List<String> categoryList = new ArrayList<>();
+    public LocalDateTime scrapePublishedTime(Document doc) {
+        return scrapePublishedTimeFromMeta(doc, "property", cssConfiguration.publishedTime, "content");
+    }
 
-        // get parent category
-        Element tag = doc.getElementsByAttributeValue("property", "article:section").first();
+    @Override
+    public Set<String> scrapeCategoryNames(Document doc) {
+        Set<String> categoryList = new HashSet<>();
 
-        if (tag != null) {
-            String parentCategory = tag.attr("content");
-            parentCategory = Category.convert(parentCategory);
-            if (!StringUtils.isEmpty(parentCategory))
-                categoryList.add(parentCategory);
+        // scrape category in meta tag
+        String category = scrapeCategoryNamesInMeta(doc, "property", "article:section", "content");
+        if (!StringUtils.isEmpty(category)){
+            categoryList.add(category);
         }
 
-        // get child category
-        Element childrenCategoryTag = doc.selectFirst(".breadcrumbs");
-        if (childrenCategoryTag != null) {
-            Elements children = childrenCategoryTag.getElementsByTag("a");
-            for (Element e : children) {
-                String category = e.attr("title");
-                category = Category.convert(category);
-
-                if (StringUtils.isEmpty(category))
-                    continue;
-
-                if (!categoryList.contains(category)) {
-                    categoryList.add(category);
-                }
-            }
-        }
-
-        if (categoryList.isEmpty())
-            categoryList.add(Category.OTHERS);
-
+        // scrape category in breadcrumb
+        categoryList.addAll(scrapeCategoryNamesInBreadcrumb(doc, "breadcrumbs"));
         return categoryList;
+
+//        List<String> categoryList = new ArrayList<>();
+//
+//        // get parent category
+//        Element tag = doc.getElementsByAttributeValue("property", "article:section").first();
+//
+//        if (tag != null) {
+//            String parentCategory = tag.attr("content");
+//            parentCategory = Category.convert(parentCategory);
+//            if (!StringUtils.isEmpty(parentCategory))
+//                categoryList.add(parentCategory);
+//        }
+//
+//        // get child category
+//        Element childrenCategoryTag = doc.selectFirst(".breadcrumbs");
+//        if (childrenCategoryTag != null) {
+//            Elements children = childrenCategoryTag.getElementsByTag("a");
+//            for (Element e : children) {
+//                String category = e.attr("title");
+//                category = Category.convert(category);
+//
+//                if (StringUtils.isEmpty(category))
+//                    continue;
+//
+//                if (!categoryList.contains(category)) {
+//                    categoryList.add(category);
+//                }
+//            }
+//        }
+//
+//        if (categoryList.isEmpty())
+//            categoryList.add(Category.OTHERS);
+//
+//        return categoryList;
+    }
+
+    @Override
+    public NodeFilter getNodeFilter(Element root) {
+        return new ThanhNienFilter(root);
     }
 }

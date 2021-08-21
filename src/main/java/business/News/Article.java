@@ -1,7 +1,7 @@
 package business.News;
 
 import business.Helper.CSS;
-import business.NewsSources.NewsOutlet;
+import business.Scraper.NewsOutlet;
 import org.jsoup.nodes.Element;
 
 import java.net.URL;
@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Article implements Comparable<Article> {
@@ -40,9 +39,11 @@ public class Article implements Comparable<Article> {
                 "body {margin: 30px;}\n" +
                 ".article-header{display: flex; font-style: italic;}\n" +
                 ".article-category{margin-right: .75rem;color: #007bff;}\n" +
+
                 ".published-time{color:#6c757d;}\n" +
-                ".article-content h1 + p{font-weight: bold;}\n" +
-                ".article-content p {text-align: justify;}\n" +
+                ".title {font-weight: bold;}" +
+                ".description {font-weight: bold;}\n" +
+                ".content-paragraph {text-align: justify;}\n" +
                 "img {width: 350px;height:250px;} article {padding: 0 4em 2em 4em;margin-right: auto;margin-left: auto;}\n" +
                 ".content-pic {text-align: center; margin-top: 1em; margin-bottom: 1em;}\n" +
                 "figcaption em {color:#6c757d;font-style: italic;font-size: 14px;}\n" +
@@ -129,7 +130,7 @@ public class Article implements Comparable<Article> {
         this.newsSource = NewsOutlet.toName(url);
     }
 
-    public void addCategory(List<String> categoryList) {
+    public void addCategory(Set<String> categoryList) {
         for (String category: categoryList){
             if (category.equals(mainCategory)){
                 continue;
@@ -184,17 +185,17 @@ public class Article implements Comparable<Article> {
 
     // setter
     public void setContent(Element title, Element description, Element mainContent,
-                           LocalDateTime publishedTime, String thumbNail, List<String> categories) {
+                           LocalDateTime publishedTime, String thumbNail, Set<String> categories) {
         if (title == null || description == null || mainContent == null) {
             throw new IllegalArgumentException();
         }
-        this.title = title;
-        this.description = description;
+        this.title = title.addClass(CSS.TITLE);
+        this.description = description.addClass(CSS.DESCRIPTION);
         this.dateTime = publishedTime;
         this.thumbNail = thumbNail;
         addCategory(categories);
 
-        this.html = createHtml(mainContent);
+        this.html = createHtml(mainContent.addClass(CSS.MAIN_CONTENT));
     }
 
     @Override

@@ -1,4 +1,4 @@
-package business.NewsSources;
+package business.Scraper;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,34 +26,35 @@ public class Category {
     public static final String CAR = "Car";
 
     // map Vietnamese names to English
-    private static final HashMap<String, String[]> CategoriesMapping = new HashMap<>();
+    private static final HashMap<String, String[]> dictionary = new HashMap<>();
 
     static {
 //        CategoriesMapping.put(COVID, new String[]{""});
-        CategoriesMapping.put(POLITICS, new String[]{"chính trị"});
-        CategoriesMapping.put(BUSINESS, new String[]{"kinh doanh", "tài chính - kinh doanh", "kinh tế"});
-        CategoriesMapping.put(TECHNOLOGY, new String[]{"khoa học - công nghệ", "công nghệ", "khoa học"});
-        CategoriesMapping.put(HEALTH, new String[]{"y tế", "sức khỏe"});
-        CategoriesMapping.put(SPORTS, new String[]{"thể thao"});
-        CategoriesMapping.put(ENTERTAINMENT, new String[]{"văn hóa", "giải trí"});
-        CategoriesMapping.put(WORLD, new String[]{"thế giới"});
-        CategoriesMapping.put(SOCIETY, new String[]{"xã hội", "thời sự"});
-        CategoriesMapping.put(LAWS, new String[]{"pháp luật", "luật pháp"});
-        CategoriesMapping.put(EDUCATION, new String[]{"giáo dục"});
-        CategoriesMapping.put(LIFE, new String[]{"đời sống", "nhịp sống trẻ"});
-        CategoriesMapping.put(TOURISM, new String[]{"du lịch", "du lịch - ẩm thực"});
-        CategoriesMapping.put(CAR, new String[]{"xe"});
+        dictionary.put(POLITICS, new String[]{"chính trị"});
+        dictionary.put(BUSINESS, new String[]{"kinh doanh", "tài chính - kinh doanh", "kinh tế"});
+        dictionary.put(TECHNOLOGY, new String[]{"khoa học - công nghệ", "công nghệ", "khoa học"});
+        dictionary.put(HEALTH, new String[]{"y tế", "sức khỏe"});
+        dictionary.put(SPORTS, new String[]{"thể thao"});
+        dictionary.put(ENTERTAINMENT, new String[]{"văn hóa", "giải trí"});
+        dictionary.put(WORLD, new String[]{"thế giới"});
+        dictionary.put(SOCIETY, new String[]{"xã hội", "thời sự"});
+        dictionary.put(LAWS, new String[]{"pháp luật", "luật pháp"});
+        dictionary.put(EDUCATION, new String[]{"giáo dục"});
+        dictionary.put(LIFE, new String[]{"đời sống", "nhịp sống trẻ"});
+        dictionary.put(TOURISM, new String[]{"du lịch", "du lịch - ẩm thực"});
+        dictionary.put(CAR, new String[]{"xe"});
     }
 
+    // convert a category name from Vietnamese to English
     public static String convert(String category) {
-        for (String english : CategoriesMapping.keySet()) {
-            for (String vietnamse : CategoriesMapping.get(english)) {
+        for (String english : dictionary.keySet()) {
+            for (String vietnamse : dictionary.get(english)) {
                 if (category.toLowerCase(Locale.ROOT).equals(vietnamse)) {
                     return english;
                 }
             }
         }
-        return "";
+        return OTHERS;
     }
 
 

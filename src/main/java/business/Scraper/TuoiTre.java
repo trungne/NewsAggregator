@@ -1,20 +1,18 @@
-package business.NewsSources;
+package business.Scraper;
 
 import business.Helper.CSS;
-import business.Helper.LocalDateTimeParser;
-import business.Sanitizer.HtmlSanitizer;
-import business.Sanitizer.TuoiTreSanitizer;
+import business.Sanitizer.TuoiTreFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.jsoup.select.NodeFilter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-public class TuoiTre extends NewsOutlet {
+public final class TuoiTre extends NewsOutlet {
     private static final Category NEW = new Category(Category.NEW, "https://tuoitre.vn/", CSS.TUOITRE_TITLE_LINK);
     private static final Category COVID = new Category(Category.COVID, "https://tuoitre.vn/covid-19.html", CSS.TUOITRE_TITLE_LINK);
     private static final Category POLITICS = new Category(Category.POLITICS, "https://tuoitre.vn/thoi-su.htm", CSS.TUOITRE_TITLE_LINK);
@@ -121,59 +119,70 @@ public class TuoiTre extends NewsOutlet {
         return new TuoiTre("Tuoi Tre",
                 "https://dangkyxettuyennghe.tuoitre.vn/img/logo-tt.png",
                 categories,
-                TuoiTreCssConfig,
-                new TuoiTreSanitizer());
+                TuoiTreCssConfig);
     }
 
-    public TuoiTre(String name, String defaultThumbnail, HashMap<String, Category> categories, CssConfiguration cssConfiguration, HtmlSanitizer sanitizer) {
-        super(name, defaultThumbnail, categories, cssConfiguration, sanitizer);
-    }
-
-    @Override
-    public LocalDateTime getPublishedTime(Document doc) {
-        Elements dateTimeTag = doc.getElementsByAttributeValue("property", cssConfiguration.publishedTime);
-
-        String dateTimeStr = dateTimeTag.attr("content");
-        if (StringUtils.isEmpty(dateTimeStr)) {
-            return LocalDateTime.now();
-        }
-
-        return LocalDateTimeParser.parse(dateTimeStr);
+    public TuoiTre(String name,
+                   String defaultThumbnail,
+                   HashMap<String, Category> categories,
+                   CssConfiguration cssConfiguration) {
+        super(name, defaultThumbnail, categories, cssConfiguration);
     }
 
     @Override
-    public List<String> getCategoryNames(Document doc) {
-        List<String> categoryList = new ArrayList<>();
+    public LocalDateTime scrapePublishedTime(Document doc) {
+        return scrapePublishedTimeFromMeta(doc, "property", cssConfiguration.publishedTime, "content");
+    }
 
-        // get parent category
-        Element tag = doc.getElementsByAttributeValue("property", "article:section").first();
-        if (tag != null) {
-            String parentCategory = tag.attr("content");
-            parentCategory = Category.convert(parentCategory);
-            if (!StringUtils.isEmpty(parentCategory))
-                categoryList.add(parentCategory);
+    @Override
+    public Set<String> scrapeCategoryNames(Document doc) {
+        Set<String> categoryList = new HashSet<>();
+
+        // Only scrape category in meta tag as categories cannot be scraped in breadcrumb
+        String category = scrapeCategoryNamesInMeta(doc, "property", "article:section", "content");
+        if (!StringUtils.isEmpty(category)){
+            categoryList.add(category);
         }
-
-        // get child category
-        Element childrenCategoryTag = doc.selectFirst(".breadcrumbs");
-        if (childrenCategoryTag != null) {
-            Elements children = childrenCategoryTag.getElementsByTag("a");
-            for (Element e : children) {
-                String category = e.attr("title");
-                category = Category.convert(category);
-
-                if (StringUtils.isEmpty(category))
-                    continue;
-
-                if (!categoryList.contains(category)) {
-                    categoryList.add(category);
-                }
-            }
-        }
-
-        if (categoryList.isEmpty())
-            categoryList.add(Category.OTHERS);
-
         return categoryList;
+
+//
+//
+//        List<String> categoryList = new ArrayList<>();
+//
+//        // get parent category
+//        Element tag = doc.getElementsByAttributeValue("property", "article:section").first();
+//        if (tag != null) {
+//            String parentCategory = tag.attr("content");
+//            parentCategory = Category.convert(parentCategory);
+//            if (!StringUtils.isEmpty(parentCategory))
+//                categoryList.add(parentCategory);
+//        }
+//
+//        // get child category
+//        Element childrenCategoryTag = doc.selectFirst(".breadcrumbs");
+//        if (childrenCategoryTag != null) {
+//            Elements children = childrenCategoryTag.getElementsByTag("a");
+//            for (Element e : children) {
+//                String category = e.attr("title");
+//                category = Category.convert(category);
+//
+//                if (StringUtils.isEmpty(category))
+//                    continue;
+//
+//                if (!categoryList.contains(category)) {
+//                    categoryList.add(category);
+//                }
+//            }
+//        }
+//
+//        if (categoryList.isEmpty())
+//            categoryList.add(Category.OTHERS);
+//
+//        return categoryList;
+    }
+
+    @Override
+    public NodeFilter getNodeFilter(Element root) {
+        return new TuoiTreFilter(root);
     }
 }
