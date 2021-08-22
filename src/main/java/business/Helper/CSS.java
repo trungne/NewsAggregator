@@ -52,6 +52,7 @@ public class CSS {
     public static final String THANHNIEN_TITLE_LINK = "story__thumb";
     public static final String THANHNIEN_TITLE = "details__headline";
     public static final String THANHNIEN_DESCRIPTION = "sapo";
+    // TODO: switch to pswp-content for thanh nien body
     public static final String THANHNIEN_BODY = "details__content";
     public static final String THANHNIEN_TIME = "article:published_time";
     public static final String THANHNIEN_PIC = "pswp-content__image";

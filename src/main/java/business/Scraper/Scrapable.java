@@ -26,6 +26,18 @@ public interface Scrapable {
 
     }
 
+    default Element scrapeAuthor(Document doc, String cls){
+        Element author = scrapeFirstElementByClass(doc, cls);
+        if (author != null){
+            Element p = new Element("p");
+            p.append("<strong>"+ author.text() +"</strong>");
+            return p;
+        }
+        else{
+            return null;
+        }
+    }
+
     default String scrapeFirstImgUrl(Document doc, String cls){
         try{
             Element firstElementOfClass = scrapeFirstElementByClass(doc, cls);

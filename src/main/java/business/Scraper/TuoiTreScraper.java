@@ -1,16 +1,20 @@
 package business.Scraper;
 
 import business.Helper.CSS;
-import business.Sanitizer.TuoiTreFilter;
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.safety.Safelist;
 import org.jsoup.select.NodeFilter;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class TuoiTreScraper extends Scraper {
     private static final Category NEW = new Category(Category.NEW, "https://tuoitre.vn/", CSS.TUOITRE_TITLE_LINK);
@@ -130,6 +134,12 @@ public final class TuoiTreScraper extends Scraper {
     }
 
     @Override
+    public Element scrapeMainContent(Document doc) throws ElementNotFound {
+        Element authorTag = scrapeAuthor(doc, "author");
+        return super.scrapeMainContent(doc).append(authorTag.outerHtml());
+    }
+
+    @Override
     public LocalDateTime scrapePublishedTime(Document doc) {
         return scrapePublishedTimeFromMeta(doc, "property", cssConfiguration.publishedTime, "content");
     }
@@ -144,45 +154,145 @@ public final class TuoiTreScraper extends Scraper {
             categoryList.add(category);
         }
         return categoryList;
-
-//
-//
-//        List<String> categoryList = new ArrayList<>();
-//
-//        // get parent category
-//        Element tag = doc.getElementsByAttributeValue("property", "article:section").first();
-//        if (tag != null) {
-//            String parentCategory = tag.attr("content");
-//            parentCategory = Category.convert(parentCategory);
-//            if (!StringUtils.isEmpty(parentCategory))
-//                categoryList.add(parentCategory);
-//        }
-//
-//        // get child category
-//        Element childrenCategoryTag = doc.selectFirst(".breadcrumbs");
-//        if (childrenCategoryTag != null) {
-//            Elements children = childrenCategoryTag.getElementsByTag("a");
-//            for (Element e : children) {
-//                String category = e.attr("title");
-//                category = Category.convert(category);
-//
-//                if (StringUtils.isEmpty(category))
-//                    continue;
-//
-//                if (!categoryList.contains(category)) {
-//                    categoryList.add(category);
-//                }
-//            }
-//        }
-//
-//        if (categoryList.isEmpty())
-//            categoryList.add(Category.OTHERS);
-//
-//        return categoryList;
     }
 
     @Override
     public NodeFilter getNodeFilter(Element root) {
         return new TuoiTreFilter(root);
+    }
+
+    static class TuoiTreFilter implements NodeFilter {
+        Element root;
+
+        public TuoiTreFilter(Element root) {
+            this.root = root;
+        }
+
+        @Override
+        public FilterResult head(Node node, int i) {
+            if (!(node instanceof Element)) {
+                return FilterResult.SKIP_ENTIRELY;
+            }
+
+            Element child = (Element) node;
+            String tagName = child.tagName();
+
+            // skip relevant news tag
+            if (child.attr("type").equals("RelatedOneNews")){
+                return FilterResult.SKIP_ENTIRELY;
+            }
+
+            if (tagName.equals("p")) {
+                child.clearAttributes();
+                Safelist safelist = Safelist.basic();
+                // clean html in the tag and add custom css class for paragraph
+                child.html(Jsoup.clean(child.html(), safelist)).addClass(CSS.PARAGRAPH);
+                root.append(child.outerHtml());
+            }
+            // simple quote
+            else if (child.hasClass("VCSortableInPreviewMode")
+                    && child.attr("type").equals("SimpleQuote")){
+                child.clearAttributes();
+                Safelist safelist = Safelist.basic();
+                child.html(Jsoup.clean(child.html(), safelist)).addClass(CSS.QUOTE);
+
+                // add css class to the paragraphs in quote
+                for (Element p: child.getElementsByTag("p")) {
+                    // style paragraph containing author's name
+                    if (p.hasClass("StarNameCaption")){
+                        p.clearAttributes();
+                        p.tagName("span");
+                        p.attr("style", "text-align:right;");
+                    }
+                    else{
+                        p.clearAttributes();
+                        p.addClass(CSS.PARAGRAPH);
+                    }
+                }
+                root.append(child.outerHtml());
+            }
+            // wrapnote
+            else if (child.hasClass("VCSortableInPreviewMode")
+                    && child.attr("type").equals("wrapnote")){
+                child.clearAttributes();
+
+                Safelist safelist = Safelist.basic();
+                safelist.removeTags("a");
+
+                child.html(Jsoup.clean(child.html(), safelist)).addClass(CSS.QUOTE);
+                root.append(child.outerHtml());
+            }
+            // img
+            else if (child.hasClass("VCSortableInPreviewMode")
+                    && child.attr("type").equals("Photo")){
+                Element figure = new Element("figure");
+
+                // pull out img tag
+                for (Element imgTag: child.getElementsByTag("img")){
+                    String src = imgTag.attr("src");
+                    String alt = imgTag.attr("alt");
+                    Element img = new Element("img")
+                            .attr("src", src)
+                            .attr("alt", alt);
+                    figure.append(img.outerHtml());
+                }
+
+                // pull out caption
+                for (Element caption: child.getElementsByTag("p")){
+                    Element figcaption = new Element("figcaption")
+                            .text(caption.text());
+                    figure.append(figcaption.outerHtml());
+                }
+
+                root.append(figure.outerHtml());
+            }
+            else if (child.hasClass("VCSortableInPreviewMode")
+                    && child.attr("type").equals("VideoStream")) {
+                String rawUrl = child.attr("data-src");
+
+                // extract the link by regex
+                String regrex = "vid=(.*)mp4";
+                Pattern pattern = Pattern.compile(regrex);
+                Matcher matcher = pattern.matcher(rawUrl);
+                if (matcher.find()) {
+                    String src = "https://hls.tuoitre.vn/" + matcher.group(1) + "mp4";
+                    Element video = new Element("video");
+                    Element source = new Element("source");
+                    source.attr("src", src);
+
+                    video.appendChild(source)
+                            .attr("controls", true)
+                            .addClass(CSS.VIDEO);
+
+                    root.append(video.outerHtml());
+                }
+            }
+            else {
+                return FilterResult.CONTINUE;
+            }
+
+            return FilterResult.SKIP_ENTIRELY;
+
+        }
+
+        @Override
+        public FilterResult tail(Node node, int i) {
+            return null;
+        }
+        // impossible to display the source
+        private static Element filterVideoTag(Element tag) {
+            String src = "=== I can not display the source because of this: &&&& ===";
+
+            Element videoCaption = new Element("p").html(tag.getElementsByTag("p").html());
+            String videoSource = "<source src='" + src + "'>";
+
+            Element videoTag = new Element("video").html(videoSource);
+
+            Element newWrapTag = new Element("div");
+            newWrapTag.appendChild(videoTag);
+            newWrapTag.appendChild(videoCaption);
+            return newWrapTag;
+
+        }
     }
 }

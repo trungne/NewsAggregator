@@ -127,21 +127,14 @@ public final class ZingNewsScraper extends Scraper {
         return scrapePublishedTimeFromMeta(doc, "property", cssConfiguration.publishedTime, "content");
     }
 
+    @Override
+    public Element scrapeDescription(Document doc) throws ElementNotFound {
+        return super.scrapeDescription(doc);
+    }
+
     public Element scrapeMainContent(Document doc) throws ElementNotFound {
-        Element content = scrapeFirstElementByClass(doc, cssConfiguration.mainContent);
-
-        // append author to the end of mainContent tag;
-        Element author = scrapeFirstElementByClass(doc, "the-article-credit");
-        if (author != null){
-            Element p = new Element("p");
-            p.append("<strong>"+ author.text() +"</strong>");
-            content.appendChild(p);
-        }
-
-        if (content == null) {
-            throw new ElementNotFound();
-        }
-        return sanitizeMainContent(content);
+        Element authorTag = scrapeAuthor(doc, "the-article-credit");
+        return super.scrapeMainContent(doc).append(authorTag.outerHtml());
     }
 
     @Override
@@ -186,9 +179,10 @@ public final class ZingNewsScraper extends Scraper {
             }
 
             if (tagName.equals("p")) {
+                child.clearAttributes();
                 Safelist safelist = Safelist.basic();
-                child.html(Jsoup.clean(child.html(), safelist));
-                child.addClass(CSS.PARAGRAPH);
+                // clean html in the tag and add custom css class for paragraph
+                child.html(Jsoup.clean(child.html(), safelist)).addClass(CSS.PARAGRAPH);
                 root.append(child.outerHtml());
             }
             else if (tagName.equals("blockquote")) {

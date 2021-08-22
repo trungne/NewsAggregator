@@ -206,8 +206,8 @@ public final class VNExpressScraper extends Scraper {
             else if (tagName.equals("p")) {
                 child.clearAttributes();
                 Safelist safelist = Safelist.basic();
-                child.html(Jsoup.clean(child.html(), safelist))
-                                .addClass(CSS.PARAGRAPH);
+                // clean html in the tag and add custom css class for paragraph
+                child.html(Jsoup.clean(child.html(), safelist)).addClass(CSS.PARAGRAPH);
                 root.append(child.outerHtml());
             }
             else if (tagName.equals("figure")) {
