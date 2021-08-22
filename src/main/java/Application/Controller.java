@@ -138,6 +138,7 @@ public class Controller {
 
     private void openArticleInNewStage(int index){
         String content = model.getArticleContent(currentCategoryButton.getText(), index);
+        System.out.println(content);
         browser.getEngine().loadContent(content);
         articleStage.show();
     }

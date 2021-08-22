@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class TuoiTre extends NewsOutlet {
+public final class TuoiTreScraper extends Scraper {
     private static final Category NEW = new Category(Category.NEW, "https://tuoitre.vn/", CSS.TUOITRE_TITLE_LINK);
     private static final Category COVID = new Category(Category.COVID, "https://tuoitre.vn/covid-19.html", CSS.TUOITRE_TITLE_LINK);
     private static final Category POLITICS = new Category(Category.POLITICS, "https://tuoitre.vn/thoi-su.htm", CSS.TUOITRE_TITLE_LINK);
@@ -96,7 +96,7 @@ public final class TuoiTre extends NewsOutlet {
     }
 
 
-    public static NewsOutlet init() {
+    public static Scraper init() {
         HashMap<String, Category> categories = new HashMap<>();
         categories.put(Category.NEW, NEW);
         categories.put(Category.COVID, COVID);
@@ -116,16 +116,16 @@ public final class TuoiTre extends NewsOutlet {
                 CSS.TUOITRE_BODY,
                 CSS.TUOITRE_TIME,
                 CSS.TUOITRE_PIC);
-        return new TuoiTre("Tuoi Tre",
+        return new TuoiTreScraper("Tuoi Tre",
                 "https://dangkyxettuyennghe.tuoitre.vn/img/logo-tt.png",
                 categories,
                 TuoiTreCssConfig);
     }
 
-    public TuoiTre(String name,
-                   String defaultThumbnail,
-                   HashMap<String, Category> categories,
-                   CssConfiguration cssConfiguration) {
+    public TuoiTreScraper(String name,
+                          String defaultThumbnail,
+                          HashMap<String, Category> categories,
+                          CssConfiguration cssConfiguration) {
         super(name, defaultThumbnail, categories, cssConfiguration);
     }
 

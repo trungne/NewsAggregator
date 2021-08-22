@@ -26,8 +26,9 @@ public interface Scrapable {
             Element firstImgTag = imgTags.first();
             // some news outlets store url of img in data-src
             String url = firstImgTag.attr("data-src");
+
+            // if the img tag doesn't have data-src attr, check its src attr
             if(StringUtils.isEmpty(url)){
-                // if the img tag doesn't have data-src attr, check its src attr
                 url = firstImgTag.attr("src");
                 if (StringUtils.isEmpty(url)){
                     return "";

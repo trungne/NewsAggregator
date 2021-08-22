@@ -1,9 +1,12 @@
 package business.Scraper;
 
 import business.Helper.CSS;
-import business.Sanitizer.ZingNewsFilter;
+import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.safety.Safelist;
 import org.jsoup.select.Elements;
 import org.jsoup.select.NodeFilter;
 
@@ -13,7 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public final class ZingNews extends NewsOutlet {
+public final class ZingNewsScraper extends Scraper {
     // main category
     private static final Category NEW = new Category(Category.NEW, "https://zingnews.vn/", CSS.ZING_TITLE_LINK);
     private static final Category COVID = new Category(Category.COVID, "https://zingnews.vn/tieu-diem/covid-19.html", CSS.ZING_TITLE_LINK);
@@ -85,7 +88,7 @@ public final class ZingNews extends NewsOutlet {
     }
 
 
-    public static NewsOutlet init() {
+    public static Scraper init() {
         HashMap<String, Category> categories = new HashMap<>();
         categories.put(Category.NEW, NEW);
         categories.put(Category.COVID, COVID);
@@ -105,23 +108,41 @@ public final class ZingNews extends NewsOutlet {
                 CSS.ZING_BODY,
                 CSS.ZING_TIME,
                 CSS.ZING_PIC);
-        return new ZingNews("ZingNews",
+        return new ZingNewsScraper("ZingNews",
                 "https://brandcom.vn/wp-content/uploads/2016/02/zingnews-logo.png",
                 categories,
                 ZingCssConfig);
     }
 
 
-    public ZingNews(String name,
-                    String defaultThumbnail,
-                    HashMap<String, Category> categories,
-                    CssConfiguration cssConfiguration) {
+    public ZingNewsScraper(String name,
+                           String defaultThumbnail,
+                           HashMap<String, Category> categories,
+                           CssConfiguration cssConfiguration) {
         super(name, defaultThumbnail, categories, cssConfiguration);
     }
 
     @Override
     public LocalDateTime scrapePublishedTime(Document doc) {
         return scrapePublishedTimeFromMeta(doc, "property", cssConfiguration.publishedTime, "content");
+    }
+
+    public Element scrapeMainContent(Document doc) throws ElementNotFound {
+        Element content = scrapeFirstElementByClass(doc, cssConfiguration.mainContent);
+
+        // append author to the end of mainContent tag;
+        Element author = scrapeFirstElementByClass(doc, "the-article-author");
+        if (author != null){
+            Element p = new Element("p");
+            p.text(author.text());
+            content.appendChild(p);
+            System.out.println("author appended");
+        }
+
+        if (content == null) {
+            throw new ElementNotFound();
+        }
+        return sanitizeMainContent(content);
     }
 
     @Override
@@ -144,4 +165,116 @@ public final class ZingNews extends NewsOutlet {
     public NodeFilter getNodeFilter(Element root) {
         return new ZingNewsFilter(root);
     }
+
+    static class ZingNewsFilter implements NodeFilter {
+        Element root;
+        public ZingNewsFilter(Element root) {
+            this.root = root;
+        }
+
+        @Override
+        public FilterResult head(Node node, int i) {
+            // only consider Element and skip all TextNode
+            if (!(node instanceof Element)) {
+                return FilterResult.SKIP_ENTIRELY;
+            }
+
+            Element child = (Element) node;
+            String tagName = child.tagName();
+
+            if (child.hasClass("inner-article")){
+                return FilterResult.SKIP_ENTIRELY;
+            }
+
+            if (tagName.equals("p")) {
+                Safelist safelist = Safelist.basic();
+                child.html(Jsoup.clean(child.html(), safelist));
+                child.addClass(CSS.PARAGRAPH);
+                root.append(child.outerHtml());
+            }
+            else if (tagName.equals("blockquote")) {
+                // get quote
+                Safelist safelist = Safelist.basic();
+                child.html(Jsoup.clean(child.outerHtml(), safelist))
+                        .addClass(CSS.PARAGRAPH);
+
+                for (Element p : child.getElementsByTag("p")) {
+                    p.addClass(CSS.PARAGRAPH);
+                }
+                root.append(child.outerHtml());
+            }
+            else if (child.hasClass("picture")) {
+                // assign data-src attr to src for img tag
+                for(Element img: child.getElementsByTag("img")){
+                    String src = img.attr("data-src");
+                    if (!StringUtils.isEmpty(src)){
+                        img.attr("src", src);
+                    }
+                }
+
+                // change caption to figcaption to follow the convention
+                for (Element e: child.getElementsByClass("caption")){
+                    e.tagName("figcaption");
+                    // remove p tag but keep the text node
+                    for (Element p: e.getElementsByTag("p")){
+                        p.unwrap();
+                    }
+                }
+
+                // clean the tag so that only img and figcaption tag remain
+                Safelist safelist = Safelist.basicWithImages();
+                safelist.addTags("figcaption");
+
+                // create a figure tag to put img and figcaption in
+                Element figure = new Element("figure")
+                        .html(Jsoup.clean
+                                (child.outerHtml(), safelist))
+                        .addClass(CSS.FIGURE);
+
+                root.append(figure.outerHtml());
+            }
+            else if (child.hasClass("video")) {
+                Element videoTag = getVideoTag(child);
+                if (videoTag != null){
+                    videoTag.addClass(CSS.VIDEO);
+                    root.append(videoTag.outerHtml());
+
+                    // get caption of video
+                    Element caption = new Element("figcaption");
+                    for (Element figCaptionTag: child.getElementsByTag("figcaption")){
+                        String clean = Jsoup.clean(figCaptionTag.html(), Safelist.none());
+                        caption.append(clean);
+                    }
+                    root.append(caption.outerHtml());
+                }
+            }
+            else {
+                return FilterResult.CONTINUE;
+            }
+
+            return FilterResult.SKIP_ENTIRELY;
+        }
+
+        private static Element getVideoTag(Element tag) {
+            // get the URL of video source
+            String src = tag.attr("data-video-src");
+            if (StringUtils.isEmpty(src)){
+                return null;
+            }
+            Element video = new Element("video");
+            video.attr("controls", "true");
+
+            Element source = new Element("source");
+            source.attr("src", src); // add attribute with value is url of video
+            video.appendChild(source); // append <source> in to <video>
+
+            return video;
+        }
+
+        @Override
+        public FilterResult tail(Node node, int i) {
+            return null;
+        }
+    }
+
 }

@@ -1,21 +1,26 @@
 package business.Scraper;
 
 import business.Helper.CSS;
-import business.Sanitizer.VNExpressFilter;
+import business.Helper.ScrapingUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.jsoup.safety.Safelist;
 import org.jsoup.select.Elements;
 import org.jsoup.select.NodeFilter;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public final class VNExpress extends NewsOutlet {
+public final class VNExpressScraper extends Scraper {
     private static final Category NEW = new Category(Category.NEW, "https://vnexpress.net/", CSS.VNEXPRESS_TITLE_LINK);
     private static final Category COVID = new Category(Category.COVID, "https://vnexpress.net/covid-19/tin-tuc", CSS.VNEXPRESS_TITLE_LINK);
     private static final Category POLITICS = new Category(Category.POLITICS, "https://vnexpress.net/thoi-su/chinh-tri", CSS.VNEXPRESS_TITLE_LINK);
@@ -101,7 +106,7 @@ public final class VNExpress extends NewsOutlet {
         OTHERS.add("https://vnexpress.net/oto-xe-may");
     }
 
-    public static NewsOutlet init() {
+    public static Scraper init() {
         HashMap<String, Category> categories = new HashMap<>();
         categories.put(Category.NEW, NEW);
         categories.put(Category.COVID, COVID);
@@ -121,16 +126,16 @@ public final class VNExpress extends NewsOutlet {
                 CSS.VNEXPRESS_BODY,
                 CSS.VNEXPRESS_TIME,
                 CSS.VNEXPRESS_PIC);
-        return new VNExpress("VNExpress",
+        return new VNExpressScraper("VNExpress",
                 "https://s1.vnecdn.net/vnexpress/restruct/i/v395/logo_default.jpg",
                 categories,
                 VNExpressConfig);
     }
 
-    public VNExpress(String name,
-                     String defaultThumbnail,
-                     HashMap<String, Category> categories,
-                     CssConfiguration cssConfiguration) {
+    public VNExpressScraper(String name,
+                            String defaultThumbnail,
+                            HashMap<String, Category> categories,
+                            CssConfiguration cssConfiguration) {
         super(name, defaultThumbnail, categories, cssConfiguration);
     }
 
@@ -142,7 +147,6 @@ public final class VNExpress extends NewsOutlet {
     @Override
     public Set<String> scrapeCategoryNames(Document doc) {
         Set<String> categoryList = new HashSet<>();
-
         // scrape category in meta tag
         String categoryInMeta = scrapeCategoryNamesInMeta(doc, "name", "tt_site_id_detail", "catename");
         if (!StringUtils.isEmpty(categoryInMeta)){
@@ -152,42 +156,6 @@ public final class VNExpress extends NewsOutlet {
         // scrape category in breadcrumb
         categoryList.addAll(scrapeCategoryNamesInBreadcrumb(doc, "breadcrumb"));
         return categoryList;
-
-
-//        List<String> categoryList = new ArrayList<>();
-//
-//        Element parentCategoryTag = doc.getElementsByAttributeValue("name", "tt_site_id_detail").first();
-//        if (parentCategoryTag != null) {
-//            String parentCategory = parentCategoryTag.attr("catename");
-//            parentCategory = Category.convert(parentCategory);
-//            if (!StringUtils.isEmpty(parentCategory))
-//                categoryList.add(parentCategory);
-//        }
-//
-//
-//        // scape all categories in body
-//        Element tag = doc.selectFirst(".breadcrumb");
-//
-//        if (tag != null) {
-//            Elements categoryTags = tag.getElementsByTag("a");
-//            for (Element e : categoryTags) {
-//                String category = e.attr("title");
-//                category = Category.convert(category);
-//
-//                if (StringUtils.isEmpty(category))
-//                    continue;
-//
-//                if (!categoryList.contains(category)) {
-//                    categoryList.add(category);
-//                }
-//            }
-//        }
-//
-//        if (categoryList.isEmpty()) {
-//            categoryList.add(Category.OTHERS);
-//        }
-//
-//        return categoryList;
     }
 
     @Override
@@ -212,5 +180,129 @@ public final class VNExpress extends NewsOutlet {
     @Override
     public NodeFilter getNodeFilter(Element root) {
         return new VNExpressFilter(root);
+    }
+    static class VNExpressFilter implements NodeFilter {
+        Element root;
+
+        public VNExpressFilter(Element root) {
+            this.root = root;
+        }
+
+        @Override
+        public FilterResult head(Node node, int i) {
+            // only consider Element and skip all TextNode
+            if (!(node instanceof Element)) {
+                return FilterResult.SKIP_ENTIRELY;
+            }
+            // skip these tags immediately
+            else if (node.attr("style").contains("display: none")){
+                return FilterResult.SKIP_ENTIRELY;
+            }
+
+            Element child = (Element) node;
+            String tagName = child.tagName();
+
+            if (tagName.matches("h\\d")){
+                root.append(child.outerHtml());
+            }
+            else if (tagName.equals("p")) {
+                child.clearAttributes();
+                Safelist safelist = Safelist.basic();
+                child.html(Jsoup.clean(child.html(), safelist))
+                                .addClass(CSS.PARAGRAPH);
+                root.append(child.outerHtml());
+            }
+            else if (tagName.equals("figure")) {
+                child.clearAttributes();
+                // get img and caption in figure tag
+                // assign data-src attr to src (VNExpress stores their img url in data-src for god knows why)
+                // clean the figure tag by safelist
+                for(Element img: child.getElementsByTag("img")){
+                    String src = img.attr("data-src");
+                    if (!StringUtils.isEmpty(src)){
+                        img.attr("src", src);
+                    }
+                }
+                // clean the figure tag
+                Safelist safelist = Safelist.basicWithImages();
+                safelist.addTags("figcaption", "figure");
+
+                // clean and add custom css class to the figure tag
+                child.clearAttributes();
+                child.html(Jsoup.clean
+                                (child.html(), safelist))
+                        .addClass(CSS.FIGURE);
+                root.append(child.outerHtml());
+            }
+            else if (tagName.equals("img")) {
+                // get standalone img tag
+                child = ScrapingUtils.createCleanImgTag(child);
+                if (child != null) {
+                    child.addClass(CSS.FIGURE);
+                    root.append(child.outerHtml());
+                }
+            }
+            else if (tagName.equals("video")) {
+                Element videoTag = filterVideoTag(child);
+                if (videoTag != null) {
+                    videoTag.addClass(CSS.VIDEO);
+                    root.append(videoTag.outerHtml());
+                }
+            }
+            else{
+                // if there is no matching tag, continue looking
+                return FilterResult.CONTINUE;
+            }
+
+            // no need to look further if the tag is valid
+            return FilterResult.SKIP_ENTIRELY;
+        }
+
+        @Override
+        public FilterResult tail(Node node, int i) {
+            return null;
+        }
+
+        private static Element filterVideoTag(Element tag) {
+            URL src;
+            try {
+                src = new URL(tag.attr("src"));
+            } catch (MalformedURLException e) {
+                return null;
+            }
+
+            String protocol = src.getProtocol();
+            String host = src.getHost();
+            String file = src.getFile();
+
+            host = host.replaceFirst(Pattern.quote("d1"), Matcher.quoteReplacement("v"));
+
+            // remove an extra /video from file path
+            file = file.replaceFirst(Pattern.quote("/video"), Matcher.quoteReplacement(""));
+
+            // remove resolution from file path
+            file = file.replaceFirst(Pattern.quote("/,240p,360p,480p,,"), Matcher.quoteReplacement(""));
+            file = file.replaceFirst(Pattern.quote("/,240p,360p,480p,720p,"), Matcher.quoteReplacement(""));
+            file = file.replaceFirst(Pattern.quote("/,240p,360p,,"), Matcher.quoteReplacement(""));
+            file = file.replaceFirst(Pattern.quote("/,240p,,"), Matcher.quoteReplacement(""));
+
+            // change extension to mp4
+            file = file.replaceFirst(Pattern.quote("/vne/master.m3u8"), Matcher.quoteReplacement(".mp4"));
+
+            try {
+                src = new URL(protocol, host, file);
+            } catch (MalformedURLException e) {
+                return null;
+            }
+
+            Element newVideo = new Element("video");
+            newVideo.attr("controls", true);
+
+            Element newVideoSrc = new Element("source");
+            newVideoSrc.attr("src", src.toString());
+
+            newVideo.appendChild(newVideoSrc);
+            return newVideo;
+        }
     }
 }

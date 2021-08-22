@@ -1,7 +1,7 @@
 package business.News;
 
 import business.Helper.CSS;
-import business.Scraper.NewsOutlet;
+import business.Scraper.Scraper;
 import org.jsoup.nodes.Element;
 
 import java.net.URL;
@@ -127,7 +127,7 @@ public class Article implements Comparable<Article> {
     public Article(URL url, String mainCategory) {
         this.url = url;
         this.mainCategory = mainCategory;
-        this.newsSource = NewsOutlet.toName(url);
+        this.newsSource = Scraper.toName(url);
     }
 
     public void addCategory(Set<String> categoryList) {

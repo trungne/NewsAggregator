@@ -4,7 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
-import static business.Helper.Scraper.scrapeLinksByClass;
+import static business.Helper.ScrapingUtils.scrapeLinksByClass;
 
 public class Category {
     public static final String NEW = "New";

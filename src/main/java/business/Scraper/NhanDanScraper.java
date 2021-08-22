@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public final class NhanDan extends NewsOutlet {
+public final class NhanDanScraper extends Scraper {
     private static final Category NEW = new Category(Category.NEW, "https://nhandan.vn/", CSS.NHANDAN_TITLE_LINK);
     private static final Category COVID = new Category(Category.COVID, "https://nhandan.vn/tieu-diem", CSS.NHANDAN_TITLE_LINK);
     private static final Category POLITICS = new Category(Category.POLITICS, "https://nhandan.vn/chinhtri", CSS.NHANDAN_TITLE_LINK);
@@ -94,7 +94,7 @@ public final class NhanDan extends NewsOutlet {
         OTHERS.add("https://nhandan.vn/bandoc");
     }
 
-    public static NewsOutlet init() {
+    public static Scraper init() {
         HashMap<String, Category> categories = new HashMap<>();
         categories.put(Category.NEW, NEW);
         categories.put(Category.COVID, COVID);
@@ -114,7 +114,7 @@ public final class NhanDan extends NewsOutlet {
                 CSS.NHANDAN_BODY,
                 CSS.NHANDAN_TIME,
                 CSS.NHANDAN_PIC);
-        return new NhanDan("Nhan Dan",
+        return new NhanDanScraper("Nhan Dan",
                 "https://www.nhandan-printing.vn/datafiles_D_D/setmulti/nhandan_copy.jpg",
                 categories,
                 NhanDanCssConfig,
@@ -123,11 +123,11 @@ public final class NhanDan extends NewsOutlet {
 
     private final String thumbnailCss;
 
-    public NhanDan(String name,
-                   String defaultThumbnail,
-                   HashMap<String, Category> categories,
-                   CssConfiguration cssConfiguration,
-                   String thumbnailCss) {
+    public NhanDanScraper(String name,
+                          String defaultThumbnail,
+                          HashMap<String, Category> categories,
+                          CssConfiguration cssConfiguration,
+                          String thumbnailCss) {
         super(name, defaultThumbnail, categories, cssConfiguration);
         this.thumbnailCss = thumbnailCss;
     }

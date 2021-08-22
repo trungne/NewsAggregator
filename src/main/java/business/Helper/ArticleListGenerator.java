@@ -2,7 +2,7 @@ package business.Helper;
 
 import business.News.Article;
 import business.Scraper.ElementNotFound;
-import business.Scraper.NewsOutlet;
+import business.Scraper.Scraper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,21 +14,21 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-import static business.Helper.ScrapingConfiguration.MAX_ARTICLES_PER_SOURCE;
-import static business.Helper.ScrapingConfiguration.MAX_WAIT_TIME_WHEN_ACCESS_URL;
+import static business.Helper.ScrapingUtils.MAX_ARTICLES_PER_SOURCE;
+import static business.Helper.ScrapingUtils.MAX_WAIT_TIME_WHEN_ACCESS_URL;
 
 
 public class ArticleListGenerator {
-    private final NewsOutlet newsOutlet;
+    private final Scraper scraper;
     private final String category;
 
-    public ArticleListGenerator(NewsOutlet newsOutlet, String category) {
-        this.newsOutlet = newsOutlet;
+    public ArticleListGenerator(Scraper scraper, String category) {
+        this.scraper = scraper;
         this.category = category;
     }
 
     public void populateArticleList(List<Article> articleList) {
-        Set<URL> articleUrls = newsOutlet.getLinksFromCategory(category);
+        Set<URL> articleUrls = scraper.getLinksFromCategory(category);
         extractArticlesFromLinks(articleUrls, articleList);
     }
 
@@ -65,12 +65,12 @@ public class ArticleListGenerator {
 
     private boolean extractContentFromDocument(Document articleDoc, Article article) {
         try {
-            Element titleTag = newsOutlet.scrapeTitle(articleDoc);
-            Element descriptionTag = newsOutlet.scrapeDescription(articleDoc);
-            Element mainContentTag = newsOutlet.scrapeMainContent(articleDoc);
-            String thumbNail = newsOutlet.scrapeThumbnail(articleDoc);
-            Set<String> categories = newsOutlet.scrapeCategoryNames(articleDoc);
-            LocalDateTime publishedTime = newsOutlet.scrapePublishedTime(articleDoc);
+            Element titleTag = scraper.scrapeTitle(articleDoc);
+            Element descriptionTag = scraper.scrapeDescription(articleDoc);
+            Element mainContentTag = scraper.scrapeMainContent(articleDoc);
+            String thumbNail = scraper.scrapeThumbnail(articleDoc);
+            Set<String> categories = scraper.scrapeCategoryNames(articleDoc);
+            LocalDateTime publishedTime = scraper.scrapePublishedTime(articleDoc);
             article.setContent(titleTag, descriptionTag, mainContentTag,
                     publishedTime, thumbNail, categories);
         }

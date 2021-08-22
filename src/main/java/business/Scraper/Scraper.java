@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class NewsOutlet implements Scrapable, Sanitizable {
+public abstract class Scraper implements Scrapable, Sanitizable {
     public static String toName(URL url) {
         String host = url.getHost();
         switch (host) {
@@ -39,10 +39,10 @@ public abstract class NewsOutlet implements Scrapable, Sanitizable {
     protected final HashMap<String, Category> categories;
     protected final CssConfiguration cssConfiguration;
 
-    public NewsOutlet(String name,
-                      String defaultThumbnail,
-                      HashMap<String, Category> categories,
-                      CssConfiguration cssConfiguration) {
+    public Scraper(String name,
+                   String defaultThumbnail,
+                   HashMap<String, Category> categories,
+                   CssConfiguration cssConfiguration) {
         this.name = name;
         this.defaultThumbnail = defaultThumbnail;
         this.categories = categories;

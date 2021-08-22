@@ -21,24 +21,19 @@ public class CSS {
     public static final String AUTHOR = "author";
     public static final String PUBLISHED_TIME = "published-time";
 
-    /* The following CSS Classes are used to initialize NewsOutletInfo */
-
-    // CSS for VNExpress
+    // CSS for VNExpressScraper
     public static final String VNEXPRESS_TITLE = "title-detail";
     public static final String VNEXPRESS_DESCRIPTION = "description";
     public static final String VNEXPRESS_BODY = "fck_detail";
 
-    // These are css of tags we need to keep in VNExpress article body
+    // These are css of tags we need to keep in VNExpressScraper article body
     public static final String VNEXPRESS_PARAGRAPH = "Normal";
     public static final String VNEXPRESS_AUTHOR = "author_mail";
-
-
-    //
     public static final String VNEXPRESS_TIME = "datePublished";
-    public static final String VNEXPRESS_PIC = "fig-picture";
+    public static final String VNEXPRESS_PIC = "content-pic";
     public static final String VNEXPRESS_TITLE_LINK = "title-news";
 
-    // CSS for ZingNews
+    // CSS for ZingNewsScraper
     public static final String ZING_TITLE_LINK = "article-title";
     public static final String ZING_TITLE = "the-article-title";
     public static final String ZING_DESCRIPTION = "the-article-summary";
@@ -46,7 +41,7 @@ public class CSS {
     public static final String ZING_TIME = "article:published_time";
     public static final String ZING_PIC = "pic";
 
-    // CSS for TuoiTre
+    // CSS for TuoiTreScraper
     public static final String TUOITRE_TITLE_LINK = "title-news";
     public static final String TUOITRE_TITLE = "article-title";
     public static final String TUOITRE_DESCRIPTION = "sapo";
@@ -54,7 +49,7 @@ public class CSS {
     public static final String TUOITRE_TIME = "article:published_time";
     public static final String TUOITRE_PIC = "VCSortableInPreviewMode";
 
-    // CSS for ThanhNien
+    // CSS for ThanhNienScraper
     public static final String THANHNIEN_TITLE_LINK = "story__thumb";
     public static final String THANHNIEN_TITLE = "details__headline";
     public static final String THANHNIEN_DESCRIPTION = "sapo";
@@ -62,7 +57,7 @@ public class CSS {
     public static final String THANHNIEN_TIME = "article:published_time";
     public static final String THANHNIEN_PIC = "pswp-content__image";
 
-    // CSS for NhanDan
+    // CSS for NhanDanScraper
     public static final String NHANDAN_TITLE_LINK = "box-title";
     public static final String NHANDAN_TITLE = "box-title-detail";
     public static final String NHANDAN_DESCRIPTION = "box-des-detail";

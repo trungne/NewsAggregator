@@ -11,10 +11,12 @@ import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
-import static business.Helper.ScrapingConfiguration.MAX_LINKS_SCRAPED_IN_A_PAGE;
-import static business.Helper.ScrapingConfiguration.MAX_WAIT_TIME_WHEN_ACCESS_URL;
-
-public class Scraper {
+public class ScrapingUtils {
+    public final static int MAX_LINKS_SCRAPED_IN_A_PAGE = 15;
+    public final static int MAX_WAIT_TIME_WHEN_ACCESS_URL = 5000; // ms
+    public final static int MAX_TERMINATION_TIME = 15000; // ms
+    public final static int MAX_ARTICLES_PER_SOURCE = 10;
+    public final static int MAX_ARTICLES_DISPLAYED = 50;
 
     public static Set<URL> scrapeLinksByClass(URL baseUrl, String cssClass) {
         Document doc;
@@ -65,6 +67,3 @@ public class Scraper {
         return cleanedFirstImgTag;
     }
 }
-
-
-

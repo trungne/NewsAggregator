@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class ThanhNien extends NewsOutlet {
+public final class ThanhNienScraper extends Scraper {
     private static final Category NEW = new Category(Category.NEW, "https://thanhnien.vn/", CSS.THANHNIEN_TITLE_LINK);
     private static final Category COVID = new Category(Category.COVID, "https://thanhnien.vn/covid-19/", CSS.THANHNIEN_TITLE_LINK);
     private static final Category POLITICS = new Category(Category.POLITICS, "https://thanhnien.vn/thoi-su/chinh-tri/", CSS.THANHNIEN_TITLE_LINK);
@@ -96,7 +96,7 @@ public final class ThanhNien extends NewsOutlet {
     }
 
 
-    public static NewsOutlet init() {
+    public static Scraper init() {
         HashMap<String, Category> categories = new HashMap<>();
         categories.put(Category.NEW, NEW);
         categories.put(Category.COVID, COVID);
@@ -117,16 +117,16 @@ public final class ThanhNien extends NewsOutlet {
                 CSS.THANHNIEN_BODY,
                 CSS.THANHNIEN_TIME,
                 CSS.THANHNIEN_PIC);
-        return new ThanhNien("Thanh Nien",
+        return new ThanhNienScraper("Thanh Nien",
                 "https://static.thanhnien.vn/v2/App_Themes/images/logo-tn-2.png",
                 categories,
                 ThanhNienCssConfig);
     }
 
-    public ThanhNien(String name,
-                     String defaultThumbnail,
-                     HashMap<String, Category> categories,
-                     CssConfiguration cssConfiguration) {
+    public ThanhNienScraper(String name,
+                            String defaultThumbnail,
+                            HashMap<String, Category> categories,
+                            CssConfiguration cssConfiguration) {
         super(name, defaultThumbnail, categories, cssConfiguration);
     }
 

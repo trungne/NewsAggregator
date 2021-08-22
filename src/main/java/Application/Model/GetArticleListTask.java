@@ -1,9 +1,8 @@
 package Application.Model;
 
 import business.Helper.ArticleListGenerator;
-import business.Helper.GetNewsOutlets;
 import business.News.Article;
-import business.Scraper.NewsOutlet;
+import business.Scraper.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -11,19 +10,23 @@ import javafx.concurrent.Task;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static business.Helper.ScrapingConfiguration.MAX_ARTICLES_DISPLAYED;
-import static business.Helper.ScrapingConfiguration.MAX_TERMINATION_TIME;
+import static business.Helper.ScrapingUtils.MAX_ARTICLES_DISPLAYED;
+import static business.Helper.ScrapingUtils.MAX_TERMINATION_TIME;
 
 // an interface for presentation layer to access scraped articles
 public class GetArticleListTask extends Task<List<Article>> {
     // get all news outlet css info
-    private static final HashMap<String, NewsOutlet> newsOutlets = GetNewsOutlets.newsOutlets;
+    private static final Scraper[] newsOutlets = new Scraper[]{
+            VNExpressScraper.init(),
+            ZingNewsScraper.init(),
+            ThanhNienScraper.init(),
+            TuoiTreScraper.init(),
+            NhanDanScraper.init()};
 
     private final String category;
 
@@ -48,9 +51,9 @@ public class GetArticleListTask extends Task<List<Article>> {
 
     private void updateArticleList(List<Article> articles) {
         ExecutorService es = Executors.newCachedThreadPool();
-        for (NewsOutlet newsOutlet : newsOutlets.values()) {
-            es.execute(()->{
-                ArticleListGenerator generator = new ArticleListGenerator(newsOutlet, category);
+        for (Scraper scraper : newsOutlets) {
+            es.execute(()-> {
+                ArticleListGenerator generator = new ArticleListGenerator(scraper, category);
                 generator.populateArticleList(articles);
             });
         }
