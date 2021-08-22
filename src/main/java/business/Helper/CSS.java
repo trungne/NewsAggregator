@@ -28,9 +28,8 @@ public class CSS {
 
     // These are css of tags we need to keep in VNExpressScraper article body
     public static final String VNEXPRESS_PARAGRAPH = "Normal";
-    public static final String VNEXPRESS_AUTHOR = "author_mail";
     public static final String VNEXPRESS_TIME = "datePublished";
-    public static final String VNEXPRESS_PIC = "content-pic";
+    public static final String VNEXPRESS_PIC = "fig-picture";
     public static final String VNEXPRESS_TITLE_LINK = "title-news";
 
     // CSS for ZingNewsScraper

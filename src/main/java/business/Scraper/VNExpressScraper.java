@@ -160,10 +160,8 @@ public final class VNExpressScraper extends Scraper {
 
     @Override
     public Element sanitizeDescription(Element e){
-        String cleanHtml;
-        cleanHtml = Jsoup.clean(e.html(), Safelist.basic());
-        Element newHtmlElement;
-        newHtmlElement = new Element("p").html(cleanHtml);
+        // clean the tag with basic safelist
+        Element newHtmlElement = new Element("p").html(Jsoup.clean(e.html(), Safelist.basic()));
 
         // deal with span tag (for location)
         Elements spanTags = newHtmlElement.getElementsByTag("span");
@@ -229,8 +227,7 @@ public final class VNExpressScraper extends Scraper {
 
                 // clean and add custom css class to the figure tag
                 child.clearAttributes();
-                child.html(Jsoup.clean
-                                (child.html(), safelist))
+                child.html(Jsoup.clean(child.html(), safelist))
                         .addClass(CSS.FIGURE);
                 root.append(child.outerHtml());
             }

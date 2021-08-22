@@ -16,7 +16,14 @@ public interface Scrapable {
         if (!query.startsWith(".")) {
             query = "." + query;
         }
-        return doc.selectFirst(query);
+        Element temp = doc.selectFirst(query);
+        if (temp != null){
+            return new Element("div").html(temp.outerHtml());
+        }
+        else{
+            return null;
+        }
+
     }
 
     default String scrapeFirstImgUrl(Document doc, String cls){

@@ -26,7 +26,8 @@ public class GetArticleListTask extends Task<List<Article>> {
             ZingNewsScraper.init(),
             ThanhNienScraper.init(),
             TuoiTreScraper.init(),
-            NhanDanScraper.init()};
+            NhanDanScraper.init(),
+    };
 
     private final String category;
 
@@ -79,7 +80,6 @@ public class GetArticleListTask extends Task<List<Article>> {
             // Preserve interrupt status
             Thread.currentThread().interrupt();
         }
-
     }
 }
 

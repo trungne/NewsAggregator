@@ -131,12 +131,11 @@ public final class ZingNewsScraper extends Scraper {
         Element content = scrapeFirstElementByClass(doc, cssConfiguration.mainContent);
 
         // append author to the end of mainContent tag;
-        Element author = scrapeFirstElementByClass(doc, "the-article-author");
+        Element author = scrapeFirstElementByClass(doc, "the-article-credit");
         if (author != null){
             Element p = new Element("p");
-            p.text(author.text());
+            p.append("<strong>"+ author.text() +"</strong>");
             content.appendChild(p);
-            System.out.println("author appended");
         }
 
         if (content == null) {
@@ -214,6 +213,7 @@ public final class ZingNewsScraper extends Scraper {
 
                 // change caption to figcaption to follow the convention
                 for (Element e: child.getElementsByClass("caption")){
+                    e.clearAttributes();
                     e.tagName("figcaption");
                     // remove p tag but keep the text node
                     for (Element p: e.getElementsByTag("p")){
@@ -227,10 +227,8 @@ public final class ZingNewsScraper extends Scraper {
 
                 // create a figure tag to put img and figcaption in
                 Element figure = new Element("figure")
-                        .html(Jsoup.clean
-                                (child.outerHtml(), safelist))
+                        .html(Jsoup.clean(child.html(), safelist))
                         .addClass(CSS.FIGURE);
-
                 root.append(figure.outerHtml());
             }
             else if (child.hasClass("video")) {
