@@ -1,6 +1,8 @@
 package business.Scraper;
 
 import business.Helper.CSS;
+import business.Helper.ScrapingUtils;
+import business.Sanitizer.MainContentFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -158,93 +160,99 @@ public final class ZingNewsScraper extends Scraper {
         return new ZingNewsFilter(root);
     }
 
-    static class ZingNewsFilter implements NodeFilter {
-        Element root;
+    static class ZingNewsFilter extends MainContentFilter {
         public ZingNewsFilter(Element root) {
-            this.root = root;
+            super(root);
         }
 
         @Override
-        public FilterResult head(Node node, int i) {
-            // only consider Element and skip all TextNode
-            if (!(node instanceof Element)) {
-                return FilterResult.SKIP_ENTIRELY;
-            }
+        protected boolean isFigure(Element node) {
+            return node.hasClass("picture");
+        }
 
-            Element child = (Element) node;
-            String tagName = child.tagName();
+        @Override
+        protected boolean isVideo(Element node) {
+            return node.hasClass("video");
+        }
 
-            if (child.hasClass("inner-article")){
-                return FilterResult.SKIP_ENTIRELY;
-            }
+        @Override
+        protected boolean isQuote(Element node) {
+            return node.hasClass("notebook")
+                    || node.tagName().equals("blockquote");
+        }
 
-            if (tagName.equals("p")) {
-                child.clearAttributes();
-                Safelist safelist = Safelist.basic();
-                // clean html in the tag and add custom css class for paragraph
-                child.html(Jsoup.clean(child.html(), safelist)).addClass(CSS.PARAGRAPH);
-                root.append(child.outerHtml());
-            }
-            else if (tagName.equals("blockquote")) {
-                // get quote
-                Safelist safelist = Safelist.basic();
-                child.html(Jsoup.clean(child.outerHtml(), safelist))
-                        .addClass(CSS.PARAGRAPH);
+        @Override
+        protected boolean isStandaloneImage(Element node) {
+            return node.tagName().equals("img");
+        }
 
-                for (Element p : child.getElementsByTag("p")) {
-                    p.addClass(CSS.PARAGRAPH);
-                }
-                root.append(child.outerHtml());
-            }
-            else if (child.hasClass("picture")) {
-                // assign data-src attr to src for img tag
-                for(Element img: child.getElementsByTag("img")){
-                    String src = img.attr("data-src");
-                    if (!StringUtils.isEmpty(src)){
-                        img.attr("src", src);
-                    }
-                }
-
-                // change caption to figcaption to follow the convention
-                for (Element e: child.getElementsByClass("caption")){
-                    e.clearAttributes();
-                    e.tagName("figcaption");
-                    // remove p tag but keep the text node
-                    for (Element p: e.getElementsByTag("p")){
-                        p.unwrap();
-                    }
-                }
-
-                // clean the tag so that only img and figcaption tag remain
-                Safelist safelist = Safelist.basicWithImages();
-                safelist.addTags("figcaption");
-
-                // create a figure tag to put img and figcaption in
-                Element figure = new Element("figure")
-                        .html(Jsoup.clean(child.html(), safelist))
-                        .addClass(CSS.FIGURE);
-                root.append(figure.outerHtml());
-            }
-            else if (child.hasClass("video")) {
-                Element videoTag = getVideoTag(child);
-                if (videoTag != null){
-                    videoTag.addClass(CSS.VIDEO);
-                    root.append(videoTag.outerHtml());
-
-                    // get caption of video
-                    Element caption = new Element("figcaption");
-                    for (Element figCaptionTag: child.getElementsByTag("figcaption")){
-                        String clean = Jsoup.clean(figCaptionTag.html(), Safelist.none());
-                        caption.append(clean);
-                    }
-                    root.append(caption.outerHtml());
+        @Override
+        protected Element getFilteredFigure(Element node) {
+            // assign data-src attr to src for img tag
+            for(Element img: node.getElementsByTag("img")){
+                String src = img.attr("data-src");
+                if (!StringUtils.isEmpty(src)){
+                    img.attr("src", src);
                 }
             }
-            else {
-                return FilterResult.CONTINUE;
+
+            // change caption to figcaption to follow the convention
+            for (Element e: node.getElementsByClass("caption")){
+                e.clearAttributes();
+                e.tagName("figcaption");
+                // remove p tag but keep the text node
+                for (Element p: e.getElementsByTag("p")){
+                    p.unwrap();
+                }
             }
 
-            return FilterResult.SKIP_ENTIRELY;
+            // clean the tag so that only img and figcaption tag remain
+            Safelist safelist = Safelist.basicWithImages();
+            safelist.addTags("figcaption");
+
+            // create a figure tag to put img and figcaption in
+            return new Element("figure")
+                    .html(Jsoup.clean(node.html(), safelist));
+        }
+
+        @Override
+        protected Element getFilteredVideo(Element node) {
+            Element videoTag = getVideoTag(node);
+            if (videoTag != null){
+                // get caption of video
+                Element caption = new Element("figcaption");
+                for (Element figCaptionTag: node.getElementsByTag("figcaption")){
+                    String clean = Jsoup.clean(figCaptionTag.html(), Safelist.none());
+                    caption.appendText(clean);
+                }
+
+                videoTag.append(caption.outerHtml());
+                return videoTag;
+            }
+
+            return null;
+
+        }
+
+        @Override
+        protected Element getFilteredQuote(Element node) {
+            Element quote = new Element("blockquote");
+            for (Element p: node.getElementsByTag("p")){
+                quote.appendChild(p.clearAttributes());
+            }
+            return quote;
+        }
+
+        @Override
+        protected Element getFilteredStandaloneImage(Element node) {
+            return ScrapingUtils.createCleanImgTag(node);
+        }
+
+        @Override
+        protected boolean skip(Element node) {
+            return node.hasClass("inner-article")
+                    || node.hasClass("covid-chart-widget")
+                    || node.hasClass("z-widget-corona");
         }
 
         private static Element getVideoTag(Element tag) {
