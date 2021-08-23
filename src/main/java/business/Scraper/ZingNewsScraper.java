@@ -182,6 +182,11 @@ public final class ZingNewsScraper extends Scraper {
         }
 
         @Override
+        protected boolean isAuthor(Element node) {
+            return false;
+        }
+
+        @Override
         protected Element getFilteredFigure(Element node) {
             // assign data-src attr to src for img tag
             for(Element img: node.getElementsByTag("img")){
@@ -236,6 +241,11 @@ public final class ZingNewsScraper extends Scraper {
                 quote.appendChild(p.clearAttributes());
             }
             return quote;
+        }
+
+        @Override
+        protected Element getFilteredAuthor(Element node) {
+            return null;
         }
 
         @Override

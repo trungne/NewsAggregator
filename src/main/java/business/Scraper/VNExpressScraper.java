@@ -202,6 +202,11 @@ public final class VNExpressScraper extends Scraper {
         }
 
         @Override
+        protected boolean isAuthor(Element node) {
+            return false;
+        }
+
+        @Override
         protected Element getFilteredFigure(Element node) {
             node.clearAttributes();
             // get img and caption in figure tag
@@ -276,6 +281,11 @@ public final class VNExpressScraper extends Scraper {
 
         @Override
         protected Element getFilteredQuote(Element node) {
+            return null;
+        }
+
+        @Override
+        protected Element getFilteredAuthor(Element node) {
             return null;
         }
 

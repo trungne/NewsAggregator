@@ -1,6 +1,7 @@
 package business.Scraper;
 
 import business.Helper.CSS;
+import business.Sanitizer.MainContentFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -161,138 +162,118 @@ public final class TuoiTreScraper extends Scraper {
         return new TuoiTreFilter(root);
     }
 
-    static class TuoiTreFilter implements NodeFilter {
-        Element root;
+    static class TuoiTreFilter extends MainContentFilter {
 
         public TuoiTreFilter(Element root) {
-            this.root = root;
+            super(root);
         }
 
         @Override
-        public FilterResult head(Node node, int i) {
-            if (!(node instanceof Element)) {
-                return FilterResult.SKIP_ENTIRELY;
-            }
+        protected boolean isFigure(Element node) {
+            return node.hasClass("VCSortableInPreviewMode")
+                    && node.attr("type").equals("Photo");
+        }
 
-            Element child = (Element) node;
-            String tagName = child.tagName();
+        @Override
+        protected boolean isVideo(Element node) {
+            return node.hasClass("VCSortableInPreviewMode")
+                    && node.attr("type").equals("VideoStream");
+        }
 
-            // skip relevant news tag
-            if (child.attr("type").equals("RelatedOneNews")){
-                return FilterResult.SKIP_ENTIRELY;
-            }
-
-            if (tagName.equals("p")) {
-                child.clearAttributes();
-                Safelist safelist = Safelist.basic();
-                // clean html in the tag and add custom css class for paragraph
-                child.html(Jsoup.clean(child.html(), safelist)).addClass(CSS.PARAGRAPH);
-                root.append(child.outerHtml());
-            }
-            // simple quote
-            else if (child.hasClass("VCSortableInPreviewMode")
-                    && child.attr("type").equals("SimpleQuote")){
-                child.clearAttributes();
-                Safelist safelist = Safelist.basic();
-                child.html(Jsoup.clean(child.html(), safelist)).addClass(CSS.QUOTE);
-
-                // add css class to the paragraphs in quote
-                for (Element p: child.getElementsByTag("p")) {
-                    // style paragraph containing author's name
-                    if (p.hasClass("StarNameCaption")){
-                        p.clearAttributes();
-                        p.tagName("span");
-                        p.attr("style", "text-align:right;");
-                    }
-                    else{
-                        p.clearAttributes();
-                        p.addClass(CSS.PARAGRAPH);
-                    }
-                }
-                root.append(child.outerHtml());
-            }
-            // wrapnote
-            else if (child.hasClass("VCSortableInPreviewMode")
-                    && child.attr("type").equals("wrapnote")){
-                child.clearAttributes();
-
-                Safelist safelist = Safelist.basic();
-                safelist.removeTags("a");
-
-                child.html(Jsoup.clean(child.html(), safelist)).addClass(CSS.QUOTE);
-                root.append(child.outerHtml());
-            }
-            // img
-            else if (child.hasClass("VCSortableInPreviewMode")
-                    && child.attr("type").equals("Photo")){
-                Element figure = new Element("figure");
-
-                // pull out img tag
-                for (Element imgTag: child.getElementsByTag("img")){
-                    String src = imgTag.attr("src");
-                    String alt = imgTag.attr("alt");
-                    Element img = new Element("img")
-                            .attr("src", src)
-                            .attr("alt", alt);
-                    figure.append(img.outerHtml());
-                }
-
-                // pull out caption
-                for (Element caption: child.getElementsByTag("p")){
-                    Element figcaption = new Element("figcaption")
-                            .text(caption.text());
-                    figure.append(figcaption.outerHtml());
-                }
-
-                root.append(figure.outerHtml());
-            }
-            else if (child.hasClass("VCSortableInPreviewMode")
-                    && child.attr("type").equals("VideoStream")) {
-                String rawUrl = child.attr("data-src");
-
-                // extract the link by regex
-                String regrex = "vid=(.*)mp4";
-                Pattern pattern = Pattern.compile(regrex);
-                Matcher matcher = pattern.matcher(rawUrl);
-                if (matcher.find()) {
-                    String src = "https://hls.tuoitre.vn/" + matcher.group(1) + "mp4";
-                    Element video = new Element("video");
-                    Element source = new Element("source");
-                    source.attr("src", src);
-
-                    video.appendChild(source)
-                            .attr("controls", true)
-                            .addClass(CSS.VIDEO);
-
-                    root.append(video.outerHtml());
-                }
+        @Override
+        protected boolean isQuote(Element node) {
+            if (node.hasClass("VCSortableInPreviewMode")){
+                String type = node.attr("type");
+                return type.equals("wrapnote")
+                        || type.equals("SimpleQuote");
             }
             else {
-                return FilterResult.CONTINUE;
+                return false;
             }
-
-            return FilterResult.SKIP_ENTIRELY;
-
         }
 
         @Override
-        public FilterResult tail(Node node, int i) {
+        protected boolean isAuthor(Element node) {
+            return false;
+        }
+
+        @Override
+        protected Element getFilteredFigure(Element node) {
+            Element figure = new Element("figure");
+
+            // pull out img tag
+            for (Element imgTag: node.getElementsByTag("img")){
+                String src = imgTag.attr("src");
+
+                if (StringUtils.isEmpty(src)){
+                    continue;
+                }
+
+                String alt = imgTag.attr("alt");
+                Element img = new Element("img")
+                        .attr("src", src)
+                        .attr("alt", alt);
+                figure.append(img.outerHtml());
+            }
+
+            // pull out caption
+            for (Element caption: node.getElementsByTag("p")){
+                Element figcaption = new Element("figcaption")
+                        .text(caption.text());
+                figure.append(figcaption.outerHtml());
+            }
+            return figure;
+        }
+
+        @Override
+        protected Element getFilteredVideo(Element node) {
+            String rawUrl = node.attr("data-src");
+
+            // extract the link from rawUrl by regex
+            String regrex = "vid=(.*)mp4";
+            Pattern pattern = Pattern.compile(regrex);
+            Matcher matcher = pattern.matcher(rawUrl);
+            if (matcher.find()) {
+                String src = "https://hls.tuoitre.vn/" + matcher.group(1) + "mp4";
+                Element source = new Element("source")
+                        .attr("src", src)
+                        .attr("controls", true);
+
+                return new Element("video").appendChild(source);
+            }
+            else{
+                return null;
+            }
+        }
+
+        @Override
+        protected Element getFilteredQuote(Element node) {
+            node.clearAttributes();
+            Safelist safelist = Safelist.basic();
+            safelist.removeTags("a"); // no need to keep link in quote
+
+            node.html(Jsoup.clean(node.html(), safelist));
+            // add css class to the paragraphs in quote
+            for (Element p: node.getElementsByTag("p")) {
+                p.clearAttributes();
+                // style paragraph containing author's name
+                if (p.hasClass("StarNameCaption")){
+                    p.tagName("span");
+                    p.attr("style", "text-align:right;");
+                }
+            }
+            return node;
+        }
+
+        @Override
+        protected Element getFilteredAuthor(Element node) {
             return null;
         }
-        // impossible to display the source
-        private static Element filterVideoTag(Element tag) {
-            String src = "=== I can not display the source because of this: &&&& ===";
 
-            Element videoCaption = new Element("p").html(tag.getElementsByTag("p").html());
-            String videoSource = "<source src='" + src + "'>";
-
-            Element videoTag = new Element("video").html(videoSource);
-
-            Element newWrapTag = new Element("div");
-            newWrapTag.appendChild(videoTag);
-            newWrapTag.appendChild(videoCaption);
-            return newWrapTag;
-
+        @Override
+        protected boolean skip(Element node) {
+            return (node.attr("type").equals("RelatedOneNews"));
         }
+
     }
 }

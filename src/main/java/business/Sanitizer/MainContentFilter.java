@@ -28,6 +28,7 @@ public abstract class MainContentFilter implements NodeFilter {
     protected abstract boolean isFigure(Element node); // contain both img and caption
     protected abstract boolean isVideo(Element node);
     protected abstract boolean isQuote(Element node);
+    protected abstract boolean isAuthor(Element node);
     protected boolean isStandaloneImage(Element node){
         return node.tagName().equals("img");
     }
@@ -55,6 +56,7 @@ public abstract class MainContentFilter implements NodeFilter {
     protected Element getFilteredStandaloneImage(Element node){
         return ScrapingUtils.createCleanImgTag(node);
     }
+    protected abstract Element getFilteredAuthor(Element node);
 
     /** Provide conditions where a node should be skipped */
     protected abstract boolean skip(Element node);
@@ -91,6 +93,9 @@ public abstract class MainContentFilter implements NodeFilter {
         }
         else if (isStandaloneImage(e)){
             e = getFilteredStandaloneImage(e).addClass(CSS.FIGURE);
+        }
+        else if (isAuthor(e)){
+            e = getFilteredAuthor(e).addClass(CSS.AUTHOR);
         }
         else{
             return FilterResult.CONTINUE;
