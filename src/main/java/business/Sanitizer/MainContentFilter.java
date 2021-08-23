@@ -1,6 +1,7 @@
 package business.Sanitizer;
 
 import business.Helper.CSS;
+import business.Helper.ScrapingUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -27,7 +28,9 @@ public abstract class MainContentFilter implements NodeFilter {
     protected abstract boolean isFigure(Element node); // contain both img and caption
     protected abstract boolean isVideo(Element node);
     protected abstract boolean isQuote(Element node);
-    protected abstract boolean isStandaloneImage(Element node);
+    protected boolean isStandaloneImage(Element node){
+        return node.tagName().equals("img");
+    }
 
     /** By default, a paragraph is filtered by
      * 1. clear all its attributes
@@ -49,7 +52,9 @@ public abstract class MainContentFilter implements NodeFilter {
     protected abstract Element getFilteredFigure(Element node);
     protected abstract Element getFilteredVideo(Element node);
     protected abstract Element getFilteredQuote(Element node);
-    protected abstract Element getFilteredStandaloneImage(Element node);
+    protected Element getFilteredStandaloneImage(Element node){
+        return ScrapingUtils.createCleanImgTag(node);
+    }
 
     /** Provide conditions where a node should be skipped */
     protected abstract boolean skip(Element node);
@@ -85,7 +90,7 @@ public abstract class MainContentFilter implements NodeFilter {
             e = getFilteredQuote(e).addClass(CSS.QUOTE);
         }
         else if (isStandaloneImage(e)){
-            e = getFilteredStandaloneImage(e);
+            e = getFilteredStandaloneImage(e).addClass(CSS.FIGURE);
         }
         else{
             return FilterResult.CONTINUE;

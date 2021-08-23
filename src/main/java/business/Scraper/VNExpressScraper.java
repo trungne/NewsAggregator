@@ -202,11 +202,6 @@ public final class VNExpressScraper extends Scraper {
         }
 
         @Override
-        protected boolean isStandaloneImage(Element node) {
-            return node.tagName().equals("img");
-        }
-
-        @Override
         protected Element getFilteredFigure(Element node) {
             node.clearAttributes();
             // get img and caption in figure tag
@@ -285,19 +280,9 @@ public final class VNExpressScraper extends Scraper {
         }
 
         @Override
-        protected Element getFilteredStandaloneImage(Element node) {
-            return ScrapingUtils.createCleanImgTag(node);
-        }
-
-        @Override
         protected boolean skip(Element node) {
-
-            if (node.attr("style").contains("display: none")){
-                return true;
-            }
-            // skip thumbnail video
-            else return node.hasClass("box_img_video");
-
+            return node.hasClass("box_img_video")
+                    || (node.attr("style").contains("display: none"));
         }
     }
 }

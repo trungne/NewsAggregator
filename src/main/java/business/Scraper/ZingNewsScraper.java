@@ -182,11 +182,6 @@ public final class ZingNewsScraper extends Scraper {
         }
 
         @Override
-        protected boolean isStandaloneImage(Element node) {
-            return node.tagName().equals("img");
-        }
-
-        @Override
         protected Element getFilteredFigure(Element node) {
             // assign data-src attr to src for img tag
             for(Element img: node.getElementsByTag("img")){
@@ -241,11 +236,6 @@ public final class ZingNewsScraper extends Scraper {
                 quote.appendChild(p.clearAttributes());
             }
             return quote;
-        }
-
-        @Override
-        protected Element getFilteredStandaloneImage(Element node) {
-            return ScrapingUtils.createCleanImgTag(node);
         }
 
         @Override
