@@ -2,6 +2,7 @@ package business.Scraper;
 
 import business.Helper.CSS;
 import business.Helper.ScrapingUtils;
+import business.Sanitizer.MainContentFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -179,91 +180,67 @@ public final class VNExpressScraper extends Scraper {
     public NodeFilter getNodeFilter(Element root) {
         return new VNExpressFilter(root);
     }
-    static class VNExpressFilter implements NodeFilter {
-        Element root;
 
+    static class VNExpressFilter extends MainContentFilter {
         public VNExpressFilter(Element root) {
-            this.root = root;
+            super(root);
         }
 
         @Override
-        public FilterResult head(Node node, int i) {
-            // only consider Element and skip all TextNode
-            if (!(node instanceof Element)) {
-                return FilterResult.SKIP_ENTIRELY;
-            }
-            // skip these tags immediately
-            else if (node.attr("style").contains("display: none")){
-                return FilterResult.SKIP_ENTIRELY;
-            }
+        protected boolean isFigure(Element node) {
+            return node.tagName().equals("figure") && node.attr("itemprop").contains("image");
+        }
 
-            Element child = (Element) node;
-            String tagName = child.tagName();
+        @Override
+        protected boolean isVideo(Element node) {
+            return node.tagName().equals("video");
+        }
 
-            if (tagName.matches("h\\d")){
-                root.append(child.outerHtml());
+        @Override
+        protected boolean isQuote(Element node) {
+            return false;
+        }
+
+        @Override
+        protected boolean isStandaloneImage(Element node) {
+            return node.tagName().equals("img");
+        }
+
+        @Override
+        protected Element getFilteredFigure(Element node) {
+            node.clearAttributes();
+            // get img and caption in figure tag
+            // assign data-src attr to src (VNExpress stores their img url in data-src for god knows why)
+            // clean the figure tag by safelist
+            for(Element img: node.getElementsByTag("img")){
+                String src = img.attr("data-src");
+                if (!StringUtils.isEmpty(src)){
+                    img.attr("src", src);
+                }
             }
-            else if (tagName.equals("p")) {
-                child.clearAttributes();
-                Safelist safelist = Safelist.basic();
-                // clean html in the tag and add custom css class for paragraph
-                child.html(Jsoup.clean(child.html(), safelist)).addClass(CSS.PARAGRAPH);
-                root.append(child.outerHtml());
-            }
-            else if (tagName.equals("figure")) {
-                child.clearAttributes();
-                // get img and caption in figure tag
-                // assign data-src attr to src (VNExpress stores their img url in data-src for god knows why)
-                // clean the figure tag by safelist
-                for(Element img: child.getElementsByTag("img")){
-                    String src = img.attr("data-src");
-                    if (!StringUtils.isEmpty(src)){
-                        img.attr("src", src);
+            // unwrap all p tag in figcaption to avoid awkward newline between img and caption
+            for (Element caption: node.getElementsByTag("figcaption")){
+                for (Element p: caption.children()){
+                    if (p.tagName().equals("p")){
+                        p.unwrap();
                     }
                 }
-                // clean the figure tag
-                Safelist safelist = Safelist.basicWithImages();
-                safelist.addTags("figcaption", "figure");
+            }
+            // clean the figure tag
+            Safelist safelist = Safelist.basicWithImages();
+            safelist.addTags("figcaption", "figure");
 
-                // clean and add custom css class to the figure tag
-                child.clearAttributes();
-                child.html(Jsoup.clean(child.html(), safelist))
-                        .addClass(CSS.FIGURE);
-                root.append(child.outerHtml());
-            }
-            else if (tagName.equals("img")) {
-                // get standalone img tag
-                child = ScrapingUtils.createCleanImgTag(child);
-                if (child != null) {
-                    child.addClass(CSS.FIGURE);
-                    root.append(child.outerHtml());
-                }
-            }
-            else if (tagName.equals("video")) {
-                Element videoTag = filterVideoTag(child);
-                if (videoTag != null) {
-                    videoTag.addClass(CSS.VIDEO);
-                    root.append(videoTag.outerHtml());
-                }
-            }
-            else{
-                // if there is no matching tag, continue looking
-                return FilterResult.CONTINUE;
-            }
-
-            // no need to look further if the tag is valid
-            return FilterResult.SKIP_ENTIRELY;
+            // clean and add custom css class to the figure tag
+            node.clearAttributes();
+            node.html(Jsoup.clean(node.html(), safelist));
+            return node;
         }
 
         @Override
-        public FilterResult tail(Node node, int i) {
-            return null;
-        }
-
-        private static Element filterVideoTag(Element tag) {
+        protected Element getFilteredVideo(Element node) {
             URL src;
             try {
-                src = new URL(tag.attr("src"));
+                src = new URL(node.attr("src"));
             } catch (MalformedURLException e) {
                 return null;
             }
@@ -294,12 +271,33 @@ public final class VNExpressScraper extends Scraper {
 
             Element newVideo = new Element("video");
             newVideo.attr("controls", true);
-
+            newVideo.attributes();
             Element newVideoSrc = new Element("source");
             newVideoSrc.attr("src", src.toString());
 
             newVideo.appendChild(newVideoSrc);
             return newVideo;
+        }
+
+        @Override
+        protected Element getFilteredQuote(Element node) {
+            return null;
+        }
+
+        @Override
+        protected Element getFilteredStandaloneImage(Element node) {
+            return ScrapingUtils.createCleanImgTag(node);
+        }
+
+        @Override
+        protected boolean skip(Element node) {
+
+            if (node.attr("style").contains("display: none")){
+                return true;
+            }
+            // skip thumbnail video
+            else return node.hasClass("box_img_video");
+
         }
     }
 }
