@@ -108,7 +108,7 @@ public class Controller {
         enableAllChildButtons(categoryBox);
         enableAllChildButtons(pageBox);
 
-        // select page 1 after scraping finishes
+        // By default, page 1 is selected after scraping finishes
         updatePreviewsPane(1);
     }
 
@@ -149,7 +149,9 @@ public class Controller {
         System.out.println(content.getHtml());
         browser.getEngine().loadContent(content.getHtml());
         articleStage.setTitle(content.getTitle());
+
         articleStage.show();
+        articleStage.requestFocus();
     }
 
     // set currentCategoryButton and change highlighting to the new current category button
