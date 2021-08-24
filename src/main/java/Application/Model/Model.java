@@ -26,13 +26,12 @@ public class Model {
         this.controller.updatePreviewsPane();
     }
 
-    public List<IndexedArticle> getArticleSublist(String category, int startIndex, int endIndex){
-        List<IndexedArticle> subList = new ArrayList<>();
+    public List<Article> getArticleSublist(String category, int startIndex, int endIndex){
+        List<Article> subList = new ArrayList<>();
         List<Article> articleList = articlesByCategories.get(category);
         for (int i = startIndex; i < endIndex; i++){
             try {
-                IndexedArticle indexedArticle = new IndexedArticle(articleList.get(i), i);
-                subList.add(indexedArticle);
+                subList.add(articleList.get(i));
             } catch (IndexOutOfBoundsException e){
                 break;
             }
@@ -40,8 +39,8 @@ public class Model {
         return subList;
     }
 
-    public String getArticleContent(String category, int index){
-        return articlesByCategories.get(category).get(index).getHtml();
+    public Article getArticleContent(String category, int index){
+        return articlesByCategories.get(category).get(index);
     }
 
     public void loadArticles(String category){

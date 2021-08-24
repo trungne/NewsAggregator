@@ -33,8 +33,7 @@ public class PreviewGrid extends GridPane {
                                  String title,
                                  String description,
                                  String publishedTime,
-                                 String source,
-                                 int index) {
+                                 String source) {
         Image image = new Image(thumbnail,
                 160,
                 90,
@@ -46,7 +45,6 @@ public class PreviewGrid extends GridPane {
         this.descriptionText.setText(description);
         this.publishedTimeText.setText(publishedTime);
         this.newsSourceText.setText(source);
-        this.setUserData(index);
     }
 
     public void underline(){
