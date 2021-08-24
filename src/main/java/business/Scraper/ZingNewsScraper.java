@@ -129,10 +129,6 @@ public final class ZingNewsScraper extends Scraper {
         return scrapePublishedTimeFromMeta(doc, "property", cssConfiguration.publishedTime, "content");
     }
 
-    @Override
-    public Element scrapeDescription(Document doc) throws ElementNotFound {
-        return super.scrapeDescription(doc);
-    }
 
     public Element scrapeMainContent(Document doc) throws ElementNotFound {
         Element authorTag = scrapeAuthor(doc, "the-article-credit");

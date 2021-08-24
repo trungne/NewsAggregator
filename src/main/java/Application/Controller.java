@@ -46,6 +46,7 @@ public class Controller {
     }
 
     public void initialize(){
+        // dymanically create gridpane inside scrollpane
         for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
             PreviewGrid grid = new PreviewGrid();
             grid.setOnMouseEntered(e -> grid.underline());
@@ -61,6 +62,9 @@ public class Controller {
                         + previewBox.getChildren().indexOf(node);
                 openArticleInNewStage(index);
             });
+            // TODO: bind gridPane to parent - https://stackoverflow.com/questions/14753793/javafx-get-gridpane-to-fit-parent
+
+
             this.previewGrids.add(grid);
             this.previewBox.getChildren().add(grid);
         }

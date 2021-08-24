@@ -44,7 +44,9 @@ public class GetArticleListTask extends Task<List<Article>> {
 
         // update progress bar
         articles.addListener((ListChangeListener<Article>)
-                change -> updateProgress(change.getList().size(), MAX_ARTICLES_DISPLAYED));
+                change -> updateProgress(
+                        change.getList().size(), // current 1
+                        MAX_ARTICLES_DISPLAYED)); // max 50
 
         updateArticleList(articles);
         return articles;
