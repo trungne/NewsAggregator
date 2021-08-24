@@ -116,10 +116,14 @@ public class Article implements Comparable<Article> {
         Element article = new Element("article");
         article.appendChild(header);
         article.appendChild(content);
+        article.appendChild(getSourceTag());
 
         return article;
     }
+    public Element getSourceTag(){
+        return new Element("p").text("Source: " + url);
 
+    }
     public String getHtml() {
         return html;
     }
