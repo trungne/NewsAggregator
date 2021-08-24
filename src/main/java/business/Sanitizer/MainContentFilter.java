@@ -11,7 +11,7 @@ import org.jsoup.select.NodeFilter;
 public abstract class MainContentFilter implements NodeFilter {
     protected Element root;
 
-    public MainContentFilter(Element root){
+    protected MainContentFilter(Element root){
         this.root = root;
     }
 
@@ -73,43 +73,40 @@ public abstract class MainContentFilter implements NodeFilter {
         }
 
         Element e = (Element) node;
-        if (skip(e)){
-            return FilterResult.SKIP_ENTIRELY;
-        }
-        if (isHeader(e)) {
-            e = getFilteredHeader(e);
-        }
-        else if(isParagraph(e)){
-            e = getFilteredParagraph(e).addClass(CSS.PARAGRAPH);
-        }
-        else if (isFigure(e)){
-            e = getFilteredFigure(e).addClass(CSS.FIGURE);
-        }
-        else if (isVideo(e)){
-            e = getFilteredVideo(e).addClass(CSS.VIDEO);
-        }
-        else if (isQuote(e)){
-            e = getFilteredQuote(e).addClass(CSS.QUOTE);
-        }
-        else if (isStandaloneImage(e)){
-            e = getFilteredStandaloneImage(e).addClass(CSS.FIGURE);
-        }
-        else if (isAuthor(e)){
-            e = getFilteredAuthor(e).addClass(CSS.AUTHOR);
-        }
-        else{
-            return FilterResult.CONTINUE;
-        }
+        try {
+            if (skip(e)){
+                return FilterResult.SKIP_ENTIRELY;
+            }
+            if (isHeader(e)) {
+                e = getFilteredHeader(e);
+            }
+            else if(isParagraph(e)){
+                e = getFilteredParagraph(e).addClass(CSS.PARAGRAPH);
+            }
+            else if (isFigure(e)){
+                e = getFilteredFigure(e).addClass(CSS.FIGURE);
+            }
+            else if (isVideo(e)){
+                e = getFilteredVideo(e).addClass(CSS.VIDEO);
+            }
+            else if (isQuote(e)){
+                e = getFilteredQuote(e).addClass(CSS.QUOTE);
+            }
+            else if (isStandaloneImage(e)){
+                e = getFilteredStandaloneImage(e).addClass(CSS.FIGURE);
+            }
+            else if (isAuthor(e)){
+                e = getFilteredAuthor(e).addClass(CSS.AUTHOR);
+            }
+            else{
+                return FilterResult.CONTINUE;
+            }
 
-        if (e != null){
             root.append(e.outerHtml());
             return FilterResult.SKIP_ENTIRELY;
-        }
-        else{
+        } catch (NullPointerException er){
             return FilterResult.CONTINUE;
         }
-
-
     }
 
     @Override

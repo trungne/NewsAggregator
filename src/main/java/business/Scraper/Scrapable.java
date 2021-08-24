@@ -29,9 +29,9 @@ public interface Scrapable {
     default Element scrapeAuthor(Document doc, String cls){
         Element author = scrapeFirstElementByClass(doc, cls);
         if (author != null){
-            Element p = new Element("p");
-            p.append("<strong>"+ author.text() +"</strong>");
-            return p;
+            return new Element("p")
+                    .attr("style", "text-align:right;")
+                    .appendChild(new Element("strong").text(author.text()));
         }
         else{
             return null;
@@ -39,24 +39,24 @@ public interface Scrapable {
     }
 
     default String scrapeFirstImgUrl(Document doc, String cls){
-        try{
-            Element firstElementOfClass = scrapeFirstElementByClass(doc, cls);
-            Elements imgTags = firstElementOfClass.getElementsByTag("img");
-            Element firstImgTag = imgTags.first();
-            // some news outlets store url of img in data-src
-            String url = firstImgTag.attr("data-src");
+        Element firstElementOfClass = scrapeFirstElementByClass(doc, cls);
+        if (firstElementOfClass != null){
+            // this loop only runs once
+            for (Element imgTag: firstElementOfClass.getElementsByTag("img")){
+                // some news outlets store url of img in data-src
+                String url = imgTag.attr("data-src");
 
-            // if the img tag doesn't have data-src attr, check its src attr
-            if(StringUtils.isEmpty(url)){
-                url = firstImgTag.attr("src");
-                if (StringUtils.isEmpty(url)){
-                    return "";
+                // if the img tag doesn't have data-src attr, check its src attr
+                if(StringUtils.isEmpty(url)){
+                    url = imgTag.attr("src");
+                    if (StringUtils.isEmpty(url)){
+                        return "";
+                    }
                 }
+                return url;
             }
-            return url;
-        } catch (NullPointerException e){
-            return "";
         }
+        return "";
     }
 
     default LocalDateTime scrapePublishedTimeFromMeta(Document doc, String key, String value, String attribute){

@@ -137,7 +137,10 @@ public final class TuoiTreScraper extends Scraper {
     @Override
     public Element scrapeMainContent(Document doc) throws ElementNotFound {
         Element authorTag = scrapeAuthor(doc, "author");
-        return super.scrapeMainContent(doc).append(authorTag.outerHtml());
+        if(authorTag != null){
+            return super.scrapeMainContent(doc).append(authorTag.outerHtml());
+        }
+        return super.scrapeMainContent(doc);
     }
 
     @Override

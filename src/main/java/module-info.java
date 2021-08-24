@@ -12,12 +12,11 @@ module JavaFxApplication {
 
     exports Application;
     exports business.News;
+    exports Application.Model;
 
     opens Application to javafx.fxml;
-    opens Application.View to javafx.fxml;
     opens Application.Model to javafx.fxml;
 
-    exports Application.View;
-    exports Application.Model;
+
 
 }

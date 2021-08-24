@@ -136,7 +136,10 @@ public final class ZingNewsScraper extends Scraper {
 
     public Element scrapeMainContent(Document doc) throws ElementNotFound {
         Element authorTag = scrapeAuthor(doc, "the-article-credit");
-        return super.scrapeMainContent(doc).append(authorTag.outerHtml());
+        if (authorTag != null){
+            return super.scrapeMainContent(doc).append(authorTag.outerHtml());
+        }
+        return super.scrapeMainContent(doc);
     }
 
     @Override
