@@ -2,7 +2,7 @@ package Application.Model;
 
 import business.Helper.ArticleListGenerator;
 import business.News.Article;
-import business.Scraper.*;
+import business.Scraper.ArticleCrawler.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

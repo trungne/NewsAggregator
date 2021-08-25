@@ -1,8 +1,10 @@
-package business.Scraper;
+package business.Scraper.ArticleCrawler;
 
 import business.Helper.CSS;
-import business.Helper.ScrapingUtils;
 import business.Sanitizer.MainContentFilter;
+import business.Scraper.Category;
+import business.Scraper.LinksCrawler.JSoupGenerator;
+import business.Scraper.LinksCrawler.LinksCrawler;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,96 +14,23 @@ import org.jsoup.safety.Safelist;
 import org.jsoup.select.Elements;
 import org.jsoup.select.NodeFilter;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 
 public final class ZingNewsScraper extends Scraper {
-    // main category
-    private static final Category NEW = new Category(Category.NEW, "https://zingnews.vn/", CSS.ZING_TITLE_LINK);
-    private static final Category COVID = new Category(Category.COVID, "https://zingnews.vn/tieu-diem/covid-19.html", CSS.ZING_TITLE_LINK);
-    private static final Category POLITICS = new Category(Category.POLITICS, "https://zingnews.vn/chinh-tri.html", CSS.ZING_TITLE_LINK);
-    private static final Category BUSINESS = new Category(Category.BUSINESS, "https://zingnews.vn/kinh-doanh-tai-chinh.html", CSS.ZING_TITLE_LINK);
-
-    static {
-        BUSINESS.add("https://zingnews.vn/bat-dong-san.html");
-        BUSINESS.add("https://zingnews.vn/tieu-dung.html");
-        BUSINESS.add("https://zingnews.vn/kinh-te-so.html");
-        BUSINESS.add("https://zingnews.vn/hang-khong.html");
-        BUSINESS.add("https://zingnews.vn/ttdn.html");
-    }
-
-    private static final Category TECHNOLOGY = new Category(Category.TECHNOLOGY, "https://zingnews.vn/cong-nghe.html", CSS.ZING_TITLE_LINK);
-
-    static {
-        TECHNOLOGY.add("https://zingnews.vn/mobile.html");
-        TECHNOLOGY.add("https://zingnews.vn/gadget.html");
-        TECHNOLOGY.add("https://zingnews.vn/internet.html");
-        TECHNOLOGY.add("https://zingnews.vn/esports.html");
-    }
-
-    private static final Category HEALTH = new Category(Category.HEALTH, "https://zingnews.vn/suc-khoe.html", CSS.ZING_TITLE_LINK);
-
-    static {
-        HEALTH.add("https://zingnews.vn/khoe-dep.html");
-        HEALTH.add("https://zingnews.vn/dinh-duong.html");
-        HEALTH.add("https://zingnews.vn/me-va-be.html");
-        HEALTH.add("https://zingnews.vn/benh-thuong-gap.html");
-    }
-
-    private static final Category SPORTS = new Category(Category.SPORTS, "https://zingnews.vn/the-thao.html", CSS.ZING_TITLE_LINK);
-
-    static {
-        SPORTS.add("https://zingnews.vn/bong-da-viet-nam.html");
-        SPORTS.add("https://zingnews.vn/bong-da-anh.html");
-        SPORTS.add("https://zingnews.vn/vo-thuat.html");
-        SPORTS.add("https://zingnews.vn/esports-the-thao.html");
-    }
-
-    private static final Category ENTERTAINMENT = new Category(Category.ENTERTAINMENT, "https://zingnews.vn/giai-tri.html", CSS.ZING_TITLE_LINK);
-
-    static {
-        ENTERTAINMENT.add("https://zingnews.vn/sao-viet.html");
-        ENTERTAINMENT.add("https://zingnews.vn/am-nhac.html");
-        ENTERTAINMENT.add("https://zingnews.vn/phim-anh.html");
-        ENTERTAINMENT.add("https://zingnews.vn/thoi-trang.html");
-    }
-
-    private static final Category WORLD = new Category(Category.WORLD, "https://zingnews.vn/the-gioi.html", CSS.ZING_TITLE_LINK);
-
-    static {
-        WORLD.add("https://zingnews.vn/quan-su-the-gioi.html");
-        WORLD.add("https://zingnews.vn/tu-lieu-the-gioi.html");
-        WORLD.add("https://zingnews.vn/phan-tich-the-gioi.html");
-        WORLD.add("https://zingnews.vn/nguoi-viet-4-phuong.html");
-        WORLD.add("https://zingnews.vn/chuyen-la-the-gioi.html");
-    }
-
-    // others
-    private static final Category OTHERS = new Category(Category.OTHERS, "", CSS.ZING_TITLE_LINK);
-
-    static {
-        OTHERS.add("https://zingnews.vn/thoi-su.html");
-        OTHERS.add("https://zingnews.vn/phap-luat.html");
-        OTHERS.add("https://zingnews.vn/doi-song.html");
-        OTHERS.add("https://zingnews.vn/giao-duc.html");
-    }
-
-
     public static Scraper init() {
-        HashMap<String, Category> categories = new HashMap<>();
-        categories.put(Category.NEW, NEW);
-        categories.put(Category.COVID, COVID);
-        categories.put(Category.POLITICS, POLITICS);
-        categories.put(Category.BUSINESS, BUSINESS);
-        categories.put(Category.TECHNOLOGY, TECHNOLOGY);
-        categories.put(Category.HEALTH, HEALTH);
-        categories.put(Category.SPORTS, SPORTS);
-        categories.put(Category.ENTERTAINMENT, ENTERTAINMENT);
-        categories.put(Category.WORLD, WORLD);
-        categories.put(Category.OTHERS, OTHERS);
+        LinksCrawler linksCrawler;
+        try{
+            linksCrawler = new LinksCrawler("https://zingnews.vn/","category-menu",
+                    CSS.ZING_TITLE_LINK,
+                    new JSoupGenerator());
+        } catch (IOException err) {
+            return null;
+        }
+
 
         CssConfiguration ZingCssConfig = new CssConfiguration(
                 "https://zingnews.vn/",
@@ -112,16 +41,15 @@ public final class ZingNewsScraper extends Scraper {
                 CSS.ZING_PIC);
         return new ZingNewsScraper("ZingNews",
                 "https://brandcom.vn/wp-content/uploads/2016/02/zingnews-logo.png",
-                categories,
-                ZingCssConfig);
+                ZingCssConfig, linksCrawler);
     }
 
 
     public ZingNewsScraper(String name,
                            String defaultThumbnail,
-                           HashMap<String, Category> categories,
-                           CssConfiguration cssConfiguration) {
-        super(name, defaultThumbnail, categories, cssConfiguration);
+                           CssConfiguration cssConfiguration,
+                           LinksCrawler linksCrawler) {
+        super(name, defaultThumbnail, cssConfiguration, linksCrawler);
     }
 
     @Override

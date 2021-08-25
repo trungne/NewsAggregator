@@ -1,4 +1,4 @@
-package business.Scraper;
+package business.Scraper.ArticleCrawler;
 
 public class ElementNotFound extends Exception{
 }

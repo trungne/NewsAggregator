@@ -1,7 +1,9 @@
-package business.Scraper;
+package business.Scraper.ArticleCrawler;
 
 import business.Helper.CSS;
 import business.Sanitizer.MainContentFilter;
+import business.Scraper.LinksCrawler.JSoupGenerator;
+import business.Scraper.LinksCrawler.LinksCrawler;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,114 +12,27 @@ import org.jsoup.safety.Safelist;
 import org.jsoup.select.Elements;
 import org.jsoup.select.NodeFilter;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class VNExpressScraper extends Scraper {
-    private static final Category NEW = new Category(Category.NEW, "https://vnexpress.net/", CSS.VNEXPRESS_TITLE_LINK);
-    private static final Category COVID = new Category(Category.COVID, "https://vnexpress.net/covid-19/tin-tuc", CSS.VNEXPRESS_TITLE_LINK);
-    private static final Category POLITICS = new Category(Category.POLITICS, "https://vnexpress.net/thoi-su/chinh-tri", CSS.VNEXPRESS_TITLE_LINK);
-    private static final Category BUSINESS = new Category(Category.BUSINESS, "https://vnexpress.net/kinh-doanh", CSS.VNEXPRESS_TITLE_LINK);
-
-    static {
-        BUSINESS.add("https://vnexpress.net/kinh-doanh/quoc-te");
-        BUSINESS.add("https://vnexpress.net/kinh-doanh/doanh-nghiep");
-        BUSINESS.add("https://vnexpress.net/kinh-doanh/chung-khoan");
-        BUSINESS.add("https://vnexpress.net/kinh-doanh/bat-dong-san");
-        BUSINESS.add("https://vnexpress.net/kinh-doanh/ebank");
-        BUSINESS.add("https://vnexpress.net/kinh-doanh/vi-mo");
-        BUSINESS.add("https://vnexpress.net/kinh-doanh/tien-cua-toi");
-        BUSINESS.add("https://vnexpress.net/kinh-doanh/bao-hiem");
-        BUSINESS.add("https://vnexpress.net/kinh-doanh/hang-hoa");
-        BUSINESS.add("https://vnexpress.net/kinh-doanh/e-commerce-40");
-    }
-
-    private static final Category TECHNOLOGY = new Category(Category.TECHNOLOGY, "https://vnexpress.net/khoa-hoc", CSS.VNEXPRESS_TITLE_LINK);
-
-    static {
-        TECHNOLOGY.add("https://vnexpress.net/khoa-hoc/tin-tuc");
-        TECHNOLOGY.add("https://vnexpress.net/khoa-hoc/phat-minh");
-        TECHNOLOGY.add("https://vnexpress.net/khoa-hoc/ung-dung");
-        TECHNOLOGY.add("https://vnexpress.net/khoa-hoc/the-gioi-tu-nhien");
-        TECHNOLOGY.add("https://vnexpress.net/khoa-hoc/thuong-thuc");
-        TECHNOLOGY.add("https://vnexpress.net/khoa-hoc/khoa-hoc-trong-nuoc");
-    }
-
-    private static final Category HEALTH = new Category(Category.HEALTH, "https://vnexpress.net/suc-khoe", CSS.VNEXPRESS_TITLE_LINK);
-
-    static {
-        HEALTH.add("https://vnexpress.net/suc-khoe/tin-tuc");
-        HEALTH.add("https://vnexpress.net/suc-khoe/tu-van");
-        HEALTH.add("https://vnexpress.net/suc-khoe/dinh-duong");
-        HEALTH.add("https://vnexpress.net/suc-khoe/khoe-dep");
-        HEALTH.add("https://vnexpress.net/suc-khoe/dan-ong");
-        HEALTH.add("https://vnexpress.net/suc-khoe/cac-benh");
-        HEALTH.add("https://vnexpress.net/suc-khoe/vaccine");
-    }
-
-    private static final Category SPORTS = new Category(Category.SPORTS, "https://vnexpress.net/the-thao", CSS.VNEXPRESS_TITLE_LINK);
-
-    static {
-        SPORTS.add("https://vnexpress.net/the-thao/video");
-        SPORTS.add("https://vnexpress.net/bong-da");
-        SPORTS.add("https://vnexpress.net/the-thao/v-league");
-        SPORTS.add("https://vnexpress.net/the-thao/cac-mon-khac");
-    }
-
-    private static final Category ENTERTAINMENT = new Category(Category.ENTERTAINMENT, "https://vnexpress.net/giai-tri", CSS.VNEXPRESS_TITLE_LINK);
-
-    static {
-        ENTERTAINMENT.add("https://vnexpress.net/giai-tri/gioi-sao");
-        ENTERTAINMENT.add("https://vnexpress.net/giai-tri/phim");
-        ENTERTAINMENT.add("https://vnexpress.net/giai-tri/nhac");
-        ENTERTAINMENT.add("https://vnexpress.net/giai-tri/thoi-trang");
-        ENTERTAINMENT.add("https://vnexpress.net/giai-tri/lam-dep");
-        ENTERTAINMENT.add("https://vnexpress.net/giai-tri/sach");
-        ENTERTAINMENT.add("https://vnexpress.net/giai-tri/san-khau-my-thuat");
-    }
-
-    private static final Category WORLD = new Category(Category.WORLD, "https://vnexpress.net/the-gioi", CSS.VNEXPRESS_TITLE_LINK);
-
-    static {
-        WORLD.add("https://vnexpress.net/the-gioi/tu-lieu");
-        WORLD.add("https://vnexpress.net/the-gioi/phan-tich");
-        WORLD.add("https://vnexpress.net/the-gioi/nguoi-viet-5-chau");
-        WORLD.add("https://vnexpress.net/the-gioi/cuoc-song-do-day");
-        WORLD.add("https://vnexpress.net/the-gioi/quan-su");
-    }
-
-    private static final Category OTHERS = new Category(Category.OTHERS, "", CSS.VNEXPRESS_TITLE_LINK);
-
-    static {
-        OTHERS.add("https://vnexpress.net/giao-duc");
-        OTHERS.add("https://vnexpress.net/thoi-su");
-        OTHERS.add("https://vnexpress.net/goc-nhin");
-        OTHERS.add("https://vnexpress.net/phap-luat");
-        OTHERS.add("https://vnexpress.net/doi-song");
-        OTHERS.add("https://vnexpress.net/du-lich");
-        OTHERS.add("https://vnexpress.net/so-hoa");
-        OTHERS.add("https://vnexpress.net/oto-xe-may");
-    }
-
     public static Scraper init() {
-        HashMap<String, Category> categories = new HashMap<>();
-        categories.put(Category.NEW, NEW);
-        categories.put(Category.COVID, COVID);
-        categories.put(Category.POLITICS, POLITICS);
-        categories.put(Category.BUSINESS, BUSINESS);
-        categories.put(Category.TECHNOLOGY, TECHNOLOGY);
-        categories.put(Category.HEALTH, HEALTH);
-        categories.put(Category.SPORTS, SPORTS);
-        categories.put(Category.ENTERTAINMENT, ENTERTAINMENT);
-        categories.put(Category.WORLD, WORLD);
-        categories.put(Category.OTHERS, OTHERS);
 
+        LinksCrawler linksCrawler;
+        try{
+            linksCrawler = new LinksCrawler("https://vnexpress.net/",
+                    "main-nav",
+                    CSS.VNEXPRESS_TITLE_LINK,
+                    new JSoupGenerator());
+        } catch (IOException err) {
+            return null;
+        }
         CssConfiguration VNExpressConfig = new CssConfiguration(
                 "https://vnexpress.net/",
                 CSS.VNEXPRESS_TITLE,
@@ -127,15 +42,15 @@ public final class VNExpressScraper extends Scraper {
                 CSS.VNEXPRESS_PIC);
         return new VNExpressScraper("VNExpress",
                 "https://s1.vnecdn.net/vnexpress/restruct/i/v395/logo_default.jpg",
-                categories,
-                VNExpressConfig);
+                VNExpressConfig,
+                linksCrawler);
     }
 
     public VNExpressScraper(String name,
                             String defaultThumbnail,
-                            HashMap<String, Category> categories,
-                            CssConfiguration cssConfiguration) {
-        super(name, defaultThumbnail, categories, cssConfiguration);
+                            CssConfiguration cssConfiguration,
+                            LinksCrawler linksCrawler) {
+        super(name, defaultThumbnail, cssConfiguration, linksCrawler);
     }
 
     @Override

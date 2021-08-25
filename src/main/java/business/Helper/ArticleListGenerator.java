@@ -1,8 +1,8 @@
 package business.Helper;
 
 import business.News.Article;
-import business.Scraper.ElementNotFound;
-import business.Scraper.Scraper;
+import business.Scraper.ArticleCrawler.ElementNotFound;
+import business.Scraper.ArticleCrawler.Scraper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

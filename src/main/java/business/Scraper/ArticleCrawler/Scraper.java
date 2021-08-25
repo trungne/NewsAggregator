@@ -1,13 +1,12 @@
-package business.Scraper;
+package business.Scraper.ArticleCrawler;
 
 import business.Sanitizer.Sanitizable;
+import business.Scraper.LinksCrawler.LinksCrawler;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 
 public abstract class Scraper implements Scrapable, Sanitizable {
@@ -36,17 +35,17 @@ public abstract class Scraper implements Scrapable, Sanitizable {
 
     protected final String name;
     protected final String defaultThumbnail;
-    protected final HashMap<String, Category> categories;
     protected final CssConfiguration cssConfiguration;
+    protected final LinksCrawler linksCrawler;
 
     public Scraper(String name,
                    String defaultThumbnail,
-                   HashMap<String, Category> categories,
-                   CssConfiguration cssConfiguration) {
+                   CssConfiguration cssConfiguration,
+                   LinksCrawler linksCrawler) {
         this.name = name;
         this.defaultThumbnail = defaultThumbnail;
-        this.categories = categories;
         this.cssConfiguration = cssConfiguration;
+        this.linksCrawler = linksCrawler;
     }
 
     // by default, scrape the first element that matches provided css
@@ -91,22 +90,8 @@ public abstract class Scraper implements Scrapable, Sanitizable {
         return defaultThumbnail;
     }
 
-    // find category by name
-    private Category find(String name) {
-        Category matched;
-        for (Category category: categories.values()) {
-            matched = category.find(name);
-            if (matched != null) return matched;
-        }
-        return null;
-    }
-
     public Set<URL> getLinksFromCategory(String categoryName) {
-        Category category = find(categoryName);
-        if (category == null){
-            return new HashSet<>();
-        }
-        return category.getLinks();
+        return linksCrawler.getArticleLinks(categoryName);
     }
 
     static class CssConfiguration {

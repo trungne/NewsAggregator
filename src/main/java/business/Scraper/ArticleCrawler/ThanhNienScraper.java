@@ -1,8 +1,10 @@
-package business.Scraper;
+package business.Scraper.ArticleCrawler;
 
 import business.Helper.CSS;
 import business.Helper.ScrapingUtils;
 import business.Sanitizer.MainContentFilter;
+import business.Scraper.LinksCrawler.JSoupGenerator;
+import business.Scraper.LinksCrawler.LinksCrawler;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,108 +12,22 @@ import org.jsoup.nodes.Element;
 import org.jsoup.safety.Safelist;
 import org.jsoup.select.NodeFilter;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 public final class ThanhNienScraper extends Scraper {
-    private static final Category NEW = new Category(Category.NEW, "https://thanhnien.vn/", CSS.THANHNIEN_TITLE_LINK);
-    private static final Category COVID = new Category(Category.COVID, "https://thanhnien.vn/covid-19/", CSS.THANHNIEN_TITLE_LINK);
-    private static final Category POLITICS = new Category(Category.POLITICS, "https://thanhnien.vn/thoi-su/chinh-tri/", CSS.THANHNIEN_TITLE_LINK);
-    private static final Category BUSINESS = new Category(Category.BUSINESS, "https://thanhnien.vn/tai-chinh-kinh-doanh", CSS.THANHNIEN_TITLE_LINK);
-
-    static {
-        BUSINESS.add("https://thanhnien.vn/tai-chinh-kinh-doanh/kinh-te-xanh/");
-        BUSINESS.add("https://thanhnien.vn/kinh-doanh/chinh-sach-phat-trien/");
-        BUSINESS.add("https://thanhnien.vn/tai-chinh-kinh-doanh/ngan-hang/");
-        BUSINESS.add("https://thanhnien.vn/tai-chinh-kinh-doanh/chung-khoan/");
-        BUSINESS.add("https://thanhnien.vn/tai-chinh-kinh-doanh/doanh-nghiep/");
-        BUSINESS.add("https://thanhnien.vn/tai-chinh-kinh-doanh/doanh-nhan/");
-        BUSINESS.add("https://thanhnien.vn/tai-chinh-kinh-doanh/tieu-dung/");
-        BUSINESS.add("https://thanhnien.vn/tai-chinh-kinh-doanh/lam-giau/");
-        BUSINESS.add("https://thanhnien.vn/tai-chinh-kinh-doanh/dia-oc/");
-    }
-
-    private static final Category TECHNOLOGY = new Category(Category.TECHNOLOGY, "https://thanhnien.vn/cong-nghe/", CSS.THANHNIEN_TITLE_LINK);
-
-    static {
-        TECHNOLOGY.add("https://thanhnien.vn/cong-nghe/xu-huong/");
-        TECHNOLOGY.add("https://thanhnien.vn/cong-nghe/san-pham-moi/");
-        TECHNOLOGY.add("https://thanhnien.vn/cong-nghe/kinh-nghiem/");
-        TECHNOLOGY.add("https://thanhnien.vn/cong-nghe/y-tuong/");
-        TECHNOLOGY.add("https://thanhnien.vn/cong-nghe/chuyen-doi-so/");
-    }
-
-    private static final Category HEALTH = new Category(Category.HEALTH, "https://thanhnien.vn/suc-khoe/", CSS.THANHNIEN_TITLE_LINK);
-
-    static {
-        HEALTH.add("https://thanhnien.vn/suc-khoe/lam-dep/");
-        HEALTH.add("https://thanhnien.vn/suc-khoe/khoe-dep-moi-ngay/");
-        HEALTH.add("https://thanhnien.vn/suc-khoe/gioi-tinh/");
-        HEALTH.add("https://thanhnien.vn/suc-khoe/song-vui-khoe/");
-    }
-
-    private static final Category SPORTS = new Category(Category.SPORTS, "https://thanhnien.vn/the-thao/", CSS.THANHNIEN_TITLE_LINK);
-
-    static {
-        SPORTS.add("https://thanhnien.vn/the-thao/bong-da-viet-nam/");
-        SPORTS.add("https://thanhnien.vn/the-thao/bong-da-quoc-te/");
-        SPORTS.add("https://thanhnien.vn/the-thao/tin-chuyen-nhuong/");
-        SPORTS.add("https://thanhnien.vn/the-thao/bong-ro/");
-        SPORTS.add("https://thanhnien.vn/the-thao/the-thao-cong-dong/");
-        SPORTS.add("https://thanhnien.vn/the-thao/toan-canh-the-thao/");
-    }
-
-    private static final Category ENTERTAINMENT = new Category(Category.ENTERTAINMENT, "https://thanhnien.vn/giai-tri/", CSS.THANHNIEN_TITLE_LINK);
-
-    static {
-        ENTERTAINMENT.add("https://thanhnien.vn/giai-tri/phim/");
-        ENTERTAINMENT.add("https://thanhnien.vn/giai-tri/truyen-hinh/");
-        ENTERTAINMENT.add("https://thanhnien.vn/giai-tri/doi-nghe-si/");
-
-    }
-
-    private static final Category WORLD = new Category(Category.WORLD, "https://thanhnien.vn/the-gioi/", CSS.THANHNIEN_TITLE_LINK);
-
-    static {
-        WORLD.add("https://thanhnien.vn/the-gioi/kinh-te-the-gioi/");
-        WORLD.add("https://thanhnien.vn/the-gioi/quan-su/");
-        WORLD.add("https://thanhnien.vn/the-gioi/goc-nhin/");
-        WORLD.add("https://thanhnien.vn/the-gioi/ho-so/");
-        WORLD.add("https://thanhnien.vn/the-gioi/nguoi-viet-nam-chau/");
-        WORLD.add("https://thanhnien.vn/the-gioi/chuyen-la/");
-    }
-
-    private static final Category OTHERS = new Category(Category.OTHERS, "", CSS.THANHNIEN_TITLE_LINK);
-
-    static {
-        OTHERS.add("https://thanhnien.vn/thoi-su/");
-        OTHERS.add("https://thanhnien.vn/toi-viet/");
-        OTHERS.add("https://thanhnien.vn/van-hoa/");
-        OTHERS.add("https://thanhnien.vn/doi-song/");
-        OTHERS.add("https://thanhnien.vn/gioi-tre/");
-        OTHERS.add("https://thanhnien.vn/giao-duc/");
-        OTHERS.add("https://thanhnien.vn/game/");
-        OTHERS.add("https://thanhnien.vn/du-lich/");
-        OTHERS.add("https://thanhnien.vn/xe/");
-        OTHERS.add("https://thanhnien.vn/ban-can-biet/");
-    }
-
-
     public static Scraper init() {
-        HashMap<String, Category> categories = new HashMap<>();
-        categories.put(Category.NEW, NEW);
-        categories.put(Category.COVID, COVID);
-        categories.put(Category.POLITICS, POLITICS);
-        categories.put(Category.BUSINESS, BUSINESS);
-        categories.put(Category.TECHNOLOGY, TECHNOLOGY);
-        categories.put(Category.HEALTH, HEALTH);
-        categories.put(Category.SPORTS, SPORTS);
-        categories.put(Category.ENTERTAINMENT, ENTERTAINMENT);
-        categories.put(Category.WORLD, WORLD);
-        categories.put(Category.OTHERS, OTHERS);
-
+        LinksCrawler linksCrawler;
+        try{
+            linksCrawler = new LinksCrawler("https://thanhnien.vn/",
+                    "site-header__menu",
+                    CSS.THANHNIEN_TITLE_LINK,
+                    new JSoupGenerator());
+        } catch (IOException err) {
+            return null;
+        }
 
         CssConfiguration ThanhNienCssConfig = new CssConfiguration(
                 "https://thanhnien.vn/",
@@ -122,15 +38,15 @@ public final class ThanhNienScraper extends Scraper {
                 CSS.THANHNIEN_PIC);
         return new ThanhNienScraper("Thanh Nien",
                 "https://static.thanhnien.vn/v2/App_Themes/images/logo-tn-2.png",
-                categories,
-                ThanhNienCssConfig);
+                ThanhNienCssConfig,
+                linksCrawler);
     }
 
     public ThanhNienScraper(String name,
                             String defaultThumbnail,
-                            HashMap<String, Category> categories,
-                            CssConfiguration cssConfiguration) {
-        super(name, defaultThumbnail, categories, cssConfiguration);
+                            CssConfiguration cssConfiguration,
+                            LinksCrawler linksCrawler) {
+        super(name, defaultThumbnail, cssConfiguration, linksCrawler);
     }
 
     @Override

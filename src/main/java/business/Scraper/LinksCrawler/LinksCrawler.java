@@ -14,6 +14,13 @@ import java.net.URL;
 import java.util.*;
 
 public class LinksCrawler {
+    private static final String[] COVID_CATEGORY_LINKS = new String[]{
+            "https://vnexpress.net/covid-19/tin-tuc",
+            "https://thanhnien.vn/covid/",
+            "https://zingnews.vn/tieu-diem/covid-19.html",
+            "https://tuoitre.vn/covid-19.html",
+            "https://nhandan.vn/tieu-diem"
+    };
     private final URL homepageUrl;
     private final String navBarCssClass;
     private final String targetCssClass;
@@ -51,22 +58,18 @@ public class LinksCrawler {
         if(name.equals(Category.NEW)){
             links.add(homepageUrl);
         }
-        else{
-            links.addAll(navigateLinksInNavBar(name));
+        else if (name.equals(Category.COVID)){
+            for (String url: COVID_CATEGORY_LINKS){
+                try{
+                    URL _url = new URL(url);
+                    links.add(_url);
+                } catch (MalformedURLException ignored){
+                    // do nothing
+                }
+            }
         }
-        return links;
-    }
-
-    private List<URL> extractAllLinksFromTag(Element tag){
-        List<URL> links = new ArrayList<>();
-        for (Element link: tag.getElementsByTag("a")){
-            try{
-                URL url = new URL(homepageUrl, link.attr("href"));
-                links.add(url);
-            }
-            catch (MalformedURLException ignored){
-                // do nothing
-            }
+        else {
+            links.addAll(navigateLinksInNavBar(name));
         }
         return links;
     }
@@ -99,6 +102,20 @@ public class LinksCrawler {
                         // do thing
                     }
                 }
+            }
+        }
+        return links;
+    }
+
+    private List<URL> extractAllLinksFromTag(Element tag){
+        List<URL> links = new ArrayList<>();
+        for (Element link: tag.getElementsByTag("a")){
+            try{
+                URL url = new URL(homepageUrl, link.attr("href"));
+                links.add(url);
+            }
+            catch (MalformedURLException ignored){
+                // do nothing
             }
         }
         return links;
