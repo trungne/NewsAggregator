@@ -29,6 +29,7 @@ public class ArticleListGenerator {
 
     public void populateArticleList(List<Article> articleList) {
         Set<URL> articleUrls = scraper.getLinksFromCategory(category);
+        // TODO: USE LinksCrawler here
         extractArticlesFromLinks(articleUrls, articleList);
     }
 
