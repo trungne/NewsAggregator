@@ -49,83 +49,11 @@ public class Category {
     public static String convert(String category) {
         for (String english : dictionary.keySet()) {
             for (String vietnamse : dictionary.get(english)) {
-                if (category.toLowerCase(Locale.ROOT).equals(vietnamse)) {
+                if (category.toLowerCase(Locale.ROOT).contains(vietnamse)) {
                     return english;
                 }
             }
         }
         return OTHERS;
-    }
-
-
-    String name;
-    String url;
-    String cssForScraping;
-    List<Category> subCategories = new ArrayList<>();
-
-    protected Category(String name, String url, String cssForScraping) {
-        this.name = name;
-        this.url = url;
-        this.cssForScraping = cssForScraping;
-    }
-
-    public void add(String name, String url) {
-        Category newCategory = new Category(name, url, cssForScraping);
-
-        for (Category category : subCategories) {
-            // update category if the category already exists in subcategory list
-            if (category.getUrl().equals(url)) {
-                subCategories.set(subCategories.indexOf(category), newCategory);
-                return;
-            }
-        }
-        subCategories.add(newCategory);
-    }
-
-    public void add(String url) {
-        add("", url);
-    }
-
-    public Category find(String name) {
-        if (this.name.equals(name)) {
-            return this;
-        }
-
-        for (Category category : subCategories) {
-            Category matched = category.find(name);
-            if (matched != null) {
-                return matched;
-            }
-        }
-
-        return null;
-    }
-
-    public String getUrl() {
-        return this.url;
-    }
-
-    public Set<URL> getLinks() {
-        Set<URL> urls = new HashSet<>();
-        try {
-            URL link = new URL(this.url);
-            urls = scrapeLinksByClass(link, cssForScraping);
-        } catch (MalformedURLException ignored) {
-        }
-
-        for (Category category : subCategories) {
-            urls.addAll(category.getLinks());
-        }
-
-        return urls;
-    }
-
-    @Override
-    public String toString() {
-        return "Category{" +
-                "name='" + name + '\'' +
-                ", url='" + url + '\'' +
-                ", cssForScraping='" + cssForScraping + '\'' +
-                '}';
     }
 }

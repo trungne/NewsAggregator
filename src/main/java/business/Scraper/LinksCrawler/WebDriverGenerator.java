@@ -15,6 +15,8 @@ public class WebDriverGenerator implements DocGenerator{
         options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1080", "--ignore-certificate-errors");
         WebDriver driver = new ChromeDriver(options);
         driver.get("https://vnexpress.net/");
+        String source = driver.getPageSource();
+        driver.quit();
         return Jsoup.parse(driver.getPageSource());
     }
 }

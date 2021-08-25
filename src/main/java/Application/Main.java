@@ -1,6 +1,7 @@
 package Application;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -28,6 +29,10 @@ public class Main extends Application {
         primaryStage.setTitle("News Aggregator");
         primaryStage.setScene(scene);
 
+        // close all stages when the main stage is closed
+        primaryStage.setOnCloseRequest(e ->{
+            Platform.exit();
+        });
         primaryStage.show();
     }
 
