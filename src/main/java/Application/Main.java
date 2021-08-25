@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.util.Objects;
@@ -16,8 +18,15 @@ public class Main extends Application {
         Parent root;
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/MainMenu.fxml")));
 
+        // create new scene in new variable
+        Scene scene = new Scene(root, 1000, 800);
+        // grab mainGridPane out of elements tree
+        GridPane gp = (GridPane) root.getChildrenUnmodifiable().get(0);
+        // bind mainGridPane prefWidth property with scene width property
+        gp.getColumnConstraints().get(1).prefWidthProperty().bind(scene.widthProperty().subtract(200));
+
         primaryStage.setTitle("News Aggregator");
-        primaryStage.setScene(new Scene(root, 1000, 800));
+        primaryStage.setScene(scene);
 
         primaryStage.show();
     }

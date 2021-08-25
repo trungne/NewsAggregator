@@ -1,5 +1,6 @@
 package Application.View;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -17,10 +18,15 @@ public class PreviewGrid extends GridPane {
     private final Text publishedTimeText = new Text();
     private final Text newsSourceText = new Text();
 
+    // method to get wrapping property of titleText
+    public DoubleProperty titleWrappingWidthProperty() {
+        return titleText.wrappingWidthProperty();
+    }
+
     public PreviewGrid(){
         titleText.setFont(titleFont);
         descriptionText.setFont(descriptionFont);
-        descriptionText.setWrappingWidth(500);
+        descriptionText.wrappingWidthProperty().bind(titleText.wrappingWidthProperty().subtract(100));
 
         // arrange components in grid to create layout for preview components
         this.add(imageView, 1, 1, 1, 2);

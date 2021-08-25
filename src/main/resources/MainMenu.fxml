@@ -16,10 +16,11 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Application.Controller">
    <center>
-      <GridPane prefHeight="601.0" prefWidth="779.0">
+       <!-- added id for container GridPane-->
+      <GridPane fx:id="mainGridPane" prefHeight="601.0" >
         <columnConstraints>
           <ColumnConstraints minWidth="10.0" prefWidth="200.0" />
-          <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="600.0" />
+          <ColumnConstraints halignment="CENTER" minWidth="10.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
