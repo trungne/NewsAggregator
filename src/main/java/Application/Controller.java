@@ -11,10 +11,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
@@ -22,6 +19,7 @@ import java.util.*;
 
 
 public class Controller {
+    @FXML public GridPane mainGridPane;
     @FXML private VBox previewBox;
     @FXML private ScrollPane mainArea;
     @FXML private HBox pageBox;
@@ -45,7 +43,7 @@ public class Controller {
         progressBar.visibleProperty().bind(model.getService().runningProperty());
     }
 
-    public void initialize(){
+    public void initialize() {
         // dymanically create gridpane inside scrollpane
         for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
             PreviewGrid grid = new PreviewGrid();
@@ -62,12 +60,16 @@ public class Controller {
                         + previewBox.getChildren().indexOf(node);
                 openArticleInNewStage(index);
             });
-            // TODO: bind gridPane to parent - https://stackoverflow.com/questions/14753793/javafx-get-gridpane-to-fit-parent
 
-
+            // bind title's wrapping property in each grid with mainGridPane prefWidth property
+            // and subtract 200px (of category buttons)
+            grid.titleWrappingWidthProperty().bind(
+                    mainGridPane.getColumnConstraints().get(1).prefWidthProperty().subtract(200)
+            );
             this.previewGrids.add(grid);
             this.previewBox.getChildren().add(grid);
         }
+
         articlePane.getChildren().add(browser);
         articleStage.setScene(articleScene);
         articleStage.setOnCloseRequest(event ->
