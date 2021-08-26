@@ -13,6 +13,7 @@ module JavaFxApplication {
     exports Application;
     exports business.News;
     exports Application.Model;
+    exports business.Scraper;
 
     opens Application to javafx.fxml;
     opens Application.Model to javafx.fxml;

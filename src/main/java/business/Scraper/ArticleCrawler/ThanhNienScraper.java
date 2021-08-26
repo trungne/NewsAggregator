@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public final class ThanhNienScraper extends Scraper {
+    // TODO: Thai comments this
     public static Scraper init() {
         LinksCrawler linksCrawler;
         try{

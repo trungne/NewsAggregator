@@ -7,6 +7,7 @@ import org.jsoup.select.NodeFilter;
 import org.jsoup.select.NodeTraversor;
 
 public interface Sanitizable {
+    // TODO: Thai comments this
     default Element sanitizeTitle(Element e) {
         return e.clearAttributes();
     }
@@ -20,7 +21,7 @@ public interface Sanitizable {
 
     // Sanitize the main content part of an article
     // This function traverses through the tag and get important info, which will be appended in root node
-    // To indicate which tag/class/etc. as important, implement the head method in NodeFilter
+    // To indicate which tag/class/etc. as important, extend the MainContentFilter class and implement all necessary methods
     default Element sanitizeMainContent(Element e){
         Element root = new Element("div");
         NodeFilter filter = getNodeFilter(root);

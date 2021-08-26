@@ -9,13 +9,16 @@ import org.jsoup.safety.Safelist;
 import org.jsoup.select.NodeFilter;
 
 public abstract class MainContentFilter implements NodeFilter {
+    // TODO: Thai comments this
     protected Element root;
 
     protected MainContentFilter(Element root){
         this.root = root;
     }
-
-    /** Default implementation for identifying a paragraph tag. Normally, just check the tag name */
+    /** Default implementation for identifying a paragraph tag. Normally, just check the tag name
+     * @param node check if this node is a paragraph
+     * @return true if the node is a paragraph
+     * */
     protected boolean isParagraph(Element node){
         return node.tagName().equals("p");
     }

@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import java.io.IOException;
 
 public class JSoupGenerator implements DocGenerator{
+    // TODO: Trung comments this
 
     @Override
     public Document getDocument(String url) throws IOException {

@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.Set;
 
 public abstract class Scraper implements Scrapable, Sanitizable {
+    // TODO: Thai comments this
     public static String toName(URL url) {
         String host = url.getHost();
         switch (host) {

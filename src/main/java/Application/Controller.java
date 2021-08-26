@@ -19,6 +19,7 @@ import java.util.*;
 
 
 public class Controller {
+    // TODO: Andrew comments this
     @FXML public GridPane mainGridPane;
     @FXML private VBox previewBox;
     @FXML private ScrollPane mainArea;

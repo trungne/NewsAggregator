@@ -8,6 +8,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 public class WebDriverGenerator implements DocGenerator{
+    // TODO: Trung comments this
     @Override
     public Document getDocument(String url) {
         WebDriverManager.chromedriver().setup();

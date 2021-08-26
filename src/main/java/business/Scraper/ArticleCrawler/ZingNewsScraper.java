@@ -21,6 +21,7 @@ import java.util.Set;
 
 
 public final class ZingNewsScraper extends Scraper {
+    // TODO: Thai comments this
     public static Scraper init() {
         LinksCrawler linksCrawler;
         try{

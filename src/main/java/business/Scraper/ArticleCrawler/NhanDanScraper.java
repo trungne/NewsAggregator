@@ -20,6 +20,7 @@ import java.util.Set;
 
 
 public final class NhanDanScraper extends Scraper {
+    // TODO: Thai comments this
     public static Scraper init() {
         LinksCrawler linksCrawler;
         try{

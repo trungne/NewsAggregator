@@ -1,12 +1,9 @@
 package business.Scraper;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
 
-import static business.Helper.ScrapingUtils.scrapeLinksByClass;
-
 public class Category {
+    // TODO: Trung comments this
     public static final String NEW = "New";
     public static final String COVID = "Covid";
     public static final String POLITICS = "Politics";

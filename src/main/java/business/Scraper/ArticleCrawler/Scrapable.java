@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public interface Scrapable {
+    // TODO: Trung comments this
     default Element scrapeFirstElementByClass(Document doc, String cls){
         String query = cls;
         if (!query.startsWith(".")) {

@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.*;
 
 public class LinksCrawler {
+    // TODO: Trung comments this
     private static final String[] COVID_CATEGORY_LINKS = new String[]{
             "https://vnexpress.net/covid-19/tin-tuc",
             "https://thanhnien.vn/covid/",

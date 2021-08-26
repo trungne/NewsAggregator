@@ -1,6 +1,5 @@
 package business.News;
 
-import business.News.Article;
 import business.Scraper.ArticleCrawler.ElementNotFound;
 import business.Scraper.ArticleCrawler.Scraper;
 import org.jsoup.Jsoup;
@@ -19,6 +18,7 @@ import static business.Helper.ScrapingUtils.MAX_WAIT_TIME_WHEN_ACCESS_URL;
 
 
 public class ArticleListGenerator {
+    // TODO: Khang comments this
     private final Scraper scraper;
     private final String category;
 

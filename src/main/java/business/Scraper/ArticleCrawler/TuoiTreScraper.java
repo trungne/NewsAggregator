@@ -20,6 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class TuoiTreScraper extends Scraper {
+    // TODO: Thai comments this
     public static Scraper init() {
         LinksCrawler linksCrawler;
         try{

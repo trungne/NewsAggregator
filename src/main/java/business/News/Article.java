@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Article implements Comparable<Article> {
+    // TODO: Khang comments this
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EE, dd/MMMM/yyyy, kk:mm ");
 
     private final URL url;
