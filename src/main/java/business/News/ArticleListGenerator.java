@@ -1,4 +1,4 @@
-package business.Helper;
+package business.News;
 
 import business.News.Article;
 import business.Scraper.ArticleCrawler.ElementNotFound;

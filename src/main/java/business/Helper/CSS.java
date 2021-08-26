@@ -2,8 +2,6 @@ package business.Helper;
 
 public class CSS {
     // CSS for main content in articles
-    // TODO: add news source to article html
-    public static final String SOURCE = "source";
     public static final String ARTICLE_HEADER = "article-header";
     public static final String ARTICLE_CATEGORY = "article-category";
     public static final String ARTICLE_CONTENT = "article-content";
@@ -27,7 +25,6 @@ public class CSS {
     public static final String VNEXPRESS_BODY = "fck_detail";
 
     // These are css of tags we need to keep in VNExpressScraper article body
-    public static final String VNEXPRESS_PARAGRAPH = "Normal";
     public static final String VNEXPRESS_TIME = "datePublished";
     public static final String VNEXPRESS_PIC = "fig-picture";
     public static final String VNEXPRESS_TITLE_LINK = "title-news";
@@ -64,5 +61,4 @@ public class CSS {
     public static final String NHANDAN_TIME = "box-date";
     public static final String NHANDAN_PIC = "box-detail-thumb";
     public static final String NHANDAN_THUMBNAIL = "box-detail-thumb";
-    public static final String NHANDAN_AUTHOR = "box-author";
 }

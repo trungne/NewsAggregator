@@ -92,6 +92,7 @@ public class LinksCrawler {
                 // compare the provided name with the name in a tag
                 if (categoryName.equals(name) && i == 0) {
                     // get all other a tags if this is the main category (index = 0)
+                    System.out.println(categoryName);
                     return extractAllLinksFromTag(menu);
                 } else if (categoryName.equals(name)) {
                     // only get this tag if it is the sub category (index =/= 0)

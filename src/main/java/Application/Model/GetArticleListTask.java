@@ -1,6 +1,6 @@
 package Application.Model;
 
-import business.Helper.ArticleListGenerator;
+import business.News.ArticleListGenerator;
 import business.News.Article;
 import business.Scraper.ArticleCrawler.*;
 import javafx.collections.FXCollections;

@@ -2,6 +2,7 @@ package Application.Model;
 
 import Application.Controller;
 import business.News.Article;
+import javafx.application.Platform;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +49,6 @@ public class Model {
             notifyController();
             return;
         }
-
         service.reset();
         service.setCategory(category);
         service.setOnSucceeded(e -> {

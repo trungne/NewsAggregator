@@ -15,7 +15,7 @@ public abstract class MainContentFilter implements NodeFilter {
         this.root = root;
     }
 
-    /** Default implementation for identifying a paragraph tag*/
+    /** Default implementation for identifying a paragraph tag. Normally, just check the tag name */
     protected boolean isParagraph(Element node){
         return node.tagName().equals("p");
     }

@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class Article implements Comparable<Article> {
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EE, dd/MMMM/yyyy, kk:mm ");
-    // TODO: display url at the end with news source
+
     private final URL url;
     private Element title;
     private Element description;
@@ -39,7 +39,6 @@ public class Article implements Comparable<Article> {
                 "body {margin: 30px;}\n" +
                 ".article-header{display: flex; font-style: italic;}\n" +
                 ".article-category{margin-right: .75rem;color: #007bff;}\n" +
-
                 ".published-time{color:#6c757d;}\n" +
                 ".title {font-weight: bold;}" +
                 ".description {font-weight: bold;}\n" +
@@ -121,9 +120,15 @@ public class Article implements Comparable<Article> {
         return article;
     }
     public Element getSourceTag(){
-        return new Element("p").text("Source: " + url);
+        Element source = new Element("p").text("Source: ");
+        Element tag = new Element("em");
+        Element link = new Element("a")
+                .attr("href", url.toString())
+                .text(newsSource);
+        return source.appendChild(tag.appendChild(link));
 
     }
+
     public String getHtml() {
         return html;
     }
