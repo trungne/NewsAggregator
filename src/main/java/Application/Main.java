@@ -24,6 +24,7 @@ public class Main extends Application {
         // grab mainGridPane out of elements tree
         GridPane gp = (GridPane) root.getChildrenUnmodifiable().get(0);
         // bind mainGridPane prefWidth property with scene width property
+        // and substract by 200 (of the category buttons)
         gp.getColumnConstraints().get(1).prefWidthProperty().bind(scene.widthProperty().subtract(200));
 
         primaryStage.setTitle("News Aggregator");
