@@ -38,14 +38,18 @@ public class Controller {
     private Button currentCategoryButton;
     public Button currentPageButton;
 
+    /** Controller constructor
+     */
     public Controller(){
         this.model = new Model(this);
         progressBar.progressProperty().bind(model.getService().progressProperty());
         progressBar.visibleProperty().bind(model.getService().runningProperty());
     }
 
+    /** Generate general layout and inject contents, with necessary event handlers and sizing bindings
+     */
     public void initialize() {
-        // dymanically create gridpane inside scrollpane
+        // dynamically create grid pane inside scroll pane
         for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
             PreviewGrid grid = new PreviewGrid();
             grid.setOnMouseEntered(e -> grid.underline());
@@ -63,7 +67,7 @@ public class Controller {
             });
 
             // bind title's wrapping property in each grid with mainGridPane prefWidth property
-            // and subtract 200px (of category buttons)
+            // and subtract 160px ~ 200px (of the thumbnail in each grid)
             grid.titleWrappingWidthProperty().bind(
                     mainGridPane.getColumnConstraints().get(1).prefWidthProperty().subtract(200)
             );
@@ -82,7 +86,9 @@ public class Controller {
         newCategory.fire();
     }
 
-    // Eventhanlder for category buttons
+    /** Handle the event when a category is clicked
+     * @param e: on-click event
+     */
     public void selectCategory(ActionEvent e){
         Button b = (Button) e.getSource();
         // do nothing if the category has already been selected
@@ -93,13 +99,18 @@ public class Controller {
         requestPreviews(b.getText());
     }
 
-    // Eventhanlder for page buttons
+    /** Handle the event when a page is clicked
+     * @param e: on-click event
+     */
     public void changePage(ActionEvent e){
         Button b = (Button) e.getSource();
         int pageNum = Integer.parseInt(b.getText());
         updatePreviewsPane(pageNum);
     }
 
+    /** Send request of scrapping a particular category
+     * @param category: category's name
+     */
     private void requestPreviews(String category){
         disableAllChildButtons(categoryBox);
         disableAllChildButtons(pageBox);
@@ -110,7 +121,8 @@ public class Controller {
         model.loadArticles(category);
     }
 
-    // this function is called after articles have been scraped by the model
+    /** Update the experience on preview pane after scrapping is finished
+     */
     public void updatePreviewsPane(){
         enableAllChildButtons(categoryBox);
         enableAllChildButtons(pageBox);
@@ -119,6 +131,9 @@ public class Controller {
         updatePreviewsPane(1);
     }
 
+    /** Update preview pane's content when pagination is used
+     * @param pageNum: pagination index
+     */
     private void updatePreviewsPane(int pageNum){
         highlightPage(pageNum);
         List<Article> articles = getArticleSublist(pageNum);
@@ -126,7 +141,9 @@ public class Controller {
         mainArea.setContent(previewBox);
     }
 
-
+    /** Extract a block of articles according to pagination index
+     * @param page: pagination index
+     */
     private List<Article> getArticleSublist(int page){
         // generate the start and end indices
         int startIndex = (page - 1) * MAX_PREVIEWS_PER_PAGE;
@@ -134,6 +151,9 @@ public class Controller {
         return model.getArticleSublist(currentCategoryButton.getText(), startIndex, endIndex);
     }
 
+    /** Put each article's contents in each of the created grid panes
+     * @param articles: list of scrapped articles
+     */
     private void placePreviewsOnGrids(List<Article> articles){
         for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
             Article a = articles.get(i);
@@ -150,6 +170,9 @@ public class Controller {
         }
     }
 
+    /** Open chosen article as a pop-up
+     * @param index: index of the selected article in the system
+     */
     private void openArticleInNewStage(int index){
         Article content = model.getArticleContent(currentCategoryButton.getText(), index);
         // TODO: turn this off when done testing
@@ -161,7 +184,9 @@ public class Controller {
         articleStage.requestFocus();
     }
 
-    // set currentCategoryButton and change highlighting to the new current category button
+    /** Update the currentCategoryButton and highlight only the current category user is on
+     * @param b: the category button
+     */
     private void highlightCategory(Button b){
         if (currentCategoryButton != null){
             currentCategoryButton.setStyle(null);
@@ -170,7 +195,9 @@ public class Controller {
         currentCategoryButton.setStyle("-fx-background-color: rgb(255,255,102);");
     }
 
-    // set currentPageButton and change highlighting to the new current page button
+    /** Update the currentPageButton and highlight only the current page user is on
+     * @param page: the index of the page
+     */
     private void highlightPage(int page){
         if (page <= 0 || page > pageBox.getChildren().size()){
             throw new IllegalArgumentException();
@@ -182,11 +209,19 @@ public class Controller {
         currentPageButton.setStyle("-fx-background-color: rgb(255,255,102);");
     }
 
+    /**
+     * Target the container pane and make all buttons NOT clickable while still loading
+     * @param parent: the container pane
+     * */
     private void disableAllChildButtons(Pane parent){
         for (Node node: parent.getChildren())
             node.setDisable(true);
     }
 
+    /**
+     * Target the container pane and make all buttons clickable when finish loading
+     * @param parent: the container pane
+     * */
     private void enableAllChildButtons(Pane parent){
         for (Node node: parent.getChildren())
             node.setDisable(false);
