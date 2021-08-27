@@ -3,6 +3,7 @@ package Application.Model;
 import business.News.ArticleListGenerator;
 import business.News.Article;
 import business.Scraper.ArticleCrawler.*;
+import business.Scraper.Service;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -21,13 +22,7 @@ import static business.Scraper.Helper.ScrapingUtils.MAX_TERMINATION_TIME;
 // an interface for presentation layer to access scraped articles
 public class GetArticleListTask extends Task<List<Article>> {
     // get all news outlet css info
-    private static final Scraper[] newsOutlets = new Scraper[]{
-            VNExpressScraper.init(),
-            ZingNewsScraper.init(),
-            ThanhNienScraper.init(),
-            TuoiTreScraper.init(),
-            NhanDanScraper.init(),
-    };
+    private static final List<Scraper> newsOutlets = Service.initScrapers();
 
     private final String category;
 

@@ -12,10 +12,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ScrapingUtils {
-    public final static int MAX_LINKS_SCRAPED_IN_A_PAGE = 15;
+    public final static int MAX_ARTICLES_PER_SOURCE = 10;
+
     public final static int MAX_WAIT_TIME_WHEN_ACCESS_URL = 5000; // ms
     public final static int MAX_TERMINATION_TIME = 15000; // ms
-    public final static int MAX_ARTICLES_PER_SOURCE = 10;
     public final static int MAX_ARTICLES_DISPLAYED = 50;
 
     /**  Target all elements with provided css class, pull out all URLs in a tag.
@@ -33,9 +33,6 @@ public class ScrapingUtils {
             Elements titleTags = doc.getElementsByClass(cssClass);
             // target all title tags and pull out links for articles
             for (Element tag : titleTags) {
-                if (links.size() > MAX_LINKS_SCRAPED_IN_A_PAGE) {
-                    return links;
-                }
                 // link is stored in href attribute of <a> tag
                 URL link = new URL(baseUrl, tag.getElementsByTag("a").attr("href"));
                 links.add(link);

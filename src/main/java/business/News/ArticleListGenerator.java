@@ -2,6 +2,7 @@ package business.News;
 
 import business.Scraper.ArticleCrawler.ElementNotFound;
 import business.Scraper.ArticleCrawler.Scraper;
+import business.Scraper.Service;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-import static business.Scraper.Helper.ScrapingUtils.MAX_ARTICLES_PER_SOURCE;
 import static business.Scraper.Helper.ScrapingUtils.MAX_WAIT_TIME_WHEN_ACCESS_URL;
 
 
@@ -35,7 +35,7 @@ public class ArticleListGenerator {
     private void extractArticlesFromLinks(Set<URL> urls, List<Article> articles) {
         int articleSuccessfullyAdded = 0;
         for (URL url : urls) {
-            if (articleSuccessfullyAdded == MAX_ARTICLES_PER_SOURCE) {
+            if (articleSuccessfullyAdded == Service.MAX_ARTICLES_PER_SOURCE) {
                 break;
             }
 
