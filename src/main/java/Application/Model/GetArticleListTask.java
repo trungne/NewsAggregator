@@ -15,8 +15,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static business.Helper.ScrapingUtils.MAX_ARTICLES_DISPLAYED;
-import static business.Helper.ScrapingUtils.MAX_TERMINATION_TIME;
+import static business.Scraper.Helper.ScrapingUtils.MAX_ARTICLES_DISPLAYED;
+import static business.Scraper.Helper.ScrapingUtils.MAX_TERMINATION_TIME;
 
 // an interface for presentation layer to access scraped articles
 public class GetArticleListTask extends Task<List<Article>> {
@@ -45,7 +45,7 @@ public class GetArticleListTask extends Task<List<Article>> {
         // update progress bar
         articles.addListener((ListChangeListener<Article>)
                 change -> updateProgress(
-                        change.getList().size(), // current 1
+                        change.getList().size(),
                         MAX_ARTICLES_DISPLAYED)); // max 50
 
         updateArticleList(articles);

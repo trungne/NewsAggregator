@@ -1,4 +1,4 @@
-package business.Sanitizer;
+package business.Scraper.Sanitizer;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;

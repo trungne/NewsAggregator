@@ -1,7 +1,7 @@
 package business.Scraper.ArticleCrawler;
 
-import business.Helper.LocalDateTimeParser;
-import business.Scraper.Category;
+import business.Scraper.Helper.LocalDateTimeParser;
+import business.Scraper.LinksCrawler.Category;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

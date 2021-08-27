@@ -1,6 +1,6 @@
 package business.Scraper.ArticleCrawler;
 
-import business.Sanitizer.Sanitizable;
+import business.Scraper.Sanitizer.Sanitizable;
 import business.Scraper.LinksCrawler.LinksCrawler;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;

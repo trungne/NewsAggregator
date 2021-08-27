@@ -1,8 +1,6 @@
 package business.Scraper.LinksCrawler;
 
-import business.Helper.ScrapingUtils;
-import business.Scraper.Category;
-import org.apache.commons.lang3.StringUtils;
+import business.Scraper.Helper.ScrapingUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -33,12 +31,11 @@ public class LinksCrawler {
      * */
     public LinksCrawler(String url,
                         String navBarClass,
-                        String targetClass,
-                        DocGenerator docGenerator) throws IOException {
+                        String targetClass) throws IOException {
         this.homepageUrl = new URL(url);
         this.navBarCssClass = navBarClass;
         this.targetCssClass = targetClass;
-        this.doc = docGenerator.getDocument(url);
+        this.doc = Jsoup.connect(url).get();
     }
 
     public Set<URL> getArticleLinks(String name){

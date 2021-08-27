@@ -1,4 +1,4 @@
-package business.Helper;
+package business.Scraper.Helper;
 
 public class CSS {
     // CSS for main content in articles

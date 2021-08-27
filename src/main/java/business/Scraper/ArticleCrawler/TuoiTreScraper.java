@@ -1,9 +1,7 @@
 package business.Scraper.ArticleCrawler;
 
-import business.Helper.CSS;
-import business.Sanitizer.MainContentFilter;
-import business.Scraper.Category;
-import business.Scraper.LinksCrawler.JSoupGenerator;
+import business.Scraper.Helper.CSS;
+import business.Scraper.Sanitizer.MainContentFilter;
 import business.Scraper.LinksCrawler.LinksCrawler;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -26,8 +24,7 @@ public final class TuoiTreScraper extends Scraper {
         try{
             linksCrawler = new LinksCrawler("https://tuoitre.vn/",
                     "menu-category",
-                    CSS.TUOITRE_TITLE_LINK,
-                    new JSoupGenerator());
+                    CSS.TUOITRE_TITLE_LINK);
         } catch (IOException err) {
             return null;
         }

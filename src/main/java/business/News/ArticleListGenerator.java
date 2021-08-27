@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-import static business.Helper.ScrapingUtils.MAX_ARTICLES_PER_SOURCE;
-import static business.Helper.ScrapingUtils.MAX_WAIT_TIME_WHEN_ACCESS_URL;
+import static business.Scraper.Helper.ScrapingUtils.MAX_ARTICLES_PER_SOURCE;
+import static business.Scraper.Helper.ScrapingUtils.MAX_WAIT_TIME_WHEN_ACCESS_URL;
 
 
 public class ArticleListGenerator {
@@ -29,7 +29,6 @@ public class ArticleListGenerator {
 
     public void populateArticleList(List<Article> articleList) {
         Set<URL> articleUrls = scraper.getLinksFromCategory(category);
-        // TODO: USE LinksCrawler here
         extractArticlesFromLinks(articleUrls, articleList);
     }
 

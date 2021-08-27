@@ -1,4 +1,4 @@
-package business.Scraper;
+package business.Scraper.LinksCrawler;
 
 import java.util.*;
 
@@ -45,8 +45,8 @@ public class Category {
     // convert a category name from Vietnamese to English
     public static String convert(String category) {
         for (String english : dictionary.keySet()) {
-            for (String vietnamse : dictionary.get(english)) {
-                if (category.toLowerCase(Locale.ROOT).contains(vietnamse)) {
+            for (String vietnamese : dictionary.get(english)) {
+                if (category.toLowerCase(Locale.ROOT).contains(vietnamese)) {
                     return english;
                 }
             }
