@@ -2,7 +2,7 @@ package business.Scraper.ArticleCrawler;
 
 import business.Helper.CSS;
 import business.Sanitizer.MainContentFilter;
-import business.Scraper.Category;
+import business.Scraper.LinksCrawler.Category;
 import business.Scraper.LinksCrawler.JSoupGenerator;
 import business.Scraper.LinksCrawler.LinksCrawler;
 import org.apache.commons.lang3.StringUtils;
