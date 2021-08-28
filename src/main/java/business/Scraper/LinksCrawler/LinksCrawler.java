@@ -1,22 +1,17 @@
 package business.Scraper.LinksCrawler;
 
 import business.Scraper.Helper.ScrapingUtils;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class LinksCrawler {
     // TODO: Trung comments this
@@ -132,7 +127,6 @@ public class LinksCrawler {
         }
 
         // main categories are stored in <li>
-        List<URL> links = new ArrayList<>();
         for (Element menu: navBar.getElementsByTag("li")) {
             Elements aTags = menu.getElementsByTag("a");
             for (int i = 0; i < aTags.size(); i++) {
@@ -150,14 +144,12 @@ public class LinksCrawler {
                 if (categoryName.equals(name)) {
                     // get all other a tags if this is the main category (index = 0)
                     if (i == 0){
+                        System.out.println(extractAllLinksFromTag(menu));
                         return extractAllLinksFromTag(menu);
                     }
-
-
-                    try {
-                        URL categoryUrl = new URL(homepageUrl, currentTag.attr("href"));
-                        return new ArrayList<>(Collections.singleton(categoryUrl));
-                    } catch (MalformedURLException ignored) {// do thing
+                    else{
+                        System.out.println(extractOneLinkFromTag(currentTag));
+                        return List.of(Objects.requireNonNull(extractOneLinkFromTag(currentTag)));
                     }
                 }
             }
@@ -167,9 +159,19 @@ public class LinksCrawler {
 //                + name
 //                + "(" + ")"
 //                + " - " + homepageUrl);
-        return links;
+        return new ArrayList<>();
     }
+    private URL extractOneLinkFromTag(Element tag){
+        Element first = tag.getElementsByTag("a").first();
+        if (first != null) {
+            try{
+                return new URL(homepageUrl, first.attr("href"));
+            } catch (MalformedURLException ignored) {
 
+            }
+        }
+        return null;
+    }
     private List<URL> extractAllLinksFromTag(Element tag){
         List<URL> links = new ArrayList<>();
         for (Element link: tag.getElementsByTag("a")){

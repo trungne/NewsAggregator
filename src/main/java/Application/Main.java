@@ -30,14 +30,17 @@ public class Main extends Application {
         primaryStage.setTitle("News Aggregator");
         primaryStage.setScene(scene);
 
-        // close all stages when the main stage is closed
+//         close all stages when the main stage is closed
         primaryStage.setOnCloseRequest(e ->{
             Platform.exit();
-//            System.exit(0);
         });
         primaryStage.show();
     }
 
+    @Override
+    public void stop(){
+        Platform.exit();
+    }
 
     public static void main(String[] args) {
         launch(args);

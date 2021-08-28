@@ -33,9 +33,8 @@ public class ArticleListGenerator {
     }
 
     private void extractArticlesFromLinks(Set<URL> urls, List<Article> articles) {
-        int articleSuccessfullyAdded = 0;
         for (URL url : urls) {
-            if (articleSuccessfullyAdded == ScrapingService.MAX_ARTICLES_PER_SOURCE) {
+            if (articles.size() >= 50) {
                 break;
             }
 
@@ -58,7 +57,6 @@ public class ArticleListGenerator {
 
             if (addedSuccessfully) {
                 articles.add(article);
-                articleSuccessfullyAdded++;
             }
         }
     }
