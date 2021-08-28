@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import static business.Scraper.Helper.ScrapingUtils.MAX_ARTICLES_DISPLAYED;
 import static business.Scraper.Helper.ScrapingUtils.MAX_WAIT_TIME_WHEN_ACCESS_URL;
 
 
@@ -34,7 +35,7 @@ public class ArticleListGenerator {
 
     private void extractArticlesFromLinks(Set<URL> urls, List<Article> articles) {
         for (URL url : urls) {
-            if (articles.size() >= 50) {
+            if (articles.size() >= MAX_ARTICLES_DISPLAYED + 20) {
                 break;
             }
 
@@ -52,7 +53,7 @@ public class ArticleListGenerator {
                 continue;
             }
 
-            Article article = new Article(url, category);
+            Article article = new Article(scraper.getName(), url, category);
             boolean addedSuccessfully = extractContentFromDocument(articleDoc, article);
 
             if (addedSuccessfully) {

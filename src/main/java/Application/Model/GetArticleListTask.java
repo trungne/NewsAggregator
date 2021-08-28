@@ -32,7 +32,7 @@ public class GetArticleListTask extends Task<List<Article>> {
         articles.addListener((ListChangeListener<Article>)
                 change -> updateProgress(
                         change.getList().size(),
-                        MAX_ARTICLES_DISPLAYED));
+                        MAX_ARTICLES_DISPLAYED + 20));
 
         ScrapingService.startScraping(articles, category);
         return articles;

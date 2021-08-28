@@ -11,29 +11,6 @@ import java.util.Set;
 
 public abstract class Scraper implements Scrapable, Sanitizable {
     // TODO: Thai comments this
-    public static String toName(URL url) {
-        String host = url.getHost();
-        switch (host) {
-            case "vnexpress.net": {
-                return "VNExpress";
-            }
-            case "zingnews.vn": {
-                return "ZingNews";
-            }
-            case "tuoitre.vn": {
-                return "Tuoi Tre";
-            }
-            case "nhandan.vn": {
-                return "Nhan Dan";
-            }
-            case "thanhnien.vn": {
-                return "Thanh Nien";
-            }
-            default:
-                return "";
-        }
-    }
-
     protected final String name;
     protected final String defaultThumbnail;
     protected final CssConfiguration cssConfiguration;
@@ -85,6 +62,10 @@ public abstract class Scraper implements Scrapable, Sanitizable {
         else{
             return url;
         }
+    }
+
+    public String getName() {
+        return name;
     }
 
     protected String getDefaultThumbnail() {

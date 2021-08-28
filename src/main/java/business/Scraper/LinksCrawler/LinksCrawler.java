@@ -107,6 +107,7 @@ public class LinksCrawler {
             if (firstATag == null || StringUtils.isEmpty(firstATag.ownText())){
                 continue;
             }
+
             String vietnameseName = firstATag.ownText();
             String englishName = Category.translateToEnglish(vietnameseName);
             if (!Category.isMainCategory(englishName)){
@@ -126,6 +127,7 @@ public class LinksCrawler {
             return new ArrayList<>(); // return an empty list instead of null to prevent error
         }
 
+        List<URL> links = new ArrayList<>();
         // main categories are stored in <li>
         for (Element menu: navBar.getElementsByTag("li")) {
             Elements aTags = menu.getElementsByTag("a");
@@ -134,7 +136,8 @@ public class LinksCrawler {
                 // a tag contains the name of the category BUT in Vietnamese
                 String vietnameseName = currentTag.ownText();
 
-                if(StringUtils.isEmpty(vietnameseName)){
+                if(StringUtils.isEmpty(vietnameseName)
+                        || currentTag.attr("href").contains("video")){
                     continue;
                 }
 
@@ -144,47 +147,35 @@ public class LinksCrawler {
                 if (categoryName.equals(name)) {
                     // get all other a tags if this is the main category (index = 0)
                     if (i == 0){
-                        System.out.println(extractAllLinksFromTag(menu));
-                        return extractAllLinksFromTag(menu);
+                        links.addAll(extractAllLinksFromTag(menu));
                     }
                     else{
-                        System.out.println(extractOneLinkFromTag(currentTag));
-                        return List.of(Objects.requireNonNull(extractOneLinkFromTag(currentTag)));
+                        links.add(extractOneLinkFromTag(currentTag));
                     }
                 }
             }
         }
-
-//        System.out.println("In LinksCrawler: "
-//                + name
-//                + "(" + ")"
-//                + " - " + homepageUrl);
-        return new ArrayList<>();
+        return links;
     }
     private URL extractOneLinkFromTag(Element tag){
         Element first = tag.getElementsByTag("a").first();
         if (first != null) {
             try{
-                return new URL(homepageUrl, first.attr("href"));
-            } catch (MalformedURLException ignored) {
-
-            }
+                if (!first.attr("href").contains("video")){
+                    return new URL(homepageUrl, first.attr("href"));
+                }
+            } catch (MalformedURLException ignored) {}
         }
         return null;
     }
     private List<URL> extractAllLinksFromTag(Element tag){
         List<URL> links = new ArrayList<>();
         for (Element link: tag.getElementsByTag("a")){
-            try{
-                URL url = new URL(homepageUrl, link.attr("href"));
+            URL url = extractOneLinkFromTag(link);
+            if (url != null){
                 links.add(url);
-            }
-            catch (MalformedURLException ignored){
-                // do nothing
             }
         }
         return links;
     }
-
-
 }

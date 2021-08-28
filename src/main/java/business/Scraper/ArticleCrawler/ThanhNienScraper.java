@@ -22,7 +22,7 @@ public final class ThanhNienScraper extends Scraper {
         LinksCrawler linksCrawler;
         try{
             linksCrawler = new LinksCrawler("https://thanhnien.vn/",
-                    "site-header__menu",
+                    "site-header__nav",
                     CSS.THANHNIEN_TITLE_LINK);
         } catch (IOException err) {
             return null;

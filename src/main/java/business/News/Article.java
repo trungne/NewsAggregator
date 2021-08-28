@@ -134,10 +134,10 @@ public class Article implements Comparable<Article> {
         return html;
     }
 
-    public Article(URL url, String mainCategory) {
+    public Article(String source, URL url, String mainCategory) {
         this.url = url;
         this.mainCategory = mainCategory;
-        this.newsSource = Scraper.toName(url);
+        this.newsSource = source;
     }
 
     public void addCategory(Set<String> categoryList) {
