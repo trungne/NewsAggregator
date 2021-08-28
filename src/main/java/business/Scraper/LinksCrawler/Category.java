@@ -13,6 +13,12 @@ public class Category {
     public static final String SPORTS = "Sports";
     public static final String ENTERTAINMENT = "Entertainment";
     public static final String WORLD = "World";
+    public static final HashSet<String> MAIN_CATEGORIES = new HashSet<>(
+            List.of(NEW, COVID, POLITICS, BUSINESS, TECHNOLOGY, HEALTH, SPORTS, ENTERTAINMENT, WORLD));
+
+    public static boolean isMainCategory(String category){
+        return MAIN_CATEGORIES.contains(category);
+    }
 
 
     public static final String OTHERS = "Others";
@@ -23,23 +29,23 @@ public class Category {
     public static final String CAR = "Car";
 
     // map Vietnamese names to English
-    private static final HashMap<String, String[]> dictionary = new HashMap<>();
+    private static final HashMap<String, HashSet<String>> dictionary = new HashMap<>();
 
     static {
-        dictionary.put(NEW, new String[]{"mới nhất", });
+        dictionary.put(NEW, new HashSet<>(List.of("mới nhất")));
 //        CategoriesMapping.put(COVID, new String[]{""});
-        dictionary.put(POLITICS, new String[]{"chính trị", "pháp luật", "luật pháp"});
-        dictionary.put(BUSINESS, new String[]{"kinh doanh", "tài chính - kinh doanh", "kinh tế"});
-        dictionary.put(TECHNOLOGY, new String[]{"khoa học - công nghệ", "công nghệ", "khoa học"});
-        dictionary.put(HEALTH, new String[]{"y tế", "sức khỏe"});
-        dictionary.put(SPORTS, new String[]{"thể thao"});
-        dictionary.put(ENTERTAINMENT, new String[]{"văn hóa", "giải trí"});
-        dictionary.put(WORLD, new String[]{"thế giới"});
-        dictionary.put(SOCIETY, new String[]{"xã hội", "thời sự"});
-        dictionary.put(EDUCATION, new String[]{"giáo dục"});
-        dictionary.put(LIFE, new String[]{"đời sống", "nhịp sống trẻ"});
-        dictionary.put(TOURISM, new String[]{"du lịch", "du lịch - ẩm thực"});
-        dictionary.put(CAR, new String[]{"xe"});
+        dictionary.put(POLITICS, new HashSet<>(List.of("chính trị", "pháp luật", "luật pháp")));
+        dictionary.put(BUSINESS, new HashSet<>(List.of("kinh doanh", "tài chính - kinh doanh", "kinh tế")));
+        dictionary.put(TECHNOLOGY, new HashSet<>(List.of("khoa học - công nghệ", "công nghệ", "khoa học", "Khoa học - Công nghệ")));
+        dictionary.put(HEALTH, new HashSet<>(List.of("y tế", "sức khỏe")));
+        dictionary.put(SPORTS, new HashSet<>(List.of("thể thao")));
+        dictionary.put(ENTERTAINMENT, new HashSet<>(List.of("văn hóa", "giải trí")));
+        dictionary.put(WORLD, new HashSet<>(List.of("thế giới")));
+        dictionary.put(SOCIETY, new HashSet<>(List.of("xã hội", "thời sự")));
+        dictionary.put(EDUCATION, new HashSet<>(List.of("giáo dục")));
+        dictionary.put(LIFE, new HashSet<>(List.of("đời sống", "nhịp sống trẻ")));
+        dictionary.put(TOURISM, new HashSet<>(List.of("du lịch", "du lịch - ẩm thực")));
+        dictionary.put(CAR, new HashSet<>(List.of("xe")));
     }
 
     /** Convert a category name from Vietnamese to English
@@ -47,11 +53,10 @@ public class Category {
      * @return name of the category in English, returns "Others" when no matches are found
      * */
     public static String translateToEnglish(String category) {
+        String cate = category.trim().toLowerCase(Locale.ROOT);
         for (String english : dictionary.keySet()) {
-            for (String vietnamese : dictionary.get(english)) {
-                if (category.toLowerCase(Locale.ROOT).contains(vietnamese)) {
-                    return english;
-                }
+            if(dictionary.get(english).contains(cate)){
+                return english;
             }
         }
         return OTHERS;

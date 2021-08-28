@@ -32,7 +32,7 @@ public class Main extends Application {
 
         // close all stages when the main stage is closed
         primaryStage.setOnCloseRequest(e ->{
-//            Platform.exit();
+            Platform.exit();
 //            System.exit(0);
         });
         primaryStage.show();

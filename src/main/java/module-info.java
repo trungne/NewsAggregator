@@ -4,6 +4,8 @@ module JavaFxApplication {
     requires javafx.web;
     requires javafx.graphics;
 
+    requires com.google.common;
+
     requires org.jsoup;
     requires selenium.chrome.driver;
     requires io.github.bonigarcia.webdrivermanager;

@@ -3,12 +3,14 @@ package business.Scraper;
 import business.News.Article;
 import business.News.ArticleListGenerator;
 import business.Scraper.ArticleCrawler.*;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import static business.Scraper.Helper.ScrapingUtils.MAX_TERMINATION_TIME;
@@ -62,6 +64,7 @@ public class ScrapingService {
         try {
             // Wait a while for existing tasks to terminate
             if (!pool.awaitTermination(MAX_TERMINATION_TIME, TimeUnit.SECONDS)) {
+                System.err.println("Shutdown now...");
                 pool.shutdownNow(); // Cancel currently executing tasks
                 // Wait a while for tasks to respond to being cancelled
                 if (!pool.awaitTermination(MAX_TERMINATION_TIME, TimeUnit.SECONDS))

@@ -52,7 +52,10 @@ public class LinksCrawler {
         this.homepageUrl = new URL(url);
         this.navBarCssClass = navBarClass;
         this.targetCssClass = targetClass;
-        this.doc = Jsoup.connect(url).get();
+        this.doc = Jsoup
+                .connect(url)
+                .timeout(10000)
+                .get();
     }
 
     public Set<URL> getArticleLinks(String name){
@@ -76,8 +79,11 @@ public class LinksCrawler {
         else if (name.equals(Category.COVID)){
             links.addAll(getCovidCategoryLinks());
         }
-        else {
+        else if (Category.isMainCategory(name)){
             links.addAll(navigateLinksInNavBar(name));
+        }
+        else{
+            links.addAll(getOtherCategories());
         }
         return links;
     }
@@ -93,6 +99,30 @@ public class LinksCrawler {
             }
         }
         return links;
+    }
+    private List<URL> getOtherCategories(){
+        Element navBar = doc.selectFirst("." + navBarCssClass); // get navigation bar
+        if (navBar == null){
+            return new ArrayList<>();
+        }
+        List<URL> links = new ArrayList<>();
+
+        for (Element menu: navBar.getElementsByTag("li")){
+            Element firstATag = menu.getElementsByTag("a").first();
+            if (firstATag == null || StringUtils.isEmpty(firstATag.ownText())){
+                continue;
+            }
+            String vietnameseName = firstATag.ownText();
+            String englishName = Category.translateToEnglish(vietnameseName);
+            if (!Category.isMainCategory(englishName)){
+                try {
+                    URL url = new URL(homepageUrl, firstATag.attr("href"));
+                    links.add(url);
+                } catch (MalformedURLException ignored) {}
+            }
+        }
+        return links;
+
     }
 
     private List<URL> navigateLinksInNavBar(String name){
@@ -117,27 +147,26 @@ public class LinksCrawler {
                 String categoryName = Category.translateToEnglish(vietnameseName);
 
                 // compare the provided name with the name in a tag
-                if (categoryName.equals(name) && i == 0) {
+                if (categoryName.equals(name)) {
                     // get all other a tags if this is the main category (index = 0)
-                    links.addAll(extractAllLinksFromTag(menu));
-                } else if (categoryName.equals(name)) {
-                    // only get this tag if it is the sub category (index =/= 0)
+                    if (i == 0){
+                        return extractAllLinksFromTag(menu);
+                    }
+
+
                     try {
                         URL categoryUrl = new URL(homepageUrl, currentTag.attr("href"));
-                        // only immediately return the category links when the category is NOT others
-
-                        if (!categoryName.equals(Category.OTHERS)){
-                            return new ArrayList<>(Collections.singleton(categoryUrl));
-                        }
-                        else {
-                            links.add(categoryUrl);
-                        }
-                    } catch (MalformedURLException ignored) {
-                        // do thing
+                        return new ArrayList<>(Collections.singleton(categoryUrl));
+                    } catch (MalformedURLException ignored) {// do thing
                     }
                 }
             }
         }
+
+//        System.out.println("In LinksCrawler: "
+//                + name
+//                + "(" + ")"
+//                + " - " + homepageUrl);
         return links;
     }
 

@@ -12,8 +12,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ScrapingUtils {
-    public final static int MAX_ARTICLES_PER_SOURCE = 10;
-
     public final static int MAX_WAIT_TIME_WHEN_ACCESS_URL = 5000; // ms
     public final static int MAX_TERMINATION_TIME = 15000; // ms
     public final static int MAX_ARTICLES_DISPLAYED = 50;
