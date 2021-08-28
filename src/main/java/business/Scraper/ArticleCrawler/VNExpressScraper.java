@@ -40,7 +40,7 @@ public final class VNExpressScraper extends Scraper {
                 CSS.VNEXPRESS_TIME,
                 CSS.VNEXPRESS_PIC);
         return new VNExpressScraper("VNExpress",
-                "https://s1.vnecdn.net/vnexpress/restruct/i/v395/logo_default.jpg",
+                "https://s1.vnecdn.net/vnexpress/restruct/i/v420/logo_default.jpg",
                 VNExpressConfig,
                 linksCrawler);
     }

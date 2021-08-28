@@ -75,7 +75,7 @@ public final class ZingNewsScraper extends Scraper {
             Elements categoryTags = tag.getElementsByClass("parent_cate");
             for (Element e : categoryTags) {
                 String category = e.attr("title");
-                category = Category.convert(category);
+                category = Category.translateToEnglish(category);
                 categoryList.add(category);
             }
         }

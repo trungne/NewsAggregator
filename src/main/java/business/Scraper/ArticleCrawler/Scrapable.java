@@ -81,7 +81,7 @@ public interface Scrapable {
                 String category = link.attr("title");
 
                 // convert from Vietnamese to English name
-                category = Category.convert(category); // return "" when cannot convert
+                category = Category.translateToEnglish(category); // return "" when cannot convert
                 categoryList.add(category);
             }
         }
@@ -95,7 +95,7 @@ public interface Scrapable {
         Element tagContainsCategoryInfo = doc.getElementsByAttributeValue(key, value).first();
         if(tagContainsCategoryInfo != null){
             String category = tagContainsCategoryInfo.attr(attribute);
-            return Category.convert(category);
+            return Category.translateToEnglish(category);
         }
         return "";
     }

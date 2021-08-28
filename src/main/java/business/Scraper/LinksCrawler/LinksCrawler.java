@@ -1,15 +1,22 @@
 package business.Scraper.LinksCrawler;
 
 import business.Scraper.Helper.ScrapingUtils;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class LinksCrawler {
     // TODO: Trung comments this
@@ -20,6 +27,16 @@ public class LinksCrawler {
             "https://tuoitre.vn/covid-19.html",
             "https://nhandan.vn/tieu-diem"
     };
+    private static final ChromeOptions OPTIONS = new ChromeOptions()
+            .addArguments("--headless",
+                    "--disable-gpu",
+                    "--window-size=1,1",
+                    "--ignore-certificate-errors",
+                    "--disable-popup-blocking");
+    static {
+        WebDriverManager.chromedriver().setup();
+    }
+
     private final URL homepageUrl;
     private final String navBarCssClass;
     private final String targetCssClass;
@@ -36,6 +53,10 @@ public class LinksCrawler {
         this.navBarCssClass = navBarClass;
         this.targetCssClass = targetClass;
         this.doc = Jsoup.connect(url).get();
+//        WebDriver driver = new ChromeDriver(OPTIONS);
+//        driver.get(url);
+//        this.doc = Jsoup.parse(driver.getPageSource());
+//        driver.quit();
     }
 
     public Set<URL> getArticleLinks(String name){
@@ -57,17 +78,23 @@ public class LinksCrawler {
             links.add(homepageUrl);
         }
         else if (name.equals(Category.COVID)){
-            for (String url: COVID_CATEGORY_LINKS){
-                try{
-                    URL _url = new URL(url);
-                    links.add(_url);
-                } catch (MalformedURLException ignored){
-                    // do nothing
-                }
-            }
+            links.addAll(getCovidCategoryLinks());
         }
         else {
             links.addAll(navigateLinksInNavBar(name));
+        }
+        return links;
+    }
+
+    private List<URL> getCovidCategoryLinks(){
+        List<URL> links = new ArrayList<>();
+        for (String url: COVID_CATEGORY_LINKS){
+            try{
+                URL _url = new URL(url);
+                links.add(_url);
+            } catch (MalformedURLException ignored){
+                // do nothing
+            }
         }
         return links;
     }
@@ -85,18 +112,34 @@ public class LinksCrawler {
             for (int i = 0; i < aTags.size(); i++) {
                 Element currentTag = aTags.get(i);
                 // a tag contains the name of the category BUT in Vietnames
-                String categoryName = Category.convert(currentTag.ownText()); // need to be translated into English
+                String vietnameseName = currentTag.ownText();
+
+                if(StringUtils.isEmpty(vietnameseName)){
+                    continue;
+                }
+
+                String categoryName = Category.translateToEnglish(vietnameseName);
 
                 // compare the provided name with the name in a tag
                 if (categoryName.equals(name) && i == 0) {
                     // get all other a tags if this is the main category (index = 0)
-                    System.out.println(categoryName);
-                    return extractAllLinksFromTag(menu);
+                    List<URL> categories = extractAllLinksFromTag(menu);
+                    System.out.println(name + ": " + categories);
+                    return categories;
                 } else if (categoryName.equals(name)) {
                     // only get this tag if it is the sub category (index =/= 0)
                     try {
                         URL categoryUrl = new URL(homepageUrl, currentTag.attr("href"));
-                        return new ArrayList<>(Collections.singleton(categoryUrl));
+                        // only immediately return the category links when the category is NOT others
+
+                        if (!categoryName.equals(Category.OTHERS)){
+                            System.out.println(name + ": " + categoryUrl);
+                            return new ArrayList<>(Collections.singleton(categoryUrl));
+                        }
+                        else{
+                            System.out.println("OTHERS: " + categoryUrl);
+                            links.add(categoryUrl);
+                        }
                     } catch (MalformedURLException ignored) {
                         // do thing
                     }

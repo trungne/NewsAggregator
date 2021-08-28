@@ -13,8 +13,9 @@ public class Category {
     public static final String SPORTS = "Sports";
     public static final String ENTERTAINMENT = "Entertainment";
     public static final String WORLD = "World";
-    public static final String OTHERS = "Others";
 
+
+    public static final String OTHERS = "Others";
     public static final String SOCIETY = "Society";
     public static final String LAWS = "Laws";
     public static final String EDUCATION = "Education";
@@ -26,6 +27,7 @@ public class Category {
     private static final HashMap<String, String[]> dictionary = new HashMap<>();
 
     static {
+        dictionary.put(NEW, new String[]{"mới nhất", });
 //        CategoriesMapping.put(COVID, new String[]{""});
         dictionary.put(POLITICS, new String[]{"chính trị"});
         dictionary.put(BUSINESS, new String[]{"kinh doanh", "tài chính - kinh doanh", "kinh tế"});
@@ -43,7 +45,7 @@ public class Category {
     }
 
     // convert a category name from Vietnamese to English
-    public static String convert(String category) {
+    public static String translateToEnglish(String category) {
         for (String english : dictionary.keySet()) {
             for (String vietnamese : dictionary.get(english)) {
                 if (category.toLowerCase(Locale.ROOT).contains(vietnamese)) {

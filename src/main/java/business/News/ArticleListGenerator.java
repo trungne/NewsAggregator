@@ -2,7 +2,7 @@ package business.News;
 
 import business.Scraper.ArticleCrawler.ElementNotFound;
 import business.Scraper.ArticleCrawler.Scraper;
-import business.Scraper.Service;
+import business.Scraper.ScrapingService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -35,7 +35,7 @@ public class ArticleListGenerator {
     private void extractArticlesFromLinks(Set<URL> urls, List<Article> articles) {
         int articleSuccessfullyAdded = 0;
         for (URL url : urls) {
-            if (articleSuccessfullyAdded == Service.MAX_ARTICLES_PER_SOURCE) {
+            if (articleSuccessfullyAdded == ScrapingService.MAX_ARTICLES_PER_SOURCE) {
                 break;
             }
 

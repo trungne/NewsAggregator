@@ -114,7 +114,7 @@ public final class NhanDanScraper extends Scraper {
         if (!tags.isEmpty()) {
             for (Element e : tags) {
                 String category = e.text();
-                category = Category.convert(category);
+                category = Category.translateToEnglish(category);
                 categoryList.add(category);
             }
         }
