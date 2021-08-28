@@ -50,12 +50,20 @@ public final class ThanhNienScraper extends Scraper {
 
     @Override
     public String scrapeThumbnail(Document doc) {
+        // get the avatar of the article
         Element thumbnailTag = doc.getElementById("contentAvatar");
-        if (thumbnailTag != null){
+        if (thumbnailTag != null && thumbnailTag.children().isEmpty()){
             for (Element img: thumbnailTag.getElementsByTag("img")){
                 if (!StringUtils.isEmpty(img.attr("src"))){
                     return img.attr("src");
                 }
+            }
+        }
+        // if there is no avatar, get the first img
+        else {
+            String url = scrapeFirstImgUrl(doc, cssConfiguration.picture);
+            if (!StringUtils.isEmpty(url)){
+                return url;
             }
         }
 

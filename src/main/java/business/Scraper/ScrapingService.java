@@ -18,7 +18,7 @@ public class ScrapingService {
     public static int MAX_ARTICLES_PER_SOURCE;
     private static final List<Scraper> SCRAPERS = initScrapers();
 
-    public static List<Scraper> initScrapers(){
+    private static List<Scraper> initScrapers(){
         List<Scraper> scrapers = createScrapers();
         MAX_ARTICLES_PER_SOURCE = (int) Math.ceil((50 * 1.0)/scrapers.size());
         return scrapers;
@@ -54,7 +54,6 @@ public class ScrapingService {
         }
         shutdownAndAwaitTermination(es);
         Collections.sort(articles);
-
     }
 
     // https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html

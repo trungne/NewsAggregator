@@ -147,8 +147,8 @@ public final class TuoiTreScraper extends Scraper {
             String rawUrl = node.attr("data-src");
 
             // extract the link from rawUrl by regex
-            String regrex = "vid=(.*)mp4";
-            Pattern pattern = Pattern.compile(regrex);
+            String regex = "vid=(.*)mp4";
+            Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(rawUrl);
             if (matcher.find()) {
                 String src = "https://hls.tuoitre.vn/" + matcher.group(1) + "mp4";

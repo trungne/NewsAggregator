@@ -77,7 +77,6 @@ public class ArticleListGenerator {
         catch (ElementNotFound | IllegalArgumentException e){
             return false;
         }
-
         return true;
     }
 }

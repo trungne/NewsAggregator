@@ -2,9 +2,11 @@ package business.Scraper.Sanitizer;
 
 import business.Scraper.Helper.CSS;
 import business.Scraper.Helper.ScrapingUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
+import org.jsoup.nodes.TextNode;
 import org.jsoup.safety.Safelist;
 import org.jsoup.select.NodeFilter;
 
@@ -70,12 +72,25 @@ public abstract class MainContentFilter implements NodeFilter {
      * */
     @Override
     public FilterResult head(Node node, int depth) {
+//        if (node instanceof TextNode e){
+//            if (StringUtils.isEmpty(e.text())){
+//                return FilterResult.CONTINUE;
+//            }
+//            String text = "TextNode: " + e.text();
+//            Element p = new Element("div").text(text);
+//            if (!StringUtils.isEmpty(p.text())){
+//                root.append(p.addClass(CSS.PARAGRAPH).outerHtml());
+//
+//            }
+//            return FilterResult.CONTINUE;
+//        }
+
+
         // only consider Element, skip TextNode
-        if (!(node instanceof Element)) {
+        if (!(node instanceof Element e)) {
             return FilterResult.SKIP_ENTIRELY;
         }
 
-        Element e = (Element) node;
         try {
             if (skip(e)){
                 return FilterResult.SKIP_ENTIRELY;

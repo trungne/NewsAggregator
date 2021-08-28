@@ -17,7 +17,6 @@ public class Category {
 
     public static final String OTHERS = "Others";
     public static final String SOCIETY = "Society";
-    public static final String LAWS = "Laws";
     public static final String EDUCATION = "Education";
     public static final String LIFE = "Life";
     public static final String TOURISM = "Tourism";
@@ -29,7 +28,7 @@ public class Category {
     static {
         dictionary.put(NEW, new String[]{"mới nhất", });
 //        CategoriesMapping.put(COVID, new String[]{""});
-        dictionary.put(POLITICS, new String[]{"chính trị"});
+        dictionary.put(POLITICS, new String[]{"chính trị", "pháp luật", "luật pháp"});
         dictionary.put(BUSINESS, new String[]{"kinh doanh", "tài chính - kinh doanh", "kinh tế"});
         dictionary.put(TECHNOLOGY, new String[]{"khoa học - công nghệ", "công nghệ", "khoa học"});
         dictionary.put(HEALTH, new String[]{"y tế", "sức khỏe"});
@@ -37,14 +36,16 @@ public class Category {
         dictionary.put(ENTERTAINMENT, new String[]{"văn hóa", "giải trí"});
         dictionary.put(WORLD, new String[]{"thế giới"});
         dictionary.put(SOCIETY, new String[]{"xã hội", "thời sự"});
-        dictionary.put(LAWS, new String[]{"pháp luật", "luật pháp"});
         dictionary.put(EDUCATION, new String[]{"giáo dục"});
         dictionary.put(LIFE, new String[]{"đời sống", "nhịp sống trẻ"});
         dictionary.put(TOURISM, new String[]{"du lịch", "du lịch - ẩm thực"});
         dictionary.put(CAR, new String[]{"xe"});
     }
 
-    // convert a category name from Vietnamese to English
+    /** Convert a category name from Vietnamese to English
+     * @param category - name of the category in Vietnamese
+     * @return name of the category in English, returns "Others" when no matches are found
+     * */
     public static String translateToEnglish(String category) {
         for (String english : dictionary.keySet()) {
             for (String vietnamese : dictionary.get(english)) {

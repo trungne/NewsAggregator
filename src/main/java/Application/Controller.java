@@ -104,6 +104,10 @@ public class Controller {
      */
     public void changePage(ActionEvent e){
         Button b = (Button) e.getSource();
+        if (b == currentPageButton){
+            return;
+        }
+
         int pageNum = Integer.parseInt(b.getText());
         updatePreviewsPane(pageNum);
     }

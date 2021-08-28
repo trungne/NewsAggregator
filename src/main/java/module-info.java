@@ -14,10 +14,10 @@ module JavaFxApplication {
     exports business.News;
     exports Application.Model;
     exports business.Scraper.ArticleCrawler;
-
-    opens Application to javafx.fxml;
-    opens Application.Model to javafx.fxml;
     exports business.Scraper.LinksCrawler;
 
 
+    opens Application to javafx.fxml;
+    opens Application.View to javafx.fxml;
+    opens Application.Model to javafx.fxml;
 }

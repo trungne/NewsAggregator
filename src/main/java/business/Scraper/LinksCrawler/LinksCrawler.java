@@ -27,15 +27,15 @@ public class LinksCrawler {
             "https://tuoitre.vn/covid-19.html",
             "https://nhandan.vn/tieu-diem"
     };
-    private static final ChromeOptions OPTIONS = new ChromeOptions()
-            .addArguments("--headless",
-                    "--disable-gpu",
-                    "--window-size=1,1",
-                    "--ignore-certificate-errors",
-                    "--disable-popup-blocking");
-    static {
-        WebDriverManager.chromedriver().setup();
-    }
+//    private static final ChromeOptions OPTIONS = new ChromeOptions()
+//            .addArguments("--headless",
+//                    "--disable-gpu",
+//                    "--window-size=1,1",
+//                    "--ignore-certificate-errors",
+//                    "--disable-popup-blocking");
+//    static {
+//        WebDriverManager.chromedriver().setup();
+//    }
 
     private final URL homepageUrl;
     private final String navBarCssClass;
@@ -53,10 +53,6 @@ public class LinksCrawler {
         this.navBarCssClass = navBarClass;
         this.targetCssClass = targetClass;
         this.doc = Jsoup.connect(url).get();
-//        WebDriver driver = new ChromeDriver(OPTIONS);
-//        driver.get(url);
-//        this.doc = Jsoup.parse(driver.getPageSource());
-//        driver.quit();
     }
 
     public Set<URL> getArticleLinks(String name){
@@ -111,7 +107,7 @@ public class LinksCrawler {
             Elements aTags = menu.getElementsByTag("a");
             for (int i = 0; i < aTags.size(); i++) {
                 Element currentTag = aTags.get(i);
-                // a tag contains the name of the category BUT in Vietnames
+                // a tag contains the name of the category BUT in Vietnamese
                 String vietnameseName = currentTag.ownText();
 
                 if(StringUtils.isEmpty(vietnameseName)){
@@ -123,9 +119,7 @@ public class LinksCrawler {
                 // compare the provided name with the name in a tag
                 if (categoryName.equals(name) && i == 0) {
                     // get all other a tags if this is the main category (index = 0)
-                    List<URL> categories = extractAllLinksFromTag(menu);
-                    System.out.println(name + ": " + categories);
-                    return categories;
+                    links.addAll(extractAllLinksFromTag(menu));
                 } else if (categoryName.equals(name)) {
                     // only get this tag if it is the sub category (index =/= 0)
                     try {
@@ -133,11 +127,9 @@ public class LinksCrawler {
                         // only immediately return the category links when the category is NOT others
 
                         if (!categoryName.equals(Category.OTHERS)){
-                            System.out.println(name + ": " + categoryUrl);
                             return new ArrayList<>(Collections.singleton(categoryUrl));
                         }
-                        else{
-                            System.out.println("OTHERS: " + categoryUrl);
+                        else {
                             links.add(categoryUrl);
                         }
                     } catch (MalformedURLException ignored) {
