@@ -131,13 +131,12 @@ public class LinksCrawler {
         // main categories are stored in <li>
         for (Element menu: navBar.getElementsByTag("li")) {
             Elements aTags = menu.getElementsByTag("a");
-            for (int i = 0; i < aTags.size(); i++) {
-                Element currentTag = aTags.get(i);
+            for (Element a: aTags){
                 // a tag contains the name of the category BUT in Vietnamese
-                String vietnameseName = currentTag.ownText();
+                String vietnameseName = a.ownText();
 
                 if(StringUtils.isEmpty(vietnameseName)
-                        || currentTag.attr("href").contains("video")){
+                        || a.attr("href").contains("video")){
                     continue;
                 }
 
@@ -146,15 +145,14 @@ public class LinksCrawler {
                 // compare the provided name with the name in a tag
                 if (categoryName.equals(name)) {
                     // get all other a tags if this is the main category (index = 0)
-                    if (i == 0){
+                    if (aTags.indexOf(a) == 0)
                         links.addAll(extractAllLinksFromTag(menu));
-                    }
-                    else{
-                        links.add(extractOneLinkFromTag(currentTag));
-                    }
+                    else
+                        links.add(extractOneLinkFromTag(a));
                 }
             }
         }
+        System.out.println(links);
         return links;
     }
     private URL extractOneLinkFromTag(Element tag){

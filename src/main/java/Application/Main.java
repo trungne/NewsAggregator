@@ -33,13 +33,10 @@ public class Main extends Application {
 //         close all stages when the main stage is closed
         primaryStage.setOnCloseRequest(e ->{
             Platform.exit();
+//          enable this only when you can't fix the lingering threads!
+//            System.exit(0);
         });
         primaryStage.show();
-    }
-
-    @Override
-    public void stop(){
-        Platform.exit();
     }
 
     public static void main(String[] args) {
