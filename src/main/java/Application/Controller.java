@@ -3,6 +3,7 @@ package Application;
 import Application.Model.Model;
 import Application.View.PreviewGrid;
 import business.News.Article;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -19,24 +20,24 @@ import java.util.*;
 
 
 public class Controller {
-    // TODO: Andrew comments this
-    @FXML public GridPane mainGridPane;
+    @FXML private GridPane mainGridPane;
     @FXML private VBox previewBox;
     @FXML private ScrollPane mainArea;
+    @FXML private AnchorPane anchorPane;
     @FXML private HBox pageBox;
     @FXML private VBox categoryBox;
-    private final Model model;
-    public static final int MAX_PREVIEWS_PER_PAGE = 10;
 
-    List<PreviewGrid> previewGrids = new ArrayList<>();
-    ProgressBar progressBar = new ProgressBar();
+    private final Model model;
+    private static final int MAX_PREVIEWS_PER_PAGE = 10;
+
+    private final ProgressBar progressBar = new ProgressBar();
     private final WebView browser = new WebView();
     private final Pane articlePane = new Pane();
     private final Scene articleScene = new Scene(articlePane);
     private final Stage articleStage = new Stage();
 
     private Button currentCategoryButton;
-    public Button currentPageButton;
+    private Button currentPageButton;
 
     /** Controller constructor
      */
@@ -50,37 +51,14 @@ public class Controller {
      */
     public void initialize() {
         // dynamically create grid pane inside scroll pane
-        for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
-            PreviewGrid grid = new PreviewGrid();
-            grid.setOnMouseEntered(e -> grid.underline());
-            grid.setOnMouseExited(e -> grid.underline());
-            grid.setOnMouseClicked(e -> {
-                // do nothing if no category or page has been selected
-                if (currentCategoryButton == null || currentPageButton == null){
-                    return;
-                }
-
-                GridPane node = (GridPane) e.getSource();
-                int index = (Integer.parseInt(currentPageButton.getText()) - 1) * 10
-                        + previewBox.getChildren().indexOf(node);
-                openArticleInNewStage(index);
-            });
-
-            // bind title's wrapping property in each grid with mainGridPane prefWidth property
-            // and subtract 160px ~ 200px (of the thumbnail in each grid)
-            grid.titleWrappingWidthProperty().bind(
-                    mainGridPane.getColumnConstraints().get(1).prefWidthProperty().subtract(200)
-            );
-            this.previewGrids.add(grid);
-            this.previewBox.getChildren().add(grid);
-        }
+        createPreviewGrids(this.previewBox);
 
         articlePane.getChildren().add(browser);
         articleStage.setScene(articleScene);
         articleStage.setOnCloseRequest(event ->
                 browser.getEngine().load(null));
 
-        progressBar.setPrefSize(500, 30);
+        progressBar.setPrefSize(anchorPane.getPrefWidth(), 30);
 
         Button newCategory = (Button) categoryBox.getChildren().get(0);
         newCategory.fire();
@@ -91,8 +69,8 @@ public class Controller {
      */
     public void selectCategory(ActionEvent e){
         Button b = (Button) e.getSource();
-        // do nothing if the category has already been selected
-        if (b == currentCategoryButton) {
+        // do nothing if the category has already been selected/scraped
+        if (model.hasData(b.getText())){
             return;
         }
         highlightCategory(b);
@@ -112,6 +90,22 @@ public class Controller {
         updatePreviewsPane(pageNum);
     }
 
+    public void refresh(){
+        this.model.refresh(currentCategoryButton.getText());
+        currentCategoryButton.fire();
+    }
+
+    public void refreshAll(){
+        this.model.refresh();
+        // automatically redirect to new category when refresh all
+        Button newCategory = (Button) categoryBox.getChildren().get(0);
+        newCategory.fire();
+    }
+
+    public void close(){
+        Platform.exit();
+    }
+
     /** Send request of scrapping a particular category
      * @param category: category's name
      */
@@ -128,9 +122,6 @@ public class Controller {
     /** Update the experience on preview pane after scrapping is finished
      */
     public void updatePreviewsPane(){
-        enableAllChildButtons(categoryBox);
-        enableAllChildButtons(pageBox);
-
         // By default, page 1 is selected after scraping finishes
         updatePreviewsPane(1);
     }
@@ -139,6 +130,9 @@ public class Controller {
      * @param pageNum: pagination index
      */
     private void updatePreviewsPane(int pageNum){
+        enableAllChildButtons(categoryBox);
+        enableAllChildButtons(pageBox);
+
         highlightPage(pageNum);
         List<Article> articles = getArticleSublist(pageNum);
         placePreviewsOnGrids(articles);
@@ -161,16 +155,9 @@ public class Controller {
     private void placePreviewsOnGrids(List<Article> articles){
         for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
             Article a = articles.get(i);
-            String thumbnail = a.getThumbNail();
-            String title = a.getTitle();
-            String description = a.getDescription();
-            String publishedTime = a.getRelativeTime();
-            String source = a.getNewsSource();
-
-            // this is used to retrieve article in model later when a preview is clicked
-            previewGrids.get(i).setPreviewToGrid(thumbnail, title,
-                                                description, publishedTime,
-                                                source);
+            PreviewGrid previewGrid = (PreviewGrid) previewBox.getChildren().get(i);
+            previewGrid.setPreviewToGrid(a.getThumbNail(), a.getTitle(),
+                    a.getDescription(), a.getRelativeTime(), a.getNewsSource());
         }
     }
 
@@ -179,8 +166,6 @@ public class Controller {
      */
     private void openArticleInNewStage(int index){
         Article content = model.getArticleContent(currentCategoryButton.getText(), index);
-        // TODO: turn this off when done testing
-        System.out.println(content.getHtml());
         browser.getEngine().loadContent(content.getHtml());
         articleStage.setTitle(content.getTitle());
 
@@ -229,6 +214,32 @@ public class Controller {
     private void enableAllChildButtons(Pane parent){
         for (Node node: parent.getChildren())
             node.setDisable(false);
+    }
+
+    private void createPreviewGrids(Pane pane){
+        for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
+            PreviewGrid grid = new PreviewGrid();
+            grid.setOnMouseEntered(e -> grid.underline());
+            grid.setOnMouseExited(e -> grid.underline());
+            grid.setOnMouseClicked(e -> {
+                // do nothing if no category or page has been selected
+                if (currentCategoryButton == null || currentPageButton == null){
+                    return;
+                }
+
+                GridPane node = (GridPane) e.getSource();
+                int index = (Integer.parseInt(currentPageButton.getText()) - 1) * 10
+                        + previewBox.getChildren().indexOf(node);
+                openArticleInNewStage(index);
+            });
+
+            // bind title's wrapping property in each grid with mainGridPane prefWidth property
+            // and subtract 160px ~ 200px (of the thumbnail in each grid)
+            grid.titleWrappingWidthProperty().bind(
+                    mainGridPane.getColumnConstraints().get(1).prefWidthProperty().subtract(200)
+            );
+            pane.getChildren().add(grid);
+        }
     }
 }
 

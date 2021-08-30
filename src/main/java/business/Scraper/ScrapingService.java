@@ -5,9 +5,9 @@ import business.News.ArticleListGenerator;
 import business.Scraper.ArticleCrawler.*;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.io.IOException;
+import java.net.*;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -16,15 +16,7 @@ import java.util.concurrent.TimeUnit;
 import static business.Scraper.Helper.ScrapingUtils.MAX_TERMINATION_TIME;
 
 public class ScrapingService {
-    // needs 50 articles
-    public static int MAX_ARTICLES_PER_SOURCE;
-    private static final List<Scraper> SCRAPERS = initScrapers();
-
-    private static List<Scraper> initScrapers(){
-        List<Scraper> scrapers = createScrapers();
-        MAX_ARTICLES_PER_SOURCE = (int) Math.ceil((50 * 1.0)/scrapers.size());
-        return scrapers;
-    }
+    private static final List<Scraper> SCRAPERS = createScrapers();
 
     private static List<Scraper> createScrapers(){
         Scraper[] scrapes = new Scraper[]{
@@ -42,6 +34,7 @@ public class ScrapingService {
         }
         return validScrapers;
     }
+
     /** Get all scrapers to scrape article in a particular category
      * @param articles a provided list where articles will be added to
      * @param category a provided category where scrapers will get articles from

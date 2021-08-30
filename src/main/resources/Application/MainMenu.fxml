@@ -17,7 +17,7 @@
 <BorderPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Application.Controller">
    <center>
        <!-- added id for container GridPane-->
-      <GridPane fx:id="mainGridPane" prefHeight="601.0" >
+      <GridPane fx:id="mainGridPane" prefHeight="601.0">
         <columnConstraints>
           <ColumnConstraints minWidth="10.0" prefWidth="200.0" />
           <ColumnConstraints halignment="CENTER" minWidth="10.0" />
@@ -118,11 +118,11 @@
                   </Button>
                </children>
             </VBox>
-            <AnchorPane prefHeight="574.0" prefWidth="590.0" GridPane.columnIndex="1" GridPane.rowSpan="9">
+            <AnchorPane fx:id="anchorPane" prefHeight="574.0" prefWidth="590.0" GridPane.columnIndex="1" GridPane.rowSpan="9">
                <children>
                   <ScrollPane fx:id="mainArea" prefHeight="381.0" prefWidth="590.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <content>
-                        <VBox fx:id="previewBox" alignment="CENTER" prefHeight="486.0" prefWidth="591.0" spacing="10.0" />
+                        <VBox fx:id="previewBox" alignment="CENTER" prefHeight="486.0" prefWidth="668.0" spacing="10.0" />
                      </content>
                   </ScrollPane>
                </children>
@@ -135,12 +135,14 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+                  <MenuItem mnemonicParsing="false" onAction="#refresh" text="Refresh Current Category" />
+                  <MenuItem mnemonicParsing="false" onAction="#refreshAll" text="Refresh All" />
+              <MenuItem mnemonicParsing="false" onAction="#close" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+              <MenuItem mnemonicParsing="false" text="How To Use" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="About us">

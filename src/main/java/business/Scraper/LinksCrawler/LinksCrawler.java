@@ -22,16 +22,6 @@ public class LinksCrawler {
             "https://tuoitre.vn/covid-19.html",
             "https://nhandan.vn/tieu-diem"
     };
-//    private static final ChromeOptions OPTIONS = new ChromeOptions()
-//            .addArguments("--headless",
-//                    "--disable-gpu",
-//                    "--window-size=1,1",
-//                    "--ignore-certificate-errors",
-//                    "--disable-popup-blocking");
-//    static {
-//        WebDriverManager.chromedriver().setup();
-//    }
-
     private final URL homepageUrl;
     private final String navBarCssClass;
     private final String targetCssClass;
@@ -152,7 +142,6 @@ public class LinksCrawler {
                 }
             }
         }
-        System.out.println(links);
         return links;
     }
     private URL extractOneLinkFromTag(Element tag){

@@ -13,12 +13,10 @@ import java.util.Objects;
 
 
 public class Main extends Application {
-
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root;
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/MainMenu.fxml")));
-
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("MainMenu.fxml"));
+        Parent root = fxmlLoader.load();
         // create new scene in new variable
         Scene scene = new Scene(root, 1000, 800);
         // grab mainGridPane out of elements tree
@@ -30,10 +28,9 @@ public class Main extends Application {
         primaryStage.setTitle("News Aggregator");
         primaryStage.setScene(scene);
 
-//         close all stages when the main stage is closed
+//      close all stages when the main stage is closed
         primaryStage.setOnCloseRequest(e ->{
             Platform.exit();
-//          enable this only when you can't fix the lingering threads!
 //            System.exit(0);
         });
         primaryStage.show();

@@ -73,7 +73,6 @@ public abstract class Scraper implements Scrapable, Sanitizable {
     }
 
     public Set<URL> getLinksFromCategory(String categoryName) {
-        System.out.println("In Scraper: "+ categoryName + " links scraped: " + name);
         return linksCrawler.getArticleLinks(categoryName);
     }
 

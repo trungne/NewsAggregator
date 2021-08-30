@@ -16,6 +16,11 @@ public class Model {
 
     public Model(Controller controller){
         this.controller = controller;
+        service.setOnSucceeded(e -> {
+            List<Article> newlyScrapedArticles = (List<Article>) e.getSource().getValue();
+            articlesByCategories.put(service.category, newlyScrapedArticles);
+            notifyController();
+        });
     }
 
     public GetArticleListService getService() {
@@ -23,7 +28,7 @@ public class Model {
     }
 
     // this function is called when the service finished, that is when scraping articles is done
-    public void notifyController(){
+    private void notifyController(){
         this.controller.updatePreviewsPane();
     }
 
@@ -44,18 +49,37 @@ public class Model {
         return articlesByCategories.get(category).get(index);
     }
 
+    /** First check if the category already has articles scraped. If yes, immediately notify the controller.
+     * Otherwise, start scraping service
+     * */
     public void loadArticles(String category){
-        if (articlesByCategories.get(category) != null){
+        if (hasData(category)){
             notifyController();
             return;
         }
+
         service.reset();
         service.setCategory(category);
-        service.setOnSucceeded(e -> {
-            List<Article> newlyScrapedArticles = (List<Article>) e.getSource().getValue();
-            articlesByCategories.put(category, newlyScrapedArticles);
-            notifyController();
-        });
         service.start();
+    }
+
+    /** Clear all articles in a particular category
+     * @param category provided category to clear articles from
+     * */
+    public void refresh(String category){
+        articlesByCategories.remove(category);
+    }
+    /** Clear all articles in the hashmap
+     * */
+    public void refresh(){
+        articlesByCategories.clear();
+    }
+
+    /** Check if data (articles) have been scraped for this category
+     * @param category the category to check
+     * @return true if the category has articles scraped, otherwise false
+     * */
+    public boolean hasData(String category){
+        return articlesByCategories.get(category) != null;
     }
 }
