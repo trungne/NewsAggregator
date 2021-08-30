@@ -8,13 +8,15 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class LinksCrawler {
-    // TODO: Trung comments this
     private static final String[] COVID_CATEGORY_LINKS = new String[]{
             "https://vnexpress.net/covid-19/tin-tuc",
             "https://thanhnien.vn/covid/",
@@ -22,11 +24,11 @@ public class LinksCrawler {
             "https://tuoitre.vn/covid-19.html",
             "https://nhandan.vn/tieu-diem"
     };
+
     private final URL homepageUrl;
     private final String navBarCssClass;
     private final String targetCssClass;
-    private final Document doc;
-
+    private Document doc;
     /** @param url url to the news outlet's homepage
      *  @param navBarClass a css class used to target the navigation bar
      *  @param targetClass a css class used to target the links
@@ -37,12 +39,17 @@ public class LinksCrawler {
         this.homepageUrl = new URL(url);
         this.navBarCssClass = navBarClass;
         this.targetCssClass = targetClass;
-        this.doc = Jsoup
-                .connect(url)
-                .timeout(10000)
-                .get();
+//        this.doc = getDocument(homepageUrl);
+        this.doc = getDocumentFromFile();
+        if (this.doc == null){
+            this.doc = getDocumentFromURL(url);
+        }
     }
 
+    /** Get urls of articles in a category
+     * @param name name of the category
+     * @return set of URLs of articles in the category
+     * */
     public Set<URL> getArticleLinks(String name){
         List<URL> categoryLinks = getCategoryLinks(name);
         Set<URL> articleLinks = new HashSet<>();
@@ -62,10 +69,13 @@ public class LinksCrawler {
             links.add(homepageUrl);
         }
         else if (name.equals(Category.COVID)){
-            links.addAll(getCovidCategoryLinks());
+            URL link = getCovidLink();
+            if (link != null){
+                links.add(link);
+            }
         }
         else if (Category.isMainCategory(name)){
-            links.addAll(navigateLinksInNavBar(name));
+            links.addAll(getLinksInNavBar(name));
         }
         else{
             links.addAll(getOtherCategories());
@@ -73,18 +83,23 @@ public class LinksCrawler {
         return links;
     }
 
-    private List<URL> getCovidCategoryLinks(){
-        List<URL> links = new ArrayList<>();
-        for (String url: COVID_CATEGORY_LINKS){
-            try{
-                URL _url = new URL(url);
-                links.add(_url);
-            } catch (MalformedURLException ignored){
-                // do nothing
+
+
+    /** @return the link to the Covid-19 section
+     * */
+    private URL getCovidLink(){
+        for(String covidSite: COVID_CATEGORY_LINKS){
+            if (covidSite.contains(homepageUrl.getHost())){
+                try {
+                    return new URL(covidSite);
+                } catch (MalformedURLException e) {
+                    break;
+                }
             }
         }
-        return links;
+        return null;
     }
+
     private List<URL> getOtherCategories(){
         Element navBar = doc.selectFirst("." + navBarCssClass); // get navigation bar
         if (navBar == null){
@@ -108,10 +123,9 @@ public class LinksCrawler {
             }
         }
         return links;
-
     }
 
-    private List<URL> navigateLinksInNavBar(String name){
+    private List<URL> getLinksInNavBar(String name){
         Element navBar = doc.selectFirst("." + navBarCssClass); // get navigation bar
         if (navBar == null) {
             return new ArrayList<>(); // return an empty list instead of null to prevent error
@@ -138,13 +152,14 @@ public class LinksCrawler {
                     if (aTags.indexOf(a) == 0)
                         links.addAll(extractAllLinksFromTag(menu));
                     else
-                        links.add(extractOneLinkFromTag(a));
+                        links.add(extractLinkFromTag(a));
                 }
             }
         }
         return links;
     }
-    private URL extractOneLinkFromTag(Element tag){
+
+    private URL extractLinkFromTag(Element tag){
         Element first = tag.getElementsByTag("a").first();
         if (first != null) {
             try{
@@ -155,14 +170,33 @@ public class LinksCrawler {
         }
         return null;
     }
+
     private List<URL> extractAllLinksFromTag(Element tag){
         List<URL> links = new ArrayList<>();
         for (Element link: tag.getElementsByTag("a")){
-            URL url = extractOneLinkFromTag(link);
+            URL url = extractLinkFromTag(link);
             if (url != null){
                 links.add(url);
             }
         }
         return links;
+    }
+
+    private Document getDocumentFromFile(){
+        // Rename filename from example.com to example.html
+        String htmlFilename = homepageUrl.getHost().replaceFirst("\\.(.+)",".html");
+        Path path = Paths.get("src", "main", "resources", "homepages", htmlFilename);
+        System.out.println(path.toAbsolutePath());
+        File file = new File(path.toAbsolutePath().toString());
+        try {
+            return Jsoup.parse(file, "UTF-8", homepageUrl.toString());
+        } catch (IOException ignored) {
+            System.out.println("Failed to get html file");
+            return null;
+        }
+    }
+
+    private Document getDocumentFromURL(String url) throws IOException {
+        return Jsoup.connect(url).timeout(10000).get();
     }
 }

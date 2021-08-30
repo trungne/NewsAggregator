@@ -7,6 +7,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,7 +36,10 @@ public class ScrapingUtils {
                 URL link = new URL(baseUrl, tag.getElementsByTag("a").attr("href"));
                 links.add(link);
             }
-        } catch (IOException e) {
+        } catch (MalformedURLException err){
+            System.out.println("MalformedURLException:" +  baseUrl);
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 

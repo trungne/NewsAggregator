@@ -32,6 +32,13 @@ public class Model {
         this.controller.updatePreviewsPane();
     }
 
+
+    /** Get a sub list of articles in a category
+     * @param category category to get articles from
+     * @param startIndex start index of the sub list
+     * @param endIndex end index of the sub list
+     * @return the sub list of articles in a category
+     * */
     public List<Article> getArticleSublist(String category, int startIndex, int endIndex){
         List<Article> subList = new ArrayList<>();
         List<Article> articleList = articlesByCategories.get(category);
@@ -45,12 +52,18 @@ public class Model {
         return subList;
     }
 
+    /** Get a particular article in a category
+     * @param category the category to get article from
+     * @param index the index of the article
+     * @return a particular article in the category
+     * */
     public Article getArticleContent(String category, int index){
         return articlesByCategories.get(category).get(index);
     }
 
     /** First check if the category already has articles scraped. If yes, immediately notify the controller.
      * Otherwise, start scraping service
+     * @param category scrape the articles in this category
      * */
     public void loadArticles(String category){
         if (hasData(category)){

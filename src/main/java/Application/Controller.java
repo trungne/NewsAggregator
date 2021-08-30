@@ -69,10 +69,6 @@ public class Controller {
      */
     public void selectCategory(ActionEvent e){
         Button b = (Button) e.getSource();
-        // do nothing if the category has already been selected/scraped
-        if (model.hasData(b.getText())){
-            return;
-        }
         highlightCategory(b);
         requestPreviews(b.getText());
     }
@@ -98,8 +94,7 @@ public class Controller {
     public void refreshAll(){
         this.model.refresh();
         // automatically redirect to new category when refresh all
-        Button newCategory = (Button) categoryBox.getChildren().get(0);
-        newCategory.fire();
+        ((Button) categoryBox.getChildren().get(0)).fire();
     }
 
     public void close(){
