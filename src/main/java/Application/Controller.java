@@ -2,7 +2,7 @@ package Application;
 
 import Application.Model.Model;
 import Application.View.PreviewGrid;
-import business.News.Article;
+import Business.News.Article;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;

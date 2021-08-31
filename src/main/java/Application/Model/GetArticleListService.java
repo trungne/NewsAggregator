@@ -1,6 +1,6 @@
 package Application.Model;
 
-import business.News.Article;
+import Business.News.Article;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 

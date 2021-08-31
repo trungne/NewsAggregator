@@ -1,4 +1,4 @@
-package business.Test;
+package Business.Test;
 
 public class ScraperTestDrive {
     public static void main(String[] args) {
