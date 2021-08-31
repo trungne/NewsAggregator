@@ -186,7 +186,6 @@ public class LinksCrawler {
         // Rename filename from example.com to example.html
         String htmlFilename = homepageUrl.getHost().replaceFirst("\\.(.+)",".html");
         Path path = Paths.get("src", "main", "resources", "homepages", htmlFilename);
-        System.out.println(path.toAbsolutePath());
         File file = new File(path.toAbsolutePath().toString());
         try {
             return Jsoup.parse(file, "UTF-8", homepageUrl.toString());
