@@ -1,8 +1,7 @@
 package Application.Model;
 
 import Application.Controller;
-import business.News.Article;
-import javafx.application.Platform;
+import Business.News.Article;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package business.Scraper.Helper;
+package Business.Scraper.Helper;
 
 import java.time.LocalDateTime;
 

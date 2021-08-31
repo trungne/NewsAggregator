@@ -1,4 +1,4 @@
-package business.Scraper.Helper;
+package Business.Scraper.Helper;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;

@@ -1,9 +1,9 @@
-package business.Scraper.ArticleCrawler;
+package Business.Scraper.ArticleCrawler;
 
-import business.Scraper.Helper.CSS;
-import business.Scraper.Sanitizer.MainContentFilter;
-import business.Scraper.LinksCrawler.Category;
-import business.Scraper.LinksCrawler.LinksCrawler;
+import Business.Scraper.Helper.CSS;
+import Business.Scraper.Sanitizer.MainContentFilter;
+import Business.Scraper.LinksCrawler.Category;
+import Business.Scraper.LinksCrawler.LinksCrawler;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

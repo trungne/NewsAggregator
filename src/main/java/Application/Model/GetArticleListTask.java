@@ -1,7 +1,7 @@
 package Application.Model;
 
-import business.News.Article;
-import business.Scraper.ScrapingService;
+import Business.News.Article;
+import Business.Scraper.ScrapingService;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-import static business.Scraper.Helper.ScrapingUtils.MAX_ARTICLES_DISPLAYED;
+import static Business.Scraper.Helper.ScrapingUtils.MAX_ARTICLES_DISPLAYED;
 
 // an interface for presentation layer to access scraped articles
 public class GetArticleListTask extends Task<List<Article>> {

@@ -1,8 +1,7 @@
-package business.News;
+package Business.News;
 
-import business.Scraper.ArticleCrawler.ElementNotFound;
-import business.Scraper.ArticleCrawler.Scraper;
-import business.Scraper.ScrapingService;
+import Business.Scraper.ArticleCrawler.ElementNotFound;
+import Business.Scraper.ArticleCrawler.Scraper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,8 +13,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-import static business.Scraper.Helper.ScrapingUtils.MAX_ARTICLES_DISPLAYED;
-import static business.Scraper.Helper.ScrapingUtils.MAX_WAIT_TIME_WHEN_ACCESS_URL;
+import static Business.Scraper.Helper.ScrapingUtils.MAX_ARTICLES_DISPLAYED;
+import static Business.Scraper.Helper.ScrapingUtils.MAX_WAIT_TIME_WHEN_ACCESS_URL;
 
 
 public class ArticleListGenerator {

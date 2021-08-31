@@ -1,6 +1,6 @@
-package business.Scraper.LinksCrawler;
+package Business.Scraper.LinksCrawler;
 
-import business.Scraper.Helper.ScrapingUtils;
+import Business.Scraper.Helper.ScrapingUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

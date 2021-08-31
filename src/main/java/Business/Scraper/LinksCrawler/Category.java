@@ -1,4 +1,4 @@
-package business.Scraper.LinksCrawler;
+package Business.Scraper.LinksCrawler;
 
 import java.util.*;
 

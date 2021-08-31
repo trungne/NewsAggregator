@@ -1,12 +1,10 @@
-package business.Scraper.Sanitizer;
+package Business.Scraper.Sanitizer;
 
-import business.Scraper.Helper.CSS;
-import business.Scraper.Helper.ScrapingUtils;
-import org.apache.commons.lang3.StringUtils;
+import Business.Scraper.Helper.CSS;
+import Business.Scraper.Helper.ScrapingUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
 import org.jsoup.safety.Safelist;
 import org.jsoup.select.NodeFilter;
 

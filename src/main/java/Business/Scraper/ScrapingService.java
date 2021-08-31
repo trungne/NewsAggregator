@@ -1,19 +1,15 @@
-package business.Scraper;
+package Business.Scraper;
 
-import business.News.Article;
-import business.News.ArticleListGenerator;
-import business.Scraper.ArticleCrawler.*;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import Business.News.Article;
+import Business.News.ArticleListGenerator;
+import Business.Scraper.ArticleCrawler.*;
 
-import java.io.IOException;
-import java.net.*;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
-import static business.Scraper.Helper.ScrapingUtils.MAX_TERMINATION_TIME;
+import static Business.Scraper.Helper.ScrapingUtils.MAX_TERMINATION_TIME;
 
 public class ScrapingService {
     private static final List<Scraper> SCRAPERS = createScrapers();

@@ -1,7 +1,6 @@
-package business.News;
+package Business.News;
 
-import business.Scraper.Helper.CSS;
-import business.Scraper.ArticleCrawler.Scraper;
+import Business.Scraper.Helper.CSS;
 import org.jsoup.nodes.Element;
 
 import java.net.URL;

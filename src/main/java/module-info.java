@@ -13,10 +13,10 @@ module JavaFxApplication {
     requires org.apache.commons.lang3;
 
     exports Application;
-    exports business.News;
+    exports Business.News;
     exports Application.Model;
-    exports business.Scraper.ArticleCrawler;
-    exports business.Scraper.LinksCrawler;
+    exports Business.Scraper.ArticleCrawler;
+    exports Business.Scraper.LinksCrawler;
 
 
     opens Application to javafx.fxml;
