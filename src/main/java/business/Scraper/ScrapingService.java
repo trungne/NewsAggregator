@@ -52,6 +52,9 @@ public class ScrapingService {
     }
 
     // https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html
+    /** Stop accepting new tasks and wait for other threads in the pool to finish
+     * @param pool the thread pool that we want to stop and join
+     * */
     private static void shutdownAndAwaitTermination(ExecutorService pool) {
         pool.shutdown(); // Disable new tasks from being submitted
         try {
