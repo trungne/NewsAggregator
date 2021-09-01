@@ -3,7 +3,6 @@ package Business.Scraper.LinksCrawler;
 import java.util.*;
 
 public class Category {
-    // TODO: Trung comments this
     public static final String NEW = "New";
     public static final String COVID = "Covid";
     public static final String POLITICS = "Politics";
@@ -21,19 +20,19 @@ public class Category {
     }
 
 
-    public static final String OTHERS = "Others";
     public static final String SOCIETY = "Society";
     public static final String EDUCATION = "Education";
     public static final String LIFE = "Life";
     public static final String TOURISM = "Tourism";
     public static final String CAR = "Car";
 
+    public static final String OTHERS = "Others";
+
     // map Vietnamese names to English
     private static final HashMap<String, HashSet<String>> dictionary = new HashMap<>();
-
     static {
         dictionary.put(NEW, new HashSet<>(List.of("mới nhất")));
-//        CategoriesMapping.put(COVID, new String[]{""});
+        dictionary.put(COVID, new HashSet<>(List.of("covid", "covid-19")));
         dictionary.put(POLITICS, new HashSet<>(List.of("chính trị", "pháp luật", "luật pháp")));
         dictionary.put(BUSINESS, new HashSet<>(List.of("kinh doanh", "tài chính - kinh doanh", "kinh tế")));
         dictionary.put(TECHNOLOGY, new HashSet<>(List.of("khoa học - công nghệ", "công nghệ", "khoa học", "Khoa học - Công nghệ")));

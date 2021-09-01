@@ -190,7 +190,6 @@ public class LinksCrawler {
         try {
             return Jsoup.parse(file, "UTF-8", homepageUrl.toString());
         } catch (IOException ignored) {
-            System.out.println("Failed to get html file");
             return null;
         }
     }

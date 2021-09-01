@@ -7,14 +7,21 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.safety.Safelist;
 import org.jsoup.select.NodeFilter;
+import org.jsoup.select.NodeTraversor;
 
 public abstract class MainContentFilter implements NodeFilter {
     // TODO: Thai comments this
     protected Element root;
 
-    protected MainContentFilter(Element root){
-        this.root = root;
+    /** Sanitize the main content part of an article
+    * This function traverses through the tag and get important info, which will be appended in root node
+    * To indicate which tag/class/etc. as important, extend the MainContentFilter class and implement all necessary methods */
+    public Element sanitizeMainContent(Element mainContent){
+        root = new Element("div");
+        NodeTraversor.filter(this, mainContent);
+        return root;
     }
+
     /** Default implementation for identifying a paragraph tag. Normally, just check the tag name
      * @param node check if this node is a paragraph
      * @return true if the node is a paragraph

@@ -22,8 +22,13 @@ public class Article implements Comparable<Article> {
     private final String mainCategory;
     private final Set<String> categories = new HashSet<>();
     private final String newsSource;
-
     private String html;
+
+    public Article(String source, URL url, String mainCategory) {
+        this.newsSource = source;
+        this.url = url;
+        this.mainCategory = mainCategory;
+    }
 
     private Element getBodyTag(Element mainContent) {
         final Element body = new Element("body");
@@ -133,12 +138,6 @@ public class Article implements Comparable<Article> {
         return html;
     }
 
-    public Article(String source, URL url, String mainCategory) {
-        this.url = url;
-        this.mainCategory = mainCategory;
-        this.newsSource = source;
-    }
-
     public void addCategory(Set<String> categoryList) {
         for (String category: categoryList){
             if (category.equals(mainCategory)){
@@ -195,7 +194,7 @@ public class Article implements Comparable<Article> {
     // setter
     public void setContent(Element title, Element description, Element mainContent,
                            LocalDateTime publishedTime, String thumbNail, Set<String> categories) {
-        if (title == null || description == null || mainContent == null) {
+        if (title == null || description == null || mainContent == null || publishedTime == null) {
             throw new IllegalArgumentException();
         }
         this.title = title.addClass(CSS.TITLE);

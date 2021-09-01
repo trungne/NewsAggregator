@@ -1,35 +1,23 @@
 package Business.Scraper;
 
 import Business.News.Article;
-import Business.News.ArticleListGenerator;
+import Business.News.NewsOutlet;
 import Business.Scraper.ArticleCrawler.*;
+import Business.Scraper.Helper.CSS;
+import Business.Scraper.LinksCrawler.LinksCrawler;
+import Business.Scraper.Sanitizer.Sanitizer;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import static Business.Scraper.GetNewsOutlets.createNewsOutlets;
 import static Business.Scraper.Helper.ScrapingUtils.MAX_TERMINATION_TIME;
 
 public class ScrapingService {
-    private static final List<Scraper> SCRAPERS = createScrapers();
-
-    private static List<Scraper> createScrapers(){
-        Scraper[] scrapes = new Scraper[]{
-                VNExpressScraper.init(),
-                ZingNewsScraper.init(),
-                ThanhNienScraper.init(),
-                TuoiTreScraper.init(),
-                NhanDanScraper.init(),
-        };
-        List<Scraper> validScrapers = new ArrayList<>();
-        for (Scraper scraper: scrapes){
-            if(scraper != null){
-                validScrapers.add(scraper);
-            }
-        }
-        return validScrapers;
-    }
+    private static final List<NewsOutlet> NEWS_OUTLETS = createNewsOutlets();
 
     /** Get all scrapers to scrape article in a particular category
      * @param articles a provided list where articles will be added to
@@ -37,11 +25,8 @@ public class ScrapingService {
      * */
     public static void startScraping(List<Article> articles, String category){
         ExecutorService es = Executors.newCachedThreadPool();
-        for (Scraper scraper : SCRAPERS) {
-            es.execute(()-> {
-                ArticleListGenerator generator = new ArticleListGenerator(scraper, category);
-                generator.populateArticleList(articles);
-            });
+        for (NewsOutlet newsOutlet : NEWS_OUTLETS) {
+            es.execute(()-> newsOutlet.populateArticleList(articles, category));
         }
         shutdownAndAwaitTermination(es);
         Collections.sort(articles);

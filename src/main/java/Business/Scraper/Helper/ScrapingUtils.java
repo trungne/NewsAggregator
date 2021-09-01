@@ -16,10 +16,47 @@ public class ScrapingUtils {
     public final static int MAX_WAIT_TIME_WHEN_ACCESS_URL = 5000; // ms
     public final static int MAX_TERMINATION_TIME = 15000; // ms
     public final static int MAX_ARTICLES_DISPLAYED = 50;
+    public static String scrapeFirstImgUrl(Document doc, String cls){
+        Element firstElementOfClass = scrapeFirstElementByClass(doc, cls);
+        if (firstElementOfClass != null){
+            // this loop only runs once
+            for (Element imgTag: firstElementOfClass.getElementsByTag("img")){
+                // some news outlets store url of img in data-src
+                String url = imgTag.attr("data-src");
 
+                // if the img tag doesn't have data-src attr, check its src attr
+                if(StringUtils.isEmpty(url)){
+                    url = imgTag.attr("src");
+                    if (StringUtils.isEmpty(url)){
+                        return "";
+                    }
+                }
+                return url;
+            }
+        }
+        return "";
+    }
+    public static Element scrapeFirstElementByClass(Document doc, String cls){
+        if (StringUtils.isEmpty(cls)){
+            return null;
+        }
+
+        String query = cls;
+        if (!query.startsWith(".")) {
+            query = "." + query;
+        }
+        Element temp = doc.selectFirst(query);
+        if (temp != null){
+            return new Element("div").html(temp.outerHtml());
+        }
+        else{
+            return null;
+        }
+
+    }
     /**  Target all elements with provided css class, pull out all URLs in a tag.
      * @param baseUrl: URL to parse and also provide the base in case of relative URLs are scraped
-     * @param cssClass: target Element that has this class and pull out URL from tag
+     * @param cssClass: target Element that has URL
      * */
     public static Set<URL> scrapeLinksByClass(URL baseUrl, String cssClass) {
         Document doc;
