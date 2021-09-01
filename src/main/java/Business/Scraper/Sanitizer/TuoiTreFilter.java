@@ -1,19 +1,10 @@
 package Business.Scraper.Sanitizer;
 
-import Business.Scraper.Helper.CSS;
-import Business.Scraper.Sanitizer.MainContentFilter;
-import Business.Scraper.LinksCrawler.LinksCrawler;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Safelist;
-import org.jsoup.select.NodeFilter;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

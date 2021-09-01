@@ -2,13 +2,9 @@ package Business.Scraper;
 
 import Business.News.Article;
 import Business.News.NewsOutlet;
-import Business.Scraper.ArticleCrawler.*;
-import Business.Scraper.Helper.CSS;
-import Business.Scraper.LinksCrawler.LinksCrawler;
-import Business.Scraper.Sanitizer.Sanitizer;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;

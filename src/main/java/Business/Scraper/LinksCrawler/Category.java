@@ -1,6 +1,9 @@
 package Business.Scraper.LinksCrawler;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
 
 public class Category {
     public static final String NEW = "New";
