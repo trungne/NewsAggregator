@@ -5,24 +5,41 @@ import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Safelist;
+import org.jsoup.select.Elements;
 
 public final class ThanhNienFilter extends MainContentFilter {
     @Override
     protected boolean isParagraph(Element node) {
-        // paragraphs are contained in div tag without any classes or other div inside
-        if (!node.className().isEmpty()
-                || !node.tagName().equals("div")
-                || !node.attributes().isEmpty()) {
+        if (!node.classNames().isEmpty() || !node.tagName().equals("div")){
+            return false;
+        }
+        Elements figureTags = node.getElementsByTag("figure");
+        Elements videoTags = node.getElementsByTag("video");
+        Elements imgTags = node.getElementsByTag("img");
+        if (figureTags.isEmpty()
+                && videoTags.isEmpty()
+                && imgTags.isEmpty()
+                && !StringUtils.isEmpty(node.text())){
+            return true;
+        }
+        else{
             return false;
         }
 
-        for (Element child : node.children()) {
-            if (child.tagName().equals("div")
-                    || child.tagName().equals("table")) { // table contains img
-                return false;
-            }
-        }
-        return true;
+//        // paragraphs are contained in div tag without any classes or other div inside
+//        if (!node.className().isEmpty()
+//                || !node.tagName().equals("div")
+//                || !node.attributes().isEmpty()) {
+//            return false;
+//        }
+//
+//        for (Element child : node.children()) {
+//            if (child.tagName().equals("div")
+//                    || child.tagName().equals("table")) { // table contains img
+//                return false;
+//            }
+//        }
+//        return true;
     }
 
     @Override
