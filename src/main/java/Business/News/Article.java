@@ -1,6 +1,5 @@
 package Business.News;
 
-import Business.Scraper.Helper.CSS;
 import org.jsoup.nodes.Element;
 
 import java.net.URL;
@@ -11,6 +10,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Article implements Comparable<Article> {
+    private static final String ARTICLE_HEADER = "article-header";
+    private static final String ARTICLE_CATEGORY = "article-category";
+    private static final String ARTICLE_CONTENT = "article-content";
+    private static final String TITLE = "title";
+    private static final String DESCRIPTION = "description";
+    private static final String MAIN_CONTENT = "main-content";
+    private static final String PUBLISHED_TIME = "published-time";
+
     // TODO: Khang comments this
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EE, dd/MMMM/yyyy, kk:mm ");
 
@@ -42,6 +49,7 @@ public class Article implements Comparable<Article> {
         Element style = new Element("style");
         String css = "html {width: 100%;height: 100%;margin: 0 auto;overflow-x: hidden;}\n" +
                 "body {margin: 30px;}\n" +
+                ".content-quote {background-color: #C5C5C5;   padding: 10px;}" +
                 ".article-header{display: flex; font-style: italic;}\n" +
                 ".article-category{margin-right: .75rem;color: #007bff;}\n" +
                 ".published-time{color:#6c757d;}\n" +
@@ -77,7 +85,7 @@ public class Article implements Comparable<Article> {
     private Element getCategoryTag() {
         // category div
         Element categories = new Element("div");
-        categories.addClass(CSS.ARTICLE_CATEGORY);
+        categories.addClass(ARTICLE_CATEGORY);
         StringBuilder categoriesStrBuilder = new StringBuilder();
         categoriesStrBuilder.append(mainCategory).append(" - ");
         for (String category : this.categories) {
@@ -93,7 +101,7 @@ public class Article implements Comparable<Article> {
 
     private Element getPublishedTimeTag() {
         Element publishedTime = new Element("div");
-        publishedTime.addClass(CSS.PUBLISHED_TIME);
+        publishedTime.addClass(PUBLISHED_TIME);
         publishedTime.text(getAbsoluteTime());
         return publishedTime;
 
@@ -102,7 +110,7 @@ public class Article implements Comparable<Article> {
     private Element getArticleTag(Element mainContent) {
         // create header div
         Element header = new Element("div");
-        header.addClass(CSS.ARTICLE_HEADER);
+        header.addClass(ARTICLE_HEADER);
 
         Element categories = getCategoryTag();
         Element publishedTime = getPublishedTimeTag();
@@ -112,7 +120,7 @@ public class Article implements Comparable<Article> {
 
         // create article content div which contains title, desp, and main content
         Element content = new Element("div");
-        content.addClass(CSS.ARTICLE_CONTENT);
+        content.addClass(ARTICLE_CONTENT);
         content.appendChild(title);
         content.appendChild(description);
         content.appendChild(mainContent);
@@ -197,13 +205,13 @@ public class Article implements Comparable<Article> {
         if (title == null || description == null || mainContent == null || publishedTime == null) {
             throw new IllegalArgumentException();
         }
-        this.title = title.addClass(CSS.TITLE);
-        this.description = description.addClass(CSS.DESCRIPTION);
+        this.title = title.addClass(TITLE);
+        this.description = description.addClass(DESCRIPTION);
         this.dateTime = publishedTime;
         this.thumbNail = thumbNail;
         addCategory(categories);
 
-        this.html = createHtml(mainContent.addClass(CSS.MAIN_CONTENT));
+        this.html = createHtml(mainContent.addClass(MAIN_CONTENT));
     }
 
     @Override

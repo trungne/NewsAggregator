@@ -161,6 +161,7 @@ public class Controller {
      */
     private void openArticleInNewStage(int index){
         Article content = model.getArticleContent(currentCategoryButton.getText(), index);
+        System.out.println(content.getHtml());
         browser.getEngine().loadContent(content.getHtml());
         articleStage.setTitle(content.getTitle());
 

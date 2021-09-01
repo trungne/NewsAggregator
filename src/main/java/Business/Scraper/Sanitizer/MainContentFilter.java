@@ -1,6 +1,5 @@
 package Business.Scraper.Sanitizer;
 
-import Business.Scraper.Helper.CSS;
 import Business.Scraper.Helper.ScrapingUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -10,6 +9,13 @@ import org.jsoup.select.NodeFilter;
 import org.jsoup.select.NodeTraversor;
 
 public abstract class MainContentFilter implements NodeFilter {
+    // CSS Classes for content in main content
+    public static final String PARAGRAPH = "content-paragraph";
+    public static final String FIGURE = "content-pic";
+    public static final String QUOTE = "content-quote";
+    public static final String VIDEO = "content-video";
+    public static final String AUTHOR = "author";
+
     // TODO: Thai comments this
     protected Element root;
 
@@ -104,22 +110,22 @@ public abstract class MainContentFilter implements NodeFilter {
                 e = getFilteredHeader(e);
             }
             else if(isParagraph(e)){
-                e = getFilteredParagraph(e).addClass(CSS.PARAGRAPH);
+                e = getFilteredParagraph(e).addClass(PARAGRAPH);
             }
             else if (isFigure(e)){
-                e = getFilteredFigure(e).addClass(CSS.FIGURE);
+                e = getFilteredFigure(e).addClass(FIGURE);
             }
             else if (isVideo(e)){
-                e = getFilteredVideo(e).addClass(CSS.VIDEO);
+                e = getFilteredVideo(e).addClass(VIDEO);
             }
             else if (isQuote(e)){
-                e = getFilteredQuote(e).addClass(CSS.QUOTE);
+                e = getFilteredQuote(e).tagName("blockquote").addClass(QUOTE);
             }
             else if (isStandaloneImage(e)){
-                e = getFilteredStandaloneImage(e).addClass(CSS.FIGURE);
+                e = getFilteredStandaloneImage(e).addClass(FIGURE);
             }
             else if (isAuthor(e)){
-                e = getFilteredAuthor(e).addClass(CSS.AUTHOR);
+                e = getFilteredAuthor(e).addClass(AUTHOR);
             }
             else{
                 return FilterResult.CONTINUE;

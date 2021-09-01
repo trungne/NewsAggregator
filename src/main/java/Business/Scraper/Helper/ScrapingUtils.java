@@ -34,6 +34,18 @@ public class ScrapingUtils {
                 return url;
             }
         }
+
+//        else{
+//            for (Element imgTag: doc.getElementsByTag("img")){
+//                if (imgTag.hasAttr("data-src")){
+//                    return imgTag.attr("data-src");
+//                }
+//                else if (imgTag.hasAttr("src")){
+//                    return imgTag.attr("src");
+//                }
+//            }
+//        }
+
         return "";
     }
     public static Element scrapeFirstElementByClass(Document doc, String cls){
