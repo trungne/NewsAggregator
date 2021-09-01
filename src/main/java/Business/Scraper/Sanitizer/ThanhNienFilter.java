@@ -16,15 +16,10 @@ public final class ThanhNienFilter extends MainContentFilter {
         Elements figureTags = node.getElementsByTag("figure");
         Elements videoTags = node.getElementsByTag("video");
         Elements imgTags = node.getElementsByTag("img");
-        if (figureTags.isEmpty()
+        return figureTags.isEmpty()
                 && videoTags.isEmpty()
                 && imgTags.isEmpty()
-                && !StringUtils.isEmpty(node.text())){
-            return true;
-        }
-        else{
-            return false;
-        }
+                && !StringUtils.isEmpty(node.text());
 
 //        // paragraphs are contained in div tag without any classes or other div inside
 //        if (!node.className().isEmpty()
