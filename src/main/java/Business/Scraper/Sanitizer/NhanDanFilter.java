@@ -1,4 +1,4 @@
-package Business.Scraper.ArticleCrawler;
+package Business.Scraper.Sanitizer;
 
 import Business.Scraper.Helper.CSS;
 import Business.Scraper.Sanitizer.MainContentFilter;
