@@ -16,37 +16,41 @@ public class ScrapingUtils {
     public final static int MAX_WAIT_TIME_WHEN_ACCESS_URL = 5000; // ms
     public final static int MAX_TERMINATION_TIME = 15000; // ms
     public final static int MAX_ARTICLES_DISPLAYED = 50;
-    public static String scrapeFirstImgUrl(Document doc, String cls){
+
+    /** Get the first image url of a tag with a specific css class
+     * @param doc document to parse
+     * @param cls css class to target
+     * @return the url of the first image found, return empty string if no image found.
+     * */
+    public static String scrapeFirstImgUrlFromClass(Document doc, String cls){
         Element firstElementOfClass = scrapeFirstElementByClass(doc, cls);
         if (firstElementOfClass != null){
-            // this loop only runs once
+            // return the first url link found
             for (Element imgTag: firstElementOfClass.getElementsByTag("img")){
                 // some news outlets store url of img in data-src
-                String url = imgTag.attr("data-src");
-
                 // if the img tag doesn't have data-src attr, check its src attr
-                if(StringUtils.isEmpty(url)){
-                    url = imgTag.attr("src");
-                    if (StringUtils.isEmpty(url)){
-                        return "";
-                    }
+                String urlInDataSrc = imgTag.attr("data-src");
+                String urlInSrc = imgTag.attr("src");
+
+                if (!StringUtils.isEmpty(urlInDataSrc)){
+                    return urlInDataSrc;
                 }
-                return url;
+                else if (!StringUtils.isEmpty(urlInSrc)){
+                    return urlInSrc;
+                }
             }
         }
-
-//        else{
-//            for (Element imgTag: doc.getElementsByTag("img")){
-//                if (imgTag.hasAttr("data-src")){
-//                    return imgTag.attr("data-src");
-//                }
-//                else if (imgTag.hasAttr("src")){
-//                    return imgTag.attr("src");
-//                }
-//            }
-//        }
-
         return "";
+    }
+
+
+    public static String scrapeFirstImgUrl(Document doc, String cls){
+        String url = scrapeFirstImgUrlFromClass(doc, cls);
+        if (StringUtils.isEmpty(url)){
+
+        }
+
+        return url;
     }
     public static Element scrapeFirstElementByClass(Document doc, String cls){
         if (StringUtils.isEmpty(cls)){

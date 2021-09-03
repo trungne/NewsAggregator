@@ -2,11 +2,16 @@ package Business.News;
 
 import org.jsoup.nodes.Element;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
 
 public class Article implements Comparable<Article> {
@@ -17,6 +22,23 @@ public class Article implements Comparable<Article> {
     private static final String DESCRIPTION = "description";
     private static final String MAIN_CONTENT = "main-content";
     private static final String PUBLISHED_TIME = "published-time";
+    private static final String CSS_STYLE = loadCssStyle();
+    private static String loadCssStyle(){
+        Path path = Paths.get("src", "main", "resources", "styles", "article-style.css");
+        File file = new File(path.toAbsolutePath().toString());
+        Scanner reader;
+        try {
+            reader = new Scanner(file);
+        } catch (IOException e){
+            return "";
+        }
+        StringBuilder style = new StringBuilder();
+        while (reader.hasNextLine()){
+            style.append(reader.nextLine());
+        }
+        reader.close();
+        return style.toString();
+    }
 
     // TODO: Khang comments this
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EE, dd/MMMM/yyyy, kk:mm ");
@@ -47,20 +69,7 @@ public class Article implements Comparable<Article> {
         final Element head = new Element("head");
         Element title = new Element("title");
         Element style = new Element("style");
-        String css = "html {width: 100%;height: 100%;margin: 0 auto;overflow-x: hidden;}\n" +
-                "body {margin: 30px;}\n" +
-                ".content-quote {background-color: #C5C5C5;   padding: 10px;}" +
-                ".article-header{display: flex; font-style: italic;}\n" +
-                ".article-category{margin-right: .75rem;color: #007bff;}\n" +
-                ".published-time{color:#6c757d;}\n" +
-                ".title {font-weight: bold;}" +
-                ".description {font-weight: bold;}\n" +
-                ".content-paragraph {text-align: justify;}\n" +
-                "img {width: 350px;height:250px;} article {padding: 0 4em 2em 4em;margin-right: auto;margin-left: auto;}\n" +
-                ".content-pic {text-align: center; margin-top: 1em; margin-bottom: 1em;}\n" +
-                "figcaption em {color:#6c757d;font-style: italic;font-size: 14px;}\n" +
-                ".content-video {width: 600px;height:400px;}\n";
-        style.text(css);
+        style.text(CSS_STYLE);
 
         title.text(getTitle());
         head.append("<meta charset=\"UTF-8\">");

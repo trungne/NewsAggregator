@@ -79,7 +79,7 @@ public final class VNExpressFilter extends MainContentFilter{
         file = file.replaceFirst(Pattern.quote("/video"), Matcher.quoteReplacement(""));
 
         // remove resolution from file path
-        file = file.replaceFirst("(?<=mp4\\/)(.*?)(/)", Matcher.quoteReplacement(""));
+        file = file.replaceFirst("(?<=mp4/)(.*?)(/)", Matcher.quoteReplacement(""));
 
         // change extension to mp4
         file = file.replaceFirst(Pattern.quote("/vne/master.m3u8"), Matcher.quoteReplacement(".mp4"));
