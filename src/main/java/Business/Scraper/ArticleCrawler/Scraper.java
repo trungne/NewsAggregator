@@ -56,36 +56,26 @@ public class Scraper {
     }
 
     // by default, scrape the first element that matches provided css
-    public Element scrapeTitle(Document doc) throws ElementNotFound {
-        Element title = scrapeFirstElementByClass(doc, this.TITLE);
-        if (title == null) {
-            throw new ElementNotFound();
-        }
-        return title;
+    public Element scrapeTitle(Document doc) {
+        return scrapeFirstElementByClass(doc, this.TITLE);
     }
 
     // by default, scrape the first element that matches provided css
-    public Element scrapeDescription(Document doc) throws ElementNotFound {
-        Element desp = scrapeFirstElementByClass(doc, DESCRIPTION);
-        if (desp == null) {
-            throw new ElementNotFound();
-        }
-        return desp;
+    public Element scrapeDescription(Document doc) {
+        return scrapeFirstElementByClass(doc, DESCRIPTION);
     }
 
     // by default, scrape the first element that matches provided css
-    public Element scrapeMainContent(Document doc) throws ElementNotFound {
+    public Element scrapeMainContent(Document doc) {
         Element content = scrapeFirstElementByClass(doc, MAIN_CONTENT);
         if (content == null) {
-            throw new ElementNotFound();
+            return null;
         }
 
         Element authorTag = scrapeAuthor(doc);
         if (authorTag != null){
             content.append(authorTag.outerHtml());
         }
-
-
         return content;
     }
 

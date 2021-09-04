@@ -1,6 +1,7 @@
 package Business.Scraper.Helper;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,6 +17,17 @@ public class ScrapingUtils {
     public final static int MAX_WAIT_TIME_WHEN_ACCESS_URL = 5000; // ms
     public final static int MAX_TERMINATION_TIME = 15000; // ms
     public final static int MAX_ARTICLES_DISPLAYED = 50;
+
+    public static Document getDocumentAndDeleteCookies(String url){
+        Connection connection = Jsoup.connect(url).timeout(MAX_WAIT_TIME_WHEN_ACCESS_URL);
+        try {
+            Document doc = connection.get();
+            connection.cookieStore().removeAll();
+            return doc;
+        } catch (IOException e) {
+            return null;
+        }
+    }
 
     /** Get the first image url of a tag with a specific css class
      * @param doc document to parse

@@ -2,6 +2,7 @@ package Business.News;
 
 import Business.Scraper.ArticleCrawler.ElementNotFound;
 import Business.Scraper.ArticleCrawler.Scraper;
+import Business.Scraper.Helper.ScrapingUtils;
 import Business.Scraper.LinksCrawler.LinksCrawler;
 import Business.Scraper.Sanitizer.Sanitizer;
 import org.apache.commons.lang3.StringUtils;
@@ -51,56 +52,48 @@ public class NewsOutlet {
                 break;
             }
 
-            Document articleDoc;
-            try {
-                articleDoc = Jsoup
-                        .connect(url.toString())
-                        .timeout(MAX_WAIT_TIME_WHEN_ACCESS_URL)
-                        .get();
-            } catch (SocketTimeoutException e) {
-                System.out.println("Cannot scrape: " + url);
-                continue;
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-                continue;
+            Article a = getArticle(url);
+            if (a != null){
+                articles.add(a);
             }
 
-            Article article = new Article(source, url, category);
-            boolean addedSuccessfully = extractContentFromDocument(articleDoc, article);
-
-            if (addedSuccessfully) {
-                articles.add(article);
-            }
         }
     }
-
-    private boolean extractContentFromDocument(Document articleDoc, Article article) {
-        try {
-            Element titleTag = scraper.scrapeTitle(articleDoc);
-            titleTag = sanitizer.sanitizeTitle(titleTag);
-
-            Element descriptionTag = scraper.scrapeDescription(articleDoc);
-            descriptionTag = sanitizer.sanitizeDescription(descriptionTag);
-
-            Element mainContentTag = scraper.scrapeMainContent(articleDoc);
-            mainContentTag = sanitizer.sanitizeMainContent(mainContentTag);
-
-            String thumbNail = scraper.scrapeThumbnail(articleDoc);
-            if (StringUtils.isEmpty(thumbNail)){
-                thumbNail = defaultThumbnail;
-            }
-
-            Set<String> categories = scraper.scrapeCategoryNames(articleDoc);
-            LocalDateTime publishedTime = scraper.scrapePublishedTime(articleDoc);
-
-
-            article.setContent(titleTag, descriptionTag, mainContentTag,
-                    publishedTime, thumbNail, categories);
+    private Article getArticle(URL url){
+        Document doc = ScrapingUtils.getDocumentAndDeleteCookies(url.toString());
+        if (doc == null){
+            return null;
         }
-        catch (ElementNotFound | IllegalArgumentException e){
-            return false;
+
+        Element title = scraper.scrapeTitle(doc);
+        title = sanitizer.sanitizeTitle(title);
+
+        Element description = scraper.scrapeDescription(doc);
+        description = sanitizer.sanitizeDescription(description);
+
+        Element mainContent = scraper.scrapeMainContent(doc);
+        mainContent = sanitizer.sanitizeMainContent(mainContent);
+
+        String thumbNail = scraper.scrapeThumbnail(doc);
+        if (StringUtils.isEmpty(thumbNail)){
+            thumbNail = defaultThumbnail;
         }
-        return true;
+
+        Set<String> categories = scraper.scrapeCategoryNames(doc);
+        LocalDateTime publishedTime = scraper.scrapePublishedTime(doc);
+
+        if (title == null || description == null || mainContent == null || publishedTime == null){
+            return null;
+        }
+
+        return ArticleFactory.createArticle(source,
+                url.toString(),
+                title,
+                description,
+                mainContent,
+                thumbNail,
+                categories, publishedTime);
+
     }
 }
 

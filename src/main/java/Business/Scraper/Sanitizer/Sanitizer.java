@@ -12,10 +12,12 @@ public class Sanitizer {
     }
 
     public Element sanitizeTitle(Element e) {
+        if (e == null) return null;
         return e.clearAttributes();
     }
 
     public Element sanitizeDescription(Element e){
+        if (e == null) return null;
         Safelist safelist;
         String cleanHtml;
         safelist = Safelist.simpleText();
@@ -24,6 +26,7 @@ public class Sanitizer {
     }
 
     public Element sanitizeMainContent(Element e){
+        if (e == null) return null;
         return FILTER.sanitizeMainContent(e);
     }
 }
