@@ -112,11 +112,10 @@ public class ArticleFactory {
 
     private static Element getSourceTag(String url, String newsSource){
         Element source = new Element("p").text("Source: ");
-        Element tag = new Element("em");
         Element link = new Element("a")
                 .attr("href", url)
                 .text(newsSource);
-        return source.appendChild(tag.appendChild(link));
+        return source.appendChild(link);
 
     }
 

@@ -14,23 +14,88 @@ body {
 }
 
 .article-header{
-    display: flex; font-style: italic;
+    display: flex;
+    font-style: italic;
 }
 .article-category{
+    display: flex;
+    justify-content: space-around;
     margin-right: .75rem;
-    color: #007bff;
+}
+.New {
+    background-color: #3cb44b;
+}
+
+.Covid {
+    background-color: #469990;
+}
+
+.Politics {
+    background-color: #5d5db1;
+}
+
+.Business {
+    background-color: #ffe119;
+}
+
+.Technology {
+    background-color: coral;
+}
+
+.Health {
+    background-color: darkcyan;
+}
+
+.Sports {
+    background-color: #dcbeff;
+}
+
+.Entertainment {
+    background-color: #fabed4;
+}
+
+.World {
+    background-color: #aaffc3;
+}
+
+.Others{
+    background-color: #a9a9a9;
+}
+
+.Society {
+    background-color: indianred;
+}
+
+.Education {
+    background-color: cadetblue;
+}
+
+.Life {
+    background-color: #dcbeff;
+}
+
+.Tourism {
+    background-color: aqua;
+}
+
+.Car {
+    background-color: burlywood;
 }
 
 .published-time{
     color:#6c757d;
+    align-self: flex-end;
 }
 
 .title {
     font-weight: bold;
+    text-align: center;
 }
 
 .description {
-    font-weight: bold;
+    font-style: italic;
+    text-align: center;
+
 }
 
 .content-paragraph {
@@ -43,7 +108,7 @@ img {
     height: 400px;
 }
 
-article {
+.main-content {
     padding: 0 4em 2em 4em;
     margin-right: auto;
     margin-left: auto;
@@ -63,4 +128,8 @@ figcaption em {
 .content-video {
     width: 600px;
     height:400px;
+}
+
+.source {
+    font-style: italic;
 }

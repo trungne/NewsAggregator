@@ -24,9 +24,13 @@ public class ScrapingUtils {
             Document doc = connection.get();
             connection.cookieStore().removeAll();
             return doc;
-        } catch (IOException e) {
-            return null;
+        } catch (MalformedURLException err){
+            System.out.println("MalformedURLException:" +  url);
         }
+        catch (IOException e) {
+            System.out.println("IOException:" +  url);
+        }
+        return null;
     }
 
     /** Get the first image url of a tag with a specific css class
@@ -87,27 +91,22 @@ public class ScrapingUtils {
      * @param cssClass: target Element that has URL
      * */
     public static Set<URL> scrapeLinksByClass(URL baseUrl, String cssClass) {
-        Document doc;
+        Document doc = getDocumentAndDeleteCookies(baseUrl.toString());
+        if (doc == null){
+            return new HashSet<>();
+        }
         Set<URL> links = new HashSet<>();
-        try {
-            doc = Jsoup
-                    .connect(baseUrl.toString())
-                    .timeout(MAX_WAIT_TIME_WHEN_ACCESS_URL)
-                    .get();
-            Elements titleTags = doc.getElementsByClass(cssClass);
-            // target all title tags and pull out links for articles
-            for (Element tag : titleTags) {
-                // link is stored in href attribute of <a> tag
+        Elements titleTags = doc.getElementsByClass(cssClass);
+        // target all title tags and pull out links for articles
+        for (Element tag : titleTags) {
+            // link is stored in href attribute of <a> tag
+            try {
                 URL link = new URL(baseUrl, tag.getElementsByTag("a").attr("href"));
                 links.add(link);
+            } catch (MalformedURLException ignored) {
             }
-        } catch (MalformedURLException err){
-            System.out.println("MalformedURLException:" +  baseUrl);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
 
+        }
         return links;
     }
 
