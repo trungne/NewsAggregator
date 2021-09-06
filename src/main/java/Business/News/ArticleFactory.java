@@ -17,8 +17,6 @@ public class ArticleFactory {
     private static final String TITLE = "title";
     private static final String DESCRIPTION = "description";
     private static final String ARTICLE_CATEGORY = "article-category";
-
-    private static final String ARTICLE_CONTENT = "article-content";
     private static final String ARTICLE_SOURCE = "source";
     private static final String MAIN_CONTENT = "main-content";
 
@@ -39,7 +37,9 @@ public class ArticleFactory {
         reader.close();
         return style.toString();
     }
+
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EE, dd/MMMM/yyyy, kk:mm ");
+
     public static Article createArticle(String newsSource,
                                         String url,
                                         Element title,
@@ -54,7 +54,7 @@ public class ArticleFactory {
         Element header = getHeader(categories, time);
         html.appendChild(getBody(header, title, description, mainContent, source));
         String rawHtml = "<!DOCTYPE html>\n" + html.outerHtml();
-        return new Article(newsSource, url, title.text(), description.text(), thumbnail, time, rawHtml);
+        return new Article(newsSource, title.text(), description.text(), thumbnail, time, rawHtml);
     }
 
     private static Element getHeadTag() {

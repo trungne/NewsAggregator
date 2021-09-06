@@ -29,10 +29,7 @@ public class Main extends Application {
         primaryStage.setScene(scene);
 
 //      close all stages when the main stage is closed
-        primaryStage.setOnCloseRequest(e ->{
-            Platform.exit();
-//            System.exit(0);
-        });
+        primaryStage.setOnCloseRequest(e -> System.exit(0));
         primaryStage.show();
     }
 

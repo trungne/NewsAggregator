@@ -41,10 +41,14 @@ public class LinksCrawler {
         this.homepageUrl = new URL(url);
         this.navBarCssClass = navBarClass;
         this.targetCssClass = targetClass;
-//        this.doc = getDocument(homepageUrl);
         this.doc = getDocumentFromFile();
+
         if (this.doc == null){
             this.doc = getDocumentFromURL(url);
+        }
+
+        if (this.doc == null) {
+            throw new IOException();
         }
     }
 
@@ -196,7 +200,7 @@ public class LinksCrawler {
         }
     }
 
-    private Document getDocumentFromURL(String url) throws IOException {
-        return Jsoup.connect(url).timeout(10000).get();
+    private Document getDocumentFromURL(String url) {
+        return ScrapingUtils.getDocumentAndDeleteCookies(url);
     }
 }

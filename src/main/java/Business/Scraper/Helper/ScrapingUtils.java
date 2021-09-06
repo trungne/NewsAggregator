@@ -8,8 +8,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -104,8 +103,8 @@ public class ScrapingUtils {
                 URL link = new URL(baseUrl, tag.getElementsByTag("a").attr("href"));
                 links.add(link);
             } catch (MalformedURLException ignored) {
+//                System.out.println("Cookies error");
             }
-
         }
         return links;
     }
@@ -136,3 +135,4 @@ public class ScrapingUtils {
         return cleanedFirstImgTag;
     }
 }
+

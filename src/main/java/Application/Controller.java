@@ -5,7 +5,9 @@ import Application.View.PreviewGrid;
 import Business.News.Article;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
 
@@ -16,6 +18,7 @@ import javafx.scene.layout.*;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.*;
 
 
@@ -26,6 +29,8 @@ public class Controller {
     @FXML private AnchorPane anchorPane;
     @FXML private HBox pageBox;
     @FXML private VBox categoryBox;
+
+    private AboutUsController aboutUsController;
 
     private final Model model;
     private static final int MAX_PREVIEWS_PER_PAGE = 10;
@@ -45,6 +50,15 @@ public class Controller {
         this.model = new Model(this);
         progressBar.progressProperty().bind(model.getService().progressProperty());
         progressBar.visibleProperty().bind(model.getService().runningProperty());
+
+        FXMLLoader aboutUsViewLoader = new FXMLLoader(Main.class.getResource("Aboutus-view.fxml"));
+        try {
+            aboutUsViewLoader.load();
+            aboutUsController = aboutUsViewLoader.getController();
+        } catch (IOException ignored) {
+
+        }
+
     }
 
     /** Generate general layout and inject contents, with necessary event handlers and sizing bindings
@@ -55,11 +69,8 @@ public class Controller {
 
         articlePane.getChildren().add(browser);
         articleStage.setScene(articleScene);
-        articleStage.setOnCloseRequest(event ->
-                browser.getEngine().load(null));
-
+        articleStage.setOnCloseRequest(e -> browser.getEngine().load(null));
         progressBar.setPrefSize(anchorPane.getPrefWidth(), 30);
-
         Button newCategory = (Button) categoryBox.getChildren().get(0);
         newCategory.fire();
     }
@@ -98,7 +109,13 @@ public class Controller {
     }
 
     public void close(){
-        Platform.exit();
+        System.exit(0);
+    }
+
+    public void aboutUs() {
+        if (aboutUsController != null){
+            aboutUsController.show();
+        }
     }
 
     /** Send request of scrapping a particular category
@@ -161,7 +178,7 @@ public class Controller {
      */
     private void openArticleInNewStage(int index){
         Article content = model.getArticleContent(currentCategoryButton.getText(), index);
-//        System.out.println(content.getHtml());
+        System.out.println(content.getHtml());
         browser.getEngine().loadContent(content.getHtml());
         articleStage.setTitle(content.getTitle());
 

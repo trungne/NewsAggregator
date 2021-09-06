@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="aboutUsPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Application.AboutUsController">
+   <children>
+      <Button layoutX="274.0" layoutY="346.0" mnemonicParsing="false" onAction="#close" text="Close" />
+      <Label layoutX="165.0" layoutY="14.0" text="HuTieuNamDzang">
+         <font>
+            <Font name="Arial Bold" size="36.0" />
+         </font>
+      </Label>
+      <Label layoutX="110.0" layoutY="113.0" text="S3818328 - Nguyen Quoc Hoang Trung">
+         <font>
+            <Font size="24.0" />
+         </font></Label>
+      <Label layoutX="145.0" layoutY="253.0" text="S3818102 - Pham Cong Minh">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="138.0" layoutY="148.0" text="S3817970 - Nguyen Bao Khang">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="140.0" layoutY="183.0" text="S3820098 - Le Nguyen Truong An">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="163.0" layoutY="218.0" text="S3752577 - Le Hong Thai">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

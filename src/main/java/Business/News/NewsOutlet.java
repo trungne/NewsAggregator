@@ -6,12 +6,9 @@ import Business.Scraper.Helper.ScrapingUtils;
 import Business.Scraper.LinksCrawler.LinksCrawler;
 import Business.Scraper.Sanitizer.Sanitizer;
 import org.apache.commons.lang3.StringUtils;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
