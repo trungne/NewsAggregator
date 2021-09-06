@@ -3,23 +3,20 @@ package Application;
 import Application.Model.Model;
 import Application.View.PreviewGrid;
 import Business.News.Article;
-import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ProgressBar;
-
-import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
 
 
 public class Controller {
@@ -178,7 +175,7 @@ public class Controller {
      */
     private void openArticleInNewStage(int index){
         Article content = model.getArticleContent(currentCategoryButton.getText(), index);
-        System.out.println(content.getHtml());
+//        System.out.println(content.getHtml());
         browser.getEngine().loadContent(content.getHtml());
         articleStage.setTitle(content.getTitle());
 

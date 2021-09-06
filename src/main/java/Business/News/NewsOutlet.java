@@ -1,6 +1,5 @@
 package Business.News;
 
-import Business.Scraper.ArticleCrawler.ElementNotFound;
 import Business.Scraper.ArticleCrawler.Scraper;
 import Business.Scraper.Helper.ScrapingUtils;
 import Business.Scraper.LinksCrawler.LinksCrawler;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 
 import static Business.Scraper.Helper.ScrapingUtils.MAX_ARTICLES_DISPLAYED;
-import static Business.Scraper.Helper.ScrapingUtils.MAX_WAIT_TIME_WHEN_ACCESS_URL;
 
 
 public class NewsOutlet {

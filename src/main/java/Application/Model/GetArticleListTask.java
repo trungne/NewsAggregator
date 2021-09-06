@@ -8,7 +8,6 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 
 import java.util.ArrayList;
-
 import java.util.List;
 
 import static Business.Scraper.Helper.ScrapingUtils.MAX_ARTICLES_DISPLAYED;
