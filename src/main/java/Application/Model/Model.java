@@ -2,8 +2,8 @@ package Application.Model;
 
 import Application.Controller;
 import Business.News.Article;
+import javafx.concurrent.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,12 +17,12 @@ public class Model {
         this.controller = controller;
         service.setOnSucceeded(e -> {
             List<Article> newlyScrapedArticles = (List<Article>) e.getSource().getValue();
-            articlesByCategories.put(service.category, newlyScrapedArticles);
+            articlesByCategories.put(service.getCategory(), newlyScrapedArticles);
             notifyController();
         });
     }
 
-    public GetArticleListService getService() {
+    public Service<List<Article>> getService() {
         return service;
     }
 
@@ -95,7 +95,8 @@ public class Model {
      * @param category scrape the articles in this category
      * */
     public void loadArticles(String category){
-        if (hasData(category)){
+        // Check if articles have been scraped for this category
+        if (articlesByCategories.get(category) != null){
             notifyController();
             return;
         }
@@ -115,13 +116,5 @@ public class Model {
      * */
     public void refresh(){
         articlesByCategories.clear();
-    }
-
-    /** Check if data (articles) have been scraped for this category
-     * @param category the category to check
-     * @return true if the category has articles scraped, otherwise false
-     * */
-    private boolean hasData(String category){
-        return articlesByCategories.get(category) != null;
     }
 }

@@ -33,7 +33,7 @@ public class GetNewsOutlets {
                     "https://vnexpress.net/",
                     "main-nav",
                     "title-news");
-            Scraper VNExpressScraper = new Scraper(
+            Scraper VNExpressScraper = new Scraper("VNExpress",
                     new Sanitizer(new VNExpressFilter()),
                     "https://s1.vnecdn.net/vnexpress/restruct/i/v420/logo_default.jpg",
                     "title-detail",
@@ -44,9 +44,7 @@ public class GetNewsOutlets {
                     "fig-picture",
                     "",
                     "datePublished");
-            return new NewsOutlet("VNExpress",
-                    VNExpressScraper,
-                    VNExpressLinksCrawler);
+            return new NewsOutlet(VNExpressScraper, VNExpressLinksCrawler);
         } catch (IOException e) {
             return null;
         }
@@ -54,7 +52,7 @@ public class GetNewsOutlets {
 
     public static NewsOutlet initTuoiTre(){
         try{
-            Scraper TuoiTreScraper = new Scraper(
+            Scraper TuoiTreScraper = new Scraper("Tuoi Tre",
                     new Sanitizer(new TuoiTreFilter()),
                     "https://dangkyxettuyennghe.tuoitre.vn/img/logo-tt.png",
                     "article-title",
@@ -69,9 +67,7 @@ public class GetNewsOutlets {
                     "https://tuoitre.vn/",
                     "menu-category",
                     "title-news");
-            return new NewsOutlet("Tuoi Tre",
-                    TuoiTreScraper,
-                    TuoiTreLinksCrawler);
+            return new NewsOutlet(TuoiTreScraper, TuoiTreLinksCrawler);
         } catch (IOException e){
             return null;
         }
@@ -80,6 +76,7 @@ public class GetNewsOutlets {
     public static NewsOutlet initThanhNien(){
         try {
             Scraper ThanhNienScraper = new Scraper(
+                    "Thanh Nien",
                     new Sanitizer(new ThanhNienFilter()),
                     "https://static.thanhnien.vn/v2/App_Themes/images/logo-tn-2.png",
                     "details__headline",
@@ -94,9 +91,7 @@ public class GetNewsOutlets {
                     "https://thanhnien.vn/",
                     "site-header__nav",
                     "story__thumb");
-            return new NewsOutlet("Thanh Nien",
-                    ThanhNienScraper,
-                    ThanhNienLinksCrawler);
+            return new NewsOutlet(ThanhNienScraper, ThanhNienLinksCrawler);
         } catch (IOException e){
             return null;
         }
@@ -104,7 +99,7 @@ public class GetNewsOutlets {
 
     public static NewsOutlet initZingNews(){
         try {
-            Scraper ZingScraper = new Scraper(
+            Scraper ZingScraper = new Scraper("ZingNews",
                     new Sanitizer(new ZingNewsFilter()),
                     "https://brandcom.vn/wp-content/uploads/2016/02/zingnews-logo.png",
                     "the-article-title",
@@ -119,9 +114,7 @@ public class GetNewsOutlets {
                     "https://zingnews.vn/",
                     "category-menu",
                     "article-title");
-            return new NewsOutlet("ZingNews",
-                    ZingScraper,
-                    ZingLinksCrawler);
+            return new NewsOutlet(ZingScraper, ZingLinksCrawler);
         } catch (IOException e){
             return null;
         }
@@ -129,7 +122,7 @@ public class GetNewsOutlets {
 
     public static NewsOutlet initNhanDan(){
         try {
-            Scraper NhanDanScraper = new Scraper(
+            Scraper NhanDanScraper = new Scraper("Nhan Dan",
                     new Sanitizer(new NhanDanFilter()),
                     "https://brandcom.vn/wp-content/uploads/2016/02/zingnews-logo.png",
                     "box-title-detail",
@@ -144,9 +137,7 @@ public class GetNewsOutlets {
                     "https://nhandan.vn/",
                     "main-menu",
                     "box-title");
-            return new NewsOutlet("Nhan Dan",
-                    NhanDanScraper,
-                    NhanDanLinksCrawler);
+            return new NewsOutlet(NhanDanScraper, NhanDanLinksCrawler);
         } catch (IOException e){
             return null;
         }

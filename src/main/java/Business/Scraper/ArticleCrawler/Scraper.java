@@ -1,6 +1,9 @@
 package Business.Scraper.ArticleCrawler;
 
+import Business.News.Article;
+import Business.News.ArticleFactory;
 import Business.Scraper.Helper.LocalDateTimeParser;
+import Business.Scraper.Helper.ScrapingUtils;
 import Business.Scraper.LinksCrawler.Category;
 import Business.Scraper.Sanitizer.Sanitizer;
 import org.apache.commons.lang3.StringUtils;
@@ -18,8 +21,8 @@ import static Business.Scraper.Helper.ScrapingUtils.scrapeFirstImgUrl;
 
 public class Scraper {
     private final Sanitizer sanitizer;
-
     private final String DEFAULT_THUMBNAIL;
+    private final String SOURCE;
 
     // css class to target and pull out need elements
     private final String TITLE;
@@ -31,7 +34,8 @@ public class Scraper {
     private final String THUMBNAIL;
     private final String PUBLISHED_TIME;
 
-    public Scraper( Sanitizer sanitizer,
+    public Scraper( String source,
+                    Sanitizer sanitizer,
                     String defaultThumbnail,
                     String title,
                     String author,
@@ -41,6 +45,7 @@ public class Scraper {
                     String picture,
                     String thumbnail,
                     String publishedTime) {
+        this.SOURCE = source;
         this.sanitizer = sanitizer;
         this.DEFAULT_THUMBNAIL = defaultThumbnail;
         this.TITLE = title;
@@ -51,6 +56,33 @@ public class Scraper {
         this.PICTURE = picture;
         this.THUMBNAIL = thumbnail;
         this.PUBLISHED_TIME = publishedTime;
+    }
+
+    public Article getArticle(String url){
+        Document doc = ScrapingUtils.getDocumentAndDeleteCookies(url);
+        if (doc == null){
+            return null;
+        }
+
+        Element title = scrapeTitle(doc);
+        Element description = scrapeDescription(doc);
+        Element mainContent = scrapeMainContent(doc);
+        String thumbNail = scrapeThumbnail(doc);
+        Set<String> categories = scrapeCategoryNames(doc);
+        LocalDateTime publishedTime = scrapePublishedTime(doc);
+
+        if (title == null || description == null || mainContent == null || publishedTime == null){
+            return null;
+        }
+
+        return ArticleFactory.createArticle(SOURCE,
+                url,
+                title,
+                description,
+                mainContent,
+                thumbNail,
+                categories, publishedTime);
+
     }
 
     private Element scrapeAuthor(Document doc){

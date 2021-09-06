@@ -16,6 +16,9 @@ public class GetArticleListService extends Service<List<Article>> {
     public void setCategory(String category) {
         this.category = category;
     }
+    public String getCategory(){
+        return this.category;
+    }
 
     @Override
     protected Task<List<Article>> createTask() {
