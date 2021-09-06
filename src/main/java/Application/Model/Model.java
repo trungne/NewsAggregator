@@ -31,34 +31,64 @@ public class Model {
         this.controller.updatePreviewsPane();
     }
 
-
-    /** Get a sub list of articles in a category
-     * @param category category to get articles from
-     * @param startIndex start index of the sub list
-     * @param endIndex end index of the sub list
-     * @return the sub list of articles in a category
-     * */
-    public List<Article> getArticleSublist(String category, int startIndex, int endIndex){
-        List<Article> subList = new ArrayList<>();
-        List<Article> articleList = articlesByCategories.get(category);
-        for (int i = startIndex; i < endIndex; i++){
-            try {
-                subList.add(articleList.get(i));
-            } catch (IndexOutOfBoundsException e){
-                break;
-            }
-        }
-        return subList;
-    }
-
     /** Get a particular article in a category
      * @param category the category to get article from
      * @param index the index of the article
      * @return a particular article in the category
      * */
-    public Article getArticleContent(String category, int index){
+    private Article getArticle(String category, int index){
         return articlesByCategories.get(category).get(index);
     }
+
+    public String getArticleTitle(String category, int index){
+        Article a = getArticle(category, index);
+        if (a == null){
+            return "";
+        }
+        return a.getTitle();
+    }
+
+    public String getArticleDescription(String category, int index){
+        Article a = getArticle(category, index);
+        if (a == null){
+            return "";
+        }
+        return a.getDescription();
+    }
+
+    public String getArticleThumbnail(String category, int index){
+        Article a = getArticle(category, index);
+        if (a == null){
+            return "";
+        }
+        return a.getThumbNail();
+    }
+
+    public String getArticleTime(String category, int index){
+        Article a = getArticle(category, index);
+        if (a == null){
+            return "";
+        }
+        return a.getRelativeTime();
+    }
+
+    public String getArticleSource(String category, int index){
+        Article a = getArticle(category, index);
+        if (a == null){
+            return "";
+        }
+        return a.getNewsSource();
+    }
+
+    public String getArticleHtml(String category, int index){
+        Article a = getArticle(category, index);
+        if (a == null){
+            return "";
+        }
+        return a.getHtml();
+    }
+
+
 
     /** First check if the category already has articles scraped. If yes, immediately notify the controller.
      * Otherwise, start scraping service
@@ -91,7 +121,7 @@ public class Model {
      * @param category the category to check
      * @return true if the category has articles scraped, otherwise false
      * */
-    public boolean hasData(String category){
+    private boolean hasData(String category){
         return articlesByCategories.get(category) != null;
     }
 }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GetNewsOutlets {
-    public static List<NewsOutlet> createNewsOutlets(){
+        public static List<NewsOutlet> createNewsOutlets(){
         NewsOutlet[] newsOutlets = new NewsOutlet[] {
                 initVNExpress(),
                 initTuoiTre(),
@@ -27,70 +27,128 @@ public class GetNewsOutlets {
         return validNewsOutlets;
     }
 
-    private static NewsOutlet initVNExpress(){
+    public static NewsOutlet initVNExpress(){
         try {
-            LinksCrawler VNExpressLinksCrawler = new LinksCrawler("https://vnexpress.net/", "main-nav", "title-news");
-            Scraper VNExpressScraper = new Scraper("title-detail", "", "breadcrumb", "description",
-                    "fck_detail", "fig-picture", "", "datePublished");
-            return new NewsOutlet("VNExpress", VNExpressScraper,
-                    new Sanitizer(new VNExpressFilter()), VNExpressLinksCrawler,
-                    "https://s1.vnecdn.net/vnexpress/restruct/i/v420/logo_default.jpg");
+            LinksCrawler VNExpressLinksCrawler = new LinksCrawler(
+                    "https://vnexpress.net/",
+                    "main-nav",
+                    "title-news");
+            Scraper VNExpressScraper = new Scraper(
+                    new Sanitizer(new VNExpressFilter()),
+                    "https://s1.vnecdn.net/vnexpress/restruct/i/v420/logo_default.jpg",
+                    "title-detail",
+                    "",
+                    "breadcrumb",
+                    "description",
+                    "fck_detail",
+                    "fig-picture",
+                    "",
+                    "datePublished");
+            return new NewsOutlet("VNExpress",
+                    VNExpressScraper,
+                    VNExpressLinksCrawler);
         } catch (IOException e) {
             return null;
         }
     }
 
-    private static NewsOutlet initTuoiTre(){
+    public static NewsOutlet initTuoiTre(){
         try{
-            Scraper TuoiTreScraper = new Scraper("article-title", "", "bread-crumbs", "sapo",
-                    "fck", "VCSortableInPreviewMode", "", "article:published_time");
-            LinksCrawler TuoiTreLinksCrawler = new LinksCrawler("https://tuoitre.vn/", "menu-category", "title-news");
-            return new NewsOutlet("Tuoi Tre", TuoiTreScraper,
-                    new Sanitizer(new TuoiTreFilter()), TuoiTreLinksCrawler,
-                    "https://dangkyxettuyennghe.tuoitre.vn/img/logo-tt.png");
+            Scraper TuoiTreScraper = new Scraper(
+                    new Sanitizer(new TuoiTreFilter()),
+                    "https://dangkyxettuyennghe.tuoitre.vn/img/logo-tt.png",
+                    "article-title",
+                    "",
+                    "bread-crumbs",
+                    "sapo",
+                    "fck",
+                    "VCSortableInPreviewMode",
+                    "",
+                    "article:published_time");
+            LinksCrawler TuoiTreLinksCrawler = new LinksCrawler(
+                    "https://tuoitre.vn/",
+                    "menu-category",
+                    "title-news");
+            return new NewsOutlet("Tuoi Tre",
+                    TuoiTreScraper,
+                    TuoiTreLinksCrawler);
         } catch (IOException e){
             return null;
         }
     }
 
-    private static NewsOutlet initThanhNien(){
+    public static NewsOutlet initThanhNien(){
         try {
-            Scraper ThanhNienScraper = new Scraper("details__headline", "details__author", "breadcrumbs", "sapo",
-                    "pswp-content", "pswp-content__image", "", "article:published_time");
-            LinksCrawler ThanhNienLinksCrawler = new LinksCrawler("https://thanhnien.vn/", "site-header__nav", "story__thumb");
-            return new NewsOutlet("Thanh Nien", ThanhNienScraper,
-                    new Sanitizer(new ThanhNienFilter()), ThanhNienLinksCrawler,
-                    "https://static.thanhnien.vn/v2/App_Themes/images/logo-tn-2.png");
+            Scraper ThanhNienScraper = new Scraper(
+                    new Sanitizer(new ThanhNienFilter()),
+                    "https://static.thanhnien.vn/v2/App_Themes/images/logo-tn-2.png",
+                    "details__headline",
+                    "details__author",
+                    "breadcrumbs",
+                    "sapo",
+                    "pswp-content",
+                    "pswp-content__image",
+                    "",
+                    "article:published_time");
+            LinksCrawler ThanhNienLinksCrawler = new LinksCrawler(
+                    "https://thanhnien.vn/",
+                    "site-header__nav",
+                    "story__thumb");
+            return new NewsOutlet("Thanh Nien",
+                    ThanhNienScraper,
+                    ThanhNienLinksCrawler);
         } catch (IOException e){
             return null;
         }
     }
 
-    private static NewsOutlet initZingNews(){
+    public static NewsOutlet initZingNews(){
         try {
-            Scraper ZingScraper = new Scraper("the-article-title", "the-article-author", "the-article-category", "the-article-summary",
-                    "the-article-body", "pic", "", "article:published_time");
-            LinksCrawler ZingLinksCrawler = new LinksCrawler("https://zingnews.vn/", "category-menu", "article-title");
-            return new NewsOutlet("ZingNews", ZingScraper,
-                    new Sanitizer(new ZingNewsFilter()), ZingLinksCrawler,
-                    "https://brandcom.vn/wp-content/uploads/2016/02/zingnews-logo.png");
+            Scraper ZingScraper = new Scraper(
+                    new Sanitizer(new ZingNewsFilter()),
+                    "https://brandcom.vn/wp-content/uploads/2016/02/zingnews-logo.png",
+                    "the-article-title",
+                    "the-article-author",
+                    "the-article-category",
+                    "the-article-summary",
+                    "the-article-body",
+                    "pic",
+                    "",
+                    "article:published_time");
+            LinksCrawler ZingLinksCrawler = new LinksCrawler(
+                    "https://zingnews.vn/",
+                    "category-menu",
+                    "article-title");
+            return new NewsOutlet("ZingNews",
+                    ZingScraper,
+                    ZingLinksCrawler);
         } catch (IOException e){
             return null;
         }
     }
 
-    private static NewsOutlet initNhanDan(){
+    public static NewsOutlet initNhanDan(){
         try {
-            Scraper NhanDanScraper = new Scraper("box-title-detail", "", "bc-item", "box-des-detail",
-                    "box-content-detail", "box-detail-thumb", "box-detail-thumb", "box-date");
-            LinksCrawler NhanDanLinksCrawler = new LinksCrawler("https://nhandan.vn/", "main-menu", "box-title");
-            return new NewsOutlet("Nhan Dan", NhanDanScraper,
-                    new Sanitizer(new NhanDanFilter()), NhanDanLinksCrawler,
-                    "https://brandcom.vn/wp-content/uploads/2016/02/zingnews-logo.png");
+            Scraper NhanDanScraper = new Scraper(
+                    new Sanitizer(new NhanDanFilter()),
+                    "https://brandcom.vn/wp-content/uploads/2016/02/zingnews-logo.png",
+                    "box-title-detail",
+                    "",
+                    "bc-item",
+                    "box-des-detail",
+                    "box-content-detail",
+                    "box-detail-thumb",
+                    "box-detail-thumb",
+                    "box-date");
+            LinksCrawler NhanDanLinksCrawler = new LinksCrawler(
+                    "https://nhandan.vn/",
+                    "main-menu",
+                    "box-title");
+            return new NewsOutlet("Nhan Dan",
+                    NhanDanScraper,
+                    NhanDanLinksCrawler);
         } catch (IOException e){
             return null;
         }
     }
-
-
 }

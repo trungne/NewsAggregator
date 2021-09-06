@@ -2,7 +2,6 @@ package Application;
 
 import Application.Model.Model;
 import Application.View.PreviewGrid;
-import Business.News.Article;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,7 +15,6 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.List;
 
 
 public class Controller {
@@ -55,7 +53,6 @@ public class Controller {
         } catch (IOException ignored) {
 
         }
-
     }
 
     /** Generate general layout and inject contents, with necessary event handlers and sizing bindings
@@ -143,30 +140,28 @@ public class Controller {
         enableAllChildButtons(pageBox);
 
         highlightPage(pageNum);
-        List<Article> articles = getArticleSublist(pageNum);
-        placePreviewsOnGrids(articles);
+        placePreviewsOnGrids(pageNum);
         mainArea.setContent(previewBox);
     }
 
-    /** Extract a block of articles according to pagination index
-     * @param page: pagination index
-     */
-    private List<Article> getArticleSublist(int page){
-        // generate the start and end indices
-        int startIndex = (page - 1) * MAX_PREVIEWS_PER_PAGE;
-        int endIndex = page * MAX_PREVIEWS_PER_PAGE;
-        return model.getArticleSublist(currentCategoryButton.getText(), startIndex, endIndex);
-    }
 
     /** Put each article's contents in each of the created grid panes
-     * @param articles: list of scrapped articles
+     * @param page: current page clicked
      */
-    private void placePreviewsOnGrids(List<Article> articles){
+    private void placePreviewsOnGrids(int page){
+        int startIndex = (page - 1) * MAX_PREVIEWS_PER_PAGE;
+        String category = currentCategoryButton.getText();
         for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
-            Article a = articles.get(i);
+            int articleIndex = startIndex + i;
+
+            String thumbnail = model.getArticleThumbnail(category, articleIndex);
+            String title = model.getArticleTitle(category, articleIndex);
+            String description = model.getArticleDescription(category, articleIndex);
+            String time = model.getArticleTime(category, articleIndex);
+            String source = model.getArticleSource(category, articleIndex);
+
             PreviewGrid previewGrid = (PreviewGrid) previewBox.getChildren().get(i);
-            previewGrid.setPreviewToGrid(a.getThumbNail(), a.getTitle(),
-                    a.getDescription(), a.getRelativeTime(), a.getNewsSource());
+            previewGrid.setPreviewToGrid(thumbnail, title, description, time, source);
         }
     }
 
@@ -174,10 +169,11 @@ public class Controller {
      * @param index: index of the selected article in the system
      */
     private void openArticleInNewStage(int index){
-        Article content = model.getArticleContent(currentCategoryButton.getText(), index);
-//        System.out.println(content.getHtml());
-        browser.getEngine().loadContent(content.getHtml());
-        articleStage.setTitle(content.getTitle());
+        String title = model.getArticleTitle(currentCategoryButton.getText(), index);
+        String html = model.getArticleHtml(currentCategoryButton.getText(), index);
+//        System.out.println(html);
+        browser.getEngine().loadContent(html);
+        articleStage.setTitle(title);
 
         articleStage.show();
         articleStage.requestFocus();

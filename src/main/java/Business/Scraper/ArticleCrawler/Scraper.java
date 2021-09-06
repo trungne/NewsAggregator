@@ -2,6 +2,7 @@ package Business.Scraper.ArticleCrawler;
 
 import Business.Scraper.Helper.LocalDateTimeParser;
 import Business.Scraper.LinksCrawler.Category;
+import Business.Scraper.Sanitizer.Sanitizer;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
@@ -16,6 +17,11 @@ import static Business.Scraper.Helper.ScrapingUtils.scrapeFirstElementByClass;
 import static Business.Scraper.Helper.ScrapingUtils.scrapeFirstImgUrl;
 
 public class Scraper {
+    private final Sanitizer sanitizer;
+
+    private final String DEFAULT_THUMBNAIL;
+
+    // css class to target and pull out need elements
     private final String TITLE;
     private final String AUTHOR;
     private final String DESCRIPTION;
@@ -25,7 +31,9 @@ public class Scraper {
     private final String THUMBNAIL;
     private final String PUBLISHED_TIME;
 
-    public Scraper( String title,
+    public Scraper( Sanitizer sanitizer,
+                    String defaultThumbnail,
+                    String title,
                     String author,
                     String category,
                     String description,
@@ -33,6 +41,8 @@ public class Scraper {
                     String picture,
                     String thumbnail,
                     String publishedTime) {
+        this.sanitizer = sanitizer;
+        this.DEFAULT_THUMBNAIL = defaultThumbnail;
         this.TITLE = title;
         this.AUTHOR = author;
         this.CATEGORY = category;
@@ -57,12 +67,14 @@ public class Scraper {
 
     // by default, scrape the first element that matches provided css
     public Element scrapeTitle(Document doc) {
-        return scrapeFirstElementByClass(doc, this.TITLE);
+        Element title = scrapeFirstElementByClass(doc, TITLE);
+        return sanitizer.sanitizeTitle(title);
     }
 
     // by default, scrape the first element that matches provided css
     public Element scrapeDescription(Document doc) {
-        return scrapeFirstElementByClass(doc, DESCRIPTION);
+        Element description = scrapeFirstElementByClass(doc, DESCRIPTION);
+        return sanitizer.sanitizeMainContent(description);
     }
 
     // by default, scrape the first element that matches provided css
@@ -76,22 +88,28 @@ public class Scraper {
         if (authorTag != null){
             content.append(authorTag.outerHtml());
         }
-        return content;
+        return sanitizer.sanitizeMainContent(content);
     }
 
     // by default, set the first img as the thumbnail
     public String scrapeThumbnail(Document doc) {
-        String url = scrapeFirstImgUrl(doc, THUMBNAIL);
+        String thumb = scrapeFirstImgUrl(doc, THUMBNAIL);
+        String pic = scrapeFirstImgUrl(doc, PICTURE);
 
-        if (StringUtils.isEmpty(url)){
-            url = scrapeFirstImgUrl(doc, PICTURE);
+        if (!StringUtils.isEmpty(thumb)){
+            return thumb;
         }
-        return url;
+        else if (!StringUtils.isEmpty(pic)){
+            return pic;
+        }
+        else {
+            return DEFAULT_THUMBNAIL;
+        }
     }
     private Element getTimeTagInMeta(Document doc, String key){
         Elements metaTags = doc.getElementsByTag("meta");
         for (Element meta: metaTags){
-            for (Attribute a: meta.attributes()){
+                for (Attribute a: meta.attributes()){
                 if(a.getValue().equals(key)){
                     return meta;
                 }

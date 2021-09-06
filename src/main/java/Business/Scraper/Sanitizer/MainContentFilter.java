@@ -17,7 +17,7 @@ public abstract class MainContentFilter implements NodeFilter {
     public static final String AUTHOR = "author";
 
     // TODO: Thai comments this
-    protected Element root;
+    private Element root;
 
     /** Sanitize the main content part of an article
     * This function traverses through the tag and get important info, which will be appended in root node
@@ -83,20 +83,6 @@ public abstract class MainContentFilter implements NodeFilter {
      * */
     @Override
     public FilterResult head(Node node, int depth) {
-//        if (node instanceof TextNode e){
-//            if (StringUtils.isEmpty(e.text())){
-//                return FilterResult.CONTINUE;
-//            }
-//            String text = "TextNode: " + e.text();
-//            Element p = new Element("div").text(text);
-//            if (!StringUtils.isEmpty(p.text())){
-//                root.append(p.addClass(CSS.PARAGRAPH).outerHtml());
-//
-//            }
-//            return FilterResult.CONTINUE;
-//        }
-
-
         // only consider Element, skip TextNode
         if (!(node instanceof Element e)) {
             return FilterResult.SKIP_ENTIRELY;

@@ -3,7 +3,6 @@ package Business.News;
 import Business.Scraper.ArticleCrawler.Scraper;
 import Business.Scraper.Helper.ScrapingUtils;
 import Business.Scraper.LinksCrawler.LinksCrawler;
-import Business.Scraper.Sanitizer.Sanitizer;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,60 +19,41 @@ public class NewsOutlet {
     // TODO: Khang comments this
     private final String source;
     private final Scraper scraper;
-    private final Sanitizer sanitizer;
     private final LinksCrawler linksCrawler;
-    private final String defaultThumbnail;
 
     public NewsOutlet(String source,
                       Scraper scraper,
-                      Sanitizer sanitizer,
-                      LinksCrawler linksCrawler,
-                      String defaultThumbnail){
+                      LinksCrawler linksCrawler){
         this.source = source;
         this.scraper = scraper;
-        this.sanitizer = sanitizer;
         this.linksCrawler = linksCrawler;
-        this.defaultThumbnail = defaultThumbnail;
     }
 
     public void populateArticleList(List<Article> articleList, String category) {
-        Set<URL> articleUrls = linksCrawler.getArticleLinks(category);
-        extractArticlesFromLinks(articleUrls, articleList, category);
-    }
-
-    private void extractArticlesFromLinks(Set<URL> urls, List<Article> articles, String category) {
+        Set<URL> urls = linksCrawler.getArticleLinks(category);
         for (URL url : urls) {
-            if (articles.size() >= MAX_ARTICLES_DISPLAYED + 20) {
+            if (articleList.size() >= MAX_ARTICLES_DISPLAYED + 20) {
                 break;
             }
 
-            Article a = getArticle(url);
+            Article a = getArticle(url.toString());
             if (a != null){
-                articles.add(a);
+                articleList.add(a);
             }
-
         }
+
     }
-    private Article getArticle(URL url){
-        Document doc = ScrapingUtils.getDocumentAndDeleteCookies(url.toString());
+
+    public Article getArticle(String url){
+        Document doc = ScrapingUtils.getDocumentAndDeleteCookies(url);
         if (doc == null){
             return null;
         }
 
         Element title = scraper.scrapeTitle(doc);
-        title = sanitizer.sanitizeTitle(title);
-
         Element description = scraper.scrapeDescription(doc);
-        description = sanitizer.sanitizeDescription(description);
-
         Element mainContent = scraper.scrapeMainContent(doc);
-        mainContent = sanitizer.sanitizeMainContent(mainContent);
-
         String thumbNail = scraper.scrapeThumbnail(doc);
-        if (StringUtils.isEmpty(thumbNail)){
-            thumbNail = defaultThumbnail;
-        }
-
         Set<String> categories = scraper.scrapeCategoryNames(doc);
         LocalDateTime publishedTime = scraper.scrapePublishedTime(doc);
 
@@ -82,14 +62,11 @@ public class NewsOutlet {
         }
 
         return ArticleFactory.createArticle(source,
-                url.toString(),
+                url,
                 title,
                 description,
                 mainContent,
                 thumbNail,
                 categories, publishedTime);
-
     }
 }
-
-
