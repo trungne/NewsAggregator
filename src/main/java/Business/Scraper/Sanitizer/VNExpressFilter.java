@@ -11,26 +11,46 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class VNExpressFilter extends MainContentFilter{
+    /** Identify figure in main content
+     * @param node main content element
+     * @return true if node contains figure
+     */
     @Override
     protected boolean isFigure(Element node) {
         return node.tagName().equals("figure") && node.attr("itemprop").contains("image");
     }
 
+    /** Identify video in main content
+     * @param node main content element
+     * @return true if node contains video
+     */
     @Override
     protected boolean isVideo(Element node) {
         return node.tagName().equals("video");
     }
 
+    /** Identify quote in main content
+     * @param node main content element
+     * @return false since we dont get VNExpress quote
+     */
     @Override
     protected boolean isQuote(Element node) {
         return false;
     }
 
+    /** Identify author in main content
+     * @param node main content element
+     * @return false since VNExpress doesn't have author inside main content
+     */
     @Override
     protected boolean isAuthor(Element node) {
         return false;
     }
 
+    /** Clean figure tag using Jsoup safelist and Jsoup Node
+     * @param node uncleaned figure element
+     * @return cleaned figure element
+     */
     @Override
     protected Element getFilteredFigure(Element node) {
         node.clearAttributes();
@@ -61,6 +81,10 @@ public final class VNExpressFilter extends MainContentFilter{
         return node;
     }
 
+    /** Clean video tag using Jsoup Node
+     * @param node uncleaned video element
+     * @return cleaned video element
+     */
     @Override
     protected Element getFilteredVideo(Element node) {
         URL src;
@@ -93,16 +117,26 @@ public final class VNExpressFilter extends MainContentFilter{
         return new Element("video").attr("controls", true).appendChild(source);
     }
 
+    /** Clean quote tag
+     * @param node uncleaned quote element
+     * @return null since we don't get VNExpress quote
+     */
     @Override
-    protected Element getFilteredQuote(Element node) {
-        return null;
-    }
+    protected Element getFilteredQuote(Element node) { return null; }
 
+    /** Clean author tag
+     * @param node uncleaned author element
+     * @return false since VNExpress doesn't have author inside main content
+     */
     @Override
     protected Element getFilteredAuthor(Element node) {
         return null;
     }
 
+    /** Identify redundant section in main content
+     * @param node main content element
+     * @return true if node contains graph
+     */
     @Override
     protected boolean skip(Element node) {
         return node.hasClass("box_img_video")

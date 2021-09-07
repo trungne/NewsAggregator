@@ -34,6 +34,19 @@ public class Scraper {
     private final String THUMBNAIL;
     private final String PUBLISHED_TIME;
 
+    /** Scraper Constructor
+     * @param source article's url domain
+     * @param sanitizer article's sanitizer
+     * @param defaultThumbnail thumbnail default url
+     * @param title article title class
+     * @param author article author class
+     * @param category article category class
+     * @param description article description class
+     * @param mainContent article mainContent class
+     * @param picture article picture class
+     * @param thumbnail article thumbnail class
+     * @param publishedTime article publishedTime class
+     */
     public Scraper( String source,
                     Sanitizer sanitizer,
                     String defaultThumbnail,
@@ -58,6 +71,10 @@ public class Scraper {
         this.PUBLISHED_TIME = publishedTime;
     }
 
+    /** Get Article all info (title, description, mainContent, thumbnail, categories, ...)
+     * @param url article url
+     * @return article all related information
+     */
     public Article getArticle(String url){
         Document doc = ScrapingUtils.getDocumentAndDeleteCookies(url);
         if (doc == null){
@@ -85,6 +102,10 @@ public class Scraper {
 
     }
 
+    /** Get author of an article
+     * @param doc article document
+     * @return author element
+     */
     private Element scrapeAuthor(Document doc){
         Element author = getFirstElementByClass(doc, this.AUTHOR);
         if (author != null){
@@ -102,20 +123,27 @@ public class Scraper {
         }
     }
 
-    // by default, scrape the first element that matches provided css
+    /** Scrape Article Title Element that matches provided css
+     * @param doc article document
+     * @return sanitized title element
+     */
     public Element scrapeTitle(Document doc) {
         Element title = getFirstElementByClass(doc, TITLE);
         return sanitizer.sanitizeTitle(title);
     }
 
-    // by default, scrape the first element that matches provided css
-    public Element scrapeDescription(Document doc) {
+    /** Scrape Article Description Element that matches provided css
+     * @param doc article document
+     * @return sanitized title element
+     */    public Element scrapeDescription(Document doc) {
         Element description = getFirstElementByClass(doc, DESCRIPTION);
         return sanitizer.sanitizeMainContent(description);
     }
 
-    // by default, scrape the first element that matches provided css
-    public Element scrapeMainContent(Document doc) {
+    /** Scrape Article Main content Element that matches provided css
+     * @param doc article document
+     * @return sanitized title element
+     */    public Element scrapeMainContent(Document doc) {
         Element content = getFirstElementByClass(doc, MAIN_CONTENT);
         if (content == null) {
             return null;
@@ -128,8 +156,10 @@ public class Scraper {
         return sanitizer.sanitizeMainContent(content);
     }
 
-    // by default, set the first img as the thumbnail
-    public String scrapeThumbnail(Document doc) {
+    /** Scrape Article Thumbnail url
+     * @param doc article document
+     * @return thumbnail url string
+     */    public String scrapeThumbnail(Document doc) {
         String thumb = scrapeFirstImgUrl(doc, THUMBNAIL);
         String pic = scrapeFirstImgUrl(doc, PICTURE);
 
@@ -144,6 +174,11 @@ public class Scraper {
         }
     }
 
+    /** Scrape Article Published Time in meta tag
+     * @param doc article document
+     * @param lookupAttribute itemprop attribute in meta tag
+     * @return Article Published Time
+     */
     private LocalDateTime scrapePublishedTimeFromMeta(Document doc, String lookupAttribute){
         Element time = ScrapingUtils.getFirstElementByMatchingValue(doc, "meta", lookupAttribute);
         if (time == null) {
@@ -159,6 +194,11 @@ public class Scraper {
         return null;
     }
 
+    /** Scrape Article Published Time in body
+     * @param doc article document
+     * @param css css class
+     * @return Article Published Time
+     */
     private LocalDateTime scrapePublishedTimeInBody(Document doc, String css){
         Elements dateTimeTags = doc.getElementsByClass(css);
         for (Element dateTimeTag :dateTimeTags){
@@ -170,6 +210,10 @@ public class Scraper {
         return null;
     }
 
+    /** Scrape Article Published Time
+     * @param doc article document
+     * @return article Published Time
+     */
     public LocalDateTime scrapePublishedTime(Document doc){
         // first look for published time in meta tag
         LocalDateTime time = scrapePublishedTimeFromMeta(doc, PUBLISHED_TIME);

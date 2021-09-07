@@ -8,27 +8,48 @@ import org.jsoup.safety.Safelist;
 
 
 public final class ZingNewsFilter extends MainContentFilter{
+
+    /** Identify figure in main content
+     * @param node main content element
+     * @return true if node contains figure
+     */
     @Override
     protected boolean isFigure(Element node) {
         return node.hasClass("picture");
     }
 
+    /** Identify video in main content
+     * @param node main content element
+     * @return true if node contains video
+     */
     @Override
     protected boolean isVideo(Element node) {
         return node.hasClass("video");
     }
 
+    /** Identify quote tag in main content
+     * @param node main content element
+     * @return true if node contains quote
+     */
     @Override
     protected boolean isQuote(Element node) {
         return node.hasClass("notebook")
                 || node.tagName().equals("blockquote");
     }
 
+    /** Identify author name in main content
+     * @param node main content element
+     * @return false since ZingNews main content doesn't contain author name
+     */
     @Override
     protected boolean isAuthor(Element node) {
         return false;
     }
 
+    /** Clean paragraph tag using Jsoup Safelist and Jsoup Node
+     * @param node uncleaned paragraph element
+     * @return cleaned paragraph element
+     */
     @Override
     protected Element getFilteredFigure(Element node) {
         // assign data-src attr to src for img tag
@@ -58,6 +79,10 @@ public final class ZingNewsFilter extends MainContentFilter{
                 .html(Jsoup.clean(node.html(), safelist));
     }
 
+    /** Clean video tag using Jsoup Node
+     * @param node uncleaned video element
+     * @return cleaned video element
+     */
     @Override
     protected Element getFilteredVideo(Element node) {
         Element videoTag = getVideoTag(node);
@@ -77,6 +102,10 @@ public final class ZingNewsFilter extends MainContentFilter{
 
     }
 
+    /** Clean quote tag using Jsoup Node
+     * @param node uncleaned quote element
+     * @return cleaned quote element
+     */
     @Override
     protected Element getFilteredQuote(Element node) {
         Element quote = new Element("blockquote");
@@ -86,11 +115,19 @@ public final class ZingNewsFilter extends MainContentFilter{
         return quote;
     }
 
+    /** Clean author tag
+     * @param node uncleaned author element
+     * @return null since we cant find author element inside main content
+     */
     @Override
     protected Element getFilteredAuthor(Element node) {
         return null;
     }
 
+    /** Identify redundant section in main content
+     * @param node main content element
+     * @return true if node contains article relevant news or covid news
+     */
     @Override
     protected boolean skip(Element node) {
         return node.hasClass("inner-article")
@@ -98,6 +135,10 @@ public final class ZingNewsFilter extends MainContentFilter{
                 || node.hasClass("z-widget-corona");
     }
 
+    /** Clean video element (not include video caption)
+     * @param tag uncleaned video element
+     * @return cleaned video element
+     */
     private static Element getVideoTag(Element tag) {
         // get the URL of video source
         String src = tag.attr("data-video-src");

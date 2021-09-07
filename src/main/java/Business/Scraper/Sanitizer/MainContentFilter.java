@@ -19,9 +19,12 @@ public abstract class MainContentFilter implements NodeFilter {
     // TODO: Thai comments this
     private Element root;
 
-    /** Sanitize the main content part of an article
-    * This function traverses through the tag and get important info, which will be appended in root node
-    * To indicate which tag/class/etc. as important, extend the MainContentFilter class and implement all necessary methods */
+    /** Sanitize the main content of an article using Jsoup NodeTraversor and NodeFilter.
+     *  This function traverses through the tag and get important info, which will be appended in root node.
+     *  To indicate which tag/class/etc. as important, the NodeFilter class extend the MainContentFilter class and implement all necessary methods.
+     * @param mainContent main content element
+     * @return cleaned main content element
+     */
     public Element sanitizeMainContent(Element mainContent){
         root = new Element("div");
         NodeTraversor.filter(this, mainContent);
@@ -35,12 +38,17 @@ public abstract class MainContentFilter implements NodeFilter {
     protected boolean isParagraph(Element node){
         return node.tagName().equals("p");
     }
-    /** Check if the node is h1, h2, h3, etc.*/
-    protected boolean isHeader(Element node){
+
+    /** Check if the node is h1, h2, h3, etc.
+     * @param node article element
+     * @return true if node contains h1 - h6 tag
+     * */    protected boolean isHeader(Element node){
         return node.tagName().matches("h\\d");
     }
 
     /** Implement how to identify these tags */
+    /* Create abstract methods which will be changed later inside each news' filter  */
+    /* Theses method meant to be used to check for particular tag. */
     protected abstract boolean isFigure(Element node); // contain both img and caption
     protected abstract boolean isVideo(Element node);
     protected abstract boolean isQuote(Element node);
@@ -67,6 +75,8 @@ public abstract class MainContentFilter implements NodeFilter {
     }
 
     /** Implement how the node should be filtered */
+    /* Create abstract methods which will be changed later inside each news' filter  */
+    /* Theses method meant to be used to get the filtered version of particular tag */
     protected abstract Element getFilteredFigure(Element node);
     protected abstract Element getFilteredVideo(Element node);
     protected abstract Element getFilteredQuote(Element node);
@@ -78,10 +88,14 @@ public abstract class MainContentFilter implements NodeFilter {
     /** Provide conditions where a node should be skipped */
     protected abstract boolean skip(Element node);
 
-    /**
-     * SKIP_ENTIRELY if the node is filter and thus has been filtered
+    /** Filter main content element, overriding original method in Jsoup NodeFilter interface.
+     * Traverse through the node, filter it if it matches the requirements.
+     * E.g. only use the filter method for image if it is image element, the other elements will uses other filter methods.
+     * Append filtered elements into the root element.
+     * SKIP_ENTIRELY if the node has been filtered.
      * CONTINUE looking if the node cannot be filtered, which means it is an invalid node.
-     * */
+     * @param node main content element
+     */
     @Override
     public FilterResult head(Node node, int depth) {
         // only consider Element, skip TextNode

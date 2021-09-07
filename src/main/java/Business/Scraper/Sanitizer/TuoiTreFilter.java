@@ -9,18 +9,30 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class TuoiTreFilter extends MainContentFilter{
+    /** Identify figure in main content
+     * @param node main content element
+     * @return true if node contains figure
+     */
     @Override
     protected boolean isFigure(Element node) {
         return node.hasClass("VCSortableInPreviewMode")
                 && node.attr("type").equals("Photo");
     }
 
+    /** Identify video in main content
+     * @param node main content element
+     * @return true if node contains video
+     */
     @Override
     protected boolean isVideo(Element node) {
         return node.hasClass("VCSortableInPreviewMode")
                 && node.attr("type").equals("VideoStream");
     }
 
+    /** Identify quote tag in main content
+     * @param node main content element
+     * @return true if node contains quote
+     */
     @Override
     protected boolean isQuote(Element node) {
         if (node.hasClass("VCSortableInPreviewMode")){
@@ -33,11 +45,19 @@ public final class TuoiTreFilter extends MainContentFilter{
         }
     }
 
+    /** Identify author name in main content
+     * @param node main content element
+     * @return false since Tuoitre main content doesn't contain author name
+     */
     @Override
     protected boolean isAuthor(Element node) {
         return false;
     }
 
+    /** Clean figure tag using Jsoup Node
+     * @param node uncleaned figure element
+     * @return cleaned figure element
+     */
     @Override
     protected Element getFilteredFigure(Element node) {
         Element figure = new Element("figure");
@@ -66,6 +86,10 @@ public final class TuoiTreFilter extends MainContentFilter{
         return figure;
     }
 
+    /** Clean video tag using Jsoup Node
+     * @param node uncleaned video element
+     * @return cleaned video element
+     */
     @Override
     protected Element getFilteredVideo(Element node) {
         String rawUrl = node.attr("data-src");
@@ -85,6 +109,10 @@ public final class TuoiTreFilter extends MainContentFilter{
         }
     }
 
+    /** Clean quote tag using Jsoup Safelist and Jsoup Node
+     * @param node uncleaned quote element
+     * @return cleaned quote element
+     */
     @Override
     protected Element getFilteredQuote(Element node) {
         node.clearAttributes();
@@ -104,11 +132,19 @@ public final class TuoiTreFilter extends MainContentFilter{
         return node;
     }
 
+    /** Clean author tag
+     * @param node uncleaned author element
+     * @return null since we cant find author element inside main content
+     */
     @Override
     protected Element getFilteredAuthor(Element node) {
         return null;
     }
 
+    /** Identify redundant section in main content
+     * @param node main content element
+     * @return true if node contains article relevant news
+     */
     @Override
     protected boolean skip(Element node) {
         return (node.attr("type").equals("RelatedOneNews"));
