@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -48,6 +49,10 @@ public class ArticleFactory {
                                         String thumbnail,
                                         Set<String> categories,
                                         LocalDateTime time){
+        // skip all articles that are more than one week old
+        if (isMoreThanAWeek(time)){
+            return null;
+        }
         Element html = new Element("html").attr("lang", "vi");
         html.appendChild(getHeadTag());
         Element source = getSourceTag(url, newsSource);
@@ -56,7 +61,10 @@ public class ArticleFactory {
         String rawHtml = "<!DOCTYPE html>\n" + html.outerHtml();
         return new Article(newsSource, title.text(), description.text(), thumbnail, time, rawHtml);
     }
-
+    private static boolean isMoreThanAWeek(LocalDateTime time){
+        long minutes = ChronoUnit.MINUTES.between(time, LocalDateTime.now());
+        return minutes >= 24 * 60 * 7; // a day in minutes
+    }
     private static Element getHeadTag() {
         final Element head = new Element("head").append("<meta charset=\"UTF-8\">" +
                 "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">" +
