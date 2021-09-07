@@ -55,6 +55,7 @@ public abstract class MainContentFilter implements NodeFilter {
     protected Element getFilteredParagraph(Element node){
         node.clearAttributes();
         node.html(Jsoup.clean(node.html(), Safelist.basic()));
+        node.tagName("p");
         return node;
     }
 

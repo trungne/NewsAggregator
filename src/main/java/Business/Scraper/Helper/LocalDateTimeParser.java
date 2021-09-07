@@ -22,26 +22,6 @@ public class LocalDateTimeParser {
         }
     }
 
-    // remove day of the week from the datetime string.
-    // Example Chủ Nhật, 10-07-2021, 08:45 into
-    // 10-07-2021, 08:45
-    public static String getDateTimeSubString(String str) {
-        str = str.trim();
-        str = str.replaceAll(",", "");
-        str = str.replaceAll("\\s+", "");
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < str.length(); i++) {
-            char ch = str.charAt(i);
-            // get the substring from the first digit onwards
-            if (Character.isDigit(ch) ||
-                    ch == '-' ||
-                    ch == ':') {
-                builder.append(ch);
-            }
-        }
-        return builder.toString();
-    }
-
     public static LocalDateTime parse(Element e){
         String dateTimeStr = getDateTimeSubString(e.text());
         if (StringUtils.isEmpty(dateTimeStr)){
@@ -78,4 +58,26 @@ public class LocalDateTimeParser {
             return null;
         }
     }
+
+    // remove day of the week from the datetime string.
+    // Example Chủ Nhật, 10-07-2021, 08:45 into
+    // 10-07-2021, 08:45
+    public static String getDateTimeSubString(String str) {
+        str = str.trim();
+        str = str.replaceAll(",", "");
+        str = str.replaceAll("\\s+", "");
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            // get the substring from the first digit onwards
+            if (Character.isDigit(ch) ||
+                    ch == '-' ||
+                    ch == ':') {
+                builder.append(ch);
+            }
+        }
+        return builder.toString();
+    }
+
+
 }

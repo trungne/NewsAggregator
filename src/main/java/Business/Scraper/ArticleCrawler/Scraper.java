@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import static Business.Scraper.Helper.ScrapingUtils.scrapeFirstElementByClass;
+import static Business.Scraper.Helper.ScrapingUtils.getFirstElementByClass;
 import static Business.Scraper.Helper.ScrapingUtils.scrapeFirstImgUrl;
 
 public class Scraper {
@@ -86,11 +86,16 @@ public class Scraper {
     }
 
     private Element scrapeAuthor(Document doc){
-        Element author = scrapeFirstElementByClass(doc, this.AUTHOR);
+        Element author = getFirstElementByClass(doc, this.AUTHOR);
         if (author != null){
-            return new Element("p")
-                    .attr("style", "text-align:right;")
-                    .appendChild(new Element("strong").text(author.text()));
+            for (Element a: author.getElementsByTag("a")){
+                if (!StringUtils.isEmpty(a.ownText())){
+                    return new Element("p")
+                            .attr("style", "text-align:right;")
+                            .appendChild(new Element("strong").text(a.ownText()));
+                }
+            }
+            return null;
         }
         else{
             return null;
@@ -99,19 +104,19 @@ public class Scraper {
 
     // by default, scrape the first element that matches provided css
     public Element scrapeTitle(Document doc) {
-        Element title = scrapeFirstElementByClass(doc, TITLE);
+        Element title = getFirstElementByClass(doc, TITLE);
         return sanitizer.sanitizeTitle(title);
     }
 
     // by default, scrape the first element that matches provided css
     public Element scrapeDescription(Document doc) {
-        Element description = scrapeFirstElementByClass(doc, DESCRIPTION);
+        Element description = getFirstElementByClass(doc, DESCRIPTION);
         return sanitizer.sanitizeMainContent(description);
     }
 
     // by default, scrape the first element that matches provided css
     public Element scrapeMainContent(Document doc) {
-        Element content = scrapeFirstElementByClass(doc, MAIN_CONTENT);
+        Element content = getFirstElementByClass(doc, MAIN_CONTENT);
         if (content == null) {
             return null;
         }
@@ -138,20 +143,9 @@ public class Scraper {
             return DEFAULT_THUMBNAIL;
         }
     }
-    private Element getTimeTagInMeta(Document doc, String key){
-        Elements metaTags = doc.getElementsByTag("meta");
-        for (Element meta: metaTags){
-                for (Attribute a: meta.attributes()){
-                if(a.getValue().equals(key)){
-                    return meta;
-                }
-            }
-        }
-        return null;
-    }
 
-    private LocalDateTime scrapePublishedTimeFromMeta(Document doc, String key){
-        Element time = getTimeTagInMeta(doc, key);
+    private LocalDateTime scrapePublishedTimeFromMeta(Document doc, String lookupAttribute){
+        Element time = ScrapingUtils.getFirstElementByMatchingValue(doc, "meta", lookupAttribute);
         if (time == null) {
             return null;
         }
@@ -177,7 +171,10 @@ public class Scraper {
     }
 
     public LocalDateTime scrapePublishedTime(Document doc){
+        // first look for published time in meta tag
         LocalDateTime time = scrapePublishedTimeFromMeta(doc, PUBLISHED_TIME);
+
+        // look for published time in body if no time tag is found in meta
         if (time == null){
             time = scrapePublishedTimeInBody(doc, PUBLISHED_TIME);
         }
@@ -186,7 +183,7 @@ public class Scraper {
 
     public Set<String> scrapeCategoryNames(Document doc) {
         Set<String> categoryList = new HashSet<>();
-        Element breadcrumb = scrapeFirstElementByClass(doc, CATEGORY);
+        Element breadcrumb = getFirstElementByClass(doc, CATEGORY);
         if (breadcrumb != null){
             // breadcrumb contains links to categories
             Elements linkTags = breadcrumb.getElementsByTag("a");

@@ -10,31 +10,19 @@ import org.jsoup.select.Elements;
 public final class ThanhNienFilter extends MainContentFilter {
     @Override
     protected boolean isParagraph(Element node) {
-        if (!node.classNames().isEmpty() || !node.tagName().equals("div")){
+        // TODO: not optimal way to find paragraph, sometimes it includes video tag
+        if (!node.classNames().isEmpty()){
             return false;
         }
         Elements figureTags = node.getElementsByTag("figure");
         Elements videoTags = node.getElementsByTag("video");
         Elements imgTags = node.getElementsByTag("img");
+        Elements scriptTags = node.getElementsByTag("script"); // video has script tag
         return figureTags.isEmpty()
                 && videoTags.isEmpty()
                 && imgTags.isEmpty()
+                && scriptTags.isEmpty()
                 && !StringUtils.isEmpty(node.text());
-
-//        // paragraphs are contained in div tag without any classes or other div inside
-//        if (!node.className().isEmpty()
-//                || !node.tagName().equals("div")
-//                || !node.attributes().isEmpty()) {
-//            return false;
-//        }
-//
-//        for (Element child : node.children()) {
-//            if (child.tagName().equals("div")
-//                    || child.tagName().equals("table")) { // table contains img
-//                return false;
-//            }
-//        }
-//        return true;
     }
 
     @Override
@@ -61,12 +49,6 @@ public final class ThanhNienFilter extends MainContentFilter {
     @Override
     protected boolean isAuthor(Element node) {
         return false;
-    }
-
-    @Override
-    protected Element getFilteredParagraph(Element node) {
-        return new Element("p")
-                .html(Jsoup.clean(node.html(), Safelist.basic()));
     }
 
     @Override
@@ -113,10 +95,11 @@ public final class ThanhNienFilter extends MainContentFilter {
 
         Element source = new Element("source")
                 .attr("src", src);
-
-        return new Element("video")
+        Element video = new Element("video")
                 .attr("controls", true)
                 .appendChild(source);
+        System.out.println(video);
+        return video;
     }
 
     @Override

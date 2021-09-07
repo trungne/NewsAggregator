@@ -40,13 +40,18 @@ public class PreviewGrid extends GridPane {
                                  String description,
                                  String publishedTime,
                                  String source) {
-        Image image = new Image(thumbnail,
-                160,
-                90,
-                false,
-                false,
-                true);
-        this.imageView.setImage(image);
+        try {
+            Image image = new Image(thumbnail,
+                    160,
+                    90,
+                    false,
+                    false,
+                    true);
+            this.imageView.setImage(image);
+        } catch (IllegalArgumentException e){
+            System.out.println(thumbnail);
+        }
+
         this.titleText.setText(title);
         this.descriptionText.setText(description);
         this.publishedTimeText.setText(publishedTime);

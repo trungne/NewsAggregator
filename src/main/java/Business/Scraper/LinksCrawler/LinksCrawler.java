@@ -60,7 +60,7 @@ public class LinksCrawler {
         List<URL> categoryLinks = getCategoryLinks(name);
         Set<URL> articleLinks = new HashSet<>();
         for (URL link: categoryLinks){
-            articleLinks.addAll(ScrapingUtils.scrapeLinksByClass(link, targetCssClass));
+            articleLinks.addAll(ScrapingUtils.getLinksByClass(link, targetCssClass));
         }
         return articleLinks;
     }

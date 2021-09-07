@@ -3,6 +3,7 @@ package Business.Scraper.Helper;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -39,7 +40,7 @@ public class ScrapingUtils {
      * @return the url of the first image found, return empty string if no image found.
      * */
     public static String scrapeFirstImgUrlFromClass(Document doc, String cls){
-        Element firstElementOfClass = scrapeFirstElementByClass(doc, cls);
+        Element firstElementOfClass = getFirstElementByClass(doc, cls);
         if (firstElementOfClass != null){
             // return the first url link found
             for (Element imgTag: firstElementOfClass.getElementsByTag("img")){
@@ -62,13 +63,28 @@ public class ScrapingUtils {
 
     public static String scrapeFirstImgUrl(Document doc, String cls){
         String url = scrapeFirstImgUrlFromClass(doc, cls);
-        if (StringUtils.isEmpty(url)){
-
+        if (!StringUtils.isEmpty(url)){
+            return url;
         }
 
-        return url;
+        // if cannot find img in the provided class, look img for any figure tag in the doc
+//        for (Element figure: doc.getElementsByTag("figure")){
+//            for (Element img: figure.getElementsByTag("img")){
+//                // check 2 src tags, return whichever not empty
+//                if (!StringUtils.isEmpty(img.attr("data-src"))){
+//                    return img.attr("data-src");
+//                }
+//                else if (!StringUtils.isEmpty(img.attr("src"))){
+//                    return img.attr("src");
+//                }
+//            }
+//        }
+
+        return "";
+
+
     }
-    public static Element scrapeFirstElementByClass(Document doc, String cls){
+    public static Element getFirstElementByClass(Document doc, String cls){
         if (StringUtils.isEmpty(cls)){
             return null;
         }
@@ -90,7 +106,7 @@ public class ScrapingUtils {
      * @param baseUrl: URL to parse and also provide the base in case of relative URLs are scraped
      * @param cssClass: target Element that has URL
      * */
-    public static Set<URL> scrapeLinksByClass(URL baseUrl, String cssClass) {
+    public static Set<URL> getLinksByClass(URL baseUrl, String cssClass) {
         Document doc = getDocumentAndDeleteCookies(baseUrl.toString());
         if (doc == null){
             return new HashSet<>();
@@ -134,6 +150,23 @@ public class ScrapingUtils {
 
         // only return img tag that has src
         return cleanedFirstImgTag;
+    }
+    /** Get first element of a tag that has a particular value
+     * @param doc document of the site
+     * @param tagName name of the tag to target
+     * @param value matching value to look for
+     * @return First element of the tag that has the specified value, null if not found
+     * */
+    public static Element getFirstElementByMatchingValue(Document doc, String tagName, String value){
+        Elements tags = doc.getElementsByTag(tagName);
+        for (Element tag: tags){
+            for (Attribute a: tag.attributes()){
+                if(a.getValue().equals(value)){
+                    return tag;
+                }
+            }
+        }
+        return null;
     }
 }
 
