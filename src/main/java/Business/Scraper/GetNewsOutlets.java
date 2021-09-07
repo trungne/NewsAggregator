@@ -99,7 +99,7 @@ public class GetNewsOutlets {
                     "",
                     "article:published_time");
             LinksCrawler ThanhNienLinksCrawler = new LinksCrawler(
-                    "https://thanhnien.vn",
+                    "https://thanhnien.vn/",
                     "site-header__nav",
                     "story__thumb");
             return new NewsOutlet(ThanhNienScraper, ThanhNienLinksCrawler);

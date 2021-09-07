@@ -41,7 +41,7 @@ public class Controller {
         progressBar.progressProperty().bind(model.getService().progressProperty());
         progressBar.visibleProperty().bind(model.getService().runningProperty());
 
-        FXMLLoader aboutUsViewLoader = new FXMLLoader(Main.class.getResource("Aboutus-view.fxml"));
+        FXMLLoader aboutUsViewLoader = new FXMLLoader(Main.class.getResource("AboutUs-view.fxml"));
         try {
             aboutUsViewLoader.load();
             aboutUsController = aboutUsViewLoader.getController();

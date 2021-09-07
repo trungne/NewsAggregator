@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("MainMenu.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("MainMenu-view.fxml"));
         Parent root = fxmlLoader.load();
         // create new scene in new variable
         Scene scene = new Scene(root, 1000, 800);

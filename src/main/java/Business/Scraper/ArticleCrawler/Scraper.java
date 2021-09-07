@@ -137,7 +137,7 @@ public class Scraper {
      * @return sanitized title element
      */    public Element scrapeDescription(Document doc) {
         Element description = getFirstElementByClass(doc, DESCRIPTION);
-        return sanitizer.sanitizeMainContent(description);
+        return sanitizer.sanitizeDescription(description);
     }
 
     /** Scrape Article Main content Element that matches provided css

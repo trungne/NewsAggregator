@@ -71,7 +71,7 @@ public abstract class MainContentFilter implements NodeFilter {
      * 1. clearing all its attributes
      * 2. clean the tag with basic safelist */
     protected Element getFilteredHeader(Element node){
-        return getFilteredParagraph(node);
+        return node.clearAttributes();
     }
 
     /** Implement how the node should be filtered */

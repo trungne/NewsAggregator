@@ -9,8 +9,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,13 +17,17 @@ public class ScrapingUtils {
     public final static int MAX_WAIT_TIME_WHEN_ACCESS_URL = 5000; // ms
     public final static int MAX_TERMINATION_TIME = 15000; // ms
     public final static int MAX_ARTICLES_DISPLAYED = 50;
+    static {
+        CookieManager cookieManager = new CookieManager();
+        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+        CookieHandler.setDefault(cookieManager);
+    }
 
     public static Document getDocumentAndDeleteCookies(String url){
-        Connection connection = Jsoup.connect(url).timeout(MAX_WAIT_TIME_WHEN_ACCESS_URL);
         try {
-            Document doc = connection.get();
+            Connection connection = Jsoup.connect(url).timeout(MAX_WAIT_TIME_WHEN_ACCESS_URL);
             connection.cookieStore().removeAll();
-            return doc;
+            return connection.get();
         } catch (MalformedURLException err){
             System.out.println("MalformedURLException:" +  url);
         }

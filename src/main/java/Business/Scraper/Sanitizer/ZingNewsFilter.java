@@ -162,17 +162,3 @@ public final class ZingNewsFilter extends MainContentFilter{
 
 }
 
-// "https://brandcom.vn/wp-content/uploads/2016/02/zingnews-logo.png"
-
-
-
-//    public Element scrapeMainContent(Document doc) throws ElementNotFound {
-//        Element authorTag = scrapeAuthor(doc, "the-article-credit");
-//        if (authorTag != null){
-//            return super.scrapeMainContent(doc).append(authorTag.outerHtml());
-//        }
-//        return super.scrapeMainContent(doc);
-//    }
-
-
-

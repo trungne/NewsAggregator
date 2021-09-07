@@ -17,8 +17,8 @@ import static Business.Scraper.Helper.ScrapingUtils.MAX_ARTICLES_DISPLAYED;
 
 public class NewsOutlet {
     // TODO: Khang comments this
-    private final Scraper scraper;
-    private final LinksCrawler linksCrawler;
+    public final Scraper scraper;
+    public final LinksCrawler linksCrawler;
 
     public NewsOutlet(Scraper scraper, LinksCrawler linksCrawler){
         this.scraper = scraper;
