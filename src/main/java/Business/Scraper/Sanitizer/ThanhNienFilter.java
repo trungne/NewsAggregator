@@ -34,10 +34,6 @@ public final class ThanhNienFilter extends MainContentFilter {
 
     @Override
     protected boolean isVideo(Element node) {
-        if (node.hasClass("cms-video")){
-        System.out.println("Found video!:" + node.outerHtml());
-        }
-
         return node.hasClass("cms-video");
     }
 
@@ -95,11 +91,9 @@ public final class ThanhNienFilter extends MainContentFilter {
 
         Element source = new Element("source")
                 .attr("src", src);
-        Element video = new Element("video")
+        return new Element("video")
                 .attr("controls", true)
                 .appendChild(source);
-        System.out.println(video);
-        return video;
     }
 
     @Override

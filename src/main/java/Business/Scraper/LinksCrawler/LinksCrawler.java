@@ -86,6 +86,7 @@ public class LinksCrawler {
         else{
             links.addAll(getOtherCategories());
         }
+//        System.out.println(links);
         return links;
     }
 

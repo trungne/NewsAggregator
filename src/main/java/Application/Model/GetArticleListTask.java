@@ -2,6 +2,7 @@ package Application.Model;
 
 import Business.News.Article;
 import Business.News.NewsOutlet;
+import Business.Scraper.GetNewsOutlets;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -14,13 +15,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static Business.Scraper.GetNewsOutlets.createNewsOutlets;
+
 import static Business.Scraper.Helper.ScrapingUtils.MAX_ARTICLES_DISPLAYED;
 import static Business.Scraper.Helper.ScrapingUtils.MAX_TERMINATION_TIME;
 
 // an interface for presentation layer to access scraped articles
 public class GetArticleListTask extends Task<List<Article>> {
-    private static final List<NewsOutlet> NEWS_OUTLETS = createNewsOutlets();
+    private static final List<NewsOutlet> NEWS_OUTLETS = GetNewsOutlets.createNewsOutlets();
     private final String category;
 
     public GetArticleListTask(String category){
@@ -79,7 +80,4 @@ public class GetArticleListTask extends Task<List<Article>> {
             Thread.currentThread().interrupt();
         }
     }
-
-
 }
-

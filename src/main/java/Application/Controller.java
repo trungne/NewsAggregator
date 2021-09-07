@@ -6,18 +6,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
-import javafx.scene.web.WebView;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
 
 public class Controller {
+    private static final int MAX_PREVIEWS_PER_PAGE = 10;
+
     @FXML private GridPane mainGridPane;
     @FXML private VBox previewBox;
     @FXML private ScrollPane mainArea;
@@ -25,16 +24,12 @@ public class Controller {
     @FXML private HBox pageBox;
     @FXML private VBox categoryBox;
 
+    // controllers
     private AboutUsController aboutUsController;
+    private ArticleViewController articleViewController;
 
     private final Model model;
-    private static final int MAX_PREVIEWS_PER_PAGE = 10;
-
     private final ProgressBar progressBar = new ProgressBar();
-    private final WebView browser = new WebView();
-    private final Pane articlePane = new Pane();
-    private final Scene articleScene = new Scene(articlePane);
-    private final Stage articleStage = new Stage();
 
     private Button currentCategoryButton;
     private Button currentPageButton;
@@ -53,6 +48,15 @@ public class Controller {
         } catch (IOException ignored) {
 
         }
+
+        FXMLLoader articleView = new FXMLLoader(Main.class.getResource("Article-view.fxml"));
+        try {
+            articleView.load();
+            articleViewController = articleView.getController();
+        } catch (IOException ignored) {
+
+        }
+
     }
 
     /** Generate general layout and inject contents, with necessary event handlers and sizing bindings
@@ -60,11 +64,8 @@ public class Controller {
     public void initialize() {
         // dynamically create grid pane inside scroll pane
         createPreviewGrids(this.previewBox);
-
-        articlePane.getChildren().add(browser);
-        articleStage.setScene(articleScene);
-        articleStage.setOnCloseRequest(e -> browser.getEngine().load(null));
         progressBar.setPrefSize(anchorPane.getPrefWidth(), 30);
+
         Button newCategory = (Button) categoryBox.getChildren().get(0);
         newCategory.fire();
     }
@@ -172,11 +173,8 @@ public class Controller {
         String title = model.getArticleTitle(currentCategoryButton.getText(), index);
         String html = model.getArticleHtml(currentCategoryButton.getText(), index);
 //        System.out.println(html);
-        browser.getEngine().loadContent(html);
-        articleStage.setTitle(title);
 
-        articleStage.show();
-        articleStage.requestFocus();
+        articleViewController.show(title, html);
     }
 
     /** Update the currentCategoryButton and highlight only the current category user is on
