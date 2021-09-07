@@ -1,8 +1,6 @@
 package Application;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
@@ -15,8 +13,7 @@ public class ArticleViewController {
     Stage stage = new Stage();
 
     public void initialize(){
-        Scene scene = new Scene(anchorPane);
-        stage.setScene(scene);
+        stage.setScene(new Scene(anchorPane));
         stage.setOnCloseRequest(e -> webView.getEngine().loadContent(""));
     }
 
@@ -30,9 +27,7 @@ public class ArticleViewController {
         stage.show();
     }
 
-    public void close(ActionEvent e){
-        Node node = (Node) e.getSource();
-        Stage stage = (Stage) node.getScene().getWindow();
+    public void close(){
         webView.getEngine().loadContent("");
         stage.close();
     }
