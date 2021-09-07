@@ -1,4 +1,4 @@
-package Application;
+package Application.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.Scene;

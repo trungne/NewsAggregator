@@ -6,7 +6,7 @@
 <?import javafx.scene.web.WebView?>
 
 
-<AnchorPane fx:id="anchorPane" prefHeight="860.0" prefWidth="803.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Application.ArticleViewController">
+<AnchorPane fx:id="anchorPane" prefHeight="860.0" prefWidth="803.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Application.Controller.ArticleViewController">
    <children>
       <BorderPane layoutX="-6.0" layoutY="-7.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>

@@ -1,5 +1,6 @@
-package Application;
+package Application.Controller;
 
+import Application.Main;
 import Application.Model.Model;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
@@ -18,7 +19,7 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 
 
-public class Controller {
+public class MainController {
     private static final int MAX_PREVIEWS_PER_PAGE = 10;
 
     @FXML private GridPane mainGridPane;
@@ -38,9 +39,9 @@ public class Controller {
     private Button currentCategoryButton;
     private Button currentPageButton;
 
-    /** Controller constructor
+    /** MainController constructor
      */
-    public Controller(){
+    public MainController(){
         this.model = new Model(this);
         progressBar.progressProperty().bind(model.getService().progressProperty());
         progressBar.visibleProperty().bind(model.getService().runningProperty());

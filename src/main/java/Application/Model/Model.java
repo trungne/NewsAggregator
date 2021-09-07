@@ -1,6 +1,6 @@
 package Application.Model;
 
-import Application.Controller;
+import Application.Controller.MainController;
 import Business.News.Article;
 import javafx.concurrent.Service;
 
@@ -10,10 +10,10 @@ import java.util.List;
 public class Model {
     private final HashMap<String, List<Article>> articlesByCategories = new HashMap<>();
 
-    private final Controller controller;
+    private final MainController controller;
     private final GetArticleListService service = new GetArticleListService();
 
-    public Model(Controller controller){
+    public Model(MainController controller){
         this.controller = controller;
         service.setOnSucceeded(e -> {
             List<Article> newlyScrapedArticles = (List<Article>) e.getSource().getValue();
