@@ -192,7 +192,7 @@ public class LinksCrawler {
     private Document getDocumentFromFile(){
         // Rename filename from example.com to example.html
         String htmlFilename = homepageUrl.getHost().replaceFirst("\\.(.+)",".html");
-        Path path = Paths.get("src", "main", "resources", "homepages", htmlFilename);
+        Path path = Paths.get("src", "main", "resources", "Homepages", htmlFilename);
         File file = new File(path.toAbsolutePath().toString());
         try {
             return Jsoup.parse(file, "UTF-8", homepageUrl.toString());

@@ -1,8 +1,8 @@
 package Application.Model;
 
 import Business.News.Article;
-import Business.News.NewsOutlet;
-import Business.Scraper.GetNewsOutlets;
+import Business.NewsOutlet;
+import Business.GetNewsOutlets;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

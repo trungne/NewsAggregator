@@ -18,4 +18,5 @@ module JavaFxApplication {
     opens Application.View to javafx.fxml;
     opens Application.Model to javafx.fxml;
     exports Business.Scraper.Sanitizer;
+    exports Business;
 }

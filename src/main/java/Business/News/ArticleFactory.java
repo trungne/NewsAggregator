@@ -23,7 +23,7 @@ public class ArticleFactory {
 
     private static final String CSS_STYLE = loadCssStyle();
     private static String loadCssStyle(){
-        Path path = Paths.get("src", "main", "resources", "styles", "article-style.css");
+        Path path = Paths.get("src", "main", "resources", "Styles", "article-style.css");
         File file = new File(path.toAbsolutePath().toString());
         Scanner reader;
         try {

@@ -1,6 +1,5 @@
-package Business.Scraper;
+package Business;
 
-import Business.News.NewsOutlet;
 import Business.Scraper.ArticleCrawler.Scraper;
 import Business.Scraper.LinksCrawler.LinksCrawler;
 import Business.Scraper.Sanitizer.*;
