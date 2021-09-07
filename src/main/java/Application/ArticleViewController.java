@@ -17,8 +17,7 @@ public class ArticleViewController {
     public void initialize(){
         Scene scene = new Scene(anchorPane);
         stage.setScene(scene);
-        // TODO: still plays sound when closing windows
-        stage.setOnCloseRequest(e -> webView.getEngine().load(null));
+        stage.setOnCloseRequest(e -> webView.getEngine().loadContent(""));
     }
 
     public void show(String title, String html){
@@ -34,7 +33,7 @@ public class ArticleViewController {
     public void close(ActionEvent e){
         Node node = (Node) e.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
-        stage.setOnCloseRequest(event -> webView.getEngine().load(null));
+        webView.getEngine().loadContent("");
         stage.close();
     }
 
