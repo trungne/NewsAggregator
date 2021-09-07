@@ -62,8 +62,7 @@ public class ArticleFactory {
         return new Article(newsSource, title.text(), description.text(), thumbnail, time, rawHtml);
     }
     private static boolean isMoreThanAWeek(LocalDateTime time){
-        long minutes = ChronoUnit.MINUTES.between(time, LocalDateTime.now());
-        return minutes >= 24 * 60 * 7; // a day in minutes
+        return ChronoUnit.MINUTES.between(time, LocalDateTime.now()) >= 24 * 60 * 7; // a day in minutes
     }
     private static Element getHeadTag() {
         final Element head = new Element("head").append("<meta charset=\"UTF-8\">" +
