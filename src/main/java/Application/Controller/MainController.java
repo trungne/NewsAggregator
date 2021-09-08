@@ -8,10 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -28,10 +25,9 @@ public class MainController {
     @FXML private GridPane mainGridPane;
     @FXML private VBox previewBox;
     @FXML private ScrollPane mainArea;
-    @FXML private AnchorPane anchorPane;
     @FXML private HBox pageBox;
     @FXML private VBox categoryBox;
-    @FXML private ProgressBar progressBar;
+    @FXML private ProgressIndicator progressBar;
 
     // controllers
     private AboutUsController aboutUsController;
@@ -83,13 +79,9 @@ public class MainController {
         // dynamically create grid pane inside scroll pane
         createPreviewGrids(this.previewBox);
 
-        progressBar.progressProperty().bind(model.getService().progressProperty());
-        progressBar.visibleProperty().bind(model.getService().runningProperty());
-
-        progressBar.setPrefSize(anchorPane.getPrefWidth(), 30);
-
         loadAboutUsView();
         loadArticleView();
+
         Button newCategory = (Button) categoryBox.getChildren().get(0);
         newCategory.fire();
     }
@@ -143,7 +135,11 @@ public class MainController {
     private void requestPreviews(String category){
         disableAllChildButtons(categoryBox);
         disableAllChildButtons(pageBox);
-        mainArea.setContent(this.progressBar);
+
+        progressBar.setVisible(true);
+        progressBar.progressProperty().bind(model.getService().progressProperty());
+        progressBar.visibleProperty().bind(model.getService().runningProperty());
+        mainArea.setContent(null); // disable preview pane
 
         // this will trigger model to scrape articles
         // when finished, the model will trigger controller to display previews
@@ -163,10 +159,15 @@ public class MainController {
     private void updatePreviewsPane(int pageNum){
         enableAllChildButtons(categoryBox);
         enableAllChildButtons(pageBox);
-
         highlightPage(pageNum);
-        placePreviewsOnGrids(pageNum);
+
+        // unbind so that progress bar can be set invisible
+        progressBar.progressProperty().unbind();
+        progressBar.visibleProperty().unbind();
+        progressBar.setVisible(false);
         mainArea.setContent(previewBox);
+
+        placePreviewsOnGrids(pageNum);
     }
 
 

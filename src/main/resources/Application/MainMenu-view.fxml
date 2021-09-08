@@ -4,9 +4,8 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -119,16 +118,12 @@
                   </Button>
                </children>
             </VBox>
-            <AnchorPane fx:id="anchorPane" prefHeight="574.0" prefWidth="590.0" GridPane.columnIndex="1" GridPane.rowSpan="9">
-               <children>
-                  <ScrollPane fx:id="mainArea" prefHeight="381.0" prefWidth="590.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <content>
-                        <VBox fx:id="previewBox" alignment="CENTER" prefHeight="486.0" prefWidth="668.0" spacing="10.0" />
-                     </content>
-                  </ScrollPane>
-                  <ProgressBar fx:id="progressBar" progress="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-               </children>
-            </AnchorPane>
+            <ScrollPane fx:id="mainArea" prefHeight="381.0" prefWidth="590.0" GridPane.columnIndex="1" GridPane.rowSpan="9">
+               <content>
+                  <VBox fx:id="previewBox" alignment="CENTER" prefHeight="486.0" prefWidth="668.0" spacing="10.0" />
+               </content>
+            </ScrollPane>
+            <ProgressIndicator fx:id="progressBar" maxHeight="300.0" maxWidth="300.0" minHeight="10.0" minWidth="10.0" prefHeight="250.0" prefWidth="250.0" progress="0.0" GridPane.columnIndex="1" GridPane.rowSpan="9" />
          </children>
       </GridPane>
    </center>
