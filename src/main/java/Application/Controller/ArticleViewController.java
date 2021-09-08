@@ -35,6 +35,8 @@ public class ArticleViewController {
         stage.setTitle(title);
         stage.requestFocus();
         stage.show();
+
+        checkPreviousAndNextButtons();
     }
 
     public void close(){
@@ -58,6 +60,8 @@ public class ArticleViewController {
         show(a.getTitle(), a.getHtml());
     }
 
-
-
+    private void checkPreviousAndNextButtons(){
+        nextButton.setDisable(!model.hasNextArticle());
+        previousButton.setDisable(!model.hasPreviousArticle());
+    }
 }

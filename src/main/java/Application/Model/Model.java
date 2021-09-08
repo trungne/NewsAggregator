@@ -92,6 +92,7 @@ public class Model {
         }
 
         addArticleToStack(a);
+        currentSelectedArticleIndex = 0;
         return a.getHtml();
     }
 
@@ -99,13 +100,12 @@ public class Model {
         if (selectedArticles.size() == MAX_ARTICLES_IN_STACK){
             selectedArticles.removeLast();
         }
-
         selectedArticles.addFirst(a);
     }
 
     public Article nextArticle(){
         // if the current article has an index of 0, there is no next article
-        if (currentSelectedArticleIndex == 0){
+        if (!hasNextArticle()){
             return null;
         }
 
@@ -114,13 +114,21 @@ public class Model {
 
     }
 
+    public boolean hasNextArticle(){
+        return !(currentSelectedArticleIndex == 0);
+    }
+
     public Article previousArticle(){
-        if (currentSelectedArticleIndex == selectedArticles.size() - 1){
+        if (!hasPreviousArticle()){
             return null;
         }
 
         currentSelectedArticleIndex++;
         return selectedArticles.get(currentSelectedArticleIndex);
+    }
+
+    public boolean hasPreviousArticle(){
+        return !(currentSelectedArticleIndex == selectedArticles.size() - 1);
     }
 
 
@@ -145,11 +153,13 @@ public class Model {
      * @param category provided category to clear articles from
      * */
     public void refresh(String category){
+        selectedArticles.clear();
         articlesByCategories.remove(category);
     }
     /** Clear all articles in the hashmap
      * */
     public void refresh(){
+        selectedArticles.clear();
         articlesByCategories.clear();
     }
 }
