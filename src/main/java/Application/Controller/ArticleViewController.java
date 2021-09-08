@@ -1,5 +1,6 @@
 package Application.Controller;
 
+import Application.Model.Model;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -11,10 +12,15 @@ public class ArticleViewController {
     @FXML WebView webView;
     @FXML AnchorPane anchorPane;
     Stage stage = new Stage();
+    Model model;
 
     public void initialize(){
         stage.setScene(new Scene(anchorPane));
         stage.setOnCloseRequest(e -> webView.getEngine().loadContent(""));
+    }
+
+    public void setModel(Model model){
+        this.model = model;
     }
 
     public void show(String title, String html){

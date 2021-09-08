@@ -7,7 +7,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -15,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -45,24 +48,38 @@ public class MainController {
         this.model = new Model(this);
         progressBar.progressProperty().bind(model.getService().progressProperty());
         progressBar.visibleProperty().bind(model.getService().runningProperty());
+        loadAboutUsView();
+        loadArticleView();
+    }
 
-        FXMLLoader aboutUsViewLoader = new FXMLLoader(Main.class.getResource("AboutUs-view.fxml"));
-        try {
-            aboutUsViewLoader.load();
-            aboutUsController = aboutUsViewLoader.getController();
-        } catch (IOException ignored) {
-
-        }
-
+    private void loadArticleView(){
         FXMLLoader articleView = new FXMLLoader(Main.class.getResource("Article-view.fxml"));
         try {
             articleView.load();
             articleViewController = articleView.getController();
-        } catch (IOException ignored) {
-
+        } catch (IOException | IllegalStateException e) {
+            displayPopUpError("Error! Cannot load 'Article-view.fxml'!");
         }
-
     }
+    private void loadAboutUsView(){
+        FXMLLoader aboutUsViewLoader = new FXMLLoader(Main.class.getResource("AboutUs-view.fxml"));
+        try {
+            aboutUsViewLoader.load();
+            aboutUsController = aboutUsViewLoader.getController();
+        } catch (IOException | IllegalStateException e) {
+            displayPopUpError("Error! Cannot load 'AboutUs-view.fxml' view!");
+        }
+    }
+
+    private void displayPopUpError(String msg){
+        Label label = new Label(msg);
+        Scene scene = new Scene(label);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+    }
+
 
     /** Generate general layout and inject contents, with necessary event handlers and sizing bindings
      */
