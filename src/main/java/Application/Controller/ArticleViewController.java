@@ -1,8 +1,10 @@
 package Application.Controller;
 
 import Application.Model.Model;
+import Business.News.Article;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -11,6 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 public class ArticleViewController {
     @FXML WebView webView;
     @FXML AnchorPane anchorPane;
+    @FXML Button nextButton;
+    @FXML Button previousButton;
     Stage stage = new Stage();
     Model model;
 
@@ -36,6 +40,22 @@ public class ArticleViewController {
     public void close(){
         webView.getEngine().loadContent("");
         stage.close();
+    }
+
+    public void next(){
+        Article a = model.nextArticle();
+        if (a == null){
+            return;
+        }
+        show(a.getTitle(), a.getHtml());
+    }
+
+    public void previous(){
+        Article a = model.previousArticle();
+        if (a == null){
+            return;
+        }
+        show(a.getTitle(), a.getHtml());
     }
 
 

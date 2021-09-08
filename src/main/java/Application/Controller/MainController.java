@@ -49,6 +49,7 @@ public class MainController {
         try {
             articleView.load();
             articleViewController = articleView.getController();
+            articleViewController.setModel(model);
         } catch (IOException | IllegalStateException e) {
             displayPopUpError("Error! Cannot load 'Article-view.fxml'!");
         }

@@ -4,11 +4,13 @@ import Application.Controller.MainController;
 import Business.News.Article;
 import javafx.concurrent.Service;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Model {
     private final HashMap<String, List<Article>> articlesByCategories = new HashMap<>();
+    private final int MAX_ARTICLES_IN_STACK = 10;
+    private final LinkedList<Article> selectedArticles = new LinkedList<>();
+    private int currentSelectedArticleIndex;
 
     private final MainController controller;
     private final GetArticleListService service = new GetArticleListService();
@@ -37,6 +39,9 @@ public class Model {
      * @return a particular article in the category
      * */
     private Article getArticle(String category, int index){
+        if (articlesByCategories.get(category) == null){
+            return null;
+        }
         return articlesByCategories.get(category).get(index);
     }
 
@@ -85,7 +90,37 @@ public class Model {
         if (a == null){
             return "";
         }
+
+        addArticleToStack(a);
         return a.getHtml();
+    }
+
+    public void addArticleToStack(Article a){
+        if (selectedArticles.size() == MAX_ARTICLES_IN_STACK){
+            selectedArticles.removeLast();
+        }
+
+        selectedArticles.addFirst(a);
+    }
+
+    public Article nextArticle(){
+        // if the current article has an index of 0, there is no next article
+        if (currentSelectedArticleIndex == 0){
+            return null;
+        }
+
+        currentSelectedArticleIndex--;
+        return selectedArticles.get(currentSelectedArticleIndex);
+
+    }
+
+    public Article previousArticle(){
+        if (currentSelectedArticleIndex == selectedArticles.size() - 1){
+            return null;
+        }
+
+        currentSelectedArticleIndex++;
+        return selectedArticles.get(currentSelectedArticleIndex);
     }
 
 

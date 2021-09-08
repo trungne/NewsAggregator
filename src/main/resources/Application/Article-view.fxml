@@ -16,8 +16,8 @@
             <HBox>
                <children>
                   <Button alignment="CENTER" mnemonicParsing="false" onAction="#close" prefWidth="50.0" text="Close" />
-                  <Button mnemonicParsing="false" prefWidth="100.0" text="Previous" />
-                  <Button mnemonicParsing="false" prefWidth="100.0" text="Next" />
+                  <Button fx:id="previousButton" mnemonicParsing="false" onAction="#previous" prefWidth="100.0" text="Previous" />
+                  <Button fx:id="nextButton" mnemonicParsing="false" onAction="#next" prefWidth="100.0" text="Next" />
                </children>
             </HBox>
          </top>
