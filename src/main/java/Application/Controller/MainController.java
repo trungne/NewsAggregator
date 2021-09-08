@@ -31,13 +31,13 @@ public class MainController {
     @FXML private AnchorPane anchorPane;
     @FXML private HBox pageBox;
     @FXML private VBox categoryBox;
+    @FXML private ProgressBar progressBar;
 
     // controllers
     private AboutUsController aboutUsController;
     private ArticleViewController articleViewController;
 
     private final Model model;
-    private final ProgressBar progressBar = new ProgressBar();
 
     private Button currentCategoryButton;
     private Button currentPageButton;
@@ -46,10 +46,6 @@ public class MainController {
      */
     public MainController(){
         this.model = new Model(this);
-        progressBar.progressProperty().bind(model.getService().progressProperty());
-        progressBar.visibleProperty().bind(model.getService().runningProperty());
-        loadAboutUsView();
-        loadArticleView();
     }
 
     private void loadArticleView(){
@@ -86,8 +82,14 @@ public class MainController {
     public void initialize() {
         // dynamically create grid pane inside scroll pane
         createPreviewGrids(this.previewBox);
+
+        progressBar.progressProperty().bind(model.getService().progressProperty());
+        progressBar.visibleProperty().bind(model.getService().runningProperty());
+
         progressBar.setPrefSize(anchorPane.getPrefWidth(), 30);
 
+        loadAboutUsView();
+        loadArticleView();
         Button newCategory = (Button) categoryBox.getChildren().get(0);
         newCategory.fire();
     }

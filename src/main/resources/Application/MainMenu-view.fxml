@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -125,6 +126,7 @@
                         <VBox fx:id="previewBox" alignment="CENTER" prefHeight="486.0" prefWidth="668.0" spacing="10.0" />
                      </content>
                   </ScrollPane>
+                  <ProgressBar fx:id="progressBar" progress="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                </children>
             </AnchorPane>
          </children>
