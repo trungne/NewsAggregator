@@ -2,9 +2,7 @@ package Business.Scraper.Sanitizer;
 
 import Business.Scraper.Helper.ScrapingUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
-import org.jsoup.safety.Safelist;
 import org.jsoup.select.Elements;
 
 public final class ThanhNienFilter extends MainContentFilter {

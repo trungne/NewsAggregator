@@ -2,14 +2,9 @@ package Business;
 
 import Business.News.Article;
 import Business.Scraper.ArticleCrawler.Scraper;
-import Business.Scraper.Helper.ScrapingUtils;
 import Business.Scraper.LinksCrawler.LinksCrawler;
-import org.apache.commons.lang3.StringUtils;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -29,7 +24,7 @@ public class NewsOutlet {
     public void populateArticleList(List<Article> articleList, String category) {
         Set<URL> urls = linksCrawler.getArticleLinks(category);
         for (URL url : urls) {
-            if (articleList.size() >= MAX_ARTICLES_DISPLAYED + 20) {
+            if (articleList.size() >= MAX_ARTICLES_DISPLAYED + 10) {
                 break;
             }
 

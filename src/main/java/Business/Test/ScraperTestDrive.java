@@ -2,7 +2,6 @@ package Business.Test;
 
 import Business.Scraper.Helper.ScrapingUtils;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
 public class ScraperTestDrive {
     public static void main(String[] args) {

@@ -1,8 +1,8 @@
 package Application.Model;
 
+import Business.GetNewsOutlets;
 import Business.News.Article;
 import Business.NewsOutlet;
-import Business.GetNewsOutlets;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
 
 import static Business.Scraper.Helper.ScrapingUtils.MAX_ARTICLES_DISPLAYED;
 import static Business.Scraper.Helper.ScrapingUtils.MAX_TERMINATION_TIME;
@@ -39,7 +38,7 @@ public class GetArticleListTask extends Task<List<Article>> {
         articles.addListener((ListChangeListener<Article>)
                 change -> updateProgress(
                         change.getList().size(),
-                        MAX_ARTICLES_DISPLAYED + 20));
+                        MAX_ARTICLES_DISPLAYED + 10));
 
         fillUpArticleList(articles, category);
         return articles;

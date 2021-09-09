@@ -4,7 +4,9 @@ import Application.Controller.MainController;
 import Business.News.Article;
 import javafx.concurrent.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Model {
     private final HashMap<String, List<Article>> articlesByCategories = new HashMap<>();
