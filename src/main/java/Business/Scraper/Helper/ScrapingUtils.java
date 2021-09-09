@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ScrapingUtils {
-    public final static int MAX_WAIT_TIME_WHEN_ACCESS_URL = 5000; // ms
+    public final static int MAX_WAIT_TIME_WHEN_ACCESS_URL = 10000; // ms
     public final static int MAX_TERMINATION_TIME = 15000; // ms
     public final static int MAX_ARTICLES_DISPLAYED = 50;
     static {
@@ -25,8 +25,12 @@ public class ScrapingUtils {
 
     public static Document getDocumentAndDeleteCookies(String url){
         try {
-            Connection connection = Jsoup.connect(url).timeout(MAX_WAIT_TIME_WHEN_ACCESS_URL);
-            connection.cookieStore().removeAll();
+            Connection connection = Jsoup
+                    .connect(url)
+                    .method(Connection.Method.POST)
+                    .timeout(MAX_WAIT_TIME_WHEN_ACCESS_URL)
+                    ;
+//            connection.cookieStore().removeAll();
             return connection.get();
         } catch (MalformedURLException err){
             System.out.println("MalformedURLException:" +  url);

@@ -9,7 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GetNewsOutlets {
+    private static int newsOutletsSize;
 
+    public static int getNewsOutletsSize(){
+        return newsOutletsSize;
+    }
     // Get all Scraping info of 5 news, return a list of NewsOutlet
     public static List<NewsOutlet> createNewsOutlets(){
         NewsOutlet[] newsOutlets = new NewsOutlet[] {
@@ -25,6 +29,7 @@ public class GetNewsOutlets {
                 validNewsOutlets.add(newsOutlet);
             }
         }
+        newsOutletsSize = validNewsOutlets.size();
         return validNewsOutlets;
     }
 
@@ -99,7 +104,7 @@ public class GetNewsOutlets {
                     "article:published_time");
             LinksCrawler ThanhNienLinksCrawler = new LinksCrawler(
                     "https://thanhnien.vn/",
-                    "site-header__nav",
+                    "site-header__menu",
                     "story__thumb");
             return new NewsOutlet(ThanhNienScraper, ThanhNienLinksCrawler);
         } catch (IOException e){

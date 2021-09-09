@@ -67,6 +67,9 @@ public class Model {
         if (selectedArticles.size() == MAX_ARTICLES_IN_STACK){
             selectedArticles.removeLast();
         }
+
+        selectedArticles.remove(a);
+
         selectedArticles.addFirst(a);
     }
 

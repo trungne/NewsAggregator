@@ -13,15 +13,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class LinksCrawler {
     private static final String[] COVID_CATEGORY_LINKS = new String[]{
             "https://vnexpress.net/covid-19/tin-tuc",
-            "https://thanhnien.vn/covid/",
+            "https://thanhnien.vn/covid-19/",
             "https://zingnews.vn/tieu-diem/covid-19.html",
             "https://tuoitre.vn/covid-19.html",
             "https://nhandan.vn/tieu-diem"
@@ -62,6 +59,7 @@ public class LinksCrawler {
         for (URL link: categoryLinks){
             articleLinks.addAll(ScrapingUtils.getLinksByClass(link, targetCssClass));
         }
+        System.out.println(categoryLinks);
         return articleLinks;
     }
 
@@ -86,7 +84,6 @@ public class LinksCrawler {
         else{
             links.addAll(getOtherCategories());
         }
-//        System.out.println(links);
         return links;
     }
 
@@ -156,10 +153,14 @@ public class LinksCrawler {
                 // compare the provided name with the name in a tag
                 if (categoryName.equals(name)) {
                     // get all other a tags if this is the main category (index = 0)
-                    if (aTags.indexOf(a) == 0)
+                    if (aTags.indexOf(a) == 0){
                         links.addAll(extractAllLinksFromTag(menu));
-                    else
+                        return links;
+                    }
+                    else{
                         links.add(extractLinkFromTag(a));
+                    }
+
                 }
             }
         }

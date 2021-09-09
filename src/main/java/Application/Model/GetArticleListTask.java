@@ -38,7 +38,7 @@ public class GetArticleListTask extends Task<List<Article>> {
         articles.addListener((ListChangeListener<Article>)
                 change -> updateProgress(
                         change.getList().size(),
-                        MAX_ARTICLES_DISPLAYED + 10));
+                        MAX_ARTICLES_DISPLAYED));
 
         fillUpArticleList(articles, category);
         return articles;
