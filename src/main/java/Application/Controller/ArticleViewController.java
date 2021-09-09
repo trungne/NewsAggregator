@@ -61,7 +61,7 @@ public class ArticleViewController {
     }
 
     private void checkPreviousAndNextButtons(){
-        nextButton.setDisable(!model.hasNextArticle());
-        previousButton.setDisable(!model.hasPreviousArticle());
+        nextButton.setDisable(model.hasNoNextArticle());
+        previousButton.setDisable(model.hasNoPreviousArticle());
     }
 }

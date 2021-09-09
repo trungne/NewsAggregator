@@ -38,62 +38,27 @@ public class Model {
      * @param index the index of the article
      * @return a particular article in the category
      * */
-    private Article getArticle(String category, int index){
+    public Article getArticle(String category, int index){
         if (articlesByCategories.get(category) == null){
             return null;
         }
         return articlesByCategories.get(category).get(index);
     }
 
-    public String getArticleTitle(String category, int index){
+    /** Get a particular article in a category and store it in article stack
+     * @param category the category to get article from
+     * @param index the index of the article
+     * @return a particular article in the category
+     * */
+    public Article getArticleAndStore(String category, int index){
         Article a = getArticle(category, index);
         if (a == null){
-            return "";
+            return null;
         }
-        return a.getTitle();
-    }
-
-    public String getArticleDescription(String category, int index){
-        Article a = getArticle(category, index);
-        if (a == null){
-            return "";
-        }
-        return a.getDescription();
-    }
-
-    public String getArticleThumbnail(String category, int index){
-        Article a = getArticle(category, index);
-        if (a == null){
-            return "";
-        }
-        return a.getThumbNail();
-    }
-
-    public String getArticleTime(String category, int index){
-        Article a = getArticle(category, index);
-        if (a == null){
-            return "";
-        }
-        return a.getRelativeTime();
-    }
-
-    public String getArticleSource(String category, int index){
-        Article a = getArticle(category, index);
-        if (a == null){
-            return "";
-        }
-        return a.getNewsSource();
-    }
-
-    public String getArticleHtml(String category, int index){
-        Article a = getArticle(category, index);
-        if (a == null){
-            return "";
-        }
-
         addArticleToStack(a);
         currentSelectedArticleIndex = 0;
-        return a.getHtml();
+
+        return a;
     }
 
     public void addArticleToStack(Article a){
@@ -104,8 +69,7 @@ public class Model {
     }
 
     public Article nextArticle(){
-        // if the current article has an index of 0, there is no next article
-        if (!hasNextArticle()){
+        if (hasNoNextArticle()){
             return null;
         }
 
@@ -114,12 +78,12 @@ public class Model {
 
     }
 
-    public boolean hasNextArticle(){
-        return !(currentSelectedArticleIndex == 0);
+    public boolean hasNoNextArticle(){
+        return currentSelectedArticleIndex == 0;
     }
 
     public Article previousArticle(){
-        if (!hasPreviousArticle()){
+        if (hasNoPreviousArticle()){
             return null;
         }
 
@@ -127,11 +91,9 @@ public class Model {
         return selectedArticles.get(currentSelectedArticleIndex);
     }
 
-    public boolean hasPreviousArticle(){
-        return !(currentSelectedArticleIndex == selectedArticles.size() - 1);
+    public boolean hasNoPreviousArticle(){
+        return currentSelectedArticleIndex == selectedArticles.size() - 1;
     }
-
-
 
     /** First check if the category already has articles scraped. If yes, immediately notify the controller.
      * Otherwise, start scraping service

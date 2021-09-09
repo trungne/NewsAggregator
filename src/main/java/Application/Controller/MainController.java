@@ -2,6 +2,7 @@ package Application.Controller;
 
 import Application.Main;
 import Application.Model.Model;
+import Business.News.Article;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -181,11 +182,15 @@ public class MainController {
         for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
             int articleIndex = startIndex + i;
 
-            String thumbnail = model.getArticleThumbnail(category, articleIndex);
-            String title = model.getArticleTitle(category, articleIndex);
-            String description = model.getArticleDescription(category, articleIndex);
-            String time = model.getArticleTime(category, articleIndex);
-            String source = model.getArticleSource(category, articleIndex);
+            Article a = model.getArticle(category, articleIndex);
+            if (a == null) {
+                continue;
+            }
+            String thumbnail = a.getThumbNail();
+            String title = a.getTitle();
+            String description = a.getDescription();
+            String time = a.getRelativeTime();
+            String source = a.getNewsSource();
 
             PreviewGrid previewGrid = (PreviewGrid) previewBox.getChildren().get(i);
             previewGrid.setPreviewToGrid(thumbnail, title, description, time, source);
@@ -196,8 +201,9 @@ public class MainController {
      * @param index: index of the selected article in the system
      */
     private void openArticleInNewStage(int index){
-        String title = model.getArticleTitle(currentCategoryButton.getText(), index);
-        String html = model.getArticleHtml(currentCategoryButton.getText(), index);
+        Article a = model.getArticleAndStore(currentCategoryButton.getText(), index);
+        String title = a.getTitle();
+        String html = a.getHtml();
 //        System.out.println(html);
 
         articleViewController.show(title, html);
@@ -258,6 +264,12 @@ public class MainController {
                 }
 
                 GridPane node = (GridPane) e.getSource();
+
+                // calculate the actual index of a grid.
+                // Ex: The first grid on page 1 is:
+                // (1 - 1) * 10 + 0 = 0
+                // Ex: The second grid on page 2:
+                // (2 - 1) * 10 + 1 = 11
                 int index = (Integer.parseInt(currentPageButton.getText()) - 1) * 10
                         + previewBox.getChildren().indexOf(node);
                 openArticleInNewStage(index);
