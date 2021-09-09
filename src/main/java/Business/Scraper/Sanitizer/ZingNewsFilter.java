@@ -37,15 +37,6 @@ public final class ZingNewsFilter extends MainContentFilter{
                 || node.tagName().equals("blockquote");
     }
 
-    /** Identify author name in main content
-     * @param node main content element
-     * @return false since ZingNews main content doesn't contain author name
-     */
-    @Override
-    protected boolean isAuthor(Element node) {
-        return false;
-    }
-
     /** Clean paragraph tag using Jsoup Safelist and Jsoup Node
      * @param node uncleaned paragraph element
      * @return cleaned paragraph element
@@ -113,15 +104,6 @@ public final class ZingNewsFilter extends MainContentFilter{
             quote.appendChild(p.clearAttributes());
         }
         return quote;
-    }
-
-    /** Clean author tag
-     * @param node uncleaned author element
-     * @return null since we cant find author element inside main content
-     */
-    @Override
-    protected Element getFilteredAuthor(Element node) {
-        return null;
     }
 
     /** Identify redundant section in main content

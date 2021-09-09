@@ -43,8 +43,8 @@ public class ArticleFactory {
 
     public static Article createArticle(String newsSource,
                                         String url,
-                                        Element title,
-                                        Element description,
+                                        String title,
+                                        String description,
                                         Element mainContent,
                                         String thumbnail,
                                         Set<String> categories,
@@ -59,7 +59,7 @@ public class ArticleFactory {
         Element header = getHeader(categories, time);
         html.appendChild(getBody(header, title, description, mainContent, source));
         String rawHtml = "<!DOCTYPE html>\n" + html.outerHtml();
-        return new Article(newsSource, title.text(), description.text(), thumbnail, time, rawHtml);
+        return new Article(newsSource, title, description, thumbnail, time, rawHtml);
     }
     private static boolean isMoreThanAWeek(LocalDateTime time){
         return ChronoUnit.MINUTES.between(time, LocalDateTime.now()) >= 24 * 60 * 7; // a day in minutes
@@ -100,16 +100,16 @@ public class ArticleFactory {
     }
 
     private static Element getBody(Element header,
-                                   Element title,
-                                   Element description,
+                                   String title,
+                                   String description,
                                    Element mainContent,
                                    Element source){
 
         Element body = new Element("body");
 
         body.appendChild(header.addClass(ARTICLE_HEADER));
-        body.appendChild(title.addClass(TITLE));
-        body.appendChild(description.addClass(DESCRIPTION));
+        body.appendChild(new Element("h1").text(title).addClass(TITLE));
+        body.appendChild(new Element("div").text(description).addClass(DESCRIPTION));
         body.appendChild(mainContent.addClass(MAIN_CONTENT));
         body.appendChild(source.addClass(ARTICLE_SOURCE));
 

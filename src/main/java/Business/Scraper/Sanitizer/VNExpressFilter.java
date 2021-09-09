@@ -38,15 +38,6 @@ public final class VNExpressFilter extends MainContentFilter{
         return false;
     }
 
-    /** Identify author in main content
-     * @param node main content element
-     * @return false since VNExpress doesn't have author inside main content
-     */
-    @Override
-    protected boolean isAuthor(Element node) {
-        return false;
-    }
-
     /** Clean figure tag using Jsoup safelist and Jsoup Node
      * @param node uncleaned figure element
      * @return cleaned figure element
@@ -123,15 +114,6 @@ public final class VNExpressFilter extends MainContentFilter{
      */
     @Override
     protected Element getFilteredQuote(Element node) { return null; }
-
-    /** Clean author tag
-     * @param node uncleaned author element
-     * @return false since VNExpress doesn't have author inside main content
-     */
-    @Override
-    protected Element getFilteredAuthor(Element node) {
-        return null;
-    }
 
     /** Identify redundant section in main content
      * @param node main content element

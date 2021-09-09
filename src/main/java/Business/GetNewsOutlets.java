@@ -99,8 +99,8 @@ public class GetNewsOutlets {
                     "breadcrumbs",
                     "sapo",
                     "pswp-content",
-                    "pswp-content__image",
-                    "",
+                    "imagefull",
+                    "contentAvatar",
                     "article:published_time");
             LinksCrawler ThanhNienLinksCrawler = new LinksCrawler(
                     "https://thanhnien.vn/",
@@ -121,7 +121,7 @@ public class GetNewsOutlets {
                     new Sanitizer(new ZingNewsFilter()),
                     "https://brandcom.vn/wp-content/uploads/2016/02/zingnews-logo.png",
                     "the-article-title",
-                    "the-article-author",
+                    "the-article-credit",
                     "the-article-category",
                     "the-article-summary",
                     "the-article-body",
@@ -145,13 +145,13 @@ public class GetNewsOutlets {
         try {
             Scraper NhanDanScraper = new Scraper("Nhan Dan",
                     new Sanitizer(new NhanDanFilter()),
-                    "https://brandcom.vn/wp-content/uploads/2016/02/zingnews-logo.png",
+                    "https://upload.wikimedia.org/wikipedia/vi/d/d7/Logo-NhanDan.png",
                     "box-title-detail",
                     "",
                     "bc-item",
                     "box-des-detail",
                     "box-content-detail",
-                    "box-detail-thumb",
+                    "light-img",
                     "box-detail-thumb",
                     "box-date");
             LinksCrawler NhanDanLinksCrawler = new LinksCrawler(

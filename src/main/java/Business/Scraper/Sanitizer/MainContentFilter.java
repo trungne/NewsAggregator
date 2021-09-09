@@ -16,7 +16,6 @@ public abstract class MainContentFilter implements NodeFilter {
     public static final String VIDEO = "content-video";
     public static final String AUTHOR = "author";
 
-    // TODO: Thai comments this
     private Element root;
 
     /** Sanitize the main content of an article using Jsoup NodeTraversor and NodeFilter.
@@ -26,6 +25,10 @@ public abstract class MainContentFilter implements NodeFilter {
      * @return cleaned main content element
      */
     public Element sanitizeMainContent(Element mainContent){
+        if (mainContent == null){
+            return null;
+        }
+
         root = new Element("div");
         NodeTraversor.filter(this, mainContent);
         return root;
@@ -52,7 +55,9 @@ public abstract class MainContentFilter implements NodeFilter {
     protected abstract boolean isFigure(Element node); // contain both img and caption
     protected abstract boolean isVideo(Element node);
     protected abstract boolean isQuote(Element node);
-    protected abstract boolean isAuthor(Element node);
+    protected boolean isAuthor(Element node){
+        return node.hasClass("author");
+    }
     protected boolean isStandaloneImage(Element node){
         return node.tagName().equals("img");
     }
@@ -79,14 +84,16 @@ public abstract class MainContentFilter implements NodeFilter {
 
     /** Implement how the node should be filtered */
     /* Create abstract methods which will be changed later inside each news' filter  */
-    /* Theses method meant to be used to get the filtered version of particular tag */
+    /* These methods meant to be used to get the filtered version of particular tag */
     protected abstract Element getFilteredFigure(Element node);
     protected abstract Element getFilteredVideo(Element node);
     protected abstract Element getFilteredQuote(Element node);
     protected Element getFilteredStandaloneImage(Element node){
         return ScrapingUtils.createCleanImgTag(node);
     }
-    protected abstract Element getFilteredAuthor(Element node);
+    protected Element getFilteredAuthor(Element node){
+        return node;
+    };
 
     /** Provide conditions where a node should be skipped */
     protected abstract boolean skip(Element node);

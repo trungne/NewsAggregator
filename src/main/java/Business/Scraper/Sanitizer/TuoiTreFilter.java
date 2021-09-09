@@ -45,15 +45,6 @@ public final class TuoiTreFilter extends MainContentFilter{
         }
     }
 
-    /** Identify author name in main content
-     * @param node main content element
-     * @return false since Tuoitre main content doesn't contain author name
-     */
-    @Override
-    protected boolean isAuthor(Element node) {
-        return false;
-    }
-
     /** Clean figure tag using Jsoup Node
      * @param node uncleaned figure element
      * @return cleaned figure element
@@ -132,14 +123,6 @@ public final class TuoiTreFilter extends MainContentFilter{
         return node;
     }
 
-    /** Clean author tag
-     * @param node uncleaned author element
-     * @return null since we cant find author element inside main content
-     */
-    @Override
-    protected Element getFilteredAuthor(Element node) {
-        return null;
-    }
 
     /** Identify redundant section in main content
      * @param node main content element

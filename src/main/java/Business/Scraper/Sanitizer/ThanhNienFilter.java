@@ -13,18 +13,8 @@ public final class ThanhNienFilter extends MainContentFilter {
      */
     @Override
     protected boolean isParagraph(Element node) {
-        // TODO: not optimal way to find paragraph, sometimes it includes video tag
-        if (!node.classNames().isEmpty()){
-            return false;
-        }
-        Elements figureTags = node.getElementsByTag("figure");
-        Elements videoTags = node.getElementsByTag("video");
-        Elements imgTags = node.getElementsByTag("img");
-        Elements scriptTags = node.getElementsByTag("script"); // video has script tag
-        return figureTags.isEmpty()
-                && videoTags.isEmpty()
-                && imgTags.isEmpty()
-                && scriptTags.isEmpty()
+        return node.classNames().isEmpty()
+                && node.tagName().equals("div")
                 && !StringUtils.isEmpty(node.text());
     }
 
@@ -57,13 +47,38 @@ public final class ThanhNienFilter extends MainContentFilter {
         return node.hasClass("quote");
     }
 
-    /** Identify author name in main content
-     * @param node main content element
-     * @return false since ThanhNien main content doesn't contain author name
-     */
     @Override
-    protected boolean isAuthor(Element node) {
-        return false;
+    protected Element getFilteredParagraph(Element node) {
+        Element p = new Element("p");
+
+        // handle figure in the paragraph
+        for (Element figure: node.getElementsByClass("imagefull")){
+            Element e = getFilteredFigure(figure);
+            if (e != null){
+                p.appendChild(e);
+            }
+            figure.remove();
+        }
+
+        // handle standalone picture in the paragraph
+        for (Element img: node.getElementsByTag("img")){
+            Element e = ScrapingUtils.createCleanImgTag(img);
+            if (e != null){
+                p.appendChild(e);
+            }
+            img.remove();
+        }
+
+        // handle video in the paragraph
+        for (Element video: node.getElementsByClass("cms-video")){
+            Element e = getFilteredVideo(video);
+            if (e != null){
+                p.appendChild(e);
+            }
+            video.remove();
+        }
+
+        return p.prependText(node.text());
     }
 
     /** Clean figure tag using Jsoup Node
@@ -133,15 +148,6 @@ public final class ThanhNienFilter extends MainContentFilter {
         return null;
     }
 
-    /** Clean author tag
-     * @param node uncleaned author element
-     * @return null since we cant find author element inside main content
-     */
-    @Override
-    protected Element getFilteredAuthor(Element node) {
-        return null;
-    }
-
     /** Identify redundant section in main content
      * @param node main content element
      * @return true if node contains article description or relevant news
@@ -149,6 +155,7 @@ public final class ThanhNienFilter extends MainContentFilter {
     @Override
     protected boolean skip(Element node) {
         return node.hasClass("sapo")
+                || node.id().equals("chapeau")
                 || node.hasClass("details__morenews");
     }
 

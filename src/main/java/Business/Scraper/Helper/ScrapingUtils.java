@@ -17,6 +17,7 @@ public class ScrapingUtils {
     public final static int MAX_WAIT_TIME_WHEN_ACCESS_URL = 10000; // ms
     public final static int MAX_TERMINATION_TIME = 15000; // ms
     public final static int MAX_ARTICLES_DISPLAYED = 50;
+
     static {
         CookieManager cookieManager = new CookieManager();
         cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
@@ -28,9 +29,8 @@ public class ScrapingUtils {
             Connection connection = Jsoup
                     .connect(url)
                     .method(Connection.Method.POST)
-                    .timeout(MAX_WAIT_TIME_WHEN_ACCESS_URL)
-                    ;
-//            connection.cookieStore().removeAll();
+                    .timeout(MAX_WAIT_TIME_WHEN_ACCESS_URL);
+            connection.cookieStore().removeAll();
             return connection.get();
         } catch (MalformedURLException err){
             System.out.println("MalformedURLException:" +  url);
@@ -41,6 +41,23 @@ public class ScrapingUtils {
         return null;
     }
 
+    public static String extractImgUrlFromTag(Element e){
+        for (Element imgTag: e.getElementsByTag("img")){
+            // some news outlets store url of img in data-src
+            // if the img tag doesn't have data-src attr, check its src attr
+            String urlInDataSrc = imgTag.attr("data-src");
+            String urlInSrc = imgTag.attr("src");
+
+            if (!StringUtils.isEmpty(urlInDataSrc)){
+                return urlInDataSrc;
+            }
+            else if (!StringUtils.isEmpty(urlInSrc)){
+                return urlInSrc;
+            }
+        }
+        return "";
+    }
+
     /** Get the first image url of a tag with a specific css class
      * @param doc document to parse
      * @param cls css class to target
@@ -49,48 +66,24 @@ public class ScrapingUtils {
     public static String scrapeFirstImgUrlFromClass(Document doc, String cls){
         Element firstElementOfClass = getFirstElementByClass(doc, cls);
         if (firstElementOfClass != null){
-            // return the first url link found
-            for (Element imgTag: firstElementOfClass.getElementsByTag("img")){
-                // some news outlets store url of img in data-src
-                // if the img tag doesn't have data-src attr, check its src attr
-                String urlInDataSrc = imgTag.attr("data-src");
-                String urlInSrc = imgTag.attr("src");
-
-                if (!StringUtils.isEmpty(urlInDataSrc)){
-                    return urlInDataSrc;
-                }
-                else if (!StringUtils.isEmpty(urlInSrc)){
-                    return urlInSrc;
-                }
-            }
+            return extractImgUrlFromTag(firstElementOfClass);
         }
         return "";
     }
 
-
-    public static String scrapeFirstImgUrl(Document doc, String cls){
-        String url = scrapeFirstImgUrlFromClass(doc, cls);
-        if (!StringUtils.isEmpty(url)){
-            return url;
+    public static String scrapeFirstImgUrlFromID(Document doc, String ID){
+        if (StringUtils.isEmpty(ID)){
+            return "";
         }
 
-        // if cannot find img in the provided class, look img for any figure tag in the doc
-//        for (Element figure: doc.getElementsByTag("figure")){
-//            for (Element img: figure.getElementsByTag("img")){
-//                // check 2 src tags, return whichever not empty
-//                if (!StringUtils.isEmpty(img.attr("data-src"))){
-//                    return img.attr("data-src");
-//                }
-//                else if (!StringUtils.isEmpty(img.attr("src"))){
-//                    return img.attr("src");
-//                }
-//            }
-//        }
+        Element tag = doc.getElementById(ID);
+        if (tag != null){
+            return extractImgUrlFromTag(tag);
+        }
 
         return "";
-
-
     }
+
     public static Element getFirstElementByClass(Document doc, String cls){
         if (StringUtils.isEmpty(cls)){
             return null;
@@ -101,14 +94,16 @@ public class ScrapingUtils {
             query = "." + query;
         }
         Element temp = doc.selectFirst(query);
-        if (temp != null){
+        if (temp != null) {
+            // return a new element with the content of the target tag to avoid
+            // unwanted linking to document
             return new Element("div").html(temp.outerHtml());
         }
-        else{
+        else {
             return null;
         }
-
     }
+
     /**  Target all elements with provided css class, pull out all URLs in a tag.
      * @param baseUrl: URL to parse and also provide the base in case of relative URLs are scraped
      * @param cssClass: target Element that has URL
@@ -127,7 +122,6 @@ public class ScrapingUtils {
                 URL link = new URL(baseUrl, tag.getElementsByTag("a").attr("href"));
                 links.add(link);
             } catch (MalformedURLException ignored) {
-//                System.out.println("Cookies error");
             }
         }
         return links;
@@ -158,6 +152,7 @@ public class ScrapingUtils {
         // only return img tag that has src
         return cleanedFirstImgTag;
     }
+
     /** Get first element of a tag that has a particular value
      * @param doc document of the site
      * @param tagName name of the tag to target

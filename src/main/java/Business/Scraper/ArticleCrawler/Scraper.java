@@ -7,17 +7,18 @@ import Business.Scraper.Helper.ScrapingUtils;
 import Business.Scraper.LinksCrawler.Category;
 import Business.Scraper.Sanitizer.Sanitizer;
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.safety.Safelist;
 import org.jsoup.select.Elements;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import static Business.Scraper.Helper.ScrapingUtils.getFirstElementByClass;
-import static Business.Scraper.Helper.ScrapingUtils.scrapeFirstImgUrl;
+import static Business.Scraper.Helper.ScrapingUtils.*;
 
 public class Scraper {
     private final Sanitizer sanitizer;
@@ -81,14 +82,17 @@ public class Scraper {
             return null;
         }
 
-        Element title = scrapeTitle(doc);
-        Element description = scrapeDescription(doc);
+        String title = scrapeTitle(doc);
+        String description = scrapeDescription(doc);
         Element mainContent = scrapeMainContent(doc);
         String thumbNail = scrapeThumbnail(doc);
         Set<String> categories = scrapeCategoryNames(doc);
         LocalDateTime publishedTime = scrapePublishedTime(doc);
 
-        if (title == null || description == null || mainContent == null || publishedTime == null){
+        if (StringUtils.isEmpty(title)
+                || StringUtils.isEmpty(description)
+                || mainContent == null
+                || publishedTime == null){
             return null;
         }
 
@@ -108,47 +112,79 @@ public class Scraper {
      */
     private Element scrapeAuthor(Document doc){
         Element author = getFirstElementByClass(doc, this.AUTHOR);
-        if (author != null){
-            for (Element a: author.getElementsByTag("a")){
-                if (!StringUtils.isEmpty(a.ownText())){
-                    return new Element("p")
-                            .attr("style", "text-align:right;")
-                            .appendChild(new Element("strong").text(a.ownText()));
-                }
+        if (author == null){
+            return null;
+        }
+
+        for (Element a: author.getElementsByTag("a")){
+            if (!StringUtils.isEmpty(a.ownText())){
+                return new Element("p")
+                        .attr("style", "text-align:right;")
+                        .addClass("author")
+                        .appendChild(new Element("strong").text(a.ownText()));
             }
-            return null;
         }
-        else{
-            return null;
+
+        for (Element p: author.getElementsByTag("p")){
+            if (!StringUtils.isEmpty(p.ownText())){
+                return new Element("p")
+                        .attr("style", "text-align:right;")
+                        .addClass("author")
+                        .appendChild(new Element("strong").text(p.ownText()));
+            }
         }
+
+        return null;
     }
 
     /** Scrape Article Title Element that matches provided css
      * @param doc article document
      * @return sanitized title element
      */
-    public Element scrapeTitle(Document doc) {
+    public String scrapeTitle(Document doc) {
         Element title = getFirstElementByClass(doc, TITLE);
-        return sanitizer.sanitizeTitle(title);
+        if (title == null){
+            return "";
+        }
+        return title.text();
     }
 
     /** Scrape Article Description Element that matches provided css
      * @param doc article document
      * @return sanitized title element
-     */    public Element scrapeDescription(Document doc) {
+     */
+    public String scrapeDescription(Document doc) {
         Element description = getFirstElementByClass(doc, DESCRIPTION);
-        return sanitizer.sanitizeDescription(description);
+        if (description == null) {
+            return "";
+        }
+
+        // some description has span tag for location, add whitespace to text for readability
+        for (Element span : description.getElementsByTag("span")){
+            span.text(span.text() + " ");
+        }
+
+        String cleanHtml = Jsoup.clean(description.html(), Safelist.simpleText());
+
+        // only get the text inside clean html
+        // this is a trick to get text node in a html string
+        // create an arbitrary tag and set its html as the html string
+        // call text() method on the tag to get text of the html string
+        // this way tags are eliminated and only text is returned
+        return new Element("p").html(cleanHtml).text();
     }
 
     /** Scrape Article Main content Element that matches provided css
      * @param doc article document
      * @return sanitized title element
-     */    public Element scrapeMainContent(Document doc) {
+     */
+    public Element scrapeMainContent(Document doc) {
         Element content = getFirstElementByClass(doc, MAIN_CONTENT);
-        if (content == null) {
+        if (content == null || content.text().length() < 10) {
+            // if content has less than 10 character, it's probably bogus
             return null;
         }
-
+        content.tagName("main");
         Element authorTag = scrapeAuthor(doc);
         if (authorTag != null){
             content.append(authorTag.outerHtml());
@@ -159,15 +195,21 @@ public class Scraper {
     /** Scrape Article Thumbnail url
      * @param doc article document
      * @return thumbnail url string
-     */    public String scrapeThumbnail(Document doc) {
-        String thumb = scrapeFirstImgUrl(doc, THUMBNAIL);
-        String pic = scrapeFirstImgUrl(doc, PICTURE);
+     */
+    public String scrapeThumbnail(Document doc) {
+        String thumbFromCls = ScrapingUtils.scrapeFirstImgUrlFromClass(doc, THUMBNAIL);
+        String thumbFromID = ScrapingUtils.scrapeFirstImgUrlFromID(doc, THUMBNAIL);
+        String firstPic = ScrapingUtils.scrapeFirstImgUrlFromClass(doc, PICTURE);
 
-        if (!StringUtils.isEmpty(thumb)){
-            return thumb;
+        if (!StringUtils.isEmpty(thumbFromCls)){
+            return thumbFromCls;
         }
-        else if (!StringUtils.isEmpty(pic)){
-            return pic;
+        else if (!StringUtils.isEmpty(thumbFromID)){
+            // sometimes provided THUMBNAIL can be of an ID
+            return thumbFromID;
+        }
+        else if (!StringUtils.isEmpty(firstPic)){
+            return firstPic;
         }
         else {
             return DEFAULT_THUMBNAIL;
