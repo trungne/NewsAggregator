@@ -126,6 +126,8 @@ figcaption em {
     font-size: 14px;}
 
 .content-video {
+    display: flex;
+    align-content: center;
     width: 600px;
     height:400px;
 }

@@ -210,7 +210,7 @@ public class MainController {
         Article a = model.getArticleAndStore(currentCategoryButton.getText(), index);
         String title = a.getTitle();
         String html = a.getHtml();
-//        System.out.println(html);
+        System.out.println(html);
 
         articleViewController.show(title, html);
     }

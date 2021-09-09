@@ -61,6 +61,9 @@ public abstract class MainContentFilter implements NodeFilter {
      * 1. clear all its attributes
      * 2. clean the tag with basic safelist */
     protected Element getFilteredParagraph(Element node){
+        for (Element a : node.getElementsByTag("a")){
+            a.unwrap();
+        }
         node.clearAttributes();
         node.html(Jsoup.clean(node.html(), Safelist.basic()));
         node.tagName("p");
