@@ -54,20 +54,20 @@ public class LinksCrawler {
      * @return set of URLs of articles in the category
      * */
     public Set<URL> getArticleLinks(String name){
-        List<URL> categoryLinks = getCategoryLinks(name);
+        Set<URL> categoryLinks = getCategoryLinks(name);
         Set<URL> articleLinks = new HashSet<>();
         for (URL link: categoryLinks){
             articleLinks.addAll(ScrapingUtils.getLinksByClass(link, targetCssClass));
         }
-        System.out.println(categoryLinks);
+//        System.out.println(categoryLinks);
         return articleLinks;
     }
 
     /** @param name of the category in English
      * @return URL(s) of the provided category.
      * */
-    private List<URL> getCategoryLinks(String name) {
-        List<URL> links = new ArrayList<>();
+    private Set<URL> getCategoryLinks(String name) {
+        Set<URL> links = new LinkedHashSet<>();
         // scrape the front page is provided category is NEW
         if(name.equals(Category.NEW)){
             links.add(homepageUrl);
@@ -129,13 +129,13 @@ public class LinksCrawler {
         return links;
     }
 
-    private List<URL> getLinksInNavBar(String name){
+    private Set<URL> getLinksInNavBar(String name){
         Element navBar = doc.selectFirst("." + navBarCssClass); // get navigation bar
         if (navBar == null) {
-            return new ArrayList<>(); // return an empty list instead of null to prevent error
+            return new LinkedHashSet<>(); // return an empty list instead of null to prevent error
         }
 
-        List<URL> links = new ArrayList<>();
+        Set<URL> links = new LinkedHashSet<>();
         // main categories are stored in <li>
         for (Element menu: navBar.getElementsByTag("li")) {
             Elements aTags = menu.getElementsByTag("a");
@@ -155,7 +155,6 @@ public class LinksCrawler {
                     // get all other a tags if this is the main category (index = 0)
                     if (aTags.indexOf(a) == 0){
                         links.addAll(extractAllLinksFromTag(menu));
-                        return links;
                     }
                     else{
                         links.add(extractLinkFromTag(a));
