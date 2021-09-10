@@ -64,10 +64,17 @@ public class ScrapingUtils {
      * @return the url of the first image found, return empty string if no image found.
      * */
     public static String scrapeFirstImgUrlFromClass(Document doc, String cls){
-        Element firstElementOfClass = getFirstElementByClass(doc, cls);
-        if (firstElementOfClass != null){
-            return extractImgUrlFromTag(firstElementOfClass);
+        if (StringUtils.isEmpty(cls)){
+            return "";
         }
+
+        for (Element e : doc.getElementsByClass(cls)){
+            String url = extractImgUrlFromTag(e);
+            if (!StringUtils.isEmpty(url)){
+                return url;
+            }
+        }
+
         return "";
     }
 

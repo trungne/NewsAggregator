@@ -51,6 +51,12 @@ public class MainController {
         this.model = new Model(this);
     }
 
+    public void setColumnConstraints(Scene scene){
+        // bind mainGridPane prefWidth property with scene width property
+        // and subtract by 200 (of the category buttons)
+        mainGridPane.getColumnConstraints().get(1).prefWidthProperty().bind(scene.widthProperty().subtract(200));
+    }
+
     private void loadArticleView(){
         FXMLLoader articleView = new FXMLLoader(Main.class.getResource("Article-view.fxml"));
         try {
