@@ -35,11 +35,14 @@ public class GetArticleListTask extends Task<List<Article>> {
                         new ArrayList<>()));
 
         // update progress bar
-        articles.addListener((ListChangeListener<Article>)
-                change -> updateProgress(
-                        change.getList().size(),
-                        MAX_ARTICLES_DISPLAYED));
+        articles.addListener((ListChangeListener<Article>) change -> {
+            updateProgress(change.getList().size(), MAX_ARTICLES_DISPLAYED);
+            if (change.getList().size() >= MAX_ARTICLES_DISPLAYED){
+                updateMessage("Sorting articles...");
+            }
+        });
 
+        updateMessage("Scraping articles...");
         fillUpArticleList(articles, category);
         return articles;
     }
@@ -48,12 +51,14 @@ public class GetArticleListTask extends Task<List<Article>> {
      * @param articles a provided list where articles will be added to
      * @param category a provided category where scrapers will get articles from
      * */
-    public static void fillUpArticleList(List<Article> articles, String category){
+    public void fillUpArticleList(List<Article> articles, String category){
         ExecutorService es = Executors.newCachedThreadPool();
         for (NewsOutlet newsOutlet : NEWS_OUTLETS) {
             es.execute(()-> newsOutlet.populateArticleList(articles, category));
         }
+        // TODO: something is slow here but I cant figure out what
         shutdownAndAwaitTermination(es);
+        updateMessage("Sorting articles...");
         Collections.sort(articles);
     }
 
@@ -61,7 +66,7 @@ public class GetArticleListTask extends Task<List<Article>> {
     /** Stop accepting new tasks and wait for other threads in the pool to finish
      * @param pool the thread pool that we want to stop and join
      * */
-    private static void shutdownAndAwaitTermination(ExecutorService pool) {
+    private void shutdownAndAwaitTermination(ExecutorService pool) {
         pool.shutdown(); // Disable new tasks from being submitted
         try {
             // Wait a while for existing tasks to terminate

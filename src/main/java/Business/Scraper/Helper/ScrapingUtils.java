@@ -9,34 +9,51 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ScrapingUtils {
-    public final static int MAX_WAIT_TIME_WHEN_ACCESS_URL = 10000; // ms
+    public final static int MAX_WAIT_TIME_WHEN_ACCESS_URL = 7000; // ms
     public final static int MAX_TERMINATION_TIME = 15000; // ms
     public final static int MAX_ARTICLES_DISPLAYED = 50;
 
-    static {
-        CookieManager cookieManager = new CookieManager();
-        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-        CookieHandler.setDefault(cookieManager);
+//    static {
+////        CookieManager cookieManager = new CookieManager();
+//        CookieManager cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
+////        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+//        CookieHandler.setDefault(cookieManager);
+//    }
+    public static void deleteCookie(CookieStore cookieStore) {
+        List<HttpCookie> cookiesToRemove = new ArrayList<>();
+        for (HttpCookie cookie : cookieStore.getCookies()) {
+            try {
+                String name = URLDecoder.decode(cookie.getName().replace("+", "%2B"), "UTF-8").replace("%2B", "+");
+                if (name.equals("thanhnien.vn")) {
+                    cookiesToRemove.add(cookie);
+                }
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        for (HttpCookie cookie : cookiesToRemove) {
+            cookieStore.remove(null, cookie);
+        }
     }
-
     public static Document getDocumentAndDeleteCookies(String url){
         try {
             Connection connection = Jsoup
                     .connect(url)
                     .method(Connection.Method.POST)
                     .timeout(MAX_WAIT_TIME_WHEN_ACCESS_URL);
-            connection.cookieStore().removeAll();
-            return connection.get();
-        } catch (MalformedURLException err){
-            System.out.println("MalformedURLException:" +  url);
-        }
-        catch (IOException e) {
-            System.out.println("IOException:" +  url);
+            Document doc = connection.get();
+//            connection.cookieStore().removeAll();
+            deleteCookie(connection.cookieStore());
+            return doc;
+        } catch (IOException ignored){
         }
         return null;
     }

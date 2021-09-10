@@ -24,6 +24,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 public class MainController {
@@ -33,8 +36,22 @@ public class MainController {
     @FXML private VBox previewBox;
     @FXML private ScrollPane mainArea;
     @FXML private HBox pageBox;
-    @FXML private VBox categoryBox;
-    @FXML private ProgressIndicator progressBar;
+    @FXML private ProgressIndicator progressIndicator;
+    @FXML private Label progressLabel;
+
+    @FXML private Button newCategory;
+    @FXML private Button covidCategory;
+    @FXML private Button politicsCategory;
+    @FXML private Button businessCategory;
+    @FXML private Button technologyCategory;
+    @FXML private Button healthCategory;
+    @FXML private Button sportsCategory;
+    @FXML private Button entertainmentCategory;
+    @FXML private Button worldCategory;
+    @FXML private Button othersCategory;
+
+    private final List<Node> categoryButtons = new ArrayList<>();
+
 
     // controllers
     private AboutUsController aboutUsController;
@@ -96,7 +113,9 @@ public class MainController {
         loadAboutUsView();
         loadArticleView();
 
-        Button newCategory = (Button) categoryBox.getChildren().get(0);
+        categoryButtons.addAll(List.of(newCategory, covidCategory, politicsCategory, businessCategory, technologyCategory,
+                healthCategory, sportsCategory, entertainmentCategory, worldCategory, othersCategory));
+
         newCategory.fire();
     }
 
@@ -130,7 +149,7 @@ public class MainController {
     public void refreshAll(){
         this.model.refresh();
         // automatically redirect to new category when refresh all
-        ((Button) categoryBox.getChildren().get(0)).fire();
+        newCategory.fire();
     }
 
     public void close(){
@@ -147,12 +166,9 @@ public class MainController {
      * @param category: category's name
      */
     private void requestPreviews(String category){
-        disableAllChildButtons(categoryBox);
-        disableAllChildButtons(pageBox);
-
-        progressBar.setVisible(true);
-        progressBar.progressProperty().bind(model.getService().progressProperty());
-        progressBar.visibleProperty().bind(model.getService().runningProperty());
+        disableAllChildButtons(categoryButtons);
+        disableAllChildButtons(pageBox.getChildren());
+        enableIndicator();
         mainArea.setContent(null); // disable preview pane
 
         // this will trigger model to scrape articles
@@ -171,17 +187,29 @@ public class MainController {
      * @param pageNum: pagination index
      */
     private void updatePreviewsPane(int pageNum){
-        enableAllChildButtons(categoryBox);
-        enableAllChildButtons(pageBox);
+        enableAllChildButtons(categoryButtons);
+        enableAllChildButtons(pageBox.getChildren());
         highlightPage(pageNum);
-
-        // unbind so that progress bar can be set invisible
-        progressBar.progressProperty().unbind();
-        progressBar.visibleProperty().unbind();
-        progressBar.setVisible(false);
+        disableIndicator();
         mainArea.setContent(previewBox);
-
         placePreviewsOnGrids(pageNum);
+    }
+
+    private void enableIndicator(){
+        progressIndicator.setVisible(true);
+        progressIndicator.progressProperty().bind(model.getService().progressProperty());
+        progressIndicator.visibleProperty().bind(model.getService().runningProperty());
+        progressLabel.textProperty().bind(model.getService().messageProperty());
+        progressLabel.setVisible(true);
+    }
+
+    private void disableIndicator(){
+        // unbind so that progress bar can be set invisible
+        progressIndicator.progressProperty().unbind();
+        progressIndicator.visibleProperty().unbind();
+        progressIndicator.setVisible(false);
+        progressLabel.textProperty().unbind();
+        progressLabel.setVisible(false);
     }
 
 
@@ -192,6 +220,7 @@ public class MainController {
         int startIndex = (page - 1) * MAX_PREVIEWS_PER_PAGE;
         String category = currentCategoryButton.getText();
         for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
+
             int articleIndex = startIndex + i;
 
             Article a = model.getArticle(category, articleIndex);
@@ -216,8 +245,7 @@ public class MainController {
         Article a = model.getArticleAndStore(currentCategoryButton.getText(), index);
         String title = a.getTitle();
         String html = a.getHtml();
-        System.out.println(html);
-
+//        System.out.println(html);
         articleViewController.show(title, html);
     }
 
@@ -248,20 +276,22 @@ public class MainController {
 
     /**
      * Target the container pane and make all buttons NOT clickable while still loading
-     * @param parent: the container pane
+     * @param nodes: the container pane
      * */
-    private void disableAllChildButtons(Pane parent){
-        for (Node node: parent.getChildren())
+    private void disableAllChildButtons(Collection<Node> nodes){
+        for (Node node: nodes){
             node.setDisable(true);
+        }
     }
 
     /**
      * Target the container pane and make all buttons clickable when finish loading
-     * @param parent: the container pane
+     * @param nodes: the container pane
      * */
-    private void enableAllChildButtons(Pane parent){
-        for (Node node: parent.getChildren())
+    private void enableAllChildButtons(Collection<Node> nodes){
+        for (Node node: nodes){
             node.setDisable(false);
+        }
     }
 
     private void createPreviewGrids(Pane pane){
