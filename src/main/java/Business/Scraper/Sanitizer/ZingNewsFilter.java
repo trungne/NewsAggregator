@@ -33,7 +33,7 @@ public final class ZingNewsFilter extends MainContentFilter{
      */
     @Override
     protected boolean isQuote(Element node) {
-        return node.hasClass("notebook")
+        return node.hasClass("notebox")
                 || node.tagName().equals("blockquote");
     }
 
@@ -114,7 +114,10 @@ public final class ZingNewsFilter extends MainContentFilter{
     protected boolean skip(Element node) {
         return node.hasClass("inner-article")
                 || node.hasClass("covid-chart-widget")
-                || node.hasClass("z-widget-corona");
+                || node.hasClass("z-widget-corona")
+                || node.hasClass("article-news-background")
+                || node.id().equals("innerarticle")
+                || node.id().equals("corona-counter");
     }
 
     /** Clean video element (not include video caption)

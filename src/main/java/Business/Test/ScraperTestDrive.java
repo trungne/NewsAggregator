@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class ScraperTestDrive {
     public static void main(String[] args) throws IOException {
-        String url = "https://nhandan.vn/culture_photo/ben-nom-dep-ngo-ngang-mua-nuoc-can-663912/";
+        String url = "https://zingnews.vn/cong-suat-tiem-vaccine-covid-19-tai-ha-noi-cao-nhat-tu-truoc-den-nay-post1261287.html";
         Document doc = Jsoup.connect(url).get();
         System.out.println(doc);
     }

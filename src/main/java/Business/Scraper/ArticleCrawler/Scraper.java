@@ -5,6 +5,7 @@ import Business.News.ArticleFactory;
 import Business.Scraper.Helper.LocalDateTimeParser;
 import Business.Scraper.Helper.ScrapingUtils;
 import Business.Scraper.LinksCrawler.Category;
+import Business.Scraper.Sanitizer.MainContentFilter;
 import Business.Scraper.Sanitizer.Sanitizer;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -21,7 +22,7 @@ import java.util.Set;
 import static Business.Scraper.Helper.ScrapingUtils.*;
 
 public class Scraper {
-    private final Sanitizer sanitizer;
+    private final MainContentFilter sanitizer;
     private final String DEFAULT_THUMBNAIL;
     private final String SOURCE;
 
@@ -49,7 +50,7 @@ public class Scraper {
      * @param publishedTime article publishedTime class
      */
     public Scraper( String source,
-                    Sanitizer sanitizer,
+                    MainContentFilter sanitizer,
                     String defaultThumbnail,
                     String title,
                     String author,

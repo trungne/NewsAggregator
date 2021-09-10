@@ -43,7 +43,7 @@ public class GetNewsOutlets {
                     "main-nav",
                     "title-news");
             Scraper VNExpressScraper = new Scraper("VNExpress",
-                    new Sanitizer(new VNExpressFilter()),
+                    new VNExpressFilter(),
                     "https://s1.vnecdn.net/vnexpress/restruct/i/v420/logo_default.jpg",
                     "title-detail",
                     "",
@@ -65,7 +65,7 @@ public class GetNewsOutlets {
     public static NewsOutlet initTuoiTre(){
         try{
             Scraper TuoiTreScraper = new Scraper("Tuoi Tre",
-                    new Sanitizer(new TuoiTreFilter()),
+                    new TuoiTreFilter(),
                     "https://dangkyxettuyennghe.tuoitre.vn/img/logo-tt.png",
                     "article-title",
                     "",
@@ -92,7 +92,7 @@ public class GetNewsOutlets {
         try {
             Scraper ThanhNienScraper = new Scraper(
                     "Thanh Nien",
-                    new Sanitizer(new ThanhNienFilter()),
+                    new ThanhNienFilter(),
                     "https://static.thanhnien.vn/v2/App_Themes/images/logo-tn-2.png",
                     "details__headline",
                     "details__author",
@@ -118,7 +118,7 @@ public class GetNewsOutlets {
     public static NewsOutlet initZingNews(){
         try {
             Scraper ZingScraper = new Scraper("ZingNews",
-                    new Sanitizer(new ZingNewsFilter()),
+                    new ZingNewsFilter(),
                     "https://brandcom.vn/wp-content/uploads/2016/02/zingnews-logo.png",
                     "the-article-title",
                     "the-article-credit",
@@ -144,7 +144,7 @@ public class GetNewsOutlets {
     public static NewsOutlet initNhanDan(){
         try {
             Scraper NhanDanScraper = new Scraper("Nhan Dan",
-                    new Sanitizer(new NhanDanFilter()),
+                    new NhanDanFilter(),
                     "https://upload.wikimedia.org/wikipedia/vi/d/d7/Logo-NhanDan.png",
                     "box-title-detail",
                     "",
