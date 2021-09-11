@@ -109,9 +109,10 @@ public abstract class MainContentFilter implements NodeFilter {
     @Override
     public FilterResult head(Node node, int depth) {
         // only consider Element, skip TextNode
-        if (!(node instanceof Element e)) {
+        if (!(node instanceof Element)) {
             return FilterResult.SKIP_ENTIRELY;
         }
+        Element e = (Element) node;
 
         try {
             if (skip(e)){
