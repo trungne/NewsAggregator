@@ -9,10 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -36,7 +33,7 @@ public class MainController {
     @FXML private VBox previewBox;
     @FXML private ScrollPane mainArea;
     @FXML private HBox pageBox;
-    @FXML private ProgressIndicator progressIndicator;
+    @FXML private ProgressBar progressBar;
     @FXML private Label progressLabel;
 
     @FXML private Button newCategory;
@@ -196,18 +193,18 @@ public class MainController {
     }
 
     private void enableIndicator(){
-        progressIndicator.setVisible(true);
-        progressIndicator.progressProperty().bind(model.getService().progressProperty());
-        progressIndicator.visibleProperty().bind(model.getService().runningProperty());
+        progressBar.setVisible(true);
+        progressBar.progressProperty().bind(model.getService().progressProperty());
+        progressBar.visibleProperty().bind(model.getService().runningProperty());
         progressLabel.textProperty().bind(model.getService().messageProperty());
         progressLabel.setVisible(true);
     }
 
     private void disableIndicator(){
         // unbind so that progress bar can be set invisible
-        progressIndicator.progressProperty().unbind();
-        progressIndicator.visibleProperty().unbind();
-        progressIndicator.setVisible(false);
+        progressBar.progressProperty().unbind();
+        progressBar.visibleProperty().unbind();
+        progressBar.setVisible(false);
         progressLabel.textProperty().unbind();
         progressLabel.setVisible(false);
     }

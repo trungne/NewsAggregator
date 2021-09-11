@@ -37,6 +37,7 @@ public class GetArticleListTask extends Task<List<Article>> {
         // update progress bar
         articles.addListener((ListChangeListener<Article>) change -> {
             updateProgress(change.getList().size(), MAX_ARTICLES_DISPLAYED);
+            updateMessage("Scraping articles (" + change.getList().size() + "/" + MAX_ARTICLES_DISPLAYED + ")");
             if (change.getList().size() >= MAX_ARTICLES_DISPLAYED){
                 updateMessage("Sorting articles...");
             }

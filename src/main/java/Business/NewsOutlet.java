@@ -7,13 +7,10 @@ import Business.Scraper.LinksCrawler.LinksCrawler;
 import java.net.URL;
 import java.util.List;
 import java.util.Set;
-
-import static Business.GetNewsOutlets.getNewsOutletsSize;
 import static Business.Scraper.Helper.ScrapingUtils.MAX_ARTICLES_DISPLAYED;
 
 
 public class NewsOutlet {
-    // TODO: Khang comments this
     public final Scraper scraper;
     public final LinksCrawler linksCrawler;
 
@@ -24,7 +21,6 @@ public class NewsOutlet {
 
     public void populateArticleList(List<Article> articleList, String category) {
         Set<URL> urls = linksCrawler.getArticleLinks(category);
-//        int articlesScraped = 0;
         for (URL url : urls) {
             if (articleList.size() >= MAX_ARTICLES_DISPLAYED){
                 break;
@@ -33,9 +29,7 @@ public class NewsOutlet {
             Article a = scraper.getArticle(url);
             if (a != null){
                 articleList.add(a);
-//                articlesScraped++;
             }
-
         }
     }
 }

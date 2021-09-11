@@ -14,7 +14,7 @@ public final class ThanhNienFilter extends MainContentFilter {
     @Override
     protected boolean isParagraph(Element node) {
         return node.classNames().isEmpty()
-                && node.tagName().equals("div")
+                && (node.tagName().equals("div") || node.tagName().equals("p"))
                 && !StringUtils.isEmpty(node.text());
     }
 

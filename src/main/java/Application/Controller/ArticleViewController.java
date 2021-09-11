@@ -11,12 +11,12 @@ import javafx.stage.Stage;
 import org.apache.commons.lang3.StringUtils;
 
 public class ArticleViewController {
-    @FXML WebView webView;
-    @FXML AnchorPane anchorPane;
-    @FXML Button nextButton;
-    @FXML Button previousButton;
-    Stage stage = new Stage();
-    Model model;
+    @FXML private WebView webView;
+    @FXML private AnchorPane anchorPane;
+    @FXML private Button nextButton;
+    @FXML private Button previousButton;
+    private final Stage stage = new Stage();
+    private Model model;
 
     public void initialize(){
         stage.setScene(new Scene(anchorPane));
@@ -31,7 +31,7 @@ public class ArticleViewController {
         if (StringUtils.isEmpty(html)){
             return;
         }
-        webView.getEngine().loadContent(html);
+        webView.getEngine().loadContent(html, "text/html");
         stage.setTitle(title);
         stage.requestFocus();
         stage.show();
