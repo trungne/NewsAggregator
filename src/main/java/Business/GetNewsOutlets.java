@@ -45,7 +45,7 @@ public class GetNewsOutlets {
                     "description",
                     "fck_detail",
                     "fig-picture",
-                    "",
+                    "block_thumb_picture",
                     "datePublished");
             return new NewsOutlet(VNExpressScraper, VNExpressLinksCrawler);
         } catch (IOException e) {
