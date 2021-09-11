@@ -1,7 +1,6 @@
 package Business.Scraper.Helper;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
@@ -9,11 +8,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.*;
-import java.util.ArrayList;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class ScrapingUtils {
@@ -21,28 +18,6 @@ public class ScrapingUtils {
     public final static int MAX_TERMINATION_TIME = 15000; // ms
     public final static int MAX_ARTICLES_DISPLAYED = 50;
 
-//    static {
-////        CookieManager cookieManager = new CookieManager();
-//        CookieManager cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
-////        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-//        CookieHandler.setDefault(cookieManager);
-//    }
-    public static void deleteCookie(CookieStore cookieStore) {
-        List<HttpCookie> cookiesToRemove = new ArrayList<>();
-        for (HttpCookie cookie : cookieStore.getCookies()) {
-            try {
-                String name = URLDecoder.decode(cookie.getName().replace("+", "%2B"), "UTF-8").replace("%2B", "+");
-                if (name.equals("thanhnien.vn")) {
-                    cookiesToRemove.add(cookie);
-                }
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
-        for (HttpCookie cookie : cookiesToRemove) {
-            cookieStore.remove(null, cookie);
-        }
-    }
     public static Document getDocumentAndDeleteCookies(URL url){
         try {
             return Jsoup.parse(url, MAX_WAIT_TIME_WHEN_ACCESS_URL);
@@ -161,7 +136,6 @@ public class ScrapingUtils {
         Element cleanedFirstImgTag = new Element("img");
 
         // assign src for the img tag
-        // TODO: maybe check valid src? end with .jpg png??
         if (!StringUtils.isEmpty(imgTag.attr("data-src")))
             cleanedFirstImgTag.attr("src", imgTag.attr("data-src"));
         else if (!StringUtils.isEmpty(imgTag.attr("src")))

@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import static Business.Scraper.Helper.ScrapingUtils.*;
+import static Business.Scraper.Helper.ScrapingUtils.getFirstElementByClass;
 
 public class Scraper {
     private final MainContentFilter sanitizer;

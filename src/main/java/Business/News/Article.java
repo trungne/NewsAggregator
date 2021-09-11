@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 public class Article implements Comparable<Article> {
-    // TODO: Khang comments this
     private final String title;
     private final String description;
     private final String thumbNail;

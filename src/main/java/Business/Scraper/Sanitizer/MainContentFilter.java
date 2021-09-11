@@ -93,7 +93,7 @@ public abstract class MainContentFilter implements NodeFilter {
     }
     protected Element getFilteredAuthor(Element node){
         return node;
-    };
+    }
 
     /** Provide conditions where a node should be skipped */
     protected abstract boolean skip(Element node);
@@ -109,10 +109,9 @@ public abstract class MainContentFilter implements NodeFilter {
     @Override
     public FilterResult head(Node node, int depth) {
         // only consider Element, skip TextNode
-        if (!(node instanceof Element)) {
+        if (!(node instanceof Element e)) {
             return FilterResult.SKIP_ENTIRELY;
         }
-        Element e = (Element) node;
 
         try {
             if (skip(e)){
