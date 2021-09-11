@@ -146,7 +146,7 @@
           </Menu>
           <Menu mnemonicParsing="false">
               <graphic>
-                  <Label text="About us" onMouseClicked="#aboutUs"></Label>
+                  <Label onMouseClicked="#aboutUs" text="About us" />
               </graphic>
           </Menu>
         </menus>

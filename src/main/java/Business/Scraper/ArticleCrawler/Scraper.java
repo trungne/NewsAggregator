@@ -6,7 +6,6 @@ import Business.Scraper.Helper.LocalDateTimeParser;
 import Business.Scraper.Helper.ScrapingUtils;
 import Business.Scraper.LinksCrawler.Category;
 import Business.Scraper.Sanitizer.MainContentFilter;
-import Business.Scraper.Sanitizer.Sanitizer;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attribute;
@@ -15,6 +14,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.safety.Safelist;
 import org.jsoup.select.Elements;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -77,7 +77,7 @@ public class Scraper {
      * @param url article url
      * @return article all related information
      */
-    public Article getArticle(String url){
+    public Article getArticle(URL url){
         Document doc = ScrapingUtils.getDocumentAndDeleteCookies(url);
         if (doc == null){
             return null;
@@ -98,7 +98,7 @@ public class Scraper {
         }
 
         return ArticleFactory.createArticle(SOURCE,
-                url,
+                url.toString(),
                 title,
                 description,
                 mainContent,
@@ -181,7 +181,7 @@ public class Scraper {
      */
     public Element scrapeMainContent(Document doc) {
         Element content = getFirstElementByClass(doc, MAIN_CONTENT);
-        if (content == null || content.text().length() < 10) {
+        if (content == null || content.html().length() < 10) {
             // if content has less than 10 character, it's probably bogus
             return null;
         }

@@ -1,8 +1,7 @@
 html {
-    width: 100%;
     height: 100%;
-    margin: 0 auto;
-    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 body {
@@ -100,13 +99,13 @@ body {
 }
 
 .content-paragraph {
-    text-align: justify;
+    text-align: start;
 }
 
 img {
     object-fit: contain;
     width: 100%;
-    height: 400px;
+    max-height: 400px;
 }
 
 .main-content {
@@ -125,6 +124,10 @@ figcaption em {
     color:#6c757d;
     font-style: italic;
     font-size: 14px;}
+
+figcaption {
+    text-align: center;
+}
 
 .content-video {
     display: flex;

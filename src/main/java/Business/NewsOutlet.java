@@ -26,20 +26,11 @@ public class NewsOutlet {
         Set<URL> urls = linksCrawler.getArticleLinks(category);
 //        int articlesScraped = 0;
         for (URL url : urls) {
-            /* get the number of articles each news outlet need to scrape by dividing total articles displayed with
-            total news outlets
-            * */
-//            if (articlesScraped ==
-//                    MAX_ARTICLES_DISPLAYED/getNewsOutletsSize() +
-//                            (MAX_ARTICLES_DISPLAYED % getNewsOutletsSize() == 0 ? 0 : 1)){
-//                break;
-//            }
-
             if (articleList.size() >= MAX_ARTICLES_DISPLAYED){
                 break;
             }
 
-            Article a = scraper.getArticle(url.toString());
+            Article a = scraper.getArticle(url);
             if (a != null){
                 articleList.add(a);
 //                articlesScraped++;

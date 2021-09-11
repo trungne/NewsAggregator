@@ -201,7 +201,8 @@ public class LinksCrawler {
         }
     }
 
-    private Document getDocumentFromURL(String url) {
-        return ScrapingUtils.getDocumentAndDeleteCookies(url);
+    private Document getDocumentFromURL(String url) throws MalformedURLException {
+        URL _url = new URL(url);
+        return ScrapingUtils.getDocumentAndDeleteCookies(_url);
     }
 }

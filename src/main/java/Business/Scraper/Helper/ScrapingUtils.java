@@ -43,19 +43,12 @@ public class ScrapingUtils {
             cookieStore.remove(null, cookie);
         }
     }
-    public static Document getDocumentAndDeleteCookies(String url){
+    public static Document getDocumentAndDeleteCookies(URL url){
         try {
-            Connection connection = Jsoup
-                    .connect(url)
-                    .method(Connection.Method.POST)
-                    .timeout(MAX_WAIT_TIME_WHEN_ACCESS_URL);
-            Document doc = connection.get();
-//            connection.cookieStore().removeAll();
-            deleteCookie(connection.cookieStore());
-            return doc;
+            return Jsoup.parse(url, MAX_WAIT_TIME_WHEN_ACCESS_URL);
         } catch (IOException ignored){
+            return null;
         }
-        return null;
     }
 
     public static String extractImgUrlFromTag(Element e){
@@ -133,7 +126,7 @@ public class ScrapingUtils {
      * @param cssClass: target Element that has URL
      * */
     public static Set<URL> getLinksByClass(URL baseUrl, String cssClass) {
-        Document doc = getDocumentAndDeleteCookies(baseUrl.toString());
+        Document doc = getDocumentAndDeleteCookies(baseUrl);
         if (doc == null){
             return new HashSet<>();
         }
@@ -143,7 +136,15 @@ public class ScrapingUtils {
         for (Element tag : titleTags) {
             // link is stored in href attribute of <a> tag
             try {
+                if (StringUtils.isEmpty(tag.getElementsByTag("a").attr("href"))){
+                    continue;
+                }
                 URL link = new URL(baseUrl, tag.getElementsByTag("a").attr("href"));
+
+                if (link.getPath().contains("/video")){
+                    continue;
+                }
+
                 links.add(link);
             } catch (MalformedURLException ignored) {
             }
