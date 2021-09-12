@@ -14,6 +14,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class LinksCrawler {
     private static final String[] COVID_CATEGORY_LINKS = new String[]{
@@ -167,6 +168,8 @@ public class LinksCrawler {
     }
 
     private URL extractLinkFromTag(Element tag){
+        
+        
         Element first = tag.getElementsByTag("a").first();
         if (first != null) {
             try{
@@ -177,16 +180,13 @@ public class LinksCrawler {
         }
         return null;
     }
-
-    private List<URL> extractAllLinksFromTag(Element tag){
-        List<URL> links = new ArrayList<>();
-        for (Element link: tag.getElementsByTag("a")){
-            URL url = extractLinkFromTag(link);
-            if (url != null){
-                links.add(url);
-            }
-        }
-        return links;
+    
+    private List<URL> extractAllLinksFromTag(Element tag) {
+        return tag.getElementsByTag("a")
+                .stream()
+                .map(this::extractLinkFromTag)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     private Document getDocumentFromFile(){
