@@ -143,12 +143,14 @@ public class MainController {
 
     public void refresh(){
         this.model.refresh(currentCategoryButton.getText());
+        articleViewController.close();
         currentCategoryButton.fire();
     }
 
     public void refreshAll(){
         this.model.refresh();
         // automatically redirect to new category when refresh all
+        articleViewController.close();
         newCategory.fire();
     }
 
