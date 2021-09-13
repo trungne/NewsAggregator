@@ -5,31 +5,30 @@ import Business.Scraper.LinksCrawler.LinksCrawler;
 import Business.Scraper.Sanitizer.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GetNewsOutlets {
-    // Get all Scraping info of 5 news, return a list of NewsOutlet
-    public static List<NewsOutlet> createNewsOutlets(){
-        NewsOutlet[] newsOutlets = new NewsOutlet[] {
+    
+    public static List<NewsOutlet> createNewsOutlets() {
+        return Stream.of(
                 initVNExpress(),
                 initTuoiTre(),
                 initThanhNien(),
                 initNhanDan(),
-                initZingNews()
-        };
-        List<NewsOutlet> validNewsOutlets = new ArrayList<>();
-        for (NewsOutlet newsOutlet: newsOutlets){
-            if(newsOutlet != null){
-                validNewsOutlets.add(newsOutlet);
-            }
-        }
-        return validNewsOutlets;
+                initZingNews())
+                
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
-
-    /** Initialize VNExpress Scraper and VNExpress LinksCrawler
+    
+    /**
+     * Initialize VNExpress Scraper and VNExpress LinksCrawler
+     *
      * @return Scraper and LinksCrawler of VNExpress, stored in NewsOutlet
-     * */
+     */
     public static NewsOutlet initVNExpress(){
         try {
             LinksCrawler VNExpressLinksCrawler = new LinksCrawler(
