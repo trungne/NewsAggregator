@@ -11,6 +11,7 @@ import java.util.List;
 public class Model {
     private final HashMap<String, List<Article>> articlesByCategories = new HashMap<>();
     private final int MAX_ARTICLES_IN_STACK = 10;
+    // TODO can we use Stack from java.util here ?
     private final LinkedList<Article> selectedArticles = new LinkedList<>();
     private int currentSelectedArticleIndex;
 

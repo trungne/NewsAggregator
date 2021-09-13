@@ -1,5 +1,6 @@
 package Business.Scraper.Helper;
 
+import static java.util.Objects.isNull;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attribute;
@@ -33,10 +34,10 @@ public class ScrapingUtils {
             String urlInDataSrc = imgTag.attr("data-src");
             String urlInSrc = imgTag.attr("src");
 
-            if (!StringUtils.isEmpty(urlInDataSrc)){
+            if (StringUtils.isNotEmpty(urlInDataSrc)){
                 return urlInDataSrc;
             }
-            else if (!StringUtils.isEmpty(urlInSrc)){
+            else if (StringUtils.isNotEmpty(urlInSrc)){
                 return urlInSrc;
             }
         }
@@ -55,7 +56,7 @@ public class ScrapingUtils {
 
         for (Element e : doc.getElementsByClass(cls)){
             String url = extractImgUrlFromTag(e);
-            if (!StringUtils.isEmpty(url)){
+            if (StringUtils.isNotEmpty(url)){
                 return url;
             }
         }
@@ -63,12 +64,12 @@ public class ScrapingUtils {
         return "";
     }
 
-    public static String scrapeFirstImgUrlFromID(Document doc, String ID){
-        if (StringUtils.isEmpty(ID)){
+    public static String scrapeFirstImgUrlFromID(Document doc, String id){
+        if (StringUtils.isEmpty(id)){
             return "";
         }
 
-        Element tag = doc.getElementById(ID);
+        Element tag = doc.getElementById(id);
         if (tag != null){
             return extractImgUrlFromTag(tag);
         }
@@ -126,25 +127,29 @@ public class ScrapingUtils {
         }
         return links;
     }
-
-    /** From a provided img tag, create a new img with the src and alt of it.
+    
+    /**
+     * From a provided img tag, create a new img with the src and alt of it.
+     *
      * @return null if the parameter is not an img tag or no src is found, otherwise return an image tag with src and alt (if there is any)
-     * */
+     */
     public static Element createCleanImgTag(Element imgTag) {
-        if (!imgTag.tagName().equals("img")) return null;
-
+        if (isNull(imgTag) || !StringUtils.equals("img", imgTag.tagName())) {
+            return null;
+        }
+        
         Element cleanedFirstImgTag = new Element("img");
 
         // assign src for the img tag
-        if (!StringUtils.isEmpty(imgTag.attr("data-src")))
+        if (StringUtils.isNotEmpty(imgTag.attr("data-src")))
             cleanedFirstImgTag.attr("src", imgTag.attr("data-src"));
-        else if (!StringUtils.isEmpty(imgTag.attr("src")))
+        else if (StringUtils.isNotEmpty(imgTag.attr("src")))
             cleanedFirstImgTag.attr("src", imgTag.attr("src"));
         else
             return null;
 
         // assign alt for the img tag
-        if (!StringUtils.isEmpty(imgTag.attr("alt"))) {
+        if (StringUtils.isNotEmpty(imgTag.attr("alt"))) {
             cleanedFirstImgTag.attr("alt", imgTag.attr("alt"));
         }
 
