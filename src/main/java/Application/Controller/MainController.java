@@ -1,3 +1,15 @@
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2021B
+  Assessment: Final Project
+  Created  date: dd/mm/yyyy
+  Author: Student name, Student ID
+  Last modified date: dd/mm/yyyy
+  Author: Student name, Student ID
+  Acknowledgement: Thanks and give credits to the resources that you used in this file
+*/
+
 package Application.Controller;
 
 import Application.Main;
@@ -247,7 +259,6 @@ public class MainController {
         Article a = model.getArticleAndStore(currentCategoryButton.getText(), index);
         String title = a.getTitle();
         String html = a.getHtml();
-//        System.out.println(html);
         articleViewController.show(title, html);
     }
 
@@ -370,7 +381,7 @@ public class MainController {
                         true);
                 this.imageView.setImage(image);
             } catch (IllegalArgumentException e){
-                System.out.println(thumbnail);
+                System.err.println(thumbnail);
             }
 
             this.titleText.setText(title);

@@ -1,3 +1,15 @@
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2021B
+  Assessment: Final Project
+  Created  date: dd/mm/yyyy
+  Author: Student name, Student ID
+  Last modified date: dd/mm/yyyy
+  Author: Student name, Student ID
+  Acknowledgement: Thanks and give credits to the resources that you used in this file
+*/
+
 package Application.Controller;
 
 import javafx.fxml.FXML;
