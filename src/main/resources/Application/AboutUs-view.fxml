@@ -1,38 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="aboutUsPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Application.Controller.AboutUsController">
+<AnchorPane fx:id="aboutUsPane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #1d1e1f; -fx-border-width: 3px; -fx-border-color: #ff9d00;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Application.Controller.AboutUsController">
    <children>
-      <Button layoutX="274.0" layoutY="346.0" mnemonicParsing="false" onAction="#close" text="Close" />
-      <Label layoutX="165.0" layoutY="14.0" text="HuTieuNamDzang">
+      <Button alignment="CENTER" layoutX="274.0" layoutY="346.0" mnemonicParsing="false" onAction="#close" style="-fx-background-color: #1d1e1f#1d1e1f; -fx-border-color: #fff; -fx-border-radius: 5px;" text="Close" textFill="#ff9d00">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Label alignment="CENTER" layoutX="10.0" layoutY="43.0" prefHeight="42.0" prefWidth="600.0" text="HuTieuNamDzang" textAlignment="CENTER" textFill="#ff9d00" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
          <font>
             <Font name="Arial Bold" size="36.0" />
          </font>
       </Label>
-      <Label layoutX="110.0" layoutY="113.0" text="S3818328 - Nguyen Quoc Hoang Trung">
+      <Label alignment="CENTER" layoutX="110.0" layoutY="113.0" text="S3818328 - Nguyen Quoc Hoang Trung" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <font>
             <Font size="24.0" />
          </font></Label>
-      <Label layoutX="145.0" layoutY="253.0" text="S3818102 - Pham Cong Minh">
+      <Label alignment="CENTER" layoutX="145.0" layoutY="253.0" text="S3818102 - Pham Cong Minh" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="138.0" layoutY="148.0" text="S3817970 - Nguyen Bao Khang">
+      <Label alignment="CENTER" layoutX="138.0" layoutY="148.0" text="S3817970 - Nguyen Bao Khang" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="140.0" layoutY="183.0" text="S3820098 - Le Nguyen Truong An">
+      <Label alignment="CENTER" layoutX="140.0" layoutY="183.0" text="S3820098 - Le Nguyen Truong An" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="163.0" layoutY="218.0" text="S3752577 - Le Hong Thai">
+      <Label alignment="CENTER" layoutX="163.0" layoutY="218.0" text="S3752577 - Le Hong Thai" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <font>
             <Font size="24.0" />
          </font>
