@@ -19,7 +19,7 @@ import org.jsoup.nodes.Node;
 import org.jsoup.safety.Safelist;
 
 
-public final class ZingNewsFilter extends MainContentFilter{
+public final class ZINGNEWS_FILTER extends MainContentFilter{
 
     /** Identify figure in main content
      * @param node main content element

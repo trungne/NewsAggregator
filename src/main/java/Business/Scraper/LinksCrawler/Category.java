@@ -44,22 +44,22 @@ public class Category {
     public static final String OTHERS = "Others";
 
     // map Vietnamese names to English
-    private static final HashMap<String, HashSet<String>> dictionary = new HashMap<>();
+    private static final HashMap<String, HashSet<String>> DICTIONARY = new HashMap<>();
     static {
-        dictionary.put(NEW, new HashSet<>(List.of("mới nhất")));
-        dictionary.put(COVID, new HashSet<>(List.of("covid", "covid-19")));
-        dictionary.put(POLITICS, new HashSet<>(List.of("chính trị", "pháp luật", "luật pháp")));
-        dictionary.put(BUSINESS, new HashSet<>(List.of("kinh doanh", "tài chính - kinh doanh", "kinh tế")));
-        dictionary.put(TECHNOLOGY, new HashSet<>(List.of("khoa học - công nghệ", "công nghệ", "khoa học", "Khoa học - Công nghệ")));
-        dictionary.put(HEALTH, new HashSet<>(List.of("y tế", "sức khỏe")));
-        dictionary.put(SPORTS, new HashSet<>(List.of("thể thao")));
-        dictionary.put(ENTERTAINMENT, new HashSet<>(List.of("văn hóa", "giải trí")));
-        dictionary.put(WORLD, new HashSet<>(List.of("thế giới")));
-        dictionary.put(SOCIETY, new HashSet<>(List.of("xã hội", "thời sự")));
-        dictionary.put(EDUCATION, new HashSet<>(List.of("giáo dục")));
-        dictionary.put(LIFE, new HashSet<>(List.of("đời sống", "nhịp sống trẻ")));
-        dictionary.put(TOURISM, new HashSet<>(List.of("du lịch", "du lịch - ẩm thực")));
-        dictionary.put(CAR, new HashSet<>(List.of("xe")));
+        DICTIONARY.put(NEW, new HashSet<>(List.of("mới nhất")));
+        DICTIONARY.put(COVID, new HashSet<>(List.of("covid", "covid-19")));
+        DICTIONARY.put(POLITICS, new HashSet<>(List.of("chính trị", "pháp luật", "luật pháp")));
+        DICTIONARY.put(BUSINESS, new HashSet<>(List.of("kinh doanh", "tài chính - kinh doanh", "kinh tế")));
+        DICTIONARY.put(TECHNOLOGY, new HashSet<>(List.of("khoa học - công nghệ", "công nghệ", "khoa học", "Khoa học - Công nghệ")));
+        DICTIONARY.put(HEALTH, new HashSet<>(List.of("y tế", "sức khỏe")));
+        DICTIONARY.put(SPORTS, new HashSet<>(List.of("thể thao")));
+        DICTIONARY.put(ENTERTAINMENT, new HashSet<>(List.of("văn hóa", "giải trí")));
+        DICTIONARY.put(WORLD, new HashSet<>(List.of("thế giới")));
+        DICTIONARY.put(SOCIETY, new HashSet<>(List.of("xã hội", "thời sự")));
+        DICTIONARY.put(EDUCATION, new HashSet<>(List.of("giáo dục")));
+        DICTIONARY.put(LIFE, new HashSet<>(List.of("đời sống", "nhịp sống trẻ")));
+        DICTIONARY.put(TOURISM, new HashSet<>(List.of("du lịch", "du lịch - ẩm thực")));
+        DICTIONARY.put(CAR, new HashSet<>(List.of("xe")));
     }
 
     /** Convert a category name from Vietnamese to English
@@ -68,8 +68,8 @@ public class Category {
      * */
     public static String translateToEnglish(String category) {
         String cate = category.trim().toLowerCase(Locale.ROOT);
-        for (String english : dictionary.keySet()) {
-            if(dictionary.get(english).contains(cate)){
+        for (String english : DICTIONARY.keySet()) {
+            if(DICTIONARY.get(english).contains(cate)){
                 return english;
             }
         }

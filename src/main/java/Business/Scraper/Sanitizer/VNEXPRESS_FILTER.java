@@ -22,7 +22,7 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class VNExpressFilter extends MainContentFilter{
+public final class VNEXPRESS_FILTER extends MainContentFilter{
     /** Identify figure in main content
      * @param node main content element
      * @return true if node contains figure

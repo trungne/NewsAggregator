@@ -21,9 +21,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Model {
-    private final HashMap<String, List<Article>> articlesByCategories = new HashMap<>();
+    private final HashMap<String, List<Article>> ARTICLES_BY_CATEGORY = new HashMap<>();
     private final int MAX_ARTICLES_IN_STACK = 10;
-    private final LinkedList<Article> selectedArticles = new LinkedList<>();
+    private final LinkedList<Article> SELECTED_ARTICLES = new LinkedList<>();
     private int currentSelectedArticleIndex;
 
     private final MainController controller;
@@ -33,7 +33,7 @@ public class Model {
         this.controller = controller;
         service.setOnSucceeded(e -> {
             List<Article> newlyScrapedArticles = (List<Article>) e.getSource().getValue();
-            articlesByCategories.put(service.getCategory(), newlyScrapedArticles);
+            ARTICLES_BY_CATEGORY.put(service.getCategory(), newlyScrapedArticles);
             notifyController();
         });
     }
@@ -53,10 +53,10 @@ public class Model {
      * @return a particular article in the category
      * */
     public Article getArticle(String category, int index){
-        if (articlesByCategories.get(category) == null){
+        if (ARTICLES_BY_CATEGORY.get(category) == null){
             return null;
         }
-        return articlesByCategories.get(category).get(index);
+        return ARTICLES_BY_CATEGORY.get(category).get(index);
     }
 
     /** Get a particular article in a category and store it in article stack
@@ -76,13 +76,13 @@ public class Model {
     }
 
     public void addArticleToStack(Article a){
-        if (selectedArticles.size() == MAX_ARTICLES_IN_STACK){
-            selectedArticles.removeLast();
+        if (SELECTED_ARTICLES.size() == MAX_ARTICLES_IN_STACK){
+            SELECTED_ARTICLES.removeLast();
         }
 
-        selectedArticles.remove(a);
+        SELECTED_ARTICLES.remove(a);
 
-        selectedArticles.addFirst(a);
+        SELECTED_ARTICLES.addFirst(a);
     }
 
     public Article nextArticle(){
@@ -91,7 +91,7 @@ public class Model {
         }
 
         currentSelectedArticleIndex--;
-        return selectedArticles.get(currentSelectedArticleIndex);
+        return SELECTED_ARTICLES.get(currentSelectedArticleIndex);
 
     }
 
@@ -105,11 +105,11 @@ public class Model {
         }
 
         currentSelectedArticleIndex++;
-        return selectedArticles.get(currentSelectedArticleIndex);
+        return SELECTED_ARTICLES.get(currentSelectedArticleIndex);
     }
 
     public boolean hasNoPreviousArticle(){
-        return currentSelectedArticleIndex == selectedArticles.size() - 1;
+        return currentSelectedArticleIndex == SELECTED_ARTICLES.size() - 1;
     }
 
     /** First check if the category already has articles scraped. If yes, immediately notify the controller.
@@ -118,7 +118,7 @@ public class Model {
      * */
     public void loadArticles(String category){
         // Check if articles have been scraped for this category
-        if (articlesByCategories.get(category) != null){
+        if (ARTICLES_BY_CATEGORY.get(category) != null){
             notifyController();
             return;
         }
@@ -132,13 +132,13 @@ public class Model {
      * @param category provided category to clear articles from
      * */
     public void refresh(String category){
-        selectedArticles.clear();
-        articlesByCategories.remove(category);
+        SELECTED_ARTICLES.clear();
+        ARTICLES_BY_CATEGORY.remove(category);
     }
     /** Clear all articles in the hashmap
      * */
     public void refresh(){
-        selectedArticles.clear();
-        articlesByCategories.clear();
+        SELECTED_ARTICLES.clear();
+        ARTICLES_BY_CATEGORY.clear();
     }
 }

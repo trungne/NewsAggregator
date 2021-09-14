@@ -36,9 +36,9 @@ public class LinksCrawler {
             "https://nhandan.vn/tieu-diem"
     };
 
-    private final URL homepageUrl;
-    private final String navBarCssClass;
-    private final String targetCssClass;
+    private final URL HOMEPAGE_URL;
+    private final String NAVBAR_CSS_CLASS;
+    private final String TARGET_CSS_CLASS;
     private Document doc;
     /** @param url url to the news outlet's homepage
      *  @param navBarClass a css class used to target the navigation bar
@@ -47,9 +47,9 @@ public class LinksCrawler {
     public LinksCrawler(String url,
                         String navBarClass,
                         String targetClass) throws IOException {
-        this.homepageUrl = new URL(url);
-        this.navBarCssClass = navBarClass;
-        this.targetCssClass = targetClass;
+        this.HOMEPAGE_URL = new URL(url);
+        this.NAVBAR_CSS_CLASS = navBarClass;
+        this.TARGET_CSS_CLASS = targetClass;
         this.doc = getDocumentFromFile();
 
         if (this.doc == null){
@@ -69,7 +69,7 @@ public class LinksCrawler {
         Set<URL> categoryLinks = getCategoryLinks(name);
         Set<URL> articleLinks = new HashSet<>();
         for (URL link: categoryLinks){
-            articleLinks.addAll(ScrapingUtils.getLinksByClass(link, targetCssClass));
+            articleLinks.addAll(ScrapingUtils.getLinksByClass(link, TARGET_CSS_CLASS));
         }
 //        System.out.println(categoryLinks);
         return articleLinks;
@@ -82,7 +82,7 @@ public class LinksCrawler {
         Set<URL> links = new LinkedHashSet<>();
         // scrape the front page is provided category is NEW
         if(name.equals(Category.NEW)){
-            links.add(homepageUrl);
+            links.add(HOMEPAGE_URL);
         }
         else if (name.equals(Category.COVID)){
             URL link = getCovidLink();
@@ -105,7 +105,7 @@ public class LinksCrawler {
      * */
     private URL getCovidLink(){
         for(String covidSite: COVID_CATEGORY_LINKS){
-            if (covidSite.contains(homepageUrl.getHost())){
+            if (covidSite.contains(HOMEPAGE_URL.getHost())){
                 try {
                     return new URL(covidSite);
                 } catch (MalformedURLException e) {
@@ -117,7 +117,7 @@ public class LinksCrawler {
     }
 
     private List<URL> getOtherCategories(){
-        Element navBar = doc.selectFirst("." + navBarCssClass); // get navigation bar
+        Element navBar = doc.selectFirst("." + NAVBAR_CSS_CLASS); // get navigation bar
         if (navBar == null){
             return new ArrayList<>();
         }
@@ -133,7 +133,7 @@ public class LinksCrawler {
             String englishName = Category.translateToEnglish(vietnameseName);
             if (!Category.isMainCategory(englishName)){
                 try {
-                    URL url = new URL(homepageUrl, firstATag.attr("href"));
+                    URL url = new URL(HOMEPAGE_URL, firstATag.attr("href"));
                     links.add(url);
                 } catch (MalformedURLException ignored) {}
             }
@@ -142,7 +142,7 @@ public class LinksCrawler {
     }
 
     private Set<URL> getLinksInNavBar(String name){
-        Element navBar = doc.selectFirst("." + navBarCssClass); // get navigation bar
+        Element navBar = doc.selectFirst("." + NAVBAR_CSS_CLASS); // get navigation bar
         if (navBar == null) {
             return new LinkedHashSet<>(); // return an empty list instead of null to prevent error
         }
@@ -183,7 +183,7 @@ public class LinksCrawler {
         if (first != null) {
             try{
                 if (!first.attr("href").contains("video")){
-                    return new URL(homepageUrl, first.attr("href"));
+                    return new URL(HOMEPAGE_URL, first.attr("href"));
                 }
             } catch (MalformedURLException ignored) {}
         }
@@ -203,11 +203,11 @@ public class LinksCrawler {
 
     private Document getDocumentFromFile(){
         // Rename filename from example.com to example.html
-        String htmlFilename = homepageUrl.getHost().replaceFirst("\\.(.+)",".html");
+        String htmlFilename = HOMEPAGE_URL.getHost().replaceFirst("\\.(.+)",".html");
         Path path = Paths.get("src", "main", "resources", "Homepages", htmlFilename);
         File file = new File(path.toAbsolutePath().toString());
         try {
-            return Jsoup.parse(file, "UTF-8", homepageUrl.toString());
+            return Jsoup.parse(file, "UTF-8", HOMEPAGE_URL.toString());
         } catch (IOException ignored) {
             return null;
         }

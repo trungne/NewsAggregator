@@ -20,7 +20,7 @@ import org.jsoup.safety.Safelist;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class TuoiTreFilter extends MainContentFilter{
+public final class TUOITRE_FILTER extends MainContentFilter{
     /** Identify figure in main content
      * @param node main content element
      * @return true if node contains figure

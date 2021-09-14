@@ -16,12 +16,12 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 public class Article implements Comparable<Article> {
-    private final String title;
-    private final String description;
-    private final String thumbNail;
-    private final LocalDateTime dateTime;
-    private final String newsSource;
-    private final String html;
+    private final String TITLE;
+    private final String DESCRIPTION;
+    private final String THUMBNAIL;
+    private final LocalDateTime DATETIME;
+    private final String NEWS_SOURCE;
+    private final String HTML;
 
     public Article(String source,
                    String title,
@@ -29,39 +29,39 @@ public class Article implements Comparable<Article> {
                    String thumbnail,
                    LocalDateTime time,
                    String html) {
-        this.newsSource = source;
-        this.title = title;
-        this.description = description;
-        this.thumbNail = thumbnail;
-        this.dateTime = time;
-        this.html = html;
+        this.NEWS_SOURCE = source;
+        this.TITLE = title;
+        this.DESCRIPTION = description;
+        this.THUMBNAIL = thumbnail;
+        this.DATETIME = time;
+        this.HTML = html;
     }
 
     public String getHtml() {
-        return html;
+        return HTML;
     }
 
     public String getNewsSource() {
-        return newsSource;
+        return NEWS_SOURCE;
     }
 
     public String getTitle() {
-        return title;
+        return TITLE;
     }
 
     public String getDescription() {
-        return description;
+        return DESCRIPTION;
     }
 
-    public String getThumbNail() {
-        return thumbNail;
+    public String getThumbnail() {
+        return THUMBNAIL;
     }
 
     public String getRelativeTime() {
-        long minutes = ChronoUnit.MINUTES.between(dateTime, LocalDateTime.now());
+        long minutes = ChronoUnit.MINUTES.between(DATETIME, LocalDateTime.now());
 
         if (minutes == 0) {
-            long seconds = ChronoUnit.SECONDS.between(dateTime, LocalDateTime.now());
+            long seconds = ChronoUnit.SECONDS.between(DATETIME, LocalDateTime.now());
             if (seconds < 2)
                 return "Just now.";
             return seconds + " seconds" + " ago.";
@@ -77,7 +77,7 @@ public class Article implements Comparable<Article> {
     }
 
     public long getMinutesSincePublished() {
-        return ChronoUnit.MINUTES.between(dateTime, LocalDateTime.now());
+        return ChronoUnit.MINUTES.between(DATETIME, LocalDateTime.now());
     }
 
 

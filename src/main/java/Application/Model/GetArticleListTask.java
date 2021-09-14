@@ -33,10 +33,10 @@ import static Business.Scraper.Helper.ScrapingUtils.MAX_TERMINATION_TIME;
 // an interface for presentation layer to access scraped articles
 public class GetArticleListTask extends Task<List<Article>> {
     private static final List<NewsOutlet> NEWS_OUTLETS = GetNewsOutlets.createNewsOutlets();
-    private final String category;
+    private final String CATEGORY;
 
     public GetArticleListTask(String category){
-        this.category = category;
+        this.CATEGORY = category;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class GetArticleListTask extends Task<List<Article>> {
         });
 
         updateMessage("Scraping articles...");
-        fillUpArticleList(articles, category);
+        fillUpArticleList(articles, CATEGORY);
         return articles;
     }
 

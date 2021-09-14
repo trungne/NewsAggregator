@@ -62,7 +62,7 @@ public class MainController {
     @FXML private Button worldCategory;
     @FXML private Button othersCategory;
 
-    private final List<Node> categoryButtons = new ArrayList<>();
+    private final List<Node> CATEGORY_BUTTONS = new ArrayList<>();
 
 
     // controllers
@@ -125,7 +125,7 @@ public class MainController {
         loadAboutUsView();
         loadArticleView();
 
-        categoryButtons.addAll(List.of(newCategory, covidCategory, politicsCategory, businessCategory, technologyCategory,
+        CATEGORY_BUTTONS.addAll(List.of(newCategory, covidCategory, politicsCategory, businessCategory, technologyCategory,
                 healthCategory, sportsCategory, entertainmentCategory, worldCategory, othersCategory));
 
         newCategory.fire();
@@ -180,7 +180,7 @@ public class MainController {
      * @param category: category's name
      */
     private void requestPreviews(String category){
-        disableAllChildButtons(categoryButtons);
+        disableAllChildButtons(CATEGORY_BUTTONS);
         disableAllChildButtons(pageBox.getChildren());
         enableIndicator();
         mainArea.setContent(null); // disable preview pane
@@ -201,7 +201,7 @@ public class MainController {
      * @param pageNum: pagination index
      */
     private void updatePreviewsPane(int pageNum){
-        enableAllChildButtons(categoryButtons);
+        enableAllChildButtons(CATEGORY_BUTTONS);
         enableAllChildButtons(pageBox.getChildren());
         highlightPage(pageNum);
         disableIndicator();
@@ -241,7 +241,7 @@ public class MainController {
             if (a == null) {
                 continue;
             }
-            String thumbnail = a.getThumbNail();
+            String thumbnail = a.getThumbnail();
             String title = a.getTitle();
             String description = a.getDescription();
             String time = a.getRelativeTime();
@@ -340,32 +340,32 @@ public class MainController {
     }
 
     static class PreviewGrid extends GridPane {
-        private static final Font titleFont = new Font("Helvetica", 20);
-        private static final Font descriptionFont = new Font("Helvetica", 12);
+        private static final Font TITLE_FONT = new Font("Helvetica", 20);
+        private static final Font DESCRIPTION_FONT = new Font("Helvetica", 12);
 
         private boolean isUnderlined = false;
-        private final ImageView imageView = new ImageView();
-        private final Text titleText = new Text();
-        private final Text descriptionText = new Text();
-        private final Text publishedTimeText = new Text();
-        private final Text newsSourceText = new Text();
+        private final ImageView IMAGE_VIEW = new ImageView();
+        private final Text TITLE_TEXT = new Text();
+        private final Text DESCRIPTION_TEXT = new Text();
+        private final Text PUBLISHED_TIME_TEXT = new Text();
+        private final Text NEWS_SOURCE_TEXT = new Text();
 
         // method to get wrapping property of titleText
         public DoubleProperty titleWrappingWidthProperty() {
-            return titleText.wrappingWidthProperty();
+            return TITLE_TEXT.wrappingWidthProperty();
         }
 
         public PreviewGrid(){
-            titleText.setFont(titleFont);
-            descriptionText.setFont(descriptionFont);
-            descriptionText.wrappingWidthProperty().bind(titleText.wrappingWidthProperty().subtract(100));
+            TITLE_TEXT.setFont(TITLE_FONT);
+            DESCRIPTION_TEXT.setFont(DESCRIPTION_FONT);
+            DESCRIPTION_TEXT.wrappingWidthProperty().bind(TITLE_TEXT.wrappingWidthProperty().subtract(100));
 
             // arrange components in grid to create layout for preview components
-            this.add(imageView, 1, 1, 1, 2);
-            this.add(titleText, 2, 1);
-            this.add(descriptionText, 2, 2);
-            this.add(publishedTimeText, 2, 3);
-            this.add(newsSourceText, 1, 3);
+            this.add(IMAGE_VIEW, 1, 1, 1, 2);
+            this.add(TITLE_TEXT, 2, 1);
+            this.add(DESCRIPTION_TEXT, 2, 2);
+            this.add(PUBLISHED_TIME_TEXT, 2, 3);
+            this.add(NEWS_SOURCE_TEXT, 1, 3);
         }
         public void setPreviewToGrid(String thumbnail,
                                      String title,
@@ -379,29 +379,29 @@ public class MainController {
                         false,
                         false,
                         true);
-                this.imageView.setImage(image);
+                this.IMAGE_VIEW.setImage(image);
             } catch (IllegalArgumentException e){
                 System.err.println(thumbnail);
             }
 
-            this.titleText.setText(title);
-            this.descriptionText.setText(description);
-            this.publishedTimeText.setText(publishedTime);
-            this.newsSourceText.setText(source);
+            this.TITLE_TEXT.setText(title);
+            this.DESCRIPTION_TEXT.setText(description);
+            this.PUBLISHED_TIME_TEXT.setText(publishedTime);
+            this.NEWS_SOURCE_TEXT.setText(source);
         }
 
         public void underline(){
             if (!isUnderlined){
-                titleText.setUnderline(true);
-                descriptionText.setUnderline(true);
-                publishedTimeText.setUnderline(true);
-                newsSourceText.setUnderline(true);
+                TITLE_TEXT.setUnderline(true);
+                DESCRIPTION_TEXT.setUnderline(true);
+                PUBLISHED_TIME_TEXT.setUnderline(true);
+                NEWS_SOURCE_TEXT.setUnderline(true);
             }
             else{
-                titleText.setUnderline(false);
-                descriptionText.setUnderline(false);
-                publishedTimeText.setUnderline(false);
-                newsSourceText.setUnderline(false);
+                TITLE_TEXT.setUnderline(false);
+                DESCRIPTION_TEXT.setUnderline(false);
+                PUBLISHED_TIME_TEXT.setUnderline(false);
+                NEWS_SOURCE_TEXT.setUnderline(false);
             }
 
             isUnderlined = !isUnderlined;

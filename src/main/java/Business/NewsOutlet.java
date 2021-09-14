@@ -24,22 +24,22 @@ import static Business.Scraper.Helper.ScrapingUtils.MAX_ARTICLES_DISPLAYED;
 
 
 public class NewsOutlet {
-    public final Scraper scraper;
-    public final LinksCrawler linksCrawler;
+    public final Scraper SCRAPER;
+    public final LinksCrawler LINKS_CRAWLER;
 
-    public NewsOutlet(Scraper scraper, LinksCrawler linksCrawler){
-        this.scraper = scraper;
-        this.linksCrawler = linksCrawler;
+    public NewsOutlet(Scraper scraper, LinksCrawler LINKS_CRAWLER){
+        this.SCRAPER = scraper;
+        this.LINKS_CRAWLER = LINKS_CRAWLER;
     }
 
     public void populateArticleList(List<Article> articleList, String category) {
-        Set<URL> urls = linksCrawler.getArticleLinks(category);
+        Set<URL> urls = LINKS_CRAWLER.getArticleLinks(category);
         for (URL url : urls) {
             if (articleList.size() >= MAX_ARTICLES_DISPLAYED){
                 break;
             }
 
-            Article a = scraper.getArticle(url);
+            Article a = SCRAPER.getArticle(url);
             if (a != null){
                 articleList.add(a);
             }
