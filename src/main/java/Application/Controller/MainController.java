@@ -3,11 +3,10 @@
   Course: INTE2512 Object-Oriented Programming
   Semester: 2021B
   Assessment: Final Project
-  Created  date: dd/mm/yyyy
-  Author: Student name, Student ID
-  Last modified date: dd/mm/yyyy
-  Author: Student name, Student ID
-  Acknowledgement: Thanks and give credits to the resources that you used in this file
+  Created  date: 27/08/2021
+  Author: Le Nguyen Truong An, s3817970
+  Last modified date: 14/09/2021
+  Acknowledgements:
 */
 
 package Application.Controller;
@@ -80,12 +79,17 @@ public class MainController {
         this.model = new Model(this);
     }
 
+    /** Bind container grid with outer scene to maintain responsiveness on resized
+     * @param scene: containing scene
+     */
     public void setColumnConstraints(Scene scene){
         // bind mainGridPane prefWidth property with scene width property
         // and subtract by 200 (of the category buttons)
         mainGridPane.getColumnConstraints().get(1).prefWidthProperty().bind(scene.widthProperty().subtract(200));
     }
 
+    /** Display individual article view
+     */
     private void loadArticleView(){
         FXMLLoader articleView = new FXMLLoader(Main.class.getResource("Article-view.fxml"));
         try {
@@ -96,6 +100,9 @@ public class MainController {
             displayPopUpError("Error! Cannot load 'Article-view.fxml'!");
         }
     }
+
+    /** Display About Us view
+     */
     private void loadAboutUsView(){
         FXMLLoader aboutUsViewLoader = new FXMLLoader(Main.class.getResource("AboutUs-view.fxml"));
         try {
@@ -106,6 +113,9 @@ public class MainController {
         }
     }
 
+    /** Display error message for pop-ups
+     * @param msg: custom error message
+     */
     private void displayPopUpError(String msg){
         Label label = new Label(msg);
         Scene scene = new Scene(label);
@@ -153,12 +163,16 @@ public class MainController {
         updatePreviewsPane(pageNum);
     }
 
+    /** Refresh to re-scrape article for the current category
+     */
     public void refresh(){
         this.model.refresh(currentCategoryButton.getText());
         articleViewController.close();
         currentCategoryButton.fire();
     }
 
+    /** Refresh to re-scrape articles for all categories
+     */
     public void refreshAll(){
         this.model.refresh();
         // automatically redirect to new category when refresh all
@@ -166,6 +180,8 @@ public class MainController {
         newCategory.fire();
     }
 
+    /** Exit program
+     */
     public void close(){
         System.exit(0);
     }
@@ -209,6 +225,8 @@ public class MainController {
         placePreviewsOnGrids(pageNum);
     }
 
+    /** Show indicator while scrapping
+     */
     private void enableIndicator(){
         progressBar.setVisible(true);
         progressBar.progressProperty().bind(model.getService().progressProperty());
@@ -217,6 +235,8 @@ public class MainController {
         progressLabel.setVisible(true);
     }
 
+    /** Hide indicator after finished scrapping
+     */
     private void disableIndicator(){
         // unbind so that progress bar can be set invisible
         progressBar.progressProperty().unbind();
@@ -307,6 +327,9 @@ public class MainController {
         }
     }
 
+    /** Create preview grid of articles for a page of a category
+     * @param pane: pane that contains preview grid of that page's articles
+     */
     private void createPreviewGrids(Pane pane){
         for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
             PreviewGrid grid = new PreviewGrid();
@@ -314,7 +337,7 @@ public class MainController {
             grid.setOnMouseExited(e -> grid.underline());
             grid.setOnMouseClicked(e -> {
                 // do nothing if no category or page has been selected
-                if (currentCategoryButton == null || currentPageButton == null){
+                if (currentCategoryButton == null || currentPageButton == null) {
                     return;
                 }
 
@@ -323,7 +346,7 @@ public class MainController {
                 // calculate the actual index of a grid.
                 // Ex: The first grid on page 1 is:
                 // (1 - 1) * 10 + 0 = 0
-                // Ex: The second grid on page 2:
+                // Ex: The second grid on page 2 is:
                 // (2 - 1) * 10 + 1 = 11
                 int index = (Integer.parseInt(currentPageButton.getText()) - 1) * 10
                         + previewBox.getChildren().indexOf(node);
@@ -355,6 +378,8 @@ public class MainController {
             return TITLE_TEXT.wrappingWidthProperty();
         }
 
+        /** Create information slots in preview grid of an article
+         */
         public PreviewGrid(){
             TITLE_TEXT.setFont(TITLE_FONT);
             DESCRIPTION_TEXT.setFont(DESCRIPTION_FONT);
@@ -367,6 +392,14 @@ public class MainController {
             this.add(PUBLISHED_TIME_TEXT, 2, 3);
             this.add(NEWS_SOURCE_TEXT, 1, 3);
         }
+
+        /** Inject previews information into preview grid
+         * @param thumbnail: article's thumbnail url
+         * @param title: article's title
+         * @param description: article's description
+         * @param publishedTime: article's publishedTime
+         * @param source: article's source
+         */
         public void setPreviewToGrid(String thumbnail,
                                      String title,
                                      String description,
@@ -390,6 +423,8 @@ public class MainController {
             this.NEWS_SOURCE_TEXT.setText(source);
         }
 
+        /** Underlining effect
+         */
         public void underline(){
             if (!isUnderlined){
                 TITLE_TEXT.setUnderline(true);

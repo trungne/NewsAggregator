@@ -3,11 +3,10 @@
   Course: INTE2512 Object-Oriented Programming
   Semester: 2021B
   Assessment: Final Project
-  Created  date: dd/mm/yyyy
-  Author: Student name, Student ID
-  Last modified date: dd/mm/yyyy
-  Author: Student name, Student ID
-  Acknowledgement: Thanks and give credits to the resources that you used in this file
+  Created  date: 27/08/2021
+  Author: Nguyen Bao Khang, s3817970
+  Last modified date: 14/09/2021
+  Acknowledgements:
 */
 
 package Application.Controller;
@@ -21,14 +20,22 @@ public class AboutUsController {
     @FXML private AnchorPane aboutUsPane;
     private final Stage stage = new Stage();
 
+    /** Initialize information in About Us pop-up
+     */
     public void initialize(){
         stage.setTitle("About Us");
         stage.setScene(new Scene(aboutUsPane));
         stage.setResizable(false);
     }
+
+    /** Show About Us pop-up
+     */
     public void show() {
         stage.show();
     }
+
+    /** Close About Us pop-up
+     */
     public void close(){
         stage.close();
     }
