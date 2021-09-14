@@ -20,14 +20,22 @@ public class AboutUsController {
     @FXML private AnchorPane aboutUsPane;
     private final Stage stage = new Stage();
 
+    /** Initialize information in About Us pop-up
+     */
     public void initialize(){
         stage.setTitle("About Us");
         stage.setScene(new Scene(aboutUsPane));
         stage.setResizable(false);
     }
+
+    /** Show About Us pop-up
+     */
     public void show() {
         stage.show();
     }
+
+    /** Close About Us pop-up
+     */
     public void close(){
         stage.close();
     }
