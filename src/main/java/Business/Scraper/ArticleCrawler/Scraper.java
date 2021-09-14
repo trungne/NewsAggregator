@@ -34,7 +34,7 @@ import java.util.Set;
 import static Business.Scraper.Helper.ScrapingUtils.getFirstElementByClass;
 
 public class Scraper {
-    private final MainContentFilter sanitizer;
+    private final MainContentFilter SANITIZER;
     private final String DEFAULT_THUMBNAIL;
     private final String SOURCE;
 
@@ -73,7 +73,7 @@ public class Scraper {
                     String thumbnail,
                     String publishedTime) {
         this.SOURCE = source;
-        this.sanitizer = sanitizer;
+        this.SANITIZER = sanitizer;
         this.DEFAULT_THUMBNAIL = defaultThumbnail;
         this.TITLE = title;
         this.AUTHOR = author;
@@ -202,7 +202,7 @@ public class Scraper {
         if (authorTag != null){
             content.append(authorTag.outerHtml());
         }
-        return sanitizer.sanitizeMainContent(content);
+        return SANITIZER.sanitizeMainContent(content);
     }
 
     /** Scrape Article Thumbnail url

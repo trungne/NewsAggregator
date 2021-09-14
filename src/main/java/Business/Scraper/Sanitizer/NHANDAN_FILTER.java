@@ -17,7 +17,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.safety.Safelist;
 
 
-public final class NhanDanFilter extends MainContentFilter{
+public final class NHANDAN_FILTER extends MainContentFilter{
     /** Identify figure in main content
      * @param node main content element
      * @return true if node contains figure

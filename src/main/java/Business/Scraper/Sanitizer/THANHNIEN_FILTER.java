@@ -16,7 +16,7 @@ import Business.Scraper.Helper.ScrapingUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Element;
 
-public final class ThanhNienFilter extends MainContentFilter {
+public final class THANHNIEN_FILTER extends MainContentFilter {
 
     /** Identify paragraph in main content
      * @param node main content element
