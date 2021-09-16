@@ -253,6 +253,12 @@ public class MainController {
     private void placePreviewsOnGrids(int page){
         int startIndex = (page - 1) * MAX_PREVIEWS_PER_PAGE;
         String category = currentCategoryButton.getText();
+
+        if (!model.hasArticles(category)){
+            displayPopUpError("Something went wrong! Check your internet connection");
+            return;
+        }
+
         for (int i = 0; i < MAX_PREVIEWS_PER_PAGE; i++){
 
             int articleIndex = startIndex + i;

@@ -53,7 +53,7 @@ public class Model {
      * @return a particular article in the category
      * */
     public Article getArticle(String category, int index){
-        if (ARTICLES_BY_CATEGORY.get(category) == null){
+        if (!hasArticles(category)){
             return null;
         }
         return ARTICLES_BY_CATEGORY.get(category).get(index);
@@ -118,7 +118,7 @@ public class Model {
      * */
     public void loadArticles(String category){
         // Check if articles have been scraped for this category
-        if (ARTICLES_BY_CATEGORY.get(category) != null){
+        if (hasArticles(category)){
             notifyController();
             return;
         }
@@ -140,5 +140,9 @@ public class Model {
     public void refresh(){
         SELECTED_ARTICLES.clear();
         ARTICLES_BY_CATEGORY.clear();
+    }
+
+    public boolean hasArticles(String category){
+        return ARTICLES_BY_CATEGORY.get(category) != null && !ARTICLES_BY_CATEGORY.get(category).isEmpty();
     }
 }
