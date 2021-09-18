@@ -3,11 +3,12 @@
   Course: INTE2512 Object-Oriented Programming
   Semester: 2021B
   Assessment: Final Project
-  Created  date: dd/mm/yyyy
-  Author: Student name, Student ID
-  Last modified date: dd/mm/yyyy
-  Author: Student name, Student ID
-  Acknowledgement: Thanks and give credits to the resources that you used in this file
+  Created  date: 10/08/2021
+  Author: Nguyen Quoc Hoang Trung, S3818328
+  Last modified date: 18/09/2021
+  Author: Nguyen Quoc Hoang Trung, S3818328
+  Acknowledgement: Comparable interface is used to compare 2 articles
+   https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html
 */
 
 package Business.News;

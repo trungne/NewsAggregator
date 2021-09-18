@@ -3,11 +3,11 @@
   Course: INTE2512 Object-Oriented Programming
   Semester: 2021B
   Assessment: Final Project
-  Created  date: dd/mm/yyyy
-  Author: Student name, Student ID
-  Last modified date: dd/mm/yyyy
-  Author: Student name, Student ID
-  Acknowledgement: Thanks and give credits to the resources that you used in this file
+  Created  date: 10/08/2021
+  Author: Nguyen Quoc Hoang Trung, S3818328
+  Last modified date: 18/09/2021
+  Author: Nguyen Quoc Hoang Trung, S3818328
+  Acknowledgement: No external knowledge
 */
 
 package Business.Scraper.ArticleCrawler;
@@ -280,6 +280,10 @@ public class Scraper {
         return time;
     }
 
+    /** Scrape Article Category Name(s) by looking at its metadata or breadcrumb
+    * @param doc article document
+     * @return a set of category names
+    * */
     public Set<String> scrapeCategoryNames(Document doc) {
         Set<String> categoryList = new HashSet<>();
         Element breadcrumb = getFirstElementByClass(doc, CATEGORY);

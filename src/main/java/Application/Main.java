@@ -1,3 +1,15 @@
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2021B
+  Assessment: Final Project
+  Created  date: 10/08/2021
+  Author: Nguyen Quoc Hoang Trung, S3818328
+  Last modified date: 18/09/2021
+  Author: Nguyen Quoc Hoang Trung, S3818328
+  Acknowledgement: No external knowledge
+*/
+
 package Application;
 
 import Application.Controller.MainController;
@@ -22,7 +34,7 @@ public class Main extends Application {
         primaryStage.setTitle("News Aggregator");
         primaryStage.setScene(scene);
 
-//      close all stages when the main stage is closed
+        // close all stages when the main stage is closed
         primaryStage.setOnCloseRequest(e -> System.exit(0));
         primaryStage.show();
     }
