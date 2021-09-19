@@ -19,5 +19,4 @@ module JavaFxApplication {
     exports Application.Model;
     exports Business.Scraper.ArticleCrawler;
     exports Business.Scraper.LinksCrawler;
-
 }
