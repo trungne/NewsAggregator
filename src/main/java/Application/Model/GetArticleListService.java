@@ -3,11 +3,9 @@
   Course: INTE2512 Object-Oriented Programming
   Semester: 2021B
   Assessment: Final Project
-  Created  date: dd/mm/yyyy
-  Author: Student name, Student ID
-  Last modified date: dd/mm/yyyy
-  Author: Student name, Student ID
-  Acknowledgement: Thanks and give credits to the resources that you used in this file
+  Created date: 10/08/2021
+  Author: Pham Cong Minh - s3818102
+  Last modified date: 19/09/2021
 */
 
 package Application.Model;
@@ -21,9 +19,7 @@ import java.util.List;
 public class GetArticleListService extends Service<List<Article>> {
     String category;
 
-    public GetArticleListService(){
-
-    }
+    public GetArticleListService(){}
 
     public void setCategory(String category) {
         this.category = category;
